@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5551883A-D66F-48B9-9A8E-9D34EBD09659}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{918CC9AB-B0FC-4AAD-AFE3-B64E5E075392}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Domain", "src\Trendlink.Domain\Trendlink.Domain.csproj", "{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Application", "src\Trendlink.Application\Trendlink.Application.csproj", "{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Infrastructure", "src\Trendlink.Infrastructure\Trendlink.Infrastructure.csproj", "{AFFF2DD1-02AA-4443-B429-225B9C8106D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Api", "src\Trendlink.Api\Trendlink.Api.csproj", "{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFFF2DD1-02AA-4443-B429-225B9C8106D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFFF2DD1-02AA-4443-B429-225B9C8106D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFFF2DD1-02AA-4443-B429-225B9C8106D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFFF2DD1-02AA-4443-B429-225B9C8106D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2641CAB3-8363-49E5-8EFC-E9B5A6E98C2A} = {5551883A-D66F-48B9-9A8E-9D34EBD09659}
+		{3CB4F18E-AC96-4E9E-82DC-CCD3186FC366} = {5551883A-D66F-48B9-9A8E-9D34EBD09659}
+		{AFFF2DD1-02AA-4443-B429-225B9C8106D7} = {5551883A-D66F-48B9-9A8E-9D34EBD09659}
+		{95E26DC6-E9C2-434E-8320-8A76FC28A3E9} = {5551883A-D66F-48B9-9A8E-9D34EBD09659}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F99BAB6-EE47-4E00-8A8A-F6FAFF8E0CFE}
+	EndGlobalSection
+EndGlobal
