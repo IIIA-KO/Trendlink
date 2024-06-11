@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NetArchTest.Rules;
-using Trendlink.ArchitectureTest.Infrastructure;
+using Trendlink.ArchitectureTests.Infrastructure;
 
-namespace Trendlink.ArchitectureTest.Layers
+namespace Trendlink.ArchitectureTests.Layers
 {
     public class LayerTests : BaseTest
     {

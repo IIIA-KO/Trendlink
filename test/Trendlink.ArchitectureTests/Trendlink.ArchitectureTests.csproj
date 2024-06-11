@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Trendlink.Api\Trendlink.Api.csproj" />
+    <ProjectReference Include="..\..\src\Trendlink.Api\Trendlink.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

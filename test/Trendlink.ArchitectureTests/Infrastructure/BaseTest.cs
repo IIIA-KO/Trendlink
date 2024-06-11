@@ -4,7 +4,7 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure;
 
-namespace Trendlink.ArchitectureTest.Infrastructure
+namespace Trendlink.ArchitectureTests.Infrastructure
 {
     public abstract class BaseTest
     {
