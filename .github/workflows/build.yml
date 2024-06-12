@@ -21,10 +21,20 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-
+      
+      # https://github.com/dotnet/sdk/issues/35134
+      - name: Remove compose proj from sln
+        working-directory: './src'
+        run: dotnet sln remove $(dotnet sln list | grep .dcproj)
+      
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
+      # https://github.com/dotnet/sdk/issues/35134
+      - name: Add compose proj back to sln
+        working-directory: './src'
+        run: dotnet sln add **/*.dcptoj
+        
       - name: Build
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
 
