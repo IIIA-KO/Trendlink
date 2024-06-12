@@ -1,5 +1,7 @@
 using Serilog;
 using Trendlink.Api.Extensions;
+using Trendlink.Application;
+using Trendlink.Infrastructure;
 
 namespace Trendlink.Api
 {
@@ -13,6 +15,9 @@ namespace Trendlink.Api
                 loggerConfig.ReadFrom.Configuration(context.Configuration));
 
             builder.Services.AddControllers();
+
+            builder.Services.AddApplication();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             WebApplication app = builder.Build();
 

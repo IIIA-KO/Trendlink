@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Api", "src\Trendlink.Api\Trendlink.Api.csproj", "{95E26DC6-E9C2-434E-8320-8A76FC28A3E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.ArchitectureTests", "test\Trendlink.ArchitectureTests\Trendlink.ArchitectureTests.csproj", "{4D73B1EE-21A2-4320-ACFE-F822735BA5B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.ArchitectureTests", "test\Trendlink.ArchitectureTests\Trendlink.ArchitectureTests.csproj", "{4D73B1EE-21A2-4320-ACFE-F822735BA5B6}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{14798DD2-3709-4786-B3EF-99CD904F5575}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{4D73B1EE-21A2-4320-ACFE-F822735BA5B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D73B1EE-21A2-4320-ACFE-F822735BA5B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D73B1EE-21A2-4320-ACFE-F822735BA5B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14798DD2-3709-4786-B3EF-99CD904F5575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14798DD2-3709-4786-B3EF-99CD904F5575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14798DD2-3709-4786-B3EF-99CD904F5575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14798DD2-3709-4786-B3EF-99CD904F5575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
