@@ -22,18 +22,16 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
-      # https://github.com/dotnet/sdk/issues/35134
+      # Remove compose proj from sln
       - name: Remove compose proj from sln
-        working-directory: './src'
-        run: dotnet sln remove $(dotnet sln list | grep .dcproj)
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove $(dotnet sln ${{ env.SOLUTION_PATH }} list | grep .dcproj)
       
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_PATH }}
 
-      # https://github.com/dotnet/sdk/issues/35134
+      # Add compose proj back to sln
       - name: Add compose proj back to sln
-        working-directory: './src'
-        run: dotnet sln add **/*.dcptoj
+        run: dotnet sln ${{ env.SOLUTION_PATH }} add **/*.dcproj
         
       - name: Build
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
