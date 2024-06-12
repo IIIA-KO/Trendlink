@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  trendlink.api:
+    image: ${DOCKER_REGISTRY-}trendlinkapi
+    container_name: Trendlink.Api
+    build:
+      context: .
+      dockerfile: src/Trendlink.Api/Dockerfile
+    depends_on:
+     - trendlink-db
+  
+  trendlink-db:
+    image: postgres:latest
+    container_name: Trendlink.Db
+    environment:
+      - POSTGRES_DB=bookify
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  bookify-seq:
+    image: datalust/seq:latest
+    container_name: Trendlink.Seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+
+  bookify-redis:
+    image: redis:latest
+    container_name: Trendlink.Redis
+    restart: always
+    ports:
+      - '6379:6379'
