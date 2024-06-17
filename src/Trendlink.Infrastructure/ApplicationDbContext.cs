@@ -48,7 +48,7 @@ namespace Trendlink.Infrastructure
         private void AddDomainEventsAsOutboxMessages()
         {
             var outboxMessages = this
-                .ChangeTracker.Entries<Entity>()
+                .ChangeTracker.Entries<IEntity>()
                 .Select(entry => entry.Entity)
                 .SelectMany(entity =>
                 {

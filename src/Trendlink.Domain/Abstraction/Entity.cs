@@ -1,6 +1,6 @@
 ﻿namespace Trendlink.Domain.Abstraction
 {
-    public abstract class Entity<TEntityId>
+    public abstract class Entity<TEntityId> : IEntity
     {
         private readonly List<IDomainEvent> _domainEvents = new();
 

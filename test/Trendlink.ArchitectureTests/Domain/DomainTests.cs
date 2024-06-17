@@ -39,7 +39,7 @@ namespace Trendlink.ArchitectureTests.Domain
         {
             IEnumerable<Type> entityTypes = Types.InAssembly(DomainAssembly)
                 .That()
-                .Inherit(typeof(Entity))
+                .Inherit(typeof(IEntity))
                 .GetTypes();
 
             var failingTypes = new List<Type>();
