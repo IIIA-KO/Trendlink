@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using ValidationException = Trendlink.Application.Exceptions.ValidationException;
 
 namespace Trendlink.Api.Middleware
@@ -16,7 +16,8 @@ namespace Trendlink.Api.Middleware
         public ExceptionHandlingMiddleware(
             RequestDelegate next,
             ILogger<ExceptionHandlingMiddleware> logger,
-            IHostEnvironment environment)
+            IHostEnvironment environment
+        )
         {
             this._next = next;
             this._logger = logger;

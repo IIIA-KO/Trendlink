@@ -1,5 +1,4 @@
-﻿
-namespace Trendlink.Domain.Abstraction
+﻿namespace Trendlink.Domain.Abstraction
 {
     public interface IEntity
     {

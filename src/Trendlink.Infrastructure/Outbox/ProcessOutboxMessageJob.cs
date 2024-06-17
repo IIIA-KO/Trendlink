@@ -1,10 +1,10 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
-using System.Data;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
