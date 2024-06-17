@@ -6,10 +6,8 @@ namespace Trendlink.Api.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
-        private static readonly JsonSerializerOptions jsonSerializerOptions = new()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
+        private static readonly JsonSerializerOptions jsonSerializerOptions =
+            new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
@@ -33,7 +31,11 @@ namespace Trendlink.Api.Middleware
             }
             catch (Exception exception)
             {
-                this._logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
+                this._logger.LogError(
+                    exception,
+                    "Exception occurred: {Message}",
+                    exception.Message
+                );
 
                 ExceptionDetails exceptionDetails = GetExceptionDetails(exception);
 
@@ -65,31 +67,37 @@ namespace Trendlink.Api.Middleware
 
         private static ExceptionDetails GetExceptionDetails(Exception exception)
         {
+            string stackTrace = exception.StackTrace?.ToString() ?? string.Empty;
             return exception switch
             {
-                ValidationException validationException => new ExceptionDetails(
-                    StatusCodes.Status400BadRequest,
-                    "ValidationFailure",
-                    "Validation error",
-                    "One or more validation errors has occurred",
-                    exception.StackTrace?.ToString() ?? string.Empty,
-                    validationException.Errors),
-                _ => new ExceptionDetails(
-                    StatusCodes.Status500InternalServerError,
-                    "ServerError",
-                    "Server error",
-                    "An unexpected error has occurred",
-                    exception.StackTrace?.ToString() ?? string.Empty,
-                    null)
+                ValidationException validationException
+                    => new ExceptionDetails(
+                        StatusCodes.Status400BadRequest,
+                        "ValidationFailure",
+                        "Validation error",
+                        "One or more validation errors has occurred",
+                        stackTrace,
+                        validationException.Errors
+                    ),
+                _
+                    => new ExceptionDetails(
+                        StatusCodes.Status500InternalServerError,
+                        "ServerError",
+                        "Server error",
+                        "An unexpected error has occurred",
+                        stackTrace,
+                        null
+                    )
             };
         }
 
         internal sealed record ExceptionDetails(
-        int Status,
-        string Type,
-        string Title,
-        string Detail,
-        string? StackTrace,
-        IEnumerable<object>? Errors);
+            int Status,
+            string Type,
+            string Title,
+            string Detail,
+            string? StackTrace,
+            IEnumerable<object>? Errors
+        );
     }
 }

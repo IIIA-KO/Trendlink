@@ -14,10 +14,8 @@ namespace Trendlink.Infrastructure.Outbox
     [DisallowConcurrentExecution]
     internal sealed class ProcessOutboxMessagesJob : IJob
     {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new()
-        {
-            TypeNameHandling = TypeNameHandling.All
-        };
+        private static readonly JsonSerializerSettings JsonSerializerSettings =
+            new() { TypeNameHandling = TypeNameHandling.All };
 
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IPublisher _publisher;
@@ -30,7 +28,8 @@ namespace Trendlink.Infrastructure.Outbox
             IPublisher publisher,
             IDateTimeProvider dateTimeProvider,
             IOptions<OutboxOptions> outboxOptions,
-            ILogger<ProcessOutboxMessagesJob> logger)
+            ILogger<ProcessOutboxMessagesJob> logger
+        )
         {
             this._sqlConnectionFactory = sqlConnectionFactory;
             this._publisher = publisher;
@@ -46,7 +45,10 @@ namespace Trendlink.Infrastructure.Outbox
             using IDbConnection connection = this._sqlConnectionFactory.CreateConnection();
             using IDbTransaction transaction = connection.BeginTransaction();
 
-            IReadOnlyList<OutboxMessageResponse> outboxMessages = await this.GetOutboxMessagesAsync(connection, transaction);
+            IReadOnlyList<OutboxMessageResponse> outboxMessages = await this.GetOutboxMessagesAsync(
+                connection,
+                transaction
+            );
 
             foreach (OutboxMessageResponse outboxMessage in outboxMessages)
             {
@@ -56,7 +58,8 @@ namespace Trendlink.Infrastructure.Outbox
                 {
                     IDomainEvent domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
                         outboxMessage.Content,
-                        JsonSerializerSettings)!;
+                        JsonSerializerSettings
+                    )!;
 
                     await this._publisher.Publish(domainEvent, context.CancellationToken);
                 }
@@ -64,12 +67,19 @@ namespace Trendlink.Infrastructure.Outbox
                 {
                     this._logger.LogError(
                         caughtException,
-                        "Exception while processing outbox message {MessageId}", outboxMessage.Id);
+                        "Exception while processing outbox message {MessageId}",
+                        outboxMessage.Id
+                    );
 
                     exception = caughtException;
                 }
 
-                await this.UpdateOutboxMessageAsync(connection, transaction, outboxMessage, exception);
+                await this.UpdateOutboxMessageAsync(
+                    connection,
+                    transaction,
+                    outboxMessage,
+                    exception
+                );
             }
 
             transaction.Commit();
@@ -77,7 +87,10 @@ namespace Trendlink.Infrastructure.Outbox
             this._logger.LogInformation("Completed processing outbox messages");
         }
 
-        private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync(IDbConnection connection, IDbTransaction transaction)
+        private async Task<IReadOnlyList<OutboxMessageResponse>> GetOutboxMessagesAsync(
+            IDbConnection connection,
+            IDbTransaction transaction
+        )
         {
             string sql = $"""
                 SELECT id, content
@@ -87,7 +100,8 @@ namespace Trendlink.Infrastructure.Outbox
                 FOR UPDATE
                 """;
 
-            IEnumerable<OutboxMessageResponse> outboxMessages = await connection.QueryAsync<OutboxMessageResponse>(sql, transaction: transaction);
+            IEnumerable<OutboxMessageResponse> outboxMessages =
+                await connection.QueryAsync<OutboxMessageResponse>(sql, transaction: transaction);
 
             return outboxMessages.ToList();
         }
@@ -96,20 +110,25 @@ namespace Trendlink.Infrastructure.Outbox
             IDbConnection connection,
             IDbTransaction transaction,
             OutboxMessageResponse outboxMessage,
-            Exception? exception)
+            Exception? exception
+        )
         {
-            const string sql = @"
+            const string sql =
+                @"
                   UPDATE outbox_messages
                   SET processed_on_utc = @ProcessedOnUtc, error = @Error
                   WHERE id = @Id";
 
-            await connection.ExecuteAsync(sql, new
-            {
-                outboxMessage.Id,
-                ProcessedOnUtc = this._dateTimeProvider.UtcNow,
-                Error = exception?.ToString()
-            },
-            transaction: transaction);
+            await connection.ExecuteAsync(
+                sql,
+                new
+                {
+                    outboxMessage.Id,
+                    ProcessedOnUtc = this._dateTimeProvider.UtcNow,
+                    Error = exception?.ToString()
+                },
+                transaction: transaction
+            );
         }
     }
 }

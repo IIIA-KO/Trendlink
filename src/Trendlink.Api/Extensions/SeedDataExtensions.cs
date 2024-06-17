@@ -8,7 +8,8 @@ namespace Trendlink.Api.Extensions
         {
             //Finish implementation
             using IServiceScope scope = app.ApplicationServices.CreateScope();
-            using ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            using ApplicationDbContext dbContext =
+                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         }
     }
 }

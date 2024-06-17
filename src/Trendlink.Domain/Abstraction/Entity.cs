@@ -9,9 +9,7 @@
             this.Id = id;
         }
 
-        protected Entity()
-        {
-        }
+        protected Entity() { }
 
         public Guid Id { get; init; }
 

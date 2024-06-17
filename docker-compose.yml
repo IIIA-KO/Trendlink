@@ -22,7 +22,7 @@ services:
     ports:
       - 5432:5432
 
-  bookify-seq:
+  trendlink-seq:
     image: datalust/seq:latest
     container_name: Trendlink.Seq
     environment:
@@ -31,7 +31,7 @@ services:
       - 5341:5341
       - 8081:80
 
-  bookify-redis:
+  trendlink-redis:
     image: redis:latest
     container_name: Trendlink.Redis
     restart: always

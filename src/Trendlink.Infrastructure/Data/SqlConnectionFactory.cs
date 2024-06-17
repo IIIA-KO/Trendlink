@@ -1,5 +1,5 @@
-﻿using Npgsql;
-using System.Data;
+﻿using System.Data;
+using Npgsql;
 using Trendlink.Application.Abstractions.Data;
 
 namespace Trendlink.Infrastructure.Data

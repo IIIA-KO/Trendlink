@@ -13,18 +13,25 @@ namespace Trendlink.Application.Abstractions.Behaviors
         private readonly ICacheService _cacheService;
         private readonly ILogger<QueryCachingBehavior<TRequest, TResponse>> _logger;
 
-        public QueryCachingBehavior(ICacheService cacheService, ILogger<QueryCachingBehavior<TRequest, TResponse>> logger)
+        public QueryCachingBehavior(
+            ICacheService cacheService,
+            ILogger<QueryCachingBehavior<TRequest, TResponse>> logger
+        )
         {
             this._cacheService = cacheService;
             this._logger = logger;
         }
 
         public async Task<TResponse> Handle(
-            TRequest request, 
-            RequestHandlerDelegate<TResponse> next, 
-            CancellationToken cancellationToken)
+            TRequest request,
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken
+        )
         {
-            TResponse? cachedResult = await this._cacheService.GetAsync<TResponse>(request.CacheKey, cancellationToken);
+            TResponse? cachedResult = await this._cacheService.GetAsync<TResponse>(
+                request.CacheKey,
+                cancellationToken
+            );
 
             string name = typeof(TRequest).Name;
 
@@ -41,7 +48,12 @@ namespace Trendlink.Application.Abstractions.Behaviors
 
             if (result.IsSuccess)
             {
-                await this._cacheService.SetAsync(request.CacheKey, result, request.Expiration, cancellationToken);
+                await this._cacheService.SetAsync(
+                    request.CacheKey,
+                    result,
+                    request.Expiration,
+                    cancellationToken
+                );
             }
 
             return result;

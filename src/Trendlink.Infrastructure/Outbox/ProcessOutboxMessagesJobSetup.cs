@@ -17,14 +17,16 @@ namespace Trendlink.Infrastructure.Outbox
             const string jobName = nameof(ProcessOutboxMessagesJob);
 
             options
-                .AddJob<ProcessOutboxMessagesJob>(configure => 
+                .AddJob<ProcessOutboxMessagesJob>(configure => configure.WithIdentity(jobName))
+                .AddTrigger(configure =>
                     configure
-                    .WithIdentity(jobName))
-                    .AddTrigger(configure => configure
                         .ForJob(jobName)
-                        .WithSimpleSchedule(schedule => schedule
-                            .WithIntervalInSeconds(this._outboxOptions.IntervalInSeconds)
-                            .RepeatForever()));
+                        .WithSimpleSchedule(schedule =>
+                            schedule
+                                .WithIntervalInSeconds(this._outboxOptions.IntervalInSeconds)
+                                .RepeatForever()
+                        )
+                );
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Trendlink.Application.Abstractions.Behaviors;
 
 namespace Trendlink.Application
 {
     public static class DependencyInjection
     {
-        private readonly static Assembly ApplicationAssembly = typeof(DependencyInjection).Assembly;
+        private static readonly Assembly ApplicationAssembly = typeof(DependencyInjection).Assembly;
 
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {

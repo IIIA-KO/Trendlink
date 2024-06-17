@@ -5,8 +5,7 @@ using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Behaviors
 {
-    public class LoggingBehavior<TRequest, TResponse>
-        : IPipelineBehavior<TRequest, TResponse>
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IBaseRequest
         where TResponse : Result
     {
@@ -18,9 +17,10 @@ namespace Trendlink.Application.Abstractions.Behaviors
         }
 
         public async Task<TResponse> Handle(
-            TRequest request, 
-            RequestHandlerDelegate<TResponse> next, 
-            CancellationToken cancellationToken)
+            TRequest request,
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken
+        )
         {
             string name = request.GetType().Name;
 
@@ -48,7 +48,7 @@ namespace Trendlink.Application.Abstractions.Behaviors
             {
                 this._logger.LogError(exception, "Request {Request} processing failed", name);
 
-                throw new Exception($"Error processing request {name}",  exception);
+                throw new Exception($"Error processing request {name}", exception);
             }
         }
     }

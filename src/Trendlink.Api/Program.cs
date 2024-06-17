@@ -11,8 +11,10 @@ namespace Trendlink.Api
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            builder.Host.UseSerilog((context, loggerConfig) =>
-                loggerConfig.ReadFrom.Configuration(context.Configuration));
+            builder.Host.UseSerilog(
+                (context, loggerConfig) =>
+                    loggerConfig.ReadFrom.Configuration(context.Configuration)
+            );
 
             builder.Services.AddControllers();
 
@@ -21,7 +23,7 @@ namespace Trendlink.Api
 
             WebApplication app = builder.Build();
 
-            if(app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.ApplyMigrations();
                 app.SeedData();

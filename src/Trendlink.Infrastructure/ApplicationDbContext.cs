@@ -9,7 +9,8 @@ namespace Trendlink.Infrastructure
 {
     public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     {
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new() { TypeNameHandling = TypeNameHandling.All };
+        private static readonly JsonSerializerSettings JsonSerializerSettings =
+            new() { TypeNameHandling = TypeNameHandling.All };
 
         private readonly IDateTimeProvider _dateTimeProvider;
 
@@ -26,7 +27,9 @@ namespace Trendlink.Infrastructure
             base.OnModelCreating(modelBuilder);
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = default
+        )
         {
             try
             {
@@ -44,8 +47,8 @@ namespace Trendlink.Infrastructure
 
         private void AddDomainEventsAsOutboxMessages()
         {
-            var outboxMessages = this.ChangeTracker
-                .Entries<Entity>()
+            var outboxMessages = this
+                .ChangeTracker.Entries<Entity>()
                 .Select(entry => entry.Entity)
                 .SelectMany(entity =>
                 {
@@ -59,7 +62,8 @@ namespace Trendlink.Infrastructure
                     Guid.NewGuid(),
                     this._dateTimeProvider.UtcNow,
                     domainEvent.GetType().Name,
-                    JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)))
+                    JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)
+                ))
                 .ToList();
 
             this.AddRange(outboxMessages);

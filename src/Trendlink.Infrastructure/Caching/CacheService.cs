@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 using Trendlink.Application.Abstractions.Caching;
 
 namespace Trendlink.Infrastructure.Caching
@@ -21,11 +21,21 @@ namespace Trendlink.Infrastructure.Caching
             return bytes is null ? default : Deserialize<T>(bytes);
         }
 
-        public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default)
+        public Task SetAsync<T>(
+            string key,
+            T value,
+            TimeSpan? expiration = null,
+            CancellationToken cancellationToken = default
+        )
         {
             byte[] bytes = Serialize(value);
 
-            return this._cache.SetAsync(key, bytes, CacheOptions.Create(expiration), cancellationToken);
+            return this._cache.SetAsync(
+                key,
+                bytes,
+                CacheOptions.Create(expiration),
+                cancellationToken
+            );
         }
 
         public Task RemoveAsync(string key, CancellationToken cancellationToken = default)
@@ -48,6 +58,5 @@ namespace Trendlink.Infrastructure.Caching
 
             return buffer.WrittenSpan.ToArray();
         }
-
     }
 }

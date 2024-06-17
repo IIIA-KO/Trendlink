@@ -2,7 +2,5 @@
 
 namespace Trendlink.Domain.Abstraction
 {
-    public interface IDomainEvent : INotification
-    {
-    }
+    public interface IDomainEvent : INotification { }
 }
