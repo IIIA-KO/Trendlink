@@ -9,5 +9,8 @@ namespace Trendlink.Domain.Users
 
         public static readonly Error InvalidCredentials =
             new("User.InvalidCredentials", "The provided credentials were invalid");
+
+        public static readonly Error Underage =
+            new("User.Underage", "The user must be at least 18 years old");
     }
 }

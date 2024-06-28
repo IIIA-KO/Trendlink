@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.UnitTests.Infrastructure;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.DomainEvents;
@@ -12,7 +13,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public void Create_Should_SetPropertyValue()
         {
             // Act
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Assert
             user.FirstName.Should().Be(UserData.FirstName);
@@ -29,7 +30,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public void Create_Should_RaiseUserCreatedDomainEvent()
         {
             // Act
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Assert
             UserCreatedDomainEvent userCreatedDomainEvent = AssertDomainEventWasPublished<UserCreatedDomainEvent, UserId>(user);
@@ -41,17 +42,31 @@ namespace Trendlink.Domain.UnitTests.Users
         public void Create_Should_AddRegisteredRoleToUser()
         {
             // Act
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Assert
             user.Roles.Should().Contain(Role.Registered);
         }
 
         [Fact]
+        public void Create_Should_Fail_WhenUserIsUnderage()
+        {
+            // Arrange
+            var underageBirthDate = DateOnly.FromDateTime(DateTime.Now.AddYears(UserData.MinimumAge - 1));
+
+            // Act
+            Result<User> result = User.Create(UserData.FirstName, UserData.LastName, underageBirthDate, UserData.Email, UserData.PhoneNumber);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(UserErrors.Underage);
+        }
+
+        [Fact]
         public void SetCity_Should_SetCityAndCityId()
         {
             // Arrange
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Act
             user.SetCity(UserData.City);
@@ -65,7 +80,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public void SetCity_Should_ThrowException_WhenCityIsNull()
         {
             // Arrange
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Act
             Action setNullCity = () => user.SetCity(null!);
@@ -78,7 +93,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public void SetIdentityId_Should_SetIdentityId()
         {
             // Arrange
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
             string identityId = Guid.NewGuid().ToString();
 
             // Act
@@ -92,7 +107,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public void SetIdentityId_Should_ThrowException_WhenIdentityIdIsNull()
         {
             // Arrange
-            var user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber);
+            User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Act
             Action setNullIdentityId = () => user.SetIdentityId(null!);
