@@ -17,7 +17,7 @@ namespace Trendlink.Domain.Users.Countries
 
         public static Result<Country> Create(CountryName name)
         {
-            if (string.IsNullOrEmpty(name.Value))
+            if (name is null || string.IsNullOrEmpty(name.Value))
             {
                 return Result.Failure<Country>(CountryErrors.Invalid);
             }

@@ -23,7 +23,7 @@ namespace Trendlink.Domain.Users.Cities
 
         public static Result<City> Create(CityName name, Country? country)
         {
-            if (string.IsNullOrEmpty(name.Value) || country is null)
+            if (name is null || string.IsNullOrEmpty(name.Value) || country is null)
             {
                 return Result.Failure<City>(CityErrors.Invalid);
             }

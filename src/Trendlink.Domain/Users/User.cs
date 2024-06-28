@@ -71,13 +71,16 @@ namespace Trendlink.Domain.Users
 
         public void SetCity(City city)
         {
-            this.City = city;
+            this.City = city 
+                ?? throw new ArgumentNullException(nameof(city), "City cannot be null.");
+            
             this.CityId = city.Id;
         }
 
         public void SetIdentityId(string identityId)
         {
-            this.IdentityId = identityId;
+            this.IdentityId = identityId
+                ?? throw new ArgumentNullException(nameof(identityId), "IdentityId cannot be null.");
         }
     }
 }
