@@ -16,13 +16,13 @@ namespace Trendlink.Domain.Abstraction
                 throw new InvalidOperationException();
             }
 
-            IsSuccess = isSuccess;
-            Error = error;
+            this.IsSuccess = isSuccess;
+            this.Error = error;
         }
 
         public bool IsSuccess { get; }
 
-        public bool IsFailure => !IsSuccess;
+        public bool IsFailure => !this.IsSuccess;
 
         public Error Error { get; }
 
@@ -45,13 +45,13 @@ namespace Trendlink.Domain.Abstraction
         public Result(TValue? value, bool isSuccess, Error error)
             : base(isSuccess, error)
         {
-            _value = value;
+            this._value = value;
         }
 
         [NotNull]
         public TValue Value =>
-            IsSuccess
-                ? _value!
+            this.IsSuccess
+                ? this._value!
                 : throw new InvalidOperationException(
                     "The value of a failure result can not be accessed."
                 );

@@ -24,7 +24,7 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
         }
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             this.dbContext.Add(entity);
         }

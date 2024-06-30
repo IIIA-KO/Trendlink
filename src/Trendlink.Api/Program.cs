@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Serilog;
 using Trendlink.Api.Extensions;
 using Trendlink.Application;
@@ -16,7 +18,14 @@ namespace Trendlink.Api
                     loggerConfig.ReadFrom.Configuration(context.Configuration)
             );
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
@@ -36,6 +45,7 @@ namespace Trendlink.Api
 
             app.UseCustomExceptionHandler();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

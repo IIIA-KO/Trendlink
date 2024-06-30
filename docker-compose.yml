@@ -14,13 +14,26 @@ services:
     image: postgres:latest
     container_name: Trendlink.Db
     environment:
-      - POSTGRES_DB=bookify
+      - POSTGRES_DB=trendlink
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - ./.containers/database:/var/lib/postgresql/data
     ports:
       - 5432:5432
+   
+  trendlink-idp:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: Trendlink.Identity
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files/trendlink-realm-export.json:/opt/keycloak/data/import/realm.json
+    ports:
+      - 18080:8080
 
   trendlink-seq:
     image: datalust/seq:latest
