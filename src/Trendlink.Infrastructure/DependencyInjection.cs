@@ -13,7 +13,6 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Cities;
-using Trendlink.Domain.Users.Countries;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
