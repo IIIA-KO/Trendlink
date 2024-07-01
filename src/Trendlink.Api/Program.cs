@@ -9,7 +9,7 @@ namespace Trendlink.Api
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +35,7 @@ namespace Trendlink.Api
             if (app.Environment.IsDevelopment())
             {
                 app.ApplyMigrations();
-                app.SeedData();
+                await app.SeedData(builder.Configuration);
             }
 
             app.UseHttpsRedirection();
@@ -50,7 +50,7 @@ namespace Trendlink.Api
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
