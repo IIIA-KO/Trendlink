@@ -1,7 +1,6 @@
-﻿using System.Net.Http.Headers;
-using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.Cities;
+﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Users
@@ -39,9 +38,9 @@ namespace Trendlink.Domain.Users
 
         public Email Email { get; private set; }
 
-        public CityId CityId { get; private set; }
+        public StateId StateId { get; private set; }
 
-        public City City { get; private set; }
+        public State State { get; private set; }
 
         public PhoneNumber PhoneNumber { get; private set; }
 
@@ -115,12 +114,12 @@ namespace Trendlink.Domain.Users
             return age >= MinimumAge;
         }
 
-        public void SetCity(City city)
+        public void SetState(State state)
         {
-            this.City =
-                city ?? throw new ArgumentNullException(nameof(city), "City cannot be null.");
+            this.State =
+                state ?? throw new ArgumentNullException(nameof(state), "State cannot be null.");
 
-            this.CityId = city.Id;
+            this.StateId = state.Id;
         }
 
         public void SetIdentityId(string identityId)

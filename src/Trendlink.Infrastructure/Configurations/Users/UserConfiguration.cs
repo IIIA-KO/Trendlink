@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Infrastructure.Configurations.Users
@@ -34,13 +34,13 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .HasConversion(email => email.Value, value => new Email(value));
 
             builder
-                .Property(user => user.CityId)
-                .HasConversion(cityId => cityId.Value, value => new CityId(value));
+                .Property(user => user.StateId)
+                .HasConversion(stateId => stateId.Value, value => new StateId(value));
 
             builder
-                .HasOne(user => user.City)
+                .HasOne(user => user.State)
                 .WithMany()
-                .HasForeignKey(user => user.CityId)
+                .HasForeignKey(user => user.StateId)
                 .IsRequired();
 
             builder

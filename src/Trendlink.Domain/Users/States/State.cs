@@ -1,11 +1,11 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.Countries;
 
-namespace Trendlink.Domain.Users.Cities
+namespace Trendlink.Domain.Users.States
 {
-    public sealed class City : Entity<CityId>
+    public sealed class State : Entity<StateId>
     {
-        private City(CityId id, CityName name, Country? country)
+        private State(StateId id, StateName name, Country? country)
         {
             this.Id = id;
             this.Name = name;
@@ -13,22 +13,22 @@ namespace Trendlink.Domain.Users.Cities
             this.Country = country;
         }
 
-        private City() { }
+        private State() { }
 
-        public CityName Name { get; init; }
+        public StateName Name { get; init; }
 
         public CountryId CountyId { get; init; }
 
         public Country? Country { get; init; }
 
-        public static Result<City> Create(CityName name, Country? country)
+        public static Result<State> Create(StateName name, Country? country)
         {
             if (name is null || string.IsNullOrEmpty(name.Value) || country is null)
             {
-                return Result.Failure<City>(CityErrors.Invalid);
+                return Result.Failure<State>(StateErrors.Invalid);
             }
 
-            return new City(CityId.New(), name, country);
+            return new State(StateId.New(), name, country);
         }
     }
 }

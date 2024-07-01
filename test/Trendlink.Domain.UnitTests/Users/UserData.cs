@@ -1,5 +1,5 @@
-﻿using Trendlink.Domain.Users.Cities;
-using Trendlink.Domain.Users.Countries;
+﻿using Trendlink.Domain.Users.Countries;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.UnitTests.Users
@@ -18,6 +18,6 @@ namespace Trendlink.Domain.UnitTests.Users
         
         public static readonly PhoneNumber PhoneNumber = new("0123456789");
 
-        public static readonly City City = City.Create(new CityName("City"), Country.Create(new CountryName("Country")).Value).Value;
+        public static readonly State City = State.Create(new StateName("City"), Country.Create(new CountryName("Country")).Value).Value;
     }
 }

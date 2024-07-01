@@ -12,7 +12,7 @@ using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
@@ -64,7 +64,7 @@ namespace Trendlink.Infrastructure
             );
 
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()

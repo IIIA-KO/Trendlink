@@ -69,11 +69,11 @@ namespace Trendlink.Domain.UnitTests.Users
             User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Act
-            user.SetCity(UserData.City);
+            user.SetState(UserData.City);
 
             // Assert
-            user.City.Should().Be(UserData.City);
-            user.CityId.Should().Be(UserData.City.Id);
+            user.State.Should().Be(UserData.City);
+            user.StateId.Should().Be(UserData.City.Id);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Trendlink.Domain.UnitTests.Users
             User user = User.Create(UserData.FirstName, UserData.LastName, UserData.BirthDate, UserData.Email, UserData.PhoneNumber).Value;
 
             // Act
-            Action setNullCity = () => user.SetCity(null!);
+            Action setNullCity = () => user.SetState(null!);
 
             // Assert
             setNullCity.Should().Throw<ArgumentNullException>();
