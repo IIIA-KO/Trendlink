@@ -1,5 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.RegisterUser
@@ -11,6 +11,6 @@ namespace Trendlink.Application.Users.RegisterUser
         string Email,
         string PhoneNumber,
         string Password,
-        CityId CityId
+        StateId StateId
     ) : ICommand<UserId>;
 }
