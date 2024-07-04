@@ -14,7 +14,7 @@ namespace Trendlink.Infrastructure.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<TEntity?> GetByIdAsync(
+        public virtual async Task<TEntity?> GetByIdAsync(
             TEntityId id,
             CancellationToken cancellationToken = default
         )

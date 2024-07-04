@@ -12,5 +12,11 @@ namespace Trendlink.Domain.Users
 
         public static readonly Error Underage =
             new("User.Underage", "The user must be at least 18 years old");
+
+        public static readonly Error DuplicateEmail =
+            new("User.DuplicateEmail", "User with this email already exists");
+
+        public static readonly Error NotAuthorized =
+            new("User.NotAuthorized", "User is not authorized to perform action");
     }
 }

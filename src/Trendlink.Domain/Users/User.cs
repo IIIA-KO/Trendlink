@@ -54,6 +54,25 @@ namespace Trendlink.Domain.Users
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 
+        public void Update(
+            FirstName firstName,
+            LastName lastName,
+            DateOnly birthDate,
+            State state,
+            Bio bio,
+            AccountType accountType,
+            AccountCategory accountCategory
+        )
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.BirthDate = birthDate;
+            this.SetState(state);
+            this.Bio = bio;
+            this.AccountType = accountType;
+            this.AccountCategory = accountCategory;
+        }
+
         public static Result<User> Create(
             FirstName firstName,
             LastName lastName,

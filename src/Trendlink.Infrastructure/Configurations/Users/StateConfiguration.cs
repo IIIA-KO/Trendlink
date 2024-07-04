@@ -25,7 +25,7 @@ namespace Trendlink.Infrastructure.Configurations.Users
             builder
                 .HasOne(state => state.Country)
                 .WithMany(country => country.States)
-                .HasForeignKey(state => state.CountyId)
+                .HasForeignKey(state => state.CountryId)
                 .IsRequired();
         }
     }

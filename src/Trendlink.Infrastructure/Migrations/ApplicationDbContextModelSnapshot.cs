@@ -64,14 +64,16 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasAnnotation("Relational:JsonPropertyName", "name");
 
                     b.HasKey("Id")
                         .HasName("pk_roles");
@@ -97,9 +99,9 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CountyId")
+                    b.Property<Guid>("CountryId")
                         .HasColumnType("uuid")
-                        .HasColumnName("county_id");
+                        .HasColumnName("country_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -110,8 +112,8 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_states");
 
-                    b.HasIndex("CountyId")
-                        .HasDatabaseName("ix_states_county_id");
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("ix_states_country_id");
 
                     b.ToTable("states", (string)null);
                 });
@@ -246,10 +248,10 @@ namespace Trendlink.Infrastructure.Migrations
                 {
                     b.HasOne("Trendlink.Domain.Users.Countries.Country", "Country")
                         .WithMany("States")
-                        .HasForeignKey("CountyId")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_states_countries_county_id");
+                        .HasConstraintName("fk_states_countries_country_id");
 
                     b.Navigation("Country");
                 });

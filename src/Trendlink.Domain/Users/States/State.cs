@@ -9,7 +9,7 @@ namespace Trendlink.Domain.Users.States
         {
             this.Id = id;
             this.Name = name;
-            this.CountyId = country!.Id;
+            this.CountryId = country!.Id;
             this.Country = country;
         }
 
@@ -17,7 +17,7 @@ namespace Trendlink.Domain.Users.States
 
         public StateName Name { get; init; }
 
-        public CountryId CountyId { get; init; }
+        public CountryId CountryId { get; init; }
 
         public Country? Country { get; init; }
 
