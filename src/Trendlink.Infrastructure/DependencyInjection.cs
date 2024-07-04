@@ -1,4 +1,7 @@
-﻿using Dapper;
+﻿using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
+using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
+using Dapper;
+using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +15,7 @@ using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authorization;
@@ -20,9 +24,6 @@ using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Outbox;
 using Trendlink.Infrastructure.Repositories;
-using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
-using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
-using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
 
 namespace Trendlink.Infrastructure
 {
@@ -63,21 +64,22 @@ namespace Trendlink.Infrastructure
                     .UseSnakeCaseNamingConvention()
             );
 
+            services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(
+                connectionString
+            ));
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
             );
 
-            services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(
-                connectionString
-            ));
-
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         }
 
-        public static void AddAuthentication(
+        private static void AddAuthentication(
             IServiceCollection services,
             IConfiguration configuration
         )
