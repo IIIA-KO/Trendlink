@@ -9,7 +9,7 @@ namespace Trendlink.Api
 {
     public static class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +27,9 @@ namespace Trendlink.Api
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
 
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -34,8 +37,11 @@ namespace Trendlink.Api
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+
                 app.ApplyMigrations();
-                await app.SeedData(builder.Configuration);
+                app.SeedData(builder.Configuration).Wait();
             }
 
             app.UseHttpsRedirection();
@@ -50,7 +56,7 @@ namespace Trendlink.Api
 
             app.MapControllers();
 
-            await app.RunAsync();
+            app.Run();
         }
     }
 }
