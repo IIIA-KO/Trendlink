@@ -17,13 +17,13 @@ namespace Trendlink.Application.Users.RegisterUser
         public RegisterUserCommandHandler(
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
-            IStateRepository cityRepository,
+            IStateRepository stateRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._authenticationService = authenticationService;
             this._userRepository = userRepository;
-            this._stateRepository = cityRepository;
+            this._stateRepository = stateRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -32,8 +32,8 @@ namespace Trendlink.Application.Users.RegisterUser
             CancellationToken cancellationToken
         )
         {
-            bool userExists = await this._userRepository.UserExists(new Email(request.Email));
-            if (!userExists)
+            bool userExists = await this._userRepository.UserExists(request.Email);
+            if (userExists)
             {
                 return Result.Failure<UserId>(UserErrors.DuplicateEmail);
             }
@@ -48,11 +48,11 @@ namespace Trendlink.Application.Users.RegisterUser
             }
 
             Result<User> result = User.Create(
-                new FirstName(request.FirstName),
-                new LastName(request.LastName),
+                request.FirstName,
+                request.LastName,
                 request.BirthDate,
-                new Email(request.Email),
-                new PhoneNumber(request.PhoneNumber)
+                request.Email,
+                request.PhoneNumber
             );
 
             if (result.IsFailure)
@@ -62,21 +62,29 @@ namespace Trendlink.Application.Users.RegisterUser
 
             User user = result.Value;
 
-            string identityId = await this._authenticationService.RegisterAsync(
-                user,
-                request.Password,
-                cancellationToken
-            );
+            try
+            {
+                string identityId = await this._authenticationService.RegisterAsync(
+                    user,
+                    request.Password,
+                    cancellationToken
+                );
 
-            user.SetState(state);
+                user.SetState(state);
 
-            user.SetIdentityId(identityId);
+                user.SetIdentityId(identityId);
 
-            this._userRepository.Add(user);
+                this._userRepository.Add(user);
 
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+                await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return user.Id;
+                return user.Id;
+            }
+            catch (Exception exception)
+                when (exception is HttpRequestException || exception is ArgumentNullException)
+            {
+                return Result.Failure<UserId>(UserErrors.RegistrationFailed);
+            }
         }
     }
 }

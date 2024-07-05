@@ -18,5 +18,11 @@ namespace Trendlink.Domain.Users
 
         public static readonly Error NotAuthorized =
             new("User.NotAuthorized", "User is not authorized to perform action");
+
+        public static readonly Error RegistrationFailed =
+            new(
+                "User.RegistrationFailed ",
+                "Failed to register user authentication service failure"
+            );
     }
 }

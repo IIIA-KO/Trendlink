@@ -6,7 +6,7 @@ namespace Trendlink.Application.Users.LogInUser
     {
         public LogInUserCommandValidator()
         {
-            this.RuleFor(c => c.Email)
+            this.RuleFor(c => c.Email.Value)
                 .EmailAddress()
                 .WithMessage("Invalid email format.")
                 .NotEmpty()

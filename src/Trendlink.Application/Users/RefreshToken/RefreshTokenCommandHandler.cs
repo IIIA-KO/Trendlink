@@ -2,6 +2,7 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Users.RefreshToken
 {
@@ -25,9 +26,9 @@ namespace Trendlink.Application.Users.RefreshToken
                 cancellationToken
             );
 
-            if (result.IsFailure)
+            if (result is null || result.IsFailure)
             {
-                return Result.Failure<AccessTokenResponse>(result.Error);
+                return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
             }
 
             return result;

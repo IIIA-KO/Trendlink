@@ -14,13 +14,13 @@ namespace Trendlink.Application.Users.RegisterUser
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow.Date.AddYears(-18)))
                 .WithMessage("You must be at least 18 years old.");
 
-            this.RuleFor(c => c.Email)
+            this.RuleFor(c => c.Email.Value)
                 .EmailAddress()
                 .WithMessage("Invalid email format.")
                 .NotEmpty()
                 .WithMessage("Email is required.");
 
-            this.RuleFor(p => p.PhoneNumber)
+            this.RuleFor(p => p.PhoneNumber.Value)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Phone Number is required.")

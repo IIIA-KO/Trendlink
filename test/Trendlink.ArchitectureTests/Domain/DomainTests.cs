@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Reflection;
+using FluentAssertions;
 using NetArchTest.Rules;
-using System.Reflection;
 using Trendlink.ArchitectureTests.Infrastructure;
 using Trendlink.Domain.Abstraction;
 

@@ -31,11 +31,11 @@ namespace Trendlink.Api.Controllers.Users
         )
         {
             var command = new RegisterUserCommand(
-                request.FirstName,
-                request.LastName,
+                new FirstName(request.FirstName),
+                new LastName(request.LastName),
                 request.BirthDate,
-                request.Email,
-                request.PhoneNumber,
+                new Email(request.Email),
+                new PhoneNumber(request.PhoneNumber),
                 request.Password,
                 new StateId(request.StateId)
             );
@@ -50,7 +50,7 @@ namespace Trendlink.Api.Controllers.Users
             CancellationToken cancellationToken
         )
         {
-            var command = new LogInUserCommand(request.Email, request.Password);
+            var command = new LogInUserCommand(new Email(request.Email), request.Password);
 
             Result<AccessTokenResponse> result = await this.Sender.Send(command, cancellationToken);
 

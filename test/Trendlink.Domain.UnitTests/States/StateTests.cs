@@ -8,7 +8,7 @@ namespace Trendlink.Domain.UnitTests.States
     public class StateTests : BaseTest
     {
         [Fact]
-        public void Create_Should_CreateCity_WhenValidNameAndCountryProvided()
+        public void Create_Should_CreateState_WhenValidNameAndCountryProvided()
         {
             // Act
             Result<State> result = State.Create(StateData.StateName, StateData.Country);
@@ -35,10 +35,10 @@ namespace Trendlink.Domain.UnitTests.States
         public void Create_Should_Fail_WhenNameValueIsNull()
         {
             // Arrange
-            var cityName = new StateName(null!);
+            var stateName = new StateName(null!);
 
             // Act
-            Result<State> result = State.Create(cityName, StateData.Country);
+            Result<State> result = State.Create(stateName, StateData.Country);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -49,10 +49,10 @@ namespace Trendlink.Domain.UnitTests.States
         public void Create_Should_Fail_WhenNameValueIsEmpty()
         {
             // Arrange
-            var cityName = new StateName(string.Empty);
+            var stateName = new StateName(string.Empty);
 
             // Act
-            Result<State> result = State.Create(cityName, StateData.Country);
+            Result<State> result = State.Create(stateName, StateData.Country);
 
             // Assert
             result.IsFailure.Should().BeTrue();

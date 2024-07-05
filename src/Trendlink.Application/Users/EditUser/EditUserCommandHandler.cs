@@ -54,7 +54,7 @@ namespace Trendlink.Application.Users.EditUser
                 return Result.Failure(StateErrors.NotFound);
             }
 
-            user.Update(
+            Result result = user.Update(
                 request.FirstName,
                 request.LastName,
                 request.BirthDate,
@@ -63,6 +63,11 @@ namespace Trendlink.Application.Users.EditUser
                 request.AccountType,
                 request.AccountCategory
             );
+
+            if (result.IsFailure)
+            {
+                return Result.Failure(result.Error);
+            }
 
             return Result.Success(await this._unitOfWork.SaveChangesAsync(cancellationToken));
         }

@@ -1,4 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users.ValueObjects;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 
 namespace Trendlink.Application.Abstractions.Authentication
@@ -6,7 +7,7 @@ namespace Trendlink.Application.Abstractions.Authentication
     public interface IJwtService
     {
         Task<Result<AccessTokenResponse>> GetAccessTokenAsync(
-            string email,
+            Email email,
             string password,
             CancellationToken cancellationToken = default
         );

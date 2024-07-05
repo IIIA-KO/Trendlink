@@ -28,7 +28,9 @@ namespace Trendlink.Application.Countries.GetStates
             CancellationToken cancellationToken
         )
         {
-            bool countryExists = await this._countryRepository.CountryExists(new CountryId(request.CountryId));
+            bool countryExists = await this._countryRepository.CountryExists(
+                new CountryId(request.CountryId)
+            );
             if (!countryExists)
             {
                 return Result.Failure<IReadOnlyCollection<StateResponse>>(CountryErrors.NotFound);
@@ -36,7 +38,9 @@ namespace Trendlink.Application.Countries.GetStates
 
             using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
 
-            const string sql = """
+            try
+            {
+                const string sql = """
                 SELECT
                     id AS Id,
                     name AS Name
@@ -44,7 +48,14 @@ namespace Trendlink.Application.Countries.GetStates
                 WHERE country_id = @CountryId
                 """;
 
-            return (await dbConnection.QueryAsync<StateResponse>(sql, new { request.CountryId})).ToList();
+                return (
+                    await dbConnection.QueryAsync<StateResponse>(sql, new { request.CountryId })
+                ).ToList();
+            }
+            catch (Exception)
+            {
+                return Result.Failure<IReadOnlyCollection<StateResponse>>(Error.Unexpected);
+            }
         }
     }
 }

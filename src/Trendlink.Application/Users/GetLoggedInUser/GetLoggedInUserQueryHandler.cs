@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
+using System.Data;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
@@ -39,12 +39,19 @@ namespace Trendlink.Application.Users.GetLoggedInUser
                 WHERE identity_id = @IdentityId
                 """;
 
-            UserResponse user = await connection.QuerySingleAsync<UserResponse>(
-                sql,
-                new { this._userContext.IdentityId }
-            );
+            try
+            {
+                UserResponse user = await connection.QuerySingleAsync<UserResponse>(
+                    sql,
+                    new { this._userContext.IdentityId }
+                );
 
-            return user;
+                return user;
+            }
+            catch (Exception)
+            {
+                return Result.Failure<UserResponse>(Error.Unexpected);
+            }
         }
     }
 }

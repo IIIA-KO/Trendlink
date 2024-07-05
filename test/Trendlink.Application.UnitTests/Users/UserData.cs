@@ -1,12 +1,21 @@
-﻿using Trendlink.Domain.Users.Countries;
+﻿using Trendlink.Application.Users.LogInUser;
+using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
-namespace Trendlink.Domain.UnitTests.Users
+namespace Trendlink.Application.UnitTests.Users
 {
     internal static class UserData
     {
         public const int MinimumAge = 18;
+
+        public const string Password = "Pa$$w0rd";
+
+        public static User Create() =>
+            User.Create(FirstName, LastName, BirthDate, Email, PhoneNumber).Value;
+
+        public static readonly AccessTokenResponse Token = new("access_token", "refresh_token");
 
         public static readonly FirstName FirstName = new("First");
 
@@ -15,7 +24,7 @@ namespace Trendlink.Domain.UnitTests.Users
         public static readonly Email Email = new("test@test.com");
 
         public static readonly DateOnly BirthDate = DateOnly.FromDateTime(
-            DateTime.Now.AddYears(-MinimumAge)
+            DateTime.Now.AddYears(-18)
         );
 
         public static readonly PhoneNumber PhoneNumber = new("0123456789");
@@ -25,5 +34,9 @@ namespace Trendlink.Domain.UnitTests.Users
             .Value;
 
         public static readonly Bio Bio = new("Bio");
+
+        public static readonly AccountType AccountType = AccountType.Personal;
+
+        public static readonly AccountCategory AccountCategory = AccountCategory.Education;
     }
 }

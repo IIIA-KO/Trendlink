@@ -1,4 +1,16 @@
 ﻿namespace Trendlink.Application.Countries.GetStates
 {
-    public record StateResponse(Guid Id, string Name);
+    public class StateResponse
+    {
+        public StateResponse() { }
+
+        public StateResponse(Guid id, string name)
+        {
+            this.Id = id;
+            this.Name = name;
+        }
+
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+    }
 }

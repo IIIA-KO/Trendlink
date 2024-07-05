@@ -5,11 +5,11 @@ using Trendlink.Domain.Users.ValueObjects;
 namespace Trendlink.Application.Users.RegisterUser
 {
     public sealed record RegisterUserCommand(
-        string FirstName,
-        string LastName,
+        FirstName FirstName,
+        LastName LastName,
         DateOnly BirthDate,
-        string Email,
-        string PhoneNumber,
+        Email Email,
+        PhoneNumber PhoneNumber,
         string Password,
         StateId StateId
     ) : ICommand<UserId>;

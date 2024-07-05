@@ -7,6 +7,8 @@ namespace Trendlink.Domain.UnitTests.States
     {
         public static readonly StateName StateName = new("TestState");
 
-        public static readonly Country Country = Country.Create(new CountryName("TestCountry")).Value;
+        public static readonly Country Country = Country
+            .Create(new CountryName("TestCountry"))
+            .Value;
     }
 }

@@ -1,7 +1,4 @@
-﻿using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
-using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
-using Dapper;
-using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
+﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +21,9 @@ using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Outbox;
 using Trendlink.Infrastructure.Repositories;
+using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
+using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
+using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
 
 namespace Trendlink.Infrastructure
 {

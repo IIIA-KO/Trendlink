@@ -54,7 +54,15 @@ namespace Trendlink.Domain.Users
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 
-        public void Update(
+        public void AddRole(Role role)
+        {
+            if (!this._roles.Contains(role))
+            {
+                this._roles.Add(role);
+            }
+        }
+
+        public Result Update(
             FirstName firstName,
             LastName lastName,
             DateOnly birthDate,
@@ -64,6 +72,11 @@ namespace Trendlink.Domain.Users
             AccountCategory accountCategory
         )
         {
+            if (!IsOfLegalAge(birthDate))
+            {
+                return Result.Failure(UserErrors.Underage);
+            }
+
             this.FirstName = firstName;
             this.LastName = lastName;
             this.BirthDate = birthDate;
@@ -71,6 +84,8 @@ namespace Trendlink.Domain.Users
             this.Bio = bio;
             this.AccountType = accountType;
             this.AccountCategory = accountCategory;
+
+            return Result.Success();
         }
 
         public static Result<User> Create(
@@ -108,7 +123,16 @@ namespace Trendlink.Domain.Users
             PhoneNumber phoneNumber
         )
         {
-            if (firstName is null || lastName is null || email is null || phoneNumber is null)
+            if (
+                firstName is null
+                || string.IsNullOrEmpty(firstName.Value)
+                || lastName is null
+                || string.IsNullOrEmpty(lastName.Value)
+                || email is null
+                || string.IsNullOrEmpty(email.Value)
+                || phoneNumber is null
+                || string.IsNullOrEmpty(phoneNumber.Value)
+            )
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
             }
@@ -116,7 +140,7 @@ namespace Trendlink.Domain.Users
             return Result.Success();
         }
 
-        private static bool IsOfLegalAge(DateOnly birthDate)
+        internal static bool IsOfLegalAge(DateOnly birthDate)
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
             var birthDateTimeOffset = new DateTimeOffset(

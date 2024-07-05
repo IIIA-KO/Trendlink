@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 
@@ -36,12 +37,12 @@ namespace Trendlink.Infrastructure.Authentication
         }
 
         public async Task<Result<AccessTokenResponse>> GetAccessTokenAsync(
-            string email,
+            Email email,
             string password,
             CancellationToken cancellationToken = default
         )
         {
-            string cacheKey = $"{CacheKeyPrefix}{email}";
+            string cacheKey = $"{CacheKeyPrefix}{email.Value}";
 
             AuthorizationToken? cachedToken = await this._cacheService.GetAsync<AuthorizationToken>(
                 cacheKey,
@@ -61,7 +62,7 @@ namespace Trendlink.Infrastructure.Authentication
                     new("client_secret", this._keycloakOptions.AuthClientSecret),
                     new("scope", "openid email"),
                     new("grant_type", "password"),
-                    new("username", email),
+                    new("username", email.Value),
                     new("password", password),
                 };
 

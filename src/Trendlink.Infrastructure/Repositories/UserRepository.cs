@@ -1,6 +1,6 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
@@ -35,7 +35,8 @@ namespace Trendlink.Infrastructure.Repositories
 
         public async Task<bool> UserExists(Email email)
         {
-            return await this.dbContext.Set<User>()
+            return await this
+                .dbContext.Set<User>()
                 .AsNoTracking()
                 .AnyAsync(user => user.Email == email);
         }
