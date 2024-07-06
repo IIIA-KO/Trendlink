@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Data;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using System.Data;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Users.GetLoggedInUser;
@@ -13,7 +13,7 @@ namespace Trendlink.Application.UnitTests.Users
     {
         public static readonly GetLoggedInUserQuery Query = new();
 
-        private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;    
+        private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
         private readonly IUserContext _userContextMock;
 
         private readonly GetLoggedInUserQueryHandler _handler;
@@ -23,7 +23,10 @@ namespace Trendlink.Application.UnitTests.Users
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
             this._userContextMock = Substitute.For<IUserContext>();
 
-            this._handler = new GetLoggedInUserQueryHandler(this._sqlConnectionFactoryMock, this._userContextMock);
+            this._handler = new GetLoggedInUserQueryHandler(
+                this._sqlConnectionFactoryMock,
+                this._userContextMock
+            );
         }
 
         [Fact]
@@ -50,13 +53,9 @@ namespace Trendlink.Application.UnitTests.Users
                 WHERE identity_id = @IdentityId
                 """;
 
-            dbConnectionMock
-                .SetupQuery(sql)
-                .Returns(expectedUser);
+            dbConnectionMock.SetupQuery(sql).Returns(expectedUser);
 
-            this._sqlConnectionFactoryMock
-                .CreateConnection()
-                .Returns(dbConnectionMock);
+            this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
             // Act
             Result<UserResponse> result = await this._handler.Handle(Query, default);
@@ -81,13 +80,9 @@ namespace Trendlink.Application.UnitTests.Users
                 WHERE identity_id = @IdentityId
                 """;
 
-            dbConnectionMock
-                .SetupQuery(sql)
-                .Throws(new Exception("Database exception"));
+            dbConnectionMock.SetupQuery(sql).Throws(new Exception("Database exception"));
 
-            this._sqlConnectionFactoryMock
-                .CreateConnection()
-                .Returns(dbConnectionMock);
+            this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
             // Act
             Result<UserResponse> result = await this._handler.Handle(Query, default);

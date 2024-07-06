@@ -4,6 +4,11 @@
     {
         Task<Country?> GetByIdAsync(CountryId id, CancellationToken cancellationToken = default);
 
+        Task<Country?> GetByIdWithStatesAsync(
+            CountryId id,
+            CancellationToken cancellationToken = default
+        );
+
         Task<bool> CountryExists(CountryId id);
     }
 }

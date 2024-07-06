@@ -1,5 +1,5 @@
-﻿using Dapper;
-using System.Data;
+﻿using System.Data;
+using Dapper;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;

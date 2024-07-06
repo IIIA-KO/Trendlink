@@ -31,7 +31,10 @@ namespace Trendlink.Application.Users.EditUser
             CancellationToken cancellationToken
         )
         {
-            User user = await this._userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            User user = await this._userRepository.GetByIdWithRolesAsync(
+                request.UserId,
+                cancellationToken
+            );
             if (user is null)
             {
                 return Result.Failure(UserErrors.NotFound);

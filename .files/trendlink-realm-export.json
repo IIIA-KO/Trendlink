@@ -751,7 +751,7 @@
       "attributes": {
         "id.token.as.detached.signature": "false",
         "saml.assertion.signature": "false",
-        "access.token.lifespan": "3600",
+        "access.token.lifespan": "900",
         "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
         "saml.encrypt": "false",

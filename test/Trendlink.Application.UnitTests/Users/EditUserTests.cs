@@ -2,7 +2,6 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Users.EditUser;
-using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
@@ -50,7 +49,10 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFailure_When_UserIsNull()
         {
             // Arrange
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns((User?)null);
 
             // Act
@@ -68,7 +70,10 @@ namespace Trendlink.Application.UnitTests.Users
             User user = UserData.Create();
             user.SetIdentityId("456");
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("123");
@@ -90,7 +95,10 @@ namespace Trendlink.Application.UnitTests.Users
 
             user.AddRole(Role.Administrator);
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("456");
@@ -114,7 +122,10 @@ namespace Trendlink.Application.UnitTests.Users
 
             user.AddRole(Role.Administrator);
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("123");
@@ -136,7 +147,10 @@ namespace Trendlink.Application.UnitTests.Users
             User user = UserData.Create();
             user.SetIdentityId("123");
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("123");
@@ -152,13 +166,16 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnSuccess_When_StateIsNull()
+        public async Task Handle_Should_ReturnFailure_When_StateIsNull()
         {
             // Arrange
             User user = UserData.Create();
             user.SetIdentityId("123");
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("123");
@@ -181,7 +198,10 @@ namespace Trendlink.Application.UnitTests.Users
             User user = UserData.Create();
             user.SetIdentityId("123");
 
-            this._userRepositoryMock.GetByIdAsync(Command.UserId, Arg.Any<CancellationToken>())
+            this._userRepositoryMock.GetByIdWithRolesAsync(
+                Command.UserId,
+                Arg.Any<CancellationToken>()
+            )
                 .Returns(user);
 
             this._userContextMock.IdentityId.Returns("123");

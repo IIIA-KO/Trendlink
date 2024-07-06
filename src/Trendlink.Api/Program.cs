@@ -8,8 +8,7 @@ using Trendlink.Infrastructure;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(
-    (context, loggerConfig) =>
-        loggerConfig.ReadFrom.Configuration(context.Configuration)
+    (context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration)
 );
 
 builder.Services.AddControllers(options =>

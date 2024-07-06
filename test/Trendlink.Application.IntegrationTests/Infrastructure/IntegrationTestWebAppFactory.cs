@@ -42,20 +42,22 @@ namespace Trendlink.Application.IntegrationTests.Infrastructure
             {
                 services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
 
-                string connectionString = $"{this._dbContainer.GetConnectionString()};Pooling=False";
+                string connectionString =
+                    $"{this._dbContainer.GetConnectionString()};Pooling=False";
 
                 services.AddDbContext<ApplicationDbContext>(options =>
-                    options
-                        .UseNpgsql(connectionString)
-                        .UseSnakeCaseNamingConvention());
+                    options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention()
+                );
 
                 services.RemoveAll(typeof(ISqlConnectionFactory));
 
-                services.AddSingleton<ISqlConnectionFactory>(_ =>
-                    new SqlConnectionFactory(connectionString));
+                services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(
+                    connectionString
+                ));
 
                 services.Configure<RedisCacheOptions>(redisCacheOptions =>
-                    redisCacheOptions.Configuration = this._redisContainer.GetConnectionString());
+                    redisCacheOptions.Configuration = this._redisContainer.GetConnectionString()
+                );
 
                 string? keycloakAddress = this._keycloakContainer.GetBaseAddress();
 

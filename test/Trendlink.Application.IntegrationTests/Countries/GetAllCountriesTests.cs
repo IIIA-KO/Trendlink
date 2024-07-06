@@ -7,7 +7,7 @@ namespace Trendlink.Application.IntegrationTests.Countries
 {
     public class GetAllCountriesTests : BaseIntegrationTest
     {
-        public GetAllCountriesTests(IntegrationTestWebAppFactory factory) 
+        public GetAllCountriesTests(IntegrationTestWebAppFactory factory)
             : base(factory) { }
 
         [Fact]
@@ -17,7 +17,10 @@ namespace Trendlink.Application.IntegrationTests.Countries
             var query = new GetAllCountriesQuery();
 
             // Act
-            Result<IReadOnlyCollection<CountryResponse>> result = await this.Sender.Send(query, default);
+            Result<IReadOnlyCollection<CountryResponse>> result = await this.Sender.Send(
+                query,
+                default
+            );
 
             // Assert
             result.IsSuccess.Should().BeTrue();

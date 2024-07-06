@@ -1,9 +1,7 @@
-﻿using System.Data;
-using Dapper;
-using Microsoft.EntityFrameworkCore;
-using Trendlink.Application.Abstractions.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Infrastructure.Specifications.Users;
 
 namespace Trendlink.Infrastructure.Repositories
 {
@@ -12,15 +10,13 @@ namespace Trendlink.Infrastructure.Repositories
         public UserRepository(ApplicationDbContext dbContext)
             : base(dbContext) { }
 
-        public override async Task<User?> GetByIdAsync(
+        public async Task<User?> GetByIdWithRolesAsync(
             UserId id,
             CancellationToken cancellationToken = default
         )
         {
-            return await this
-                .dbContext.Set<User>()
-                .Include(user => user.Roles)
-                .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
+            return await this.ApplySpecification(new UserByIdWithRolesSpecification(id))
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public override void Add(User user)

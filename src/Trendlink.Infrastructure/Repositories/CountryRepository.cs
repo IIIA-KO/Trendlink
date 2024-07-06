@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Domain.Users.Countries;
+using Trendlink.Infrastructure.Specifications.Countries;
 
 namespace Trendlink.Infrastructure.Repositories
 {
@@ -7,6 +8,15 @@ namespace Trendlink.Infrastructure.Repositories
     {
         public CountryRepository(ApplicationDbContext dbContext)
             : base(dbContext) { }
+
+        public async Task<Country?> GetByIdWithStatesAsync(
+            CountryId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ApplySpecification(new CountryByIdWithStatesSpecification(id))
+                .FirstOrDefaultAsync(cancellationToken);
+        }
 
         public async Task<bool> CountryExists(CountryId id)
         {

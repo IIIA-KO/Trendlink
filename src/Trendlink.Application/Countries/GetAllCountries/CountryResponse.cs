@@ -4,7 +4,7 @@
     {
         public CountryResponse() { }
 
-        public CountryResponse(Guid id, string name) 
+        public CountryResponse(Guid id, string name)
         {
             this.Id = id;
             this.Name = name;

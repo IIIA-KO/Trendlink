@@ -28,7 +28,7 @@ namespace Trendlink.Domain.Users
             this.PhoneNumber = phoneNumber;
         }
 
-        private User() { }
+        public User() { }
 
         public FirstName FirstName { get; private set; }
 

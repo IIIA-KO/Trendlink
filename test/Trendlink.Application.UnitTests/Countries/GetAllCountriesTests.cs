@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Data;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using System.Data;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Countries.GetAllCountries;
 using Trendlink.Domain.Abstraction;
@@ -11,11 +11,11 @@ namespace Trendlink.Application.UnitTests.Countries
     public class GetAllCountriesTests
     {
         private const string Sql = """
-                SELECT
-                    id AS Id,
-                    name AS Name
-                FROM countries
-                """;
+            SELECT
+                id AS Id,
+                name AS Name
+            FROM countries
+            """;
 
         private readonly List<CountryResponse> ExpectedCountries =
         [
@@ -43,16 +43,15 @@ namespace Trendlink.Application.UnitTests.Countries
             // Arrange
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
 
-            dbConnectionMock
-                .SetupQuery(Sql)
-                .Throws(new Exception("Database exception"));
+            dbConnectionMock.SetupQuery(Sql).Throws(new Exception("Database exception"));
 
-            this._sqlConnectionFactoryMock
-                .CreateConnection()
-                .Returns(dbConnectionMock);
+            this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
             // Act
-            Result<IReadOnlyCollection<CountryResponse>> result = await this._handler.Handle(Query, default);
+            Result<IReadOnlyCollection<CountryResponse>> result = await this._handler.Handle(
+                Query,
+                default
+            );
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -65,16 +64,15 @@ namespace Trendlink.Application.UnitTests.Countries
             // Arrange
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
 
-            dbConnectionMock
-                .SetupQuery(Sql)
-                .Returns(this.ExpectedCountries);
+            dbConnectionMock.SetupQuery(Sql).Returns(this.ExpectedCountries);
 
-            this._sqlConnectionFactoryMock
-                .CreateConnection()
-                .Returns(dbConnectionMock);
+            this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
             // Act
-            Result<IReadOnlyCollection<CountryResponse>> result = await this._handler.Handle(Query, default);
+            Result<IReadOnlyCollection<CountryResponse>> result = await this._handler.Handle(
+                Query,
+                default
+            );
 
             // Assert
             result.IsSuccess.Should().BeTrue();

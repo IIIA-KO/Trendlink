@@ -11,7 +11,7 @@ namespace Trendlink.Application.IntegrationTests.Users
 {
     public class RegisterUserTests : BaseIntegrationTest
     {
-        public RegisterUserTests(IntegrationTestWebAppFactory factory) 
+        public RegisterUserTests(IntegrationTestWebAppFactory factory)
             : base(factory) { }
 
         [Fact]

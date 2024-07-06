@@ -1,5 +1,5 @@
-﻿using Dapper;
-using System.Data;
+﻿using System.Data;
+using Dapper;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
@@ -26,11 +26,11 @@ namespace Trendlink.Application.Countries.GetAllCountries
             try
             {
                 const string sql = """
-                SELECT
-                    id AS Id,
-                    name AS Name
-                FROM countries
-                """;
+                    SELECT
+                        id AS Id,
+                        name AS Name
+                    FROM countries
+                    """;
 
                 return (await dbConnection.QueryAsync<CountryResponse>(sql)).ToList();
             }

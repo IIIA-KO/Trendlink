@@ -10,7 +10,7 @@ namespace Trendlink.Application.IntegrationTests.Countries
     {
         private static readonly Guid CountryId = Guid.NewGuid();
 
-        public GetStatesTests(IntegrationTestWebAppFactory factory) 
+        public GetStatesTests(IntegrationTestWebAppFactory factory)
             : base(factory) { }
 
         [Fact]
@@ -20,7 +20,10 @@ namespace Trendlink.Application.IntegrationTests.Countries
             var query = new GetStatesQuery(CountryId);
 
             // Act
-            Result<IReadOnlyCollection<StateResponse>> result = await this.Sender.Send(query, default);
+            Result<IReadOnlyCollection<StateResponse>> result = await this.Sender.Send(
+                query,
+                default
+            );
 
             // Assert
             result.IsFailure.Should().BeTrue();

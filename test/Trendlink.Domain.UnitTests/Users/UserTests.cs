@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.UnitTests.Infrastructure;
 using Trendlink.Domain.Users;

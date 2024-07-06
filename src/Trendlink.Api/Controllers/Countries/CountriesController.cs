@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Countries.GetAllCountries;
 using Trendlink.Application.Countries.GetStates;
-using Trendlink.Domain.Users.Countries;
 
 namespace Trendlink.Api.Controllers.Countries
 {

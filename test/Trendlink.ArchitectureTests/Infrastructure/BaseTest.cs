@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Trendlink.Api;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure;
