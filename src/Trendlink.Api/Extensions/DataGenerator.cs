@@ -1,6 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Globalization;
+using Bogus;
+using Newtonsoft.Json;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Api.Extensions
 {
@@ -69,6 +73,37 @@ namespace Trendlink.Api.Extensions
             >(content);
 
             return result!.Data;
+        }
+
+        public static (User admin, List<User> users) GenerateUsers()
+        {
+            Faker<User> userFaker = new Faker<User>()
+                .RuleFor(u => u.FirstName, f => new FirstName(f.Name.FirstName()))
+                .RuleFor(u => u.LastName, f => new LastName(f.Name.LastName()))
+                .RuleFor(
+                    u => u.BirthDate,
+                    f => new DateOnly(
+                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Year,
+                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Month,
+                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Day
+                    )
+                )
+                .RuleFor(
+                    u => u.Email,
+                    (f, u) =>
+                        new Email(
+                            $"{u.FirstName.Value.ToUpperInvariant()}.{u.LastName.Value.ToUpperInvariant()}@test.com"
+                        )
+                )
+                .RuleFor(
+                    u => u.PhoneNumber,
+                    f => new PhoneNumber(f.Phone.PhoneNumber("##########"))
+                );
+
+            User admin = userFaker.Generate();
+            List<User> users = userFaker.Generate(3);
+
+            return (admin, users);
         }
     }
 }
