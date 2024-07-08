@@ -37,8 +37,17 @@ jobs:
       - name: Build
         run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
 
+      # Remove integration tests from sln
+      - name: Remove Trendlinl.Application.IntegrationTests from sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove $(dotnet sln ${{ env.SOLUTION_PATH }} list | grep .IntegrationTests.scproj)
+      
       - name: Test
         run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
 
+      # Add integration tests back to sln
+      - name: Add Trendlinl.Application.IntegrationTests back to sln
+        run: |
+          find . -name '*.IntegrationTests.scproj' | xargs -I {} dotnet sln ${{ env.SOLUTION_PATH }} add {}
+        
       - name: Publish
         run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
