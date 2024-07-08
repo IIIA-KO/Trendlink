@@ -1,7 +1,6 @@
-﻿using System.Net.Http.Headers;
-using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.Cities;
+﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Users
@@ -29,7 +28,7 @@ namespace Trendlink.Domain.Users
             this.PhoneNumber = phoneNumber;
         }
 
-        private User() { }
+        public User() { }
 
         public FirstName FirstName { get; private set; }
 
@@ -39,9 +38,9 @@ namespace Trendlink.Domain.Users
 
         public Email Email { get; private set; }
 
-        public CityId CityId { get; private set; }
+        public StateId StateId { get; private set; }
 
-        public City City { get; private set; }
+        public State State { get; private set; }
 
         public PhoneNumber PhoneNumber { get; private set; }
 
@@ -54,6 +53,40 @@ namespace Trendlink.Domain.Users
         public string IdentityId { get; private set; } = string.Empty;
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
+
+        public void AddRole(Role role)
+        {
+            if (!this._roles.Contains(role))
+            {
+                this._roles.Add(role);
+            }
+        }
+
+        public Result Update(
+            FirstName firstName,
+            LastName lastName,
+            DateOnly birthDate,
+            State state,
+            Bio bio,
+            AccountType accountType,
+            AccountCategory accountCategory
+        )
+        {
+            if (!IsOfLegalAge(birthDate))
+            {
+                return Result.Failure(UserErrors.Underage);
+            }
+
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.BirthDate = birthDate;
+            this.SetState(state);
+            this.Bio = bio;
+            this.AccountType = accountType;
+            this.AccountCategory = accountCategory;
+
+            return Result.Success();
+        }
 
         public static Result<User> Create(
             FirstName firstName,
@@ -90,7 +123,16 @@ namespace Trendlink.Domain.Users
             PhoneNumber phoneNumber
         )
         {
-            if (firstName is null || lastName is null || email is null || phoneNumber is null)
+            if (
+                firstName is null
+                || string.IsNullOrEmpty(firstName.Value)
+                || lastName is null
+                || string.IsNullOrEmpty(lastName.Value)
+                || email is null
+                || string.IsNullOrEmpty(email.Value)
+                || phoneNumber is null
+                || string.IsNullOrEmpty(phoneNumber.Value)
+            )
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
             }
@@ -98,7 +140,7 @@ namespace Trendlink.Domain.Users
             return Result.Success();
         }
 
-        private static bool IsOfLegalAge(DateOnly birthDate)
+        internal static bool IsOfLegalAge(DateOnly birthDate)
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
             var birthDateTimeOffset = new DateTimeOffset(
@@ -115,12 +157,12 @@ namespace Trendlink.Domain.Users
             return age >= MinimumAge;
         }
 
-        public void SetCity(City city)
+        public void SetState(State state)
         {
-            this.City =
-                city ?? throw new ArgumentNullException(nameof(city), "City cannot be null.");
+            this.State =
+                state ?? throw new ArgumentNullException(nameof(state), "State cannot be null.");
 
-            this.CityId = city.Id;
+            this.StateId = state.Id;
         }
 
         public void SetIdentityId(string identityId)

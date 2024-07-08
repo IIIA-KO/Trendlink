@@ -41,31 +41,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("role_user", (string)null);
                 });
 
-            modelBuilder.Entity("Trendlink.Domain.Users.Cities.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CountyId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("county_id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_cities");
-
-                    b.HasIndex("CountyId")
-                        .HasDatabaseName("ix_cities_county_id");
-
-                    b.ToTable("cities", (string)null);
-                });
-
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -89,14 +64,16 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("id")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasAnnotation("Relational:JsonPropertyName", "name");
 
                     b.HasKey("Id")
                         .HasName("pk_roles");
@@ -114,6 +91,31 @@ namespace Trendlink.Infrastructure.Migrations
                             Id = 2,
                             Name = "Registered"
                         });
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Users.States.State", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("country_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_states");
+
+                    b.HasIndex("CountryId")
+                        .HasDatabaseName("ix_states_country_id");
+
+                    b.ToTable("states", (string)null);
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
@@ -139,10 +141,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date")
                         .HasColumnName("birth_date");
-
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("city_id");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -173,11 +171,12 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone_number");
 
+                    b.Property<Guid>("StateId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("state_id");
+
                     b.HasKey("Id")
                         .HasName("pk_users");
-
-                    b.HasIndex("CityId")
-                        .HasDatabaseName("ix_users_city_id");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -186,6 +185,9 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasIndex("IdentityId")
                         .IsUnique()
                         .HasDatabaseName("ix_users_identity_id");
+
+                    b.HasIndex("StateId")
+                        .HasDatabaseName("ix_users_state_id");
 
                     b.ToTable("users", (string)null);
                 });
@@ -242,33 +244,33 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_role_user_users_users_id");
                 });
 
-            modelBuilder.Entity("Trendlink.Domain.Users.Cities.City", b =>
+            modelBuilder.Entity("Trendlink.Domain.Users.States.State", b =>
                 {
                     b.HasOne("Trendlink.Domain.Users.Countries.Country", "Country")
-                        .WithMany("Cities")
-                        .HasForeignKey("CountyId")
+                        .WithMany("States")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_cities_countries_county_id");
+                        .HasConstraintName("fk_states_countries_country_id");
 
                     b.Navigation("Country");
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
                 {
-                    b.HasOne("Trendlink.Domain.Users.Cities.City", "City")
+                    b.HasOne("Trendlink.Domain.Users.States.State", "State")
                         .WithMany()
-                        .HasForeignKey("CityId")
+                        .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_users_cities_city_id");
+                        .HasConstraintName("fk_users_states_state_id");
 
-                    b.Navigation("City");
+                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
-                    b.Navigation("Cities");
+                    b.Navigation("States");
                 });
 #pragma warning restore 612, 618
         }

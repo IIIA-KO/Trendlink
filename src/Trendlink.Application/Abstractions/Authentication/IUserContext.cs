@@ -7,5 +7,7 @@ namespace Trendlink.Application.Abstractions.Authentication
         UserId UserId { get; }
 
         string IdentityId { get; }
+
+        string? AccessToken { get; }
     }
 }

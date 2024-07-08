@@ -2,6 +2,7 @@
 using MediatR;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Exceptions;
+using ValidationException = Trendlink.Application.Exceptions.ValidationException;
 
 namespace Trendlink.Application.Abstractions.Behaviors
 {
@@ -40,7 +41,7 @@ namespace Trendlink.Application.Abstractions.Behaviors
 
             if (validationErrors.Any())
             {
-                throw new Exceptions.ValidationException(validationErrors);
+                throw new ValidationException(validationErrors);
             }
 
             return await next();

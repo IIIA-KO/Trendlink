@@ -1,5 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Domain.Users.Countries
 {
@@ -13,7 +13,7 @@ namespace Trendlink.Domain.Users.Countries
 
         public CountryName Name { get; init; }
 
-        public ICollection<City> Cities { get; init; } = [];
+        public ICollection<State> States { get; init; } = [];
 
         public static Result<Country> Create(CountryName name)
         {

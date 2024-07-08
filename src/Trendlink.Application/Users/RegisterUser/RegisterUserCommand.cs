@@ -1,16 +1,16 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.RegisterUser
 {
     public sealed record RegisterUserCommand(
-        string FirstName,
-        string LastName,
+        FirstName FirstName,
+        LastName LastName,
         DateOnly BirthDate,
-        string Email,
-        string PhoneNumber,
+        Email Email,
+        PhoneNumber PhoneNumber,
         string Password,
-        CityId CityId
+        StateId StateId
     ) : ICommand<UserId>;
 }

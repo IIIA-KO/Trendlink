@@ -2,7 +2,7 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.RegisterUser
@@ -11,19 +11,19 @@ namespace Trendlink.Application.Users.RegisterUser
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
-        private readonly ICityRepository _cityRepository;
+        private readonly IStateRepository _stateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RegisterUserCommandHandler(
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
-            ICityRepository cityRepository,
+            IStateRepository stateRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._authenticationService = authenticationService;
             this._userRepository = userRepository;
-            this._cityRepository = cityRepository;
+            this._stateRepository = stateRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -32,18 +32,27 @@ namespace Trendlink.Application.Users.RegisterUser
             CancellationToken cancellationToken
         )
         {
-            City? city = await this._cityRepository.GetByIdAsync(request.CityId, cancellationToken);
-            if (city is null)
+            bool userExists = await this._userRepository.UserExists(request.Email);
+            if (userExists)
             {
-                return Result.Failure<UserId>(CityErrors.NotFound);
+                return Result.Failure<UserId>(UserErrors.DuplicateEmail);
+            }
+
+            State? state = await this._stateRepository.GetByIdAsync(
+                request.StateId,
+                cancellationToken
+            );
+            if (state is null)
+            {
+                return Result.Failure<UserId>(StateErrors.NotFound);
             }
 
             Result<User> result = User.Create(
-                new FirstName(request.FirstName),
-                new LastName(request.LastName),
+                request.FirstName,
+                request.LastName,
                 request.BirthDate,
-                new Email(request.Email),
-                new PhoneNumber(request.PhoneNumber)
+                request.Email,
+                request.PhoneNumber
             );
 
             if (result.IsFailure)
@@ -53,21 +62,29 @@ namespace Trendlink.Application.Users.RegisterUser
 
             User user = result.Value;
 
-            string identityId = await this._authenticationService.RegisterAsync(
-                user,
-                request.Password,
-                cancellationToken
-            );
+            try
+            {
+                string identityId = await this._authenticationService.RegisterAsync(
+                    user,
+                    request.Password,
+                    cancellationToken
+                );
 
-            user.SetCity(city);
+                user.SetState(state);
 
-            user.SetIdentityId(identityId);
+                user.SetIdentityId(identityId);
 
-            this._userRepository.Add(user);
+                this._userRepository.Add(user);
 
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+                await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return user.Id;
+                return user.Id;
+            }
+            catch (Exception exception)
+                when (exception is HttpRequestException || exception is ArgumentNullException)
+            {
+                return Result.Failure<UserId>(UserErrors.RegistrationFailed);
+            }
         }
     }
 }

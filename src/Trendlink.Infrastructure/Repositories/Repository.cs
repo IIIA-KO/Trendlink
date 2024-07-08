@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Infrastructure.Specifications;
 
 namespace Trendlink.Infrastructure.Repositories
 {
@@ -27,6 +28,13 @@ namespace Trendlink.Infrastructure.Repositories
         public virtual void Add(TEntity entity)
         {
             this.dbContext.Add(entity);
+        }
+
+        protected IQueryable<TEntity> ApplySpecification(
+            Specification<TEntity, TEntityId> specification
+        )
+        {
+            return SpecificationEvaluator.GetQuery(this.dbContext.Set<TEntity>(), specification);
         }
     }
 }

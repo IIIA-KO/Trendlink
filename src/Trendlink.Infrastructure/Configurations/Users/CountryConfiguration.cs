@@ -24,9 +24,9 @@ namespace Trendlink.Infrastructure.Configurations.Users
             builder.Property(country => country.Name).IsRequired().HasMaxLength(200);
 
             builder
-                .HasMany(country => country.Cities)
+                .HasMany(country => country.States)
                 .WithOne(city => city.Country)
-                .HasForeignKey(city => city.CountyId)
+                .HasForeignKey(city => city.CountryId)
                 .IsRequired();
         }
     }

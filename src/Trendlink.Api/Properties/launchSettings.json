@@ -20,7 +20,7 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "publishAllPorts": true,
       "useSSL": true
     }

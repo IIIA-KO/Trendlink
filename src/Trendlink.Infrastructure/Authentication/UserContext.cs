@@ -20,5 +20,11 @@ namespace Trendlink.Infrastructure.Authentication
         public string IdentityId =>
             this._httpContextAccessor.HttpContext?.User.GetIdentityId()
             ?? throw new ApplicationException("User context is unavailable");
+
+        public string? AccessToken =>
+            this
+                ._httpContextAccessor.HttpContext?.Request.Headers.Authorization.FirstOrDefault()
+                ?.Split(' ')
+                .LastOrDefault();
     }
 }

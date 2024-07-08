@@ -14,21 +14,21 @@ namespace Trendlink.Application.Users.RegisterUser
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow.Date.AddYears(-18)))
                 .WithMessage("You must be at least 18 years old.");
 
-            this.RuleFor(c => c.Email)
+            this.RuleFor(c => c.Email.Value)
                 .EmailAddress()
                 .WithMessage("Invalid email format.")
                 .NotEmpty()
                 .WithMessage("Email is required.");
 
-            this.RuleFor(p => p.PhoneNumber)
+            this.RuleFor(p => p.PhoneNumber.Value)
                 .NotEmpty()
                 .NotNull()
                 .WithMessage("Phone Number is required.")
                 .MinimumLength(10)
                 .WithMessage("PhoneNumber must not be less than 10 characters.")
                 .MaximumLength(20)
-                .WithMessage("PhoneNumber must not exceed 50 characters.")
-                .Matches(@"((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}")
+                .WithMessage("PhoneNumber must not exceed 20 characters.")
+                .Matches(@"^\d{10,20}$")
                 .WithMessage("PhoneNumber not valid");
 
             this.RuleFor(c => c.Password)
@@ -44,10 +44,10 @@ namespace Trendlink.Application.Users.RegisterUser
                 .WithMessage("Password must contain at least one lowercase letter.")
                 .Matches(@"[0-9]+")
                 .WithMessage("Password must contain at least one number.")
-                .Matches(@"[\!\?\*\.]+")
-                .WithMessage("Password must contain at least one (!? *.).");
+                .Matches(@"[\!\?\*\.\$]+")
+                .WithMessage("Password must contain at least one (!? *.$).");
 
-            this.RuleFor(c => c.CityId).NotEmpty().WithMessage("City is required.");
+            this.RuleFor(c => c.StateId).NotEmpty().WithMessage("State is required.");
         }
     }
 }

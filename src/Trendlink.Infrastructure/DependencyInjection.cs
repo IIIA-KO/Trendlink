@@ -12,7 +12,8 @@ using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.Cities;
+using Trendlink.Domain.Users.Countries;
+using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
@@ -63,21 +64,22 @@ namespace Trendlink.Infrastructure
                     .UseSnakeCaseNamingConvention()
             );
 
+            services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(
+                connectionString
+            ));
+
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
             );
 
-            services.AddSingleton<ISqlConnectionFactory>(_ => new SqlConnectionFactory(
-                connectionString
-            ));
-
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         }
 
-        public static void AddAuthentication(
+        private static void AddAuthentication(
             IServiceCollection services,
             IConfiguration configuration
         )
