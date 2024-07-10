@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
+using System.Data;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
@@ -28,8 +28,9 @@ namespace Trendlink.Application.Countries.GetStates
             CancellationToken cancellationToken
         )
         {
-            bool countryExists = await this._countryRepository.CountryExists(
-                new CountryId(request.CountryId)
+            bool countryExists = await this._countryRepository.ExistsById(
+                new CountryId(request.CountryId),
+                cancellationToken
             );
             if (!countryExists)
             {

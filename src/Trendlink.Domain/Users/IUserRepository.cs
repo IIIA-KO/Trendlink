@@ -10,6 +10,6 @@ namespace Trendlink.Domain.Users
 
         void Add(User user);
 
-        Task<bool> UserExists(Email email);
+        Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default);
     }
 }

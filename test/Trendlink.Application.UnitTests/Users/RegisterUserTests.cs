@@ -49,7 +49,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFaulire_When_UserExists()
         {
             // Arrange
-            this._userRepositoryMock.UserExists(Command.Email).Returns(true);
+            this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(true);
 
             // Act
             Result<UserId> result = await this._handler.Handle(Command, default);
@@ -63,7 +63,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFailure_When_StateIsNull()
         {
             // Arrange
-            this._userRepositoryMock.UserExists(Command.Email).Returns(false);
+            this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
             this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
                 .Returns((State?)null);
@@ -80,7 +80,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFailure_When_UserCreationFails()
         {
             // Arrange
-            this._userRepositoryMock.UserExists(Command.Email).Returns(false);
+            this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
             this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
                 .Returns(UserData.State);
@@ -106,7 +106,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFailure_When_AuthenticationThrows()
         {
             // Arrange
-            this._userRepositoryMock.UserExists(Command.Email).Returns(false);
+            this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
             this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
                 .Returns(UserData.State);
@@ -130,7 +130,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_SuccessfullyRegisterUser()
         {
             // Arrange
-            this._userRepositoryMock.UserExists(Command.Email).Returns(false);
+            this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
             this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
                 .Returns(UserData.State);

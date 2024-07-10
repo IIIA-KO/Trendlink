@@ -29,12 +29,9 @@ namespace Trendlink.Infrastructure.Repositories
             this.dbContext.Add(user);
         }
 
-        public async Task<bool> UserExists(Email email)
+        public async Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default)
         {
-            return await this
-                .dbContext.Set<User>()
-                .AsNoTracking()
-                .AnyAsync(user => user.Email == email);
+            return await this.ExistsAsync(user => user.Email == email, cancellationToken);
         }
     }
 }
