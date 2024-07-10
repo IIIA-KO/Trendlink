@@ -26,6 +26,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+builder.Services.AddCorsPolicy();
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -38,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseRequestContextLogging();
 app.UseSerilogRequestLogging();
