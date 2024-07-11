@@ -9,4 +9,16 @@
         public static readonly Error Unexpected =
             new("Error.Unexpected", "Unexpected error occured");
     }
+
+    public record NotFoundError : Error
+    {
+        public NotFoundError(string code, string name)
+            : base(code, name) { }
+    }
+
+    public record UnauthorizedError : Error
+    {
+        public UnauthorizedError(string code, string name)
+            : base(code, name) { }
+    }
 }

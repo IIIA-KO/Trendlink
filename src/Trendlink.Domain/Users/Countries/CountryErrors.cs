@@ -6,7 +6,7 @@ namespace Trendlink.Domain.Users.Countries
     {
         public static readonly Error Invalid = new("Country.Invalid", "The country is invalid.");
 
-        public static readonly Error NotFound =
+        public static readonly NotFoundError NotFound =
             new("Country.NotFound", "The country with provided identifier was not found");
     }
 }

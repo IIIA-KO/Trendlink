@@ -4,6 +4,25 @@ namespace Trendlink.Api.Controllers.Users
 {
     public sealed record RegisterUserRequest
     {
+        public RegisterUserRequest(
+            string firstName,
+            string lastName,
+            DateOnly birthDate,
+            string email,
+            string phoneNumber,
+            string password,
+            Guid stateId
+        )
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.BirthDate = birthDate;
+            this.Email = email;
+            this.PhoneNumber = phoneNumber;
+            this.Password = password;
+            this.StateId = stateId;
+        }
+
         public string FirstName { get; init; }
 
         public string LastName { get; init; }

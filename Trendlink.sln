@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Application.UnitT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Application.IntegrationTests", "test\Trendlink.Application.IntegrationTests\Trendlink.Application.IntegrationTests.csproj", "{0162E482-FBB2-4525-BCC8-9815BCF0D341}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Api.FunctionalTests", "test\Trendlinl.Api.FunctionalTests\Trendlink.Api.FunctionalTests.csproj", "{89AE0EE3-ED37-4981-9F65-51E1E3E21482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{0162E482-FBB2-4525-BCC8-9815BCF0D341}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0162E482-FBB2-4525-BCC8-9815BCF0D341}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0162E482-FBB2-4525-BCC8-9815BCF0D341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89AE0EE3-ED37-4981-9F65-51E1E3E21482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89AE0EE3-ED37-4981-9F65-51E1E3E21482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89AE0EE3-ED37-4981-9F65-51E1E3E21482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89AE0EE3-ED37-4981-9F65-51E1E3E21482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{A0D6CC25-981A-48A5-ADE5-698B840A0B05} = {918CC9AB-B0FC-4AAD-AFE3-B64E5E075392}
 		{EF917F2E-0A6C-4925-8B11-74064FC21E0F} = {918CC9AB-B0FC-4AAD-AFE3-B64E5E075392}
 		{0162E482-FBB2-4525-BCC8-9815BCF0D341} = {918CC9AB-B0FC-4AAD-AFE3-B64E5E075392}
+		{89AE0EE3-ED37-4981-9F65-51E1E3E21482} = {918CC9AB-B0FC-4AAD-AFE3-B64E5E075392}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F99BAB6-EE47-4E00-8A8A-F6FAFF8E0CFE}
