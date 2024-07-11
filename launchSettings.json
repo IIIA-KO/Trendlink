@@ -3,8 +3,15 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "trendlink.api",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
       "serviceActions": {
-        "trendlink.api": "StartDebugging"
+        "trendlink.api": "StartDebugging",
+        "trendlink-db": "StartWithoutDebugging",
+        "trendlink-idp": "StartWithoutDebugging",
+        "trendlink-redis": "StartWithoutDebugging",
+        "trendlink-seq": "StartWithoutDebugging"
       }
     }
   }

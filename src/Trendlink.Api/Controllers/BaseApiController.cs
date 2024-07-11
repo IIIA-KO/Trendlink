@@ -14,37 +14,32 @@ namespace Trendlink.Api.Controllers
 
         protected IActionResult HandleResult<T>(Result<T> result)
         {
-            if (result is null)
+            if (result.IsSuccess)
             {
-                return this.NotFound();
+                return result.Value is not null ? this.Ok(result.Value) : this.NotFound();
             }
 
-            if (result.IsSuccess && result.Value is not null)
-            {
-                return this.Ok(result.Value);
-            }
-
-            if (result.IsSuccess && result.Value is null)
-            {
-                return this.NotFound();
-            }
-
-            return this.BadRequest(result.Error);
+            return this.HandleError(result.Error);
         }
 
         protected IActionResult HandleResult(Result result)
         {
-            if (result is null)
-            {
-                return this.NotFound();
-            }
-
             if (result.IsSuccess)
             {
                 return this.Ok();
             }
 
-            return this.BadRequest(result);
+            return this.HandleError(result.Error);
+        }
+
+        private IActionResult HandleError(Error error)
+        {
+            return error switch
+            {
+                NotFoundError => this.NotFound(error),
+                UnauthorizedError => this.Unauthorized(error),
+                _ => this.BadRequest(error)
+            };
         }
     }
 }

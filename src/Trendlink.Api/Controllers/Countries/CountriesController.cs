@@ -17,7 +17,7 @@ namespace Trendlink.Api.Controllers.Countries
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
-        [HttpGet("states/{id:guid}")]
+        [HttpGet("{id:guid}/states/")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCountryStates(
             Guid id,

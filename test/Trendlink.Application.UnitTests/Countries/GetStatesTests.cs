@@ -1,7 +1,7 @@
-﻿using System.Data;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
+using System.Data;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Countries.GetStates;
 using Trendlink.Domain.Abstraction;
@@ -48,7 +48,7 @@ namespace Trendlink.Application.UnitTests.Countries
         public async Task Handle_Should_ReturnFailure_WhenCountryIsNull()
         {
             // Arrange
-            this._countryRepositoryMock.CountryExists(new CountryId(Query.CountryId))
+            this._countryRepositoryMock.ExistsById(new CountryId(Query.CountryId), default)
                 .Returns(false);
 
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
@@ -72,7 +72,7 @@ namespace Trendlink.Application.UnitTests.Countries
         public async Task Handle_Should_ReturnFailure_WhenConnectionThrows()
         {
             // Arrange
-            this._countryRepositoryMock.CountryExists(new CountryId(Query.CountryId))
+            this._countryRepositoryMock.ExistsById(new CountryId(Query.CountryId), default)
                 .Returns(true);
 
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
@@ -96,7 +96,7 @@ namespace Trendlink.Application.UnitTests.Countries
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            this._countryRepositoryMock.CountryExists(new CountryId(Query.CountryId))
+            this._countryRepositoryMock.ExistsById(new CountryId(Query.CountryId), default)
                 .Returns(true);
 
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();

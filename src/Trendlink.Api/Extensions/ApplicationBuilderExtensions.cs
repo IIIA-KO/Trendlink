@@ -26,5 +26,20 @@ namespace Trendlink.Api.Extensions
             app.UseMiddleware<RequestContextLoggingMiddleware>();
             return app;
         }
+
+        public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+        {
+            services.AddCors(options => 
+                options
+                .AddPolicy("CorsPolicy", policy => 
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("https:localhost:3000")
+                )
+            );
+
+            return services;
+        }
     }
 }

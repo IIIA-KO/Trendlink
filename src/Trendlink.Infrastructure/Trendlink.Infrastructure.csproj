@@ -32,6 +32,7 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="Trendlink.Application.IntegrationTests" />
+		<InternalsVisibleTo Include="Trendlink.Api.FunctionalTests" />
 	</ItemGroup>
 
 </Project>

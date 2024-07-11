@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using Bogus;
 using Newtonsoft.Json;
+using Trendlink.Application.Countries.GetAllCountries;
+using Trendlink.Application.Countries.GetStates;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
@@ -82,11 +84,18 @@ namespace Trendlink.Api.Extensions
                 .RuleFor(u => u.LastName, f => new LastName(f.Name.LastName()))
                 .RuleFor(
                     u => u.BirthDate,
-                    f => new DateOnly(
-                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Year,
-                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Month,
-                        f.Date.Past(30, DateTime.Now.AddYears(-18)).Day
-                    )
+                    f =>
+                    {
+                        DateTime birthDateTime = f.Date.Past(
+                            30,
+                            DateTime.Now.AddYears(-18).AddDays(-1)
+                        );
+                        return new DateOnly(
+                            birthDateTime.Year,
+                            birthDateTime.Month,
+                            birthDateTime.Day
+                        );
+                    }
                 )
                 .RuleFor(
                     u => u.Email,

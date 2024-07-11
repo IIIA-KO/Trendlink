@@ -32,7 +32,10 @@ namespace Trendlink.Application.Users.RegisterUser
             CancellationToken cancellationToken
         )
         {
-            bool userExists = await this._userRepository.UserExists(request.Email);
+            bool userExists = await this._userRepository.ExistByEmailAsync(
+                request.Email,
+                cancellationToken
+            );
             if (userExists)
             {
                 return Result.Failure<UserId>(UserErrors.DuplicateEmail);

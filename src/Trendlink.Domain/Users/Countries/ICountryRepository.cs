@@ -9,6 +9,6 @@
             CancellationToken cancellationToken = default
         );
 
-        Task<bool> CountryExists(CountryId id);
+        Task<bool> ExistsById(CountryId id, CancellationToken cancellationToken = default);
     }
 }

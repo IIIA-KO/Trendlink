@@ -5,8 +5,6 @@ using Trendlink.Application.Users.GetLoggedInUser;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
-using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -52,14 +50,7 @@ namespace Trendlink.Api.Controllers.Users
         {
             var command = new LogInUserCommand(new Email(request.Email), request.Password);
 
-            Result<AccessTokenResponse> result = await this.Sender.Send(command, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return this.Unauthorized(result.Error);
-            }
-
-            return this.Ok(result.Value);
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
         [HttpPost("refresh")]
@@ -70,14 +61,7 @@ namespace Trendlink.Api.Controllers.Users
         {
             var command = new RefreshTokenCommand(request.RefreshToken);
 
-            Result<AccessTokenResponse> result = await this.Sender.Send(command, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                return this.Unauthorized(result.Error);
-            }
-
-            return this.Ok(result.Value);
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
         [HttpPut("edit/{id:guid}")]
@@ -98,14 +82,7 @@ namespace Trendlink.Api.Controllers.Users
                 request.AccountCategory
             );
 
-            Result result = await this.Sender.Send(command, cancellationToken);
-
-            if (result.IsFailure && result.Error == UserErrors.NotAuthorized)
-            {
-                return this.Unauthorized(result.Error.Name);
-            }
-
-            return this.HandleResult(result);
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
     }
 }
