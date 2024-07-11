@@ -43,7 +43,7 @@ jobs:
 
       # Remove functional tests from sln
       - name: Remove Trendlink.Api.FunctionalTests  from sln
-        run: dotnet sln ${{ env.SOLUTION_PATH }} remove test/Trendlink.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
       
       - name: Test
         run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
@@ -54,7 +54,7 @@ jobs:
 
       # Add  functional tests back to sln
       - name: Add Trendlink.Api.FunctionalTests back to sln
-        run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlink.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
+        run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
       
       - name: Publish
         run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
