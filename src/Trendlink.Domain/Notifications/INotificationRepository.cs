@@ -1,0 +1,25 @@
+﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Notifications.ValueObjects;
+
+namespace Trendlink.Domain.Notifications
+{
+    public interface INotificationRepository
+    {
+        Task<Notification?> GetByIdAsync(
+            NotificationId id,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Notification?> GetByIdWithUser(
+            NotificationId id,
+            CancellationToken cancellationToken = default
+        );
+
+        void Add(Notification notification);
+
+        Task<Result> MarkAsReadAsync(
+            NotificationId id,
+            CancellationToken cancellationToken = default
+        );
+    }
+}
