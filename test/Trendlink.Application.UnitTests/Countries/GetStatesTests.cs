@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Data;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using System.Data;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Countries.GetStates;
 using Trendlink.Domain.Abstraction;

@@ -1,4 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
@@ -8,6 +9,8 @@ namespace Trendlink.Domain.Users
     public sealed class User : Entity<UserId>
     {
         private readonly List<Role> _roles = [];
+
+        private readonly List<Notification> _notifications = [];
 
         private const int MinimumAge = 18;
 
@@ -53,6 +56,8 @@ namespace Trendlink.Domain.Users
         public string IdentityId { get; private set; } = string.Empty;
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
+
+        public IReadOnlyCollection<Notification> Notifications => this._notifications.AsReadOnly();
 
         public void AddRole(Role role)
         {

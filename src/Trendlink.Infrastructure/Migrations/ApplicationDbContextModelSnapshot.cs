@@ -41,6 +41,47 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("role_user", (string)null);
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_read");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("message");
+
+                    b.Property<int>("NotificationType")
+                        .HasColumnType("integer")
+                        .HasColumnName("notification_type");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_notifications");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_notifications_user_id");
+
+                    b.ToTable("notifications", (string)null);
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -244,6 +285,18 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_role_user_users_users_id");
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Users.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.States.State", b =>
                 {
                     b.HasOne("Trendlink.Domain.Users.Countries.Country", "Country")
@@ -271,6 +324,11 @@ namespace Trendlink.Infrastructure.Migrations
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

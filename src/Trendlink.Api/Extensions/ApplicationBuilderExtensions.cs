@@ -29,13 +29,11 @@ namespace Trendlink.Api.Extensions
 
         public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
         {
-            services.AddCors(options => 
-                options
-                .AddPolicy("CorsPolicy", policy => 
-                    policy
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .WithOrigins("https:localhost:3000")
+            services.AddCors(options =>
+                options.AddPolicy(
+                    "CorsPolicy",
+                    policy =>
+                        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https:localhost:3000")
                 )
             );
 

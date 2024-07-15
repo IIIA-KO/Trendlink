@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Infrastructure.Specifications

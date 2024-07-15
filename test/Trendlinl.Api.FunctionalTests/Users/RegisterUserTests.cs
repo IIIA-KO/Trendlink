@@ -4,9 +4,6 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using Trendlink.Api.Controllers.Users;
 using Trendlink.Api.FunctionalTests.Infrastructure;
-using Trendlink.Application.Countries.GetAllCountries;
-using Trendlink.Application.Countries.GetStates;
-using Trendlink.Domain.Users.States;
 using Trendlinl.Api.FunctionalTests.Infrastructure;
 
 namespace Trendlink.Api.FunctionalTests.Users
