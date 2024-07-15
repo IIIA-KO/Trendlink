@@ -40,5 +40,16 @@ namespace Trendlink.Infrastructure.Repositories
 
             return Result.Success();
         }
+
+        public async Task<bool> ExistsByIdAsync(
+            NotificationId notificationId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ExistsAsync(
+                notification => notification.Id == notificationId,
+                cancellationToken
+            );
+        }
     }
 }

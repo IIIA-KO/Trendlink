@@ -11,13 +11,11 @@ namespace Trendlink.Domain.UnitTests.States
         public void Create_Should_CreateState_WhenValidNameAndCountryProvided()
         {
             // Act
-            Result<State> result = State.Create(StateData.StateName, StateData.Country);
+            State state = State.Create(StateData.StateName, StateData.Country).Value;
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
-            State createdCity = result.Value;
-            createdCity.Name.Should().Be(StateData.StateName);
-            createdCity.Country.Should().Be(StateData.Country);
+            state.Name.Should().Be(StateData.StateName);
+            state.Country.Should().Be(StateData.Country);
         }
 
         [Fact]

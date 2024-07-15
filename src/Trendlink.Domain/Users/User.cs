@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Abstraction;
+﻿using Microsoft.VisualBasic;
+using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
@@ -65,6 +66,11 @@ namespace Trendlink.Domain.Users
             {
                 this._roles.Add(role);
             }
+        }
+
+        public bool HasRole(Role role)
+        {
+            return this._roles.Contains(role);
         }
 
         public Result Update(

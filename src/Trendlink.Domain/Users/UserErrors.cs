@@ -17,7 +17,7 @@ namespace Trendlink.Domain.Users
             new("User.DuplicateEmail", "User with this email already exists");
 
         public static readonly UnauthorizedError NotAuthorized =
-            new("User.NotAuthorized", "User is not authorized to perform action");
+            new("User.NotAuthorized", "User is not authorized to perform this action");
 
         public static readonly Error RegistrationFailed =
             new(

@@ -12,7 +12,7 @@ namespace Trendlink.Domain.UnitTests.Users
     public class UserTests : BaseTest
     {
         [Fact]
-        public void Create_Should_SetPropertyValue()
+        public void Create_Should_SetPropertyValues()
         {
             // Act
             User user = User.Create(

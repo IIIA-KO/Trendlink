@@ -21,5 +21,10 @@ namespace Trendlink.Domain.Notifications
             NotificationId id,
             CancellationToken cancellationToken = default
         );
+
+        Task<bool> ExistsByIdAsync(
+            NotificationId notificationId,
+            CancellationToken cancellationToken = default
+        );
     }
 }

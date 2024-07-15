@@ -39,16 +39,16 @@ namespace Trendlink.Application.Countries.GetStates
 
             using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
 
+            const string sql = """
+                SELECT
+                    id AS Id,
+                    name AS Name
+                FROM states
+                WHERE country_id = @CountryId
+                """;
+
             try
             {
-                const string sql = """
-                    SELECT
-                        id AS Id,
-                        name AS Name
-                    FROM states
-                    WHERE country_id = @CountryId
-                    """;
-
                 return (
                     await dbConnection.QueryAsync<StateResponse>(sql, new { request.CountryId })
                 ).ToList();

@@ -19,6 +19,16 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<User?> GetByIdentityIdAsync(
+            string identityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                .dbContext.Set<User>()
+                .FirstOrDefaultAsync(user => user.IdentityId == identityId, cancellationToken);
+        }
+
         public override void Add(User user)
         {
             foreach (Role role in user.Roles)

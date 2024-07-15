@@ -31,7 +31,7 @@ namespace Trendlink.Application.Users.EditUser
             CancellationToken cancellationToken
         )
         {
-            User user = await this._userRepository.GetByIdWithRolesAsync(
+            User? user = await this._userRepository.GetByIdWithRolesAsync(
                 request.UserId,
                 cancellationToken
             );
@@ -42,7 +42,7 @@ namespace Trendlink.Application.Users.EditUser
 
             if (
                 this._userContext.IdentityId != user.IdentityId
-                && !user.Roles.Any(r => r == Role.Administrator)
+                && !user.HasRole(Role.Administrator)
             )
             {
                 return Result.Failure(UserErrors.NotAuthorized);
