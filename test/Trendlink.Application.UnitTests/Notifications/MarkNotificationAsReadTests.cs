@@ -2,7 +2,6 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Notifications.MarkNotificationAsRead;
-using Trendlink.Application.Users.GetLoggedInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;

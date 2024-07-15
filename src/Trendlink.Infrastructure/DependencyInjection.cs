@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
@@ -71,6 +73,7 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
