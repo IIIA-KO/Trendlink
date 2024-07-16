@@ -4,6 +4,7 @@ using Serilog;
 using Trendlink.Api.Extensions;
 using Trendlink.Application;
 using Trendlink.Infrastructure;
+using Trendlink.Infrastructure.SignalR;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddControllers(options =>
 
     options.Filters.Add(new AuthorizeFilter(policy));
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -52,6 +55,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 await app.RunAsync();
 

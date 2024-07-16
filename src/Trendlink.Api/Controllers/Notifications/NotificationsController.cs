@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Notifications.CreateNotification;
 using Trendlink.Application.Notifications.MarkNotificationAsRead;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -11,6 +11,7 @@ namespace Trendlink.Api.Controllers.Notifications
     public class NotificationsController : BaseApiController
     {
         [HttpPost]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<IActionResult> CreateNotification(
             [FromBody] СreateNotificationRequest request,
             CancellationToken cancellationToken
@@ -18,7 +19,7 @@ namespace Trendlink.Api.Controllers.Notifications
         {
             var command = new CreateNotificationCommand(
                 new UserId(request.UserId),
-                (NotificationType)request.NotificationType,
+                request.NotificationType,
                 new Title(request.Title),
                 new Message(request.Message)
             );

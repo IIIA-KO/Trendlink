@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Application.Notifications.CreateNotification;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
@@ -26,6 +27,7 @@ namespace Trendlink.Application.UnitTests.Notifications
         private readonly IDateTimeProvider _dateTimeProviderMock;
         private readonly IUserRepository _userRepositoryMock;
         private readonly INotificationRepository _notificationRepositoryMock;
+        private readonly INotificationService _notificationServiceMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
         public CreateNotificationTests()
@@ -33,12 +35,14 @@ namespace Trendlink.Application.UnitTests.Notifications
             this._dateTimeProviderMock = Substitute.For<IDateTimeProvider>();
             this._userRepositoryMock = Substitute.For<IUserRepository>();
             this._notificationRepositoryMock = Substitute.For<INotificationRepository>();
+            this._notificationServiceMock = Substitute.For<INotificationService>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
             this._handler = new CreateNotificationCommandHandler(
                 this._dateTimeProviderMock,
                 this._userRepositoryMock,
                 this._notificationRepositoryMock,
+                this._notificationServiceMock,
                 this._unitOfWorkMock
             );
         }

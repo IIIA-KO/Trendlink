@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
@@ -12,14 +13,17 @@ namespace Trendlink.Application.Notifications.GetUserNotifications
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IUserRepository _userRepository;
+        private readonly IUserContext _userContext;
 
         public GetUserNotificationsQueryHandler(
             ISqlConnectionFactory sqlConnectionFactory,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            IUserContext userContext
         )
         {
             this._sqlConnectionFactory = sqlConnectionFactory;
             this._userRepository = userRepository;
+            this._userContext = userContext;
         }
 
         public async Task<Result<IReadOnlyList<NotificationResponse>>> Handle(
@@ -27,16 +31,21 @@ namespace Trendlink.Application.Notifications.GetUserNotifications
             CancellationToken cancellationToken
         )
         {
-            User? user = await this._userRepository.GetByIdWithRolesAsync(
+            bool userExists = await this._userRepository.ExistsByIdAsync(
                 request.UserId,
                 cancellationToken
             );
-            if (user is null)
+            if (!userExists)
             {
                 return Result.Failure<IReadOnlyList<NotificationResponse>>(UserErrors.NotFound);
             }
 
-            if (!user.HasRole(Role.Administrator))
+            User user = await this._userRepository.GetByIdWithRolesAsync(
+                this._userContext.UserId,
+                cancellationToken
+            );
+
+            if (!user!.HasRole(Role.Administrator))
             {
                 return Result.Failure<IReadOnlyList<NotificationResponse>>(
                     UserErrors.NotAuthorized

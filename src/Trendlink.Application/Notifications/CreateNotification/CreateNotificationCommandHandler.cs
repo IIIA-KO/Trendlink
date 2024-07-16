@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
@@ -13,18 +14,21 @@ namespace Trendlink.Application.Notifications.CreateNotification
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IUserRepository _userRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly INotificationService _notificationService;
         private readonly IUnitOfWork _unitOfWork;
 
         public CreateNotificationCommandHandler(
             IDateTimeProvider dateTimeProvider,
             IUserRepository userRepository,
             INotificationRepository notificationRepository,
+            INotificationService notificationService,
             IUnitOfWork unitOfWork
         )
         {
             this._dateTimeProvider = dateTimeProvider;
             this._userRepository = userRepository;
             this._notificationRepository = notificationRepository;
+            this._notificationService = notificationService;
             this._unitOfWork = unitOfWork;
         }
 
@@ -56,6 +60,12 @@ namespace Trendlink.Application.Notifications.CreateNotification
             this._notificationRepository.Add(notification);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+            await this._notificationService.SendNotificationAsync(
+                user.Id.Value.ToString(),
+                notification.Title.Value,
+                notification.Message.Value
+            );
 
             return notification.Id;
         }

@@ -39,6 +39,14 @@ namespace Trendlink.Infrastructure.Repositories
             this.dbContext.Add(user);
         }
 
+        public async Task<bool> ExistsByIdAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ExistsAsync(user => user.Id == id, cancellationToken);
+        }
+
         public async Task<bool> ExistByEmailAsync(
             Email email,
             CancellationToken cancellationToken = default

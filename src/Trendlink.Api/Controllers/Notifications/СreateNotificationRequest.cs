@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Trendlink.Domain.Notifications;
 
 namespace Trendlink.Api.Controllers.Notifications
 {
@@ -8,7 +9,7 @@ namespace Trendlink.Api.Controllers.Notifications
         public Guid UserId { get; init; }
 
         [JsonRequired]
-        public int NotificationType { get; init; }
+        public NotificationType NotificationType { get; init; }
 
         public string Title { get; init; }
 

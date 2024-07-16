@@ -3,6 +3,7 @@ using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Notifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
@@ -33,6 +34,7 @@ namespace Trendlink.Application.UnitTests.Notifications
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
         private readonly IUserRepository _userRepositoryMock;
+        private readonly IUserContext _userContextMock;
 
         private readonly GetUserNotificationsQueryHandler _handler;
 
@@ -40,10 +42,12 @@ namespace Trendlink.Application.UnitTests.Notifications
         {
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
             this._userRepositoryMock = Substitute.For<IUserRepository>();
+            this._userContextMock = Substitute.For<IUserContext>();
 
             this._handler = new GetUserNotificationsQueryHandler(
                 this._sqlConnectionFactoryMock,
-                this._userRepositoryMock
+                this._userRepositoryMock,
+                this._userContextMock
             );
         }
 

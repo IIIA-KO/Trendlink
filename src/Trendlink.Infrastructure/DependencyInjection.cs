@@ -11,6 +11,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
@@ -23,6 +24,7 @@ using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Outbox;
 using Trendlink.Infrastructure.Repositories;
+using Trendlink.Infrastructure.SignalR;
 using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
 using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
 using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
@@ -47,6 +49,8 @@ namespace Trendlink.Infrastructure
             AddCaching(services, configuration);
 
             AddBackgroundJobs(services, configuration);
+
+            AddRealTimeServices(services);
 
             return services;
         }
@@ -158,6 +162,11 @@ namespace Trendlink.Infrastructure
             services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
             services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+        }
+
+        private static void AddRealTimeServices(IServiceCollection services)
+        {
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

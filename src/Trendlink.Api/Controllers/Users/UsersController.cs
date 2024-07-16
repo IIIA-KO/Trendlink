@@ -34,7 +34,6 @@ namespace Trendlink.Api.Controllers.Users
         }
 
         [HttpGet("{id:guid}/notifications")]
-        [Authorize(Roles = Roles.Administrator)]
         public async Task<IActionResult> GetUserNotifications(
             Guid id,
             CancellationToken cancellationToken
@@ -88,7 +87,7 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPut("edit/{id:guid}")]
+        [HttpPut("{id:guid}/edit")]
         public async Task<IActionResult> EditUser(
             Guid id,
             [FromBody] EditUserRequest request,

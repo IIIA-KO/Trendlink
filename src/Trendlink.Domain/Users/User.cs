@@ -70,7 +70,7 @@ namespace Trendlink.Domain.Users
 
         public bool HasRole(Role role)
         {
-            return this._roles.Contains(role);
+            return this._roles.Any(r => r.Name == role.Name);
         }
 
         public Result Update(

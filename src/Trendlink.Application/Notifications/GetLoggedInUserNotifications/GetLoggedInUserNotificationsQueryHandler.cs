@@ -40,6 +40,7 @@ namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
                     created_on_utc AS CreatedOnUtc
                 FROM notifications
                 WHERE user_id = @UserId
+                ORDER BY created_on_utc DESC
                 """;
 
             try
@@ -47,7 +48,7 @@ namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
                 return (
                     await dbConnection.QueryAsync<NotificationResponse>(
                         sql,
-                        new { this._userContext.UserId.Value }
+                        new { UserId = this._userContext.UserId.Value }
                     )
                 ).ToList();
             }
