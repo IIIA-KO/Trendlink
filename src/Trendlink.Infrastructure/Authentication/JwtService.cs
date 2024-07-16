@@ -9,6 +9,14 @@ using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenRes
 
 namespace Trendlink.Infrastructure.Authentication
 {
+    public class CachedAuthorizationToken
+    {
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTimeOffset AcquiredAt { get; set; }
+        public int ExpiresIn { get; set; }
+    }
+
     internal sealed class JwtService : IJwtService
     {
         private static readonly Error AuthenticationFailed =
@@ -44,14 +52,23 @@ namespace Trendlink.Infrastructure.Authentication
         {
             string cacheKey = $"{CacheKeyPrefix}{email.Value}";
 
-            AuthorizationToken? cachedToken = await this._cacheService.GetAsync<AuthorizationToken>(
-                cacheKey,
-                cancellationToken
-            );
+            CachedAuthorizationToken? cachedToken =
+                await this._cacheService.GetAsync<CachedAuthorizationToken>(
+                    cacheKey,
+                    cancellationToken
+                );
 
             if (cachedToken is not null)
             {
-                return new AccessTokenResponse(cachedToken.AccessToken, cachedToken.RefreshToken);
+                TimeSpan remainingTime =
+                    cachedToken.AcquiredAt.AddSeconds(cachedToken.ExpiresIn)
+                    - DateTimeOffset.UtcNow;
+
+                return new AccessTokenResponse(
+                    cachedToken.AccessToken,
+                    cachedToken.RefreshToken,
+                    (int)remainingTime.TotalSeconds
+                );
             }
 
             try
@@ -86,16 +103,25 @@ namespace Trendlink.Infrastructure.Authentication
                     return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
                 }
 
+                var cachedAuthorizationToken = new CachedAuthorizationToken()
+                {
+                    AccessToken = authorizationToken.AccessToken,
+                    RefreshToken = authorizationToken.RefreshToken,
+                    ExpiresIn = authorizationToken.ExpiresIn,
+                    AcquiredAt = DateTimeOffset.UtcNow
+                };
+
                 await this._cacheService.SetAsync(
                     cacheKey,
-                    authorizationToken,
+                    cachedAuthorizationToken,
                     TimeSpan.FromSeconds(authorizationToken.ExpiresIn),
                     cancellationToken
                 );
 
                 return new AccessTokenResponse(
                     authorizationToken.AccessToken,
-                    authorizationToken.RefreshToken
+                    authorizationToken.RefreshToken,
+                    authorizationToken.ExpiresIn
                 );
             }
             catch (HttpRequestException)
@@ -152,9 +178,17 @@ namespace Trendlink.Infrastructure.Authentication
 
                 if (!string.IsNullOrEmpty(email))
                 {
+                    var cachedAuthorizationToken = new CachedAuthorizationToken
+                    {
+                        AccessToken = authorizationToken.AccessToken,
+                        RefreshToken = authorizationToken.RefreshToken,
+                        ExpiresIn = authorizationToken.ExpiresIn,
+                        AcquiredAt = DateTimeOffset.UtcNow,
+                    };
+
                     await this._cacheService.SetAsync(
                         $"{CacheKeyPrefix}{email}",
-                        authorizationToken,
+                        cachedAuthorizationToken,
                         TimeSpan.FromSeconds(authorizationToken.ExpiresIn),
                         cancellationToken
                     );
@@ -162,7 +196,8 @@ namespace Trendlink.Infrastructure.Authentication
 
                 return new AccessTokenResponse(
                     authorizationToken.AccessToken,
-                    authorizationToken.RefreshToken
+                    authorizationToken.RefreshToken,
+                    authorizationToken.ExpiresIn
                 );
             }
             catch (HttpRequestException)
