@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;

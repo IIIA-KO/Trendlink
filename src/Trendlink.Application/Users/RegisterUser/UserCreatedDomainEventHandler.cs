@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Globalization;
+using System.Text;
+using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
@@ -15,6 +17,10 @@ namespace Trendlink.Application.Users.RegisterUser
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly INotificationRepository _notificationRepository;
         private readonly IUnitOfWork _unitOfWork;
+
+        private static readonly CompositeFormat WelcomeMessageFormat = CompositeFormat.Parse(
+            Resources.NotificationMessages.WelcomeMessage
+        );
 
         public UserCreatedDomainEventHandler(
             IUserRepository userRepository,
@@ -43,30 +49,18 @@ namespace Trendlink.Application.Users.RegisterUser
                 return;
             }
 
+            string welcomeMessage = string.Format(
+                CultureInfo.CurrentCulture,
+                WelcomeMessageFormat,
+                user.FirstName.Value
+            );
+
             Notification greetingMessage = Notification
                 .Create(
                     user.Id,
                     NotificationType.News,
                     new Title("Welcome to Trendlink!"),
-                    new Message(
-                        """
-                        Hello, {user.FirstName.Value}
-                         
-                        Welcome to Trendlink, the ultimate platform for bloggers connect, collaborate and grow!
-
-                        We're thrilled to have you join our community. At Trendlink, we believe in the power of collaboration and magic that happens when like-minded individuals come together.
-
-                        Here are few things you can do to get started:
-                        1. Complete your profile: Let the community know more about you.
-                        2. Explore collaboration opportunities: Browse through current cooperation requests or make your own.
-                        3. Connect with others: Follow your favourite bloggers and start building your network.
-
-                        Thank you for joining us!
-
-                        Best regards,
-                        The Trendlink team.
-                        """
-                    ),
+                    new Message(welcomeMessage),
                     this._dateTimeProvider.UtcNow
                 )
                 .Value;

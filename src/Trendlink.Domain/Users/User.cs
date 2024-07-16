@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Trendlink.Domain.Abstraction;
+﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;

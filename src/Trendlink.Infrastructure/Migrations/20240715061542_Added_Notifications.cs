@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,7 +20,10 @@ namespace Trendlink.Infrastructure.Migrations
                     title = table.Column<string>(type: "text", nullable: false),
                     message = table.Column<string>(type: "text", nullable: false),
                     is_read = table.Column<bool>(type: "boolean", nullable: false),
-                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_on_utc = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    )
                 },
                 constraints: table =>
                 {
@@ -31,20 +33,22 @@ namespace Trendlink.Infrastructure.Migrations
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_notifications_user_id",
                 table: "notifications",
-                column: "user_id");
+                column: "user_id"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "notifications");
+            migrationBuilder.DropTable(name: "notifications");
         }
     }
 }

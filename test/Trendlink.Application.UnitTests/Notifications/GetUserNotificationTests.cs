@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
@@ -9,7 +8,6 @@ using Trendlink.Application.Notifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Trendlink.Domain.Notifications;
 
 namespace Trendlink.Application.Notifications.CreateNotification
 {
