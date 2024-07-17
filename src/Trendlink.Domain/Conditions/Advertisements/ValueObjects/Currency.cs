@@ -24,7 +24,7 @@
 
         public static Currency FromCode(string code)
         {
-            return All.First(currency => currency.Code == code)
+            return All.FirstOrDefault(currency => currency.Code == code)
                 ?? throw new ApplicationException("The currency is invalid.");
         }
 
