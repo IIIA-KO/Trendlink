@@ -53,6 +53,8 @@ namespace Trendlink.Application.UnitTests.Notifications
         public async Task Handle_Should_ReturnFailure_When_UserNotFound()
         {
             // Arrange
+            this._userRepositoryMock.ExistsByIdAsync(Query.UserId).Returns(false);
+
             this._userRepositoryMock.GetByIdWithRolesAsync(Query.UserId, default)
                 .Returns((User?)null);
 
@@ -72,7 +74,12 @@ namespace Trendlink.Application.UnitTests.Notifications
         {
             // Arrange
             User user = UserData.Create();
-            this._userRepositoryMock.GetByIdWithRolesAsync(Query.UserId, default).Returns(user);
+
+            this._userContextMock.UserId.Returns(user.Id);
+
+            this._userRepositoryMock.ExistsByIdAsync(Query.UserId).Returns(true);
+
+            this._userRepositoryMock.GetByIdWithRolesAsync(user.Id, default).Returns(user);
 
             // Act
             Result<IReadOnlyList<NotificationResponse>> result = await this._handler.Handle(
@@ -92,7 +99,11 @@ namespace Trendlink.Application.UnitTests.Notifications
             User user = UserData.Create();
             user.AddRole(Role.Administrator);
 
-            this._userRepositoryMock.GetByIdWithRolesAsync(Query.UserId, default).Returns(user);
+            this._userContextMock.UserId.Returns(user.Id);
+
+            this._userRepositoryMock.ExistsByIdAsync(Query.UserId).Returns(true);
+
+            this._userRepositoryMock.GetByIdWithRolesAsync(user.Id, default).Returns(user);
 
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
             dbConnectionMock.SetupQuery(Sql).Throws(new Exception("Database exception"));
@@ -117,7 +128,11 @@ namespace Trendlink.Application.UnitTests.Notifications
             User user = UserData.Create();
             user.AddRole(Role.Administrator);
 
-            this._userRepositoryMock.GetByIdWithRolesAsync(Query.UserId, default).Returns(user);
+            this._userContextMock.UserId.Returns(user.Id);
+
+            this._userRepositoryMock.ExistsByIdAsync(Query.UserId).Returns(true);
+
+            this._userRepositoryMock.GetByIdWithRolesAsync(user.Id, default).Returns(user);
 
             var notifications = new List<NotificationResponse>
             {

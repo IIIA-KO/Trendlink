@@ -25,6 +25,7 @@ namespace Trendlink.Application.UnitTests.Notifications
                 created_on_utc AS CreatedOnUtc
             FROM notifications
             WHERE user_id = @UserId
+            ORDER BY created_on_utc DESC
             """;
 
         private static readonly GetLoggedInUserNotificationsQuery Query = new();

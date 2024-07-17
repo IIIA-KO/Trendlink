@@ -48,11 +48,11 @@ namespace Trendlink.Application.Users.EditUser
                 return Result.Failure(UserErrors.NotAuthorized);
             }
 
-            State state = await this._stateRepository.GetByIdAsync(
+            bool stateExists = await this._stateRepository.ExistsByIdAsync(
                 request.StateId,
                 cancellationToken
             );
-            if (state is null)
+            if (!stateExists)
             {
                 return Result.Failure(StateErrors.NotFound);
             }
@@ -61,7 +61,7 @@ namespace Trendlink.Application.Users.EditUser
                 request.FirstName,
                 request.LastName,
                 request.BirthDate,
-                state,
+                request.StateId,
                 request.Bio,
                 request.AccountType,
                 request.AccountCategory
