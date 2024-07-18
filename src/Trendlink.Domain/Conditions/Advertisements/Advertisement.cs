@@ -40,6 +40,32 @@ namespace Trendlink.Domain.Conditions.Advertisements
             Description description
         )
         {
+            Result validationResult = ValidateParameters(name, price, description);
+            if (validationResult.IsFailure)
+            {
+                return Result.Failure<Advertisement>(validationResult.Error);
+            }
+
+            return new Advertisement(AdvertisementId.New(), conditionId, name, price, description);
+        }
+
+        public Result Update(Name name, Money price, Description description)
+        {
+            Result validationResult = ValidateParameters(name, price, description);
+            if (validationResult.IsFailure)
+            {
+                return Result.Failure(validationResult.Error);
+            }
+
+            this.Name = name;
+            this.Price = price;
+            this.Description = description;
+
+            return Result.Success();
+        }
+
+        private static Result ValidateParameters(Name name, Money price, Description description)
+        {
             if (
                 name is null
                 || string.IsNullOrEmpty(name.Value)
@@ -55,7 +81,7 @@ namespace Trendlink.Domain.Conditions.Advertisements
                 return Result.Failure<Advertisement>(AdvertisementErrors.InvalidPrice);
             }
 
-            return new Advertisement(AdvertisementId.New(), conditionId, name, price, description);
+            return Result.Success();
         }
     }
 }

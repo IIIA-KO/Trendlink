@@ -9,5 +9,8 @@ namespace Trendlink.Domain.Conditions
 
         public static readonly Error InvalidDescription =
             new("Condition.InvalidDescription", "The provided description is invalid");
+
+        public static readonly Error Duplicate =
+            new("Condition.Duplicate", "Condition already exists");
     }
 }

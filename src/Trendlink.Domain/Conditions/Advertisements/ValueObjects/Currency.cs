@@ -24,8 +24,9 @@
 
         public static Currency FromCode(string code)
         {
-            return All.FirstOrDefault(currency => currency.Code == code)
-                ?? throw new ApplicationException("The currency is invalid.");
+            return All.FirstOrDefault(currency =>
+                    currency.Code.Equals(code, StringComparison.OrdinalIgnoreCase)
+                ) ?? throw new ApplicationException("The currency is invalid.");
         }
 
         public Money MinPositiveValue => new(.01M, this);

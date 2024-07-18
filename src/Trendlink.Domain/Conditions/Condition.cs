@@ -1,5 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
@@ -30,12 +31,43 @@ namespace Trendlink.Domain.Conditions
 
         public static Result<Condition> Create(UserId userId, Description description)
         {
+            Result validationResult = ValidateParameters(description);
+            if (validationResult.IsFailure)
+            {
+                return Result.Failure<Condition>(validationResult.Error);
+            }
+
+            return new Condition(ConditionId.New(), userId, description);
+        }
+
+        public Result Update(Description description)
+        {
+            Result validationResult = ValidateParameters(description);
+            if (validationResult.IsFailure)
+            {
+                return Result.Failure(validationResult.Error);
+            }
+
+            this.Description = description;
+
+            return Result.Success();
+        }
+
+        private static Result ValidateParameters(Description description)
+        {
             if (description is null || string.IsNullOrEmpty(description.Value))
             {
                 return Result.Failure<Condition>(ConditionErrors.InvalidDescription);
             }
 
-            return new Condition(ConditionId.New(), userId, description);
+            return Result.Success();
+        }
+
+        public bool HasAdvertisement(Name advertisementName)
+        {
+            return this._advertisements.Any(ad =>
+                string.Equals(ad.Name.Value, advertisementName.Value, StringComparison.Ordinal)
+            );
         }
     }
 }

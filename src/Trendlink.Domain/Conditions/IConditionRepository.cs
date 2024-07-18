@@ -1,4 +1,5 @@
 ﻿using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Conditions
 {
@@ -18,6 +19,18 @@ namespace Trendlink.Domain.Conditions
             ConditionId id,
             CancellationToken cancellationToken = default
         );
+
+        Task<Condition?> GetByUserIdAsync(
+            UserId userId,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Condition?> GetByUserIdWithAdvertisementAsync(
+            UserId userId,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<bool> ExistsByUserId(UserId userId, CancellationToken cancellationToken = default);
 
         void Add(Condition condition);
     }

@@ -69,10 +69,12 @@ namespace Trendlink.Application.Users.EditUser
 
             if (result.IsFailure)
             {
-                return Result.Failure(result.Error);
+                return result;
             }
 
-            return Result.Success(await this._unitOfWork.SaveChangesAsync(cancellationToken));
+            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success();
         }
     }
 }

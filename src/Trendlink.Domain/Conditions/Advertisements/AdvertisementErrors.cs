@@ -15,5 +15,8 @@ namespace Trendlink.Domain.Conditions.Advertisements
 
         public static readonly Error Invalid =
             new("Advertisement.Invalid", "The provided advertisement content is invalid");
+
+        public static readonly Error Duplicate =
+            new("Advertisement.Duplicate", "Advertisement with such name already exists");
     }
 }

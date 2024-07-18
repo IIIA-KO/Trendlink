@@ -9,13 +9,12 @@ using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenRes
 
 namespace Trendlink.Infrastructure.Authentication
 {
-    public class CachedAuthorizationToken
-    {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-        public DateTimeOffset AcquiredAt { get; set; }
-        public int ExpiresIn { get; set; }
-    }
+    public record CachedAuthorizationToken(
+        string AccessToken,
+        string RefreshToken,
+        DateTimeOffset AcquiredAt,
+        int ExpiresIn
+    );
 
     internal sealed class JwtService : IJwtService
     {
@@ -103,13 +102,12 @@ namespace Trendlink.Infrastructure.Authentication
                     return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
                 }
 
-                var cachedAuthorizationToken = new CachedAuthorizationToken()
-                {
-                    AccessToken = authorizationToken.AccessToken,
-                    RefreshToken = authorizationToken.RefreshToken,
-                    ExpiresIn = authorizationToken.ExpiresIn,
-                    AcquiredAt = DateTimeOffset.UtcNow
-                };
+                var cachedAuthorizationToken = new CachedAuthorizationToken(
+                    authorizationToken.AccessToken,
+                    authorizationToken.RefreshToken,
+                    DateTimeOffset.UtcNow,
+                    authorizationToken.ExpiresIn
+                );
 
                 await this._cacheService.SetAsync(
                     cacheKey,
@@ -178,13 +176,12 @@ namespace Trendlink.Infrastructure.Authentication
 
                 if (!string.IsNullOrEmpty(email))
                 {
-                    var cachedAuthorizationToken = new CachedAuthorizationToken
-                    {
-                        AccessToken = authorizationToken.AccessToken,
-                        RefreshToken = authorizationToken.RefreshToken,
-                        ExpiresIn = authorizationToken.ExpiresIn,
-                        AcquiredAt = DateTimeOffset.UtcNow,
-                    };
+                    var cachedAuthorizationToken = new CachedAuthorizationToken(
+                        authorizationToken.AccessToken,
+                        authorizationToken.RefreshToken,
+                        DateTimeOffset.UtcNow,
+                        authorizationToken.ExpiresIn
+                    );
 
                     await this._cacheService.SetAsync(
                         $"{CacheKeyPrefix}{email}",

@@ -12,6 +12,8 @@ using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
@@ -77,6 +79,8 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IStateRepository, StateRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IConditionRepository, ConditionRepository>();
+            services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
