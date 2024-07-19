@@ -12,7 +12,7 @@ namespace Trendlink.Application.UnitTests.Users
         public const string Password = "Pa$$w0rd";
 
         public static User Create() =>
-            User.Create(FirstName, LastName, BirthDate, Email, PhoneNumber).Value;
+            User.Create(FirstName, LastName, BirthDate, State.Id, Email, PhoneNumber).Value;
 
         public static readonly FirstName FirstName = new("First");
 

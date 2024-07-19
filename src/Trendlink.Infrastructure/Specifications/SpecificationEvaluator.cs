@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Infrastructure.Specifications
@@ -20,7 +19,7 @@ namespace Trendlink.Infrastructure.Specifications
                 queryable = queryable.Where(specification.Criteria);
             }
 
-            _ = specification.IncludeExpressions.Aggregate(
+            queryable = specification.IncludeExpressions.Aggregate(
                 queryable,
                 (current, includeExpression) => current.Include(includeExpression)
             );

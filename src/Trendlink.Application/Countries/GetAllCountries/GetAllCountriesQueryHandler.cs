@@ -23,15 +23,15 @@ namespace Trendlink.Application.Countries.GetAllCountries
         {
             using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
 
+            const string sql = """
+                SELECT
+                    id AS Id,
+                    name AS Name
+                FROM countries
+                """;
+
             try
             {
-                const string sql = """
-                    SELECT
-                        id AS Id,
-                        name AS Name
-                    FROM countries
-                    """;
-
                 return (await dbConnection.QueryAsync<CountryResponse>(sql)).ToList();
             }
             catch (Exception)

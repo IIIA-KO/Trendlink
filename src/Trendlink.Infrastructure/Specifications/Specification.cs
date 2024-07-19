@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Infrastructure.Specifications

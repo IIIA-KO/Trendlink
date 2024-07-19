@@ -1,4 +1,8 @@
 ﻿namespace Trendlink.Application.Users.LogInUser
 {
-    public sealed record AccessTokenResponse(string AccessToken, string RefreshToken);
+    public sealed record AccessTokenResponse(
+        string AccessToken,
+        string RefreshToken,
+        int ExpiresIn
+    );
 }

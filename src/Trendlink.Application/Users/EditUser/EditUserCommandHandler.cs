@@ -31,7 +31,7 @@ namespace Trendlink.Application.Users.EditUser
             CancellationToken cancellationToken
         )
         {
-            User user = await this._userRepository.GetByIdWithRolesAsync(
+            User? user = await this._userRepository.GetByIdWithRolesAsync(
                 request.UserId,
                 cancellationToken
             );
@@ -42,17 +42,17 @@ namespace Trendlink.Application.Users.EditUser
 
             if (
                 this._userContext.IdentityId != user.IdentityId
-                && !user.Roles.Any(r => r == Role.Administrator)
+                && !user.HasRole(Role.Administrator)
             )
             {
                 return Result.Failure(UserErrors.NotAuthorized);
             }
 
-            State state = await this._stateRepository.GetByIdAsync(
+            bool stateExists = await this._stateRepository.ExistsByIdAsync(
                 request.StateId,
                 cancellationToken
             );
-            if (state is null)
+            if (!stateExists)
             {
                 return Result.Failure(StateErrors.NotFound);
             }
@@ -61,7 +61,7 @@ namespace Trendlink.Application.Users.EditUser
                 request.FirstName,
                 request.LastName,
                 request.BirthDate,
-                state,
+                request.StateId,
                 request.Bio,
                 request.AccountType,
                 request.AccountCategory
@@ -69,10 +69,12 @@ namespace Trendlink.Application.Users.EditUser
 
             if (result.IsFailure)
             {
-                return Result.Failure(result.Error);
+                return result;
             }
 
-            return Result.Success(await this._unitOfWork.SaveChangesAsync(cancellationToken));
+            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success();
         }
     }
 }

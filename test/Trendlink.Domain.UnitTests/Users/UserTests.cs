@@ -12,13 +12,14 @@ namespace Trendlink.Domain.UnitTests.Users
     public class UserTests : BaseTest
     {
         [Fact]
-        public void Create_Should_SetPropertyValue()
+        public void Create_Should_SetPropertyValues()
         {
             // Act
             User user = User.Create(
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -27,6 +28,7 @@ namespace Trendlink.Domain.UnitTests.Users
             user.FirstName.Should().Be(UserData.FirstName);
             user.LastName.Should().Be(UserData.LastName);
             user.BirthDate.Should().Be(UserData.BirthDate);
+            user.StateId.Should().Be(UserData.State.Id);
             user.Email.Should().Be(UserData.Email);
             user.PhoneNumber.Should().Be(UserData.PhoneNumber);
             user.AccountType.Should().Be(AccountType.Personal);
@@ -42,6 +44,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -63,6 +66,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -84,6 +88,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 underageBirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             );
@@ -94,45 +99,6 @@ namespace Trendlink.Domain.UnitTests.Users
         }
 
         [Fact]
-        public void SetCity_Should_SetCityAndCityId()
-        {
-            // Arrange
-            User user = User.Create(
-                UserData.FirstName,
-                UserData.LastName,
-                UserData.BirthDate,
-                UserData.Email,
-                UserData.PhoneNumber
-            ).Value;
-
-            // Act
-            user.SetState(UserData.State);
-
-            // Assert
-            user.State.Should().Be(UserData.State);
-            user.StateId.Should().Be(UserData.State.Id);
-        }
-
-        [Fact]
-        public void SetCity_Should_ThrowException_WhenCityIsNull()
-        {
-            // Arrange
-            User user = User.Create(
-                UserData.FirstName,
-                UserData.LastName,
-                UserData.BirthDate,
-                UserData.Email,
-                UserData.PhoneNumber
-            ).Value;
-
-            // Act
-            Action setNullCity = () => user.SetState(null!);
-
-            // Assert
-            setNullCity.Should().Throw<ArgumentNullException>();
-        }
-
-        [Fact]
         public void SetIdentityId_Should_SetIdentityId()
         {
             // Arrange
@@ -140,6 +106,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -160,6 +127,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -179,6 +147,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -201,7 +170,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 newFirstName,
                 newLastName,
                 newBirthDate,
-                newState,
+                newState.Id,
                 newBio,
                 newAccountType,
                 newAccountCategory
@@ -211,7 +180,6 @@ namespace Trendlink.Domain.UnitTests.Users
             user.FirstName.Should().Be(newFirstName);
             user.LastName.Should().Be(newLastName);
             user.BirthDate.Should().Be(newBirthDate);
-            user.State.Should().Be(newState);
             user.StateId.Should().Be(newState.Id);
             user.Bio.Should().Be(newBio);
             user.AccountType.Should().Be(newAccountType);
@@ -226,6 +194,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -238,7 +207,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 underageBirthDate,
-                UserData.State,
+                UserData.State.Id,
                 UserData.Bio,
                 AccountType.Personal,
                 AccountCategory.None
@@ -257,6 +226,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
@@ -276,6 +246,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.FirstName,
                 UserData.LastName,
                 UserData.BirthDate,
+                UserData.State.Id,
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;

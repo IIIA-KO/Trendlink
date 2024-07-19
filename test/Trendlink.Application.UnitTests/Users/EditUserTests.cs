@@ -103,8 +103,8 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._userContextMock.IdentityId.Returns("456");
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
@@ -130,8 +130,8 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._userContextMock.IdentityId.Returns("123");
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
@@ -155,8 +155,8 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._userContextMock.IdentityId.Returns("123");
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
@@ -166,7 +166,7 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_When_StateIsNull()
+        public async Task Handle_Should_ReturnFailure_When_StateDoesNotExist()
         {
             // Arrange
             User user = UserData.Create();
@@ -180,8 +180,8 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._userContextMock.IdentityId.Returns("123");
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns((State?)null);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(false);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
@@ -206,8 +206,8 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._userContextMock.IdentityId.Returns("123");
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             // Act
             var invalidCommand = new EditUserCommand(

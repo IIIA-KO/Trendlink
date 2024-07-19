@@ -19,6 +19,16 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<User?> GetByIdentityIdAsync(
+            string identityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                .dbContext.Set<User>()
+                .FirstOrDefaultAsync(user => user.IdentityId == identityId, cancellationToken);
+        }
+
         public override void Add(User user)
         {
             foreach (Role role in user.Roles)
@@ -29,7 +39,18 @@ namespace Trendlink.Infrastructure.Repositories
             this.dbContext.Add(user);
         }
 
-        public async Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistsByIdAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ExistsAsync(user => user.Id == id, cancellationToken);
+        }
+
+        public async Task<bool> ExistByEmailAsync(
+            Email email,
+            CancellationToken cancellationToken = default
+        )
         {
             return await this.ExistsAsync(user => user.Email == email, cancellationToken);
         }

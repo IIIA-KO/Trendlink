@@ -1,4 +1,7 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
@@ -9,6 +12,8 @@ namespace Trendlink.Domain.Users
     {
         private readonly List<Role> _roles = [];
 
+        private readonly List<Notification> _notifications = [];
+
         private const int MinimumAge = 18;
 
         private User(
@@ -16,6 +21,7 @@ namespace Trendlink.Domain.Users
             FirstName firstName,
             LastName lastName,
             DateOnly birthDate,
+            StateId stateId,
             Email email,
             PhoneNumber phoneNumber
         )
@@ -24,6 +30,7 @@ namespace Trendlink.Domain.Users
             this.FirstName = firstName;
             this.LastName = lastName;
             this.BirthDate = birthDate;
+            this.StateId = stateId;
             this.Email = email;
             this.PhoneNumber = phoneNumber;
         }
@@ -52,7 +59,11 @@ namespace Trendlink.Domain.Users
 
         public string IdentityId { get; private set; } = string.Empty;
 
+        public Condition? Condition { get; private set; }
+
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
+
+        public IReadOnlyCollection<Notification> Notifications => this._notifications.AsReadOnly();
 
         public void AddRole(Role role)
         {
@@ -62,11 +73,16 @@ namespace Trendlink.Domain.Users
             }
         }
 
+        public bool HasRole(Role role)
+        {
+            return this._roles.Any(r => string.Equals(r.Name, role.Name, StringComparison.Ordinal));
+        }
+
         public Result Update(
             FirstName firstName,
             LastName lastName,
             DateOnly birthDate,
-            State state,
+            StateId stateId,
             Bio bio,
             AccountType accountType,
             AccountCategory accountCategory
@@ -80,7 +96,7 @@ namespace Trendlink.Domain.Users
             this.FirstName = firstName;
             this.LastName = lastName;
             this.BirthDate = birthDate;
-            this.SetState(state);
+            this.StateId = stateId;
             this.Bio = bio;
             this.AccountType = accountType;
             this.AccountCategory = accountCategory;
@@ -92,6 +108,7 @@ namespace Trendlink.Domain.Users
             FirstName firstName,
             LastName lastName,
             DateOnly birthDate,
+            StateId stateId,
             Email email,
             PhoneNumber phoneNumber
         )
@@ -107,7 +124,15 @@ namespace Trendlink.Domain.Users
                 return Result.Failure<User>(UserErrors.Underage);
             }
 
-            var user = new User(UserId.New(), firstName, lastName, birthDate, email, phoneNumber);
+            var user = new User(
+                UserId.New(),
+                firstName,
+                lastName,
+                birthDate,
+                stateId,
+                email,
+                phoneNumber
+            );
 
             user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
 
@@ -155,14 +180,6 @@ namespace Trendlink.Domain.Users
             }
 
             return age >= MinimumAge;
-        }
-
-        public void SetState(State state)
-        {
-            this.State =
-                state ?? throw new ArgumentNullException(nameof(state), "State cannot be null.");
-
-            this.StateId = state.Id;
         }
 
         public void SetIdentityId(string identityId)

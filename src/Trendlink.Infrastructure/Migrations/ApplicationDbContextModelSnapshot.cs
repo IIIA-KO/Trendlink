@@ -41,6 +41,101 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("role_user", (string)null);
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Conditions.Advertisements.Advertisement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ConditionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("condition_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_advertisements");
+
+                    b.HasIndex("ConditionId")
+                        .HasDatabaseName("ix_advertisements_condition_id");
+
+                    b.ToTable("advertisements", (string)null);
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Conditions.Condition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_conditions");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_conditions_user_id");
+
+                    b.ToTable("conditions", (string)null);
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_read");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("message");
+
+                    b.Property<int>("NotificationType")
+                        .HasColumnType("integer")
+                        .HasColumnName("notification_type");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_notifications");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_notifications_user_id");
+
+                    b.ToTable("notifications", (string)null);
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -244,6 +339,67 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_role_user_users_users_id");
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Conditions.Advertisements.Advertisement", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Conditions.Condition", "Condition")
+                        .WithMany("Advertisements")
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_advertisements_conditions_condition_id");
+
+                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.ValueObjects.Money", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("AdvertisementId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("numeric")
+                                .HasColumnName("price_amount");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("price_currency");
+
+                            b1.HasKey("AdvertisementId");
+
+                            b1.ToTable("advertisements");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AdvertisementId")
+                                .HasConstraintName("fk_advertisements_advertisements_id");
+                        });
+
+                    b.Navigation("Condition");
+
+                    b.Navigation("Price")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Conditions.Condition", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Users.User", "User")
+                        .WithOne("Condition")
+                        .HasForeignKey("Trendlink.Domain.Conditions.Condition", "UserId")
+                        .HasConstraintName("fk_conditions_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Users.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_notifications_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.States.State", b =>
                 {
                     b.HasOne("Trendlink.Domain.Users.Countries.Country", "Country")
@@ -268,9 +424,21 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Conditions.Condition", b =>
+                {
+                    b.Navigation("Advertisements");
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
+                {
+                    b.Navigation("Condition");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }

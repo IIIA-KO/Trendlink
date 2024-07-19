@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Trendlink.Application.Extensions;
 
 namespace Trendlink.Application.Users.EditUser
 {
@@ -6,9 +7,13 @@ namespace Trendlink.Application.Users.EditUser
     {
         public EditUserCommandValidator()
         {
-            this.RuleFor(c => c.FirstName).NotEmpty().WithMessage("First name is required.");
+            this.RuleFor(c => c.FirstName).NotNullOrEmpty();
 
-            this.RuleFor(c => c.LastName).NotEmpty().WithMessage("Last name is required.");
+            this.RuleFor(c => c.FirstName.Value).NotNullOrEmpty();
+
+            this.RuleFor(c => c.LastName).NotNullOrEmpty();
+
+            this.RuleFor(c => c.LastName.Value).NotNullOrEmpty();
 
             this.RuleFor(c => c.BirthDate)
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow.Date.AddYears(-18)))

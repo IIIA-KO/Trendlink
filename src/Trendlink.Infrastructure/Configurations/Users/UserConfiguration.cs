@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
@@ -42,6 +44,12 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .WithMany()
                 .HasForeignKey(user => user.StateId)
                 .IsRequired();
+
+            builder
+                .HasOne(user => user.Condition)
+                .WithOne(condition => condition.User)
+                .HasForeignKey<Condition>(condition => condition.UserId)
+                .IsRequired(false);
 
             builder
                 .Property(user => user.PhoneNumber)
