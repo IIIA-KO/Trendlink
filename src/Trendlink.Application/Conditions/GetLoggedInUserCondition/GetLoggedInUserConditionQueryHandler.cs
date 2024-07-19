@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
+using System.Data;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
@@ -53,50 +53,57 @@ namespace Trendlink.Application.Conditions.GetLoggedInUserCondition
 
             var conditionDictionary = new Dictionary<Guid, ConditionResponse>();
 
-            await dbConnection.QueryAsync<
-                ConditionResponse,
-                AdvertisementResponse,
-                ConditionResponse
-            >(
-                sql,
-                (condition, advertisement) =>
-                {
-                    if (
-                        !conditionDictionary.TryGetValue(
-                            condition.Id,
-                            out ConditionResponse? conditionEntry
+            try
+            {
+                await dbConnection.QueryAsync<
+                    ConditionResponse,
+                    AdvertisementResponse,
+                    ConditionResponse
+                >(
+                    sql,
+                    (condition, advertisement) =>
+                    {
+                        if (
+                            !conditionDictionary.TryGetValue(
+                                condition.Id,
+                                out ConditionResponse? conditionEntry
+                            )
                         )
-                    )
-                    {
-                        conditionEntry = new ConditionResponse
                         {
-                            Id = condition.Id,
-                            UserId = condition.UserId,
-                            Description = condition.Description,
-                            Advertisements = []
-                        };
+                            conditionEntry = new ConditionResponse
+                            {
+                                Id = condition.Id,
+                                UserId = condition.UserId,
+                                Description = condition.Description,
+                                Advertisements = []
+                            };
 
-                        conditionDictionary.Add(condition.Id, conditionEntry);
-                    }
+                            conditionDictionary.Add(condition.Id, conditionEntry);
+                        }
 
-                    if (advertisement != null)
-                    {
-                        var ad = new AdvertisementResponse
+                        if (advertisement != null)
                         {
-                            Id = advertisement.Id,
-                            Name = advertisement.Name,
-                            PriceAmount = advertisement.PriceAmount,
-                            PriceCurrency = advertisement.PriceCurrency,
-                            Description = advertisement.Description
-                        };
-                        conditionEntry.Advertisements.Add(ad);
-                    }
+                            var ad = new AdvertisementResponse
+                            {
+                                Id = advertisement.Id,
+                                Name = advertisement.Name,
+                                PriceAmount = advertisement.PriceAmount,
+                                PriceCurrency = advertisement.PriceCurrency,
+                                Description = advertisement.Description
+                            };
+                            conditionEntry.Advertisements.Add(ad);
+                        }
 
-                    return conditionEntry;
-                },
-                new { UserId = userId },
-                splitOn: "SplitProperty"
-            );
+                        return conditionEntry;
+                    },
+                    new { UserId = userId },
+                    splitOn: "SplitProperty"
+                );
+            }
+            catch (Exception)
+            {
+                return Result.Failure<ConditionResponse>(Error.Unexpected);
+            }
 
             ConditionResponse? conditionResponse = conditionDictionary.Values.FirstOrDefault();
 

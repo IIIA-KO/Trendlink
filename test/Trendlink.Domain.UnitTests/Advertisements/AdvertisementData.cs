@@ -9,7 +9,7 @@ namespace Trendlink.Domain.UnitTests.Advertisements
 
         public static readonly Name Name = new("Name");
 
-        public static readonly Money Price = new(1, Currency.Uah);
+        public static readonly Money Price = new(1m, Currency.Uah);
 
         public static readonly Description Description = new("Description");
     }

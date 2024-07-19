@@ -4,7 +4,6 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
-using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Advertisements.CreateAdvertisement
 {

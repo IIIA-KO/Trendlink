@@ -76,5 +76,56 @@ namespace Trendlink.Domain.UnitTests.Advertisements
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(AdvertisementErrors.InvalidPrice);
         }
+
+        [Fact]
+        public void Update_Should_UpdateAdvertisementProperties()
+        {
+            // Arrange
+            Advertisement advertisement = Advertisement
+                .Create(
+                    AdvertisementData.ConditionId,
+                    AdvertisementData.Name,
+                    AdvertisementData.Price,
+                    AdvertisementData.Description
+                )
+                .Value;
+
+            var newName = new Name("New Name");
+            var newPrice = new Money(100, Currency.Uah);
+            var newDescription = new Description("New Description");
+
+            // Act
+            advertisement.Update(newName, newPrice, newDescription);
+
+            // Assert
+            advertisement.Name.Should().Be(newName);
+            advertisement.Price.Should().Be(newPrice);
+            advertisement.Description.Should().Be(newDescription);
+        }
+
+        [Fact]
+        public void Update_Should_ReturnFailure_WhenPriceAmountIsInvalid()
+        {
+            // Arrange
+            Advertisement advertisement = Advertisement
+                .Create(
+                    AdvertisementData.ConditionId,
+                    AdvertisementData.Name,
+                    AdvertisementData.Price,
+                    AdvertisementData.Description
+                )
+                .Value;
+
+            var newName = new Name("New Name");
+            var newPrice = new Money(-23.2m, Currency.Uah);
+            var newDescription = new Description("New Description");
+
+            // Act
+            Result result = advertisement.Update(newName, newPrice, newDescription);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(AdvertisementErrors.InvalidPrice);
+        }
     }
 }

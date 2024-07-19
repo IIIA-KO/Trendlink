@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.UnitTests.Advertisements;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.UnitTests.Conditions
 {
@@ -34,6 +37,54 @@ namespace Trendlink.Domain.UnitTests.Conditions
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(ConditionErrors.InvalidDescription);
+        }
+
+        [Fact]
+        public void Update_Should_UpdateConditionPropertes()
+        {
+            // Arrange
+            Condition condition = Condition
+                .Create(ConditionData.UserId, ConditionData.Description)
+                .Value;
+
+            var newDescription = new Description("New Description");
+
+            // Act
+            condition.Update(newDescription);
+
+            // Assert
+            condition.Description.Should().Be(newDescription);
+        }
+
+        [Fact]
+        public void Update_Should_ReturnFailure_WhenDescriptionIsNull()
+        {
+            // Arrange
+            Condition condition = Condition
+                .Create(ConditionData.UserId, ConditionData.Description)
+                .Value;
+
+            // Act
+            Result result = condition.Update(null!);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(ConditionErrors.InvalidDescription);
+        }
+
+        [Fact]
+        public void HasAdvertisement_Should_ReturnFalse_WhenAdvertisementNotPresentInList()
+        {
+            // Arrange
+            Condition condition = Condition
+                .Create(ConditionData.UserId, ConditionData.Description)
+                .Value;
+
+            // Act
+            bool result = condition.HasAdvertisement(AdvertisementData.Name);
+
+            // Assert
+            result.Should().BeFalse();
         }
     }
 }
