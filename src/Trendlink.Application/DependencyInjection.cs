@@ -22,7 +22,7 @@ namespace Trendlink.Application
                 configuration.AddOpenBehavior(typeof(QueryCachingBehavior<,>));
             });
 
-            services.AddValidatorsFromAssembly(ApplicationAssembly);
+            services.AddValidatorsFromAssembly(ApplicationAssembly, includeInternalTypes: true);
 
             return services;
         }

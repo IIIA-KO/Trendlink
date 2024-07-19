@@ -10,7 +10,9 @@ namespace Trendlink.Api.Middleware
             new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         private readonly RequestDelegate _next;
+
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
         private readonly IHostEnvironment _environment;
 
         public ExceptionHandlingMiddleware(
@@ -53,14 +55,20 @@ namespace Trendlink.Api.Middleware
                     problemDetails.Extensions["errors"] = exceptionDetails.Errors;
                 }
 
-                if (this._environment.IsDevelopment() && exceptionDetails.StackTrace is not null)
+                if (this._environment.IsDevelopment())
                 {
                     problemDetails.Extensions["stackTrace"] = exceptionDetails.StackTrace;
+                    if (exceptionDetails.InnerExceptionDetails is not null)
+                    {
+                        problemDetails.Extensions["innerExceptionDetails"] =
+                            exceptionDetails.InnerExceptionDetails;
+                    }
                 }
 
                 context.Response.StatusCode = exceptionDetails.Status;
+                context.Response.ContentType = "application/json";
 
-                string json = JsonSerializer.Serialize(context, jsonSerializerOptions);
+                string json = JsonSerializer.Serialize(problemDetails, jsonSerializerOptions);
 
                 await context.Response.WriteAsync(json);
             }
@@ -68,8 +76,20 @@ namespace Trendlink.Api.Middleware
 
         private static ExceptionDetails GetExceptionDetails(Exception exception)
         {
-            string stackTrace = exception.StackTrace?.ToString() ?? string.Empty;
-            return exception switch
+            var innerExceptionDetails = new List<InnerExceptionDetail>();
+            Exception? currentException = exception.InnerException;
+
+            while (currentException is not null)
+            {
+                innerExceptionDetails.Add(
+                    new InnerExceptionDetail(currentException.Message, currentException.StackTrace)
+                );
+                currentException = currentException.InnerException;
+            }
+
+            string stackTrace = exception.StackTrace ?? string.Empty;
+
+            return exception.InnerException switch
             {
                 ValidationException validationException
                     => new ExceptionDetails(
@@ -78,6 +98,7 @@ namespace Trendlink.Api.Middleware
                         "Validation error",
                         "One or more validation errors has occurred",
                         stackTrace,
+                        innerExceptionDetails,
                         validationException.Errors
                     ),
                 _
@@ -85,12 +106,15 @@ namespace Trendlink.Api.Middleware
                         StatusCodes.Status500InternalServerError,
                         "ServerError",
                         "Server error",
-                        "An unexpected error has occurred",
+                        exception.Message,
                         stackTrace,
+                        innerExceptionDetails,
                         null
                     )
             };
         }
+
+        internal sealed record InnerExceptionDetail(string Message, string? StackTrace);
 
         internal sealed record ExceptionDetails(
             int Status,
@@ -98,6 +122,7 @@ namespace Trendlink.Api.Middleware
             string Title,
             string Detail,
             string? StackTrace,
+            IEnumerable<InnerExceptionDetail>? InnerExceptionDetails,
             IEnumerable<object>? Errors
         );
     }

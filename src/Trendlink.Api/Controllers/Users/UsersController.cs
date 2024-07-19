@@ -1,0 +1,88 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Trendlink.Application.Users.EditUser;
+using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.LogInUser;
+using Trendlink.Application.Users.RefreshToken;
+using Trendlink.Application.Users.RegisterUser;
+using Trendlink.Domain.Users.States;
+using Trendlink.Domain.Users.ValueObjects;
+
+namespace Trendlink.Api.Controllers.Users
+{
+    [Route("/api/users")]
+    public class UsersController : BaseApiController
+    {
+        [HttpGet("me")]
+        public async Task<IActionResult> GetLoggedInUse(CancellationToken cancellationToken)
+        {
+            var query = new GetLoggedInUserQuery();
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(
+            [FromBody] RegisterUserRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new RegisterUserCommand(
+                new FirstName(request.FirstName),
+                new LastName(request.LastName),
+                request.BirthDate,
+                new Email(request.Email),
+                new PhoneNumber(request.PhoneNumber),
+                request.Password,
+                new StateId(request.StateId)
+            );
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> LogIn(
+            [FromBody] LogInUserRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new LogInUserCommand(new Email(request.Email), request.Password);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(
+            [FromBody] RefreshTokenRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new RefreshTokenCommand(request.RefreshToken);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpPut("edit/{id:guid}")]
+        public async Task<IActionResult> EditUser(
+            Guid id,
+            [FromBody] EditUserRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new EditUserCommand(
+                new UserId(id),
+                new FirstName(request.FirstName),
+                new LastName(request.LastName),
+                request.BirthDate,
+                new StateId(request.StateId),
+                new Bio(request.Bio),
+                request.AccountType,
+                request.AccountCategory
+            );
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+    }
+}

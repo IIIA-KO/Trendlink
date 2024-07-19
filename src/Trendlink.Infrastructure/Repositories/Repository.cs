@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Infrastructure.Specifications;
 
 namespace Trendlink.Infrastructure.Repositories
 {
@@ -24,9 +26,28 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
         }
 
-        public void Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             this.dbContext.Add(entity);
+        }
+
+        public async Task<bool> ExistsAsync(
+            Expression<Func<TEntity, bool>> expression,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                .dbContext.Set<TEntity>()
+                .AsNoTracking()
+                .Where(expression)
+                .AnyAsync(cancellationToken);
+        }
+
+        protected IQueryable<TEntity> ApplySpecification(
+            Specification<TEntity, TEntityId> specification
+        )
+        {
+            return SpecificationEvaluator.GetQuery(this.dbContext.Set<TEntity>(), specification);
         }
     }
 }
