@@ -51,7 +51,7 @@ namespace Trendlink.Domain.Cooperations
 
         public CooperationStatus Status { get; set; }
 
-        public static Cooperation Pend(
+        public static Result<Cooperation> Pend(
             Name name,
             Description description,
             DateTimeOffset dateTime,
@@ -60,6 +60,11 @@ namespace Trendlink.Domain.Cooperations
             UserId selllerId
         )
         {
+            if (buyerId == selllerId)
+            {
+                return Result.Failure<Cooperation>(CooperationErrors.SameUser);
+            }
+
             var cooperation = new Cooperation(
                 CooperationId.New(),
                 name,
