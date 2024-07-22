@@ -1,7 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
-using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -22,7 +21,7 @@ namespace Trendlink.Domain.Conditions
 
         public UserId UserId { get; private set; }
 
-        public User? User { get; private set; }
+        public User? User { get; init; }
 
         public Description Description { get; private set; }
 

@@ -1,5 +1,4 @@
-﻿using Trendlink.Domain.Conditions.ValueObjects;
-using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Conditions
 {

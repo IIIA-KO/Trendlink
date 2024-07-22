@@ -1,5 +1,4 @@
 ﻿using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 
 namespace Trendlink.Infrastructure.Specifications.Conditions
 {

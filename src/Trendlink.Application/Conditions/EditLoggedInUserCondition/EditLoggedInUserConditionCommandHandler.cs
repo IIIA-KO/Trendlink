@@ -2,7 +2,6 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Conditions.EditCondition
 {

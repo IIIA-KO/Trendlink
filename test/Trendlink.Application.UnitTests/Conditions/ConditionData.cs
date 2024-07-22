@@ -1,5 +1,5 @@
 ﻿using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Conditions

@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Trendlink.Application.Abstractions.Authentication;
+﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;

@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
-using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Shared;
 
 namespace Trendlink.Domain.Conditions.Advertisements
 {

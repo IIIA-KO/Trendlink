@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Conditions.ValueObjects
+﻿namespace Trendlink.Domain.Shared
 {
     public sealed record Description(string Value);
 }
