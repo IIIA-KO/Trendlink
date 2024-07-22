@@ -16,19 +16,23 @@ namespace Trendlink.Domain.Cooperations
             CooperationId id,
             Name name,
             Description description,
-            DateTimeOffset dateTime,
+            DateTimeOffset scheduledOnUtc,
             AdvertisementId advertisementId,
             UserId buyerId,
-            UserId selllerId
+            UserId selllerId,
+            CooperationStatus status,
+            DateTime pendedOnUtc
         )
             : base(id)
         {
             this.Name = name;
             this.Description = description;
-            this.ScheduledOnUtc = dateTime;
+            this.ScheduledOnUtc = scheduledOnUtc;
             this.AdvertisementId = advertisementId;
             this.BuyerId = buyerId;
             this.SellerId = selllerId;
+            this.Status = status;
+            this.PendedOnUtc = pendedOnUtc;
         }
 
         public Name Name { get; private set; }
@@ -51,13 +55,24 @@ namespace Trendlink.Domain.Cooperations
 
         public CooperationStatus Status { get; set; }
 
+        public DateTime PendedOnUtc { get; private set; }
+
+        public DateTime? ConfirmedOnUtc { get; private set; }
+
+        public DateTime? RejectedOnUtc { get; private set; }
+
+        public DateTime? CancelledOnUtc { get; private set; }
+
+        public DateTime? CompletedOnUtc { get; private set; }
+
         public static Result<Cooperation> Pend(
             Name name,
             Description description,
-            DateTimeOffset dateTime,
+            DateTimeOffset scheduledOnUtc,
             AdvertisementId advertisementId,
             UserId buyerId,
-            UserId selllerId
+            UserId selllerId,
+            DateTime utcNow
         )
         {
             if (buyerId == selllerId)
@@ -69,18 +84,79 @@ namespace Trendlink.Domain.Cooperations
                 CooperationId.New(),
                 name,
                 description,
-                dateTime,
+                scheduledOnUtc,
                 advertisementId,
                 buyerId,
-                selllerId
-            )
-            {
-                Status = CooperationStatus.Pending
-            };
+                selllerId,
+                CooperationStatus.Pending,
+                utcNow
+            );
 
             cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation.Id));
 
             return cooperation;
+        }
+
+        public Result Confirm(DateTime utcNow)
+        {
+            if (this.Status != CooperationStatus.Pending)
+            {
+                return Result.Failure(CooperationErrors.NotPending);
+            }
+
+            this.Status = CooperationStatus.Confirmed;
+            this.ConfirmedOnUtc = utcNow;
+
+            this.RaiseDomainEvent(new CooperationConfirmedDomainEvent(this.Id));
+
+            return Result.Success();
+        }
+
+        public Result Reject(DateTime utcNow)
+        {
+            if (this.Status != CooperationStatus.Pending)
+            {
+                return Result.Failure(CooperationErrors.NotPending);
+            }
+
+            this.Status = CooperationStatus.Rejected;
+            this.RejectedOnUtc = utcNow;
+
+            this.RaiseDomainEvent(new CooperationRejectedDomainEvent(this.Id));
+            return Result.Success();
+        }
+
+        public Result Complete(DateTime utcNow)
+        {
+            if (this.Status != CooperationStatus.Confirmed)
+            {
+                return Result.Failure(CooperationErrors.NotConfirmed);
+            }
+
+            this.Status = CooperationStatus.Completed;
+            this.CompletedOnUtc = utcNow;
+
+            this.RaiseDomainEvent(new CooperationCompletedDomainEvent(this.Id));
+            return Result.Success();
+        }
+
+        public Result Cancel(DateTime utcNow)
+        {
+            if (this.Status != CooperationStatus.Confirmed)
+            {
+                return Result.Failure(CooperationErrors.NotConfirmed);
+            }
+
+            if (utcNow > this.ScheduledOnUtc)
+            {
+                return Result.Failure(CooperationErrors.AlreadyStarted);
+            }
+
+            this.Status = CooperationStatus.Cancelled;
+            this.CancelledOnUtc = utcNow;
+
+            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this.Id));
+            return Result.Success();
         }
     }
 }
