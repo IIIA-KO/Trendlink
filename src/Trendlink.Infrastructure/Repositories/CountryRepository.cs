@@ -18,7 +18,10 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<bool> ExistsById(CountryId id, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistsById(
+            CountryId id,
+            CancellationToken cancellationToken = default
+        )
         {
             return await this.ExistsAsync(country => country.Id == id, cancellationToken);
         }

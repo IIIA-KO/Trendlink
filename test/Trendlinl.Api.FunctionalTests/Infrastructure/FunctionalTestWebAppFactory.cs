@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.Keycloak;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
-using Trendlink.Api.FunctionalTests.Infrastructure;
 using Trendlink.Api.FunctionalTests.Users;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Countries.GetAllCountries;

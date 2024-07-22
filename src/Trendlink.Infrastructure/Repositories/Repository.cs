@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Specifications;
 
@@ -29,6 +29,11 @@ namespace Trendlink.Infrastructure.Repositories
         public virtual void Add(TEntity entity)
         {
             this.dbContext.Add(entity);
+        }
+
+        public void Remove(TEntity entity)
+        {
+            this.dbContext.Remove(entity);
         }
 
         public async Task<bool> ExistsAsync(

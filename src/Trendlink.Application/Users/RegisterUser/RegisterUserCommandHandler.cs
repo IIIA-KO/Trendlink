@@ -1,4 +1,5 @@
-﻿using Trendlink.Application.Abstractions.Authentication;
+﻿using System.Numerics;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
@@ -41,11 +42,11 @@ namespace Trendlink.Application.Users.RegisterUser
                 return Result.Failure<UserId>(UserErrors.DuplicateEmail);
             }
 
-            State? state = await this._stateRepository.GetByIdAsync(
+            bool stateExists = await this._stateRepository.ExistsByIdAsync(
                 request.StateId,
                 cancellationToken
             );
-            if (state is null)
+            if (!stateExists)
             {
                 return Result.Failure<UserId>(StateErrors.NotFound);
             }
@@ -54,6 +55,7 @@ namespace Trendlink.Application.Users.RegisterUser
                 request.FirstName,
                 request.LastName,
                 request.BirthDate,
+                request.StateId,
                 request.Email,
                 request.PhoneNumber
             );
@@ -72,8 +74,6 @@ namespace Trendlink.Application.Users.RegisterUser
                     request.Password,
                     cancellationToken
                 );
-
-                user.SetState(state);
 
                 user.SetIdentityId(identityId);
 

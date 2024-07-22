@@ -1,8 +1,5 @@
-﻿using System.Globalization;
-using Bogus;
+﻿using Bogus;
 using Newtonsoft.Json;
-using Trendlink.Application.Countries.GetAllCountries;
-using Trendlink.Application.Countries.GetStates;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
@@ -101,7 +98,7 @@ namespace Trendlink.Api.Extensions
                     u => u.Email,
                     (f, u) =>
                         new Email(
-                            $"{u.FirstName.Value.ToUpperInvariant()}.{u.LastName.Value.ToUpperInvariant()}@test.com"
+                            $"{u.FirstName.Value.Normalize()}.{u.LastName.Value.Normalize()}@test.com"
                         )
                 )
                 .RuleFor(

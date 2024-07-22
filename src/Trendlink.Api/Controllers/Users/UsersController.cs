@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
+using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetLoggedInUser;
 using Trendlink.Application.Users.LogInUser;
@@ -14,9 +16,30 @@ namespace Trendlink.Api.Controllers.Users
     public class UsersController : BaseApiController
     {
         [HttpGet("me")]
-        public async Task<IActionResult> GetLoggedInUse(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
         {
             var query = new GetLoggedInUserQuery();
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("notifications")]
+        public async Task<IActionResult> GetLoggedInUserNotifications(
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetLoggedInUserNotificationsQuery();
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("{id:guid}/notifications")]
+        public async Task<IActionResult> GetUserNotifications(
+            Guid id,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserNotificationsQuery(new UserId(id));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -64,7 +87,7 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPut("edit/{id:guid}")]
+        [HttpPut("{id:guid}/edit")]
         public async Task<IActionResult> EditUser(
             Guid id,
             [FromBody] EditUserRequest request,

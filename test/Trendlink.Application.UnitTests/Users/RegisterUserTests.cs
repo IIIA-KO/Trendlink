@@ -60,13 +60,13 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_When_StateIsNull()
+        public async Task Handle_Should_ReturnFailure_When_StateDoesNotExist()
         {
             // Arrange
             this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns((State?)null);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(false);
 
             // Act
             Result<UserId> result = await this._handler.Handle(Command, default);
@@ -82,8 +82,8 @@ namespace Trendlink.Application.UnitTests.Users
             // Arrange
             this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             // Act
             var invalidCommand = new RegisterUserCommand(
@@ -108,8 +108,8 @@ namespace Trendlink.Application.UnitTests.Users
             // Arrange
             this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             this._authenticationServiceMock.RegisterAsync(
                 Arg.Any<User>(),
@@ -132,8 +132,8 @@ namespace Trendlink.Application.UnitTests.Users
             // Arrange
             this._userRepositoryMock.ExistByEmailAsync(Command.Email, default).Returns(false);
 
-            this._stateRepositoryMock.GetByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
-                .Returns(UserData.State);
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, Arg.Any<CancellationToken>())
+                .Returns(true);
 
             this._authenticationServiceMock.RegisterAsync(
                 Arg.Any<User>(),

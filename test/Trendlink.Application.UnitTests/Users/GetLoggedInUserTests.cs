@@ -11,6 +11,16 @@ namespace Trendlink.Application.UnitTests.Users
 {
     public class GetLoggedInUserTests
     {
+        private const string Sql = """
+            SELECT
+                id AS Id,
+                first_name AS FirstName,
+                last_name AS LastName,
+                email AS Email
+            FROM users
+            WHERE identity_id = @IdentityId
+            """;
+
         public static readonly GetLoggedInUserQuery Query = new();
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
@@ -43,17 +53,7 @@ namespace Trendlink.Application.UnitTests.Users
 
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
 
-            const string sql = """
-                SELECT
-                    id AS Id,
-                    first_name AS FirstName,
-                    last_name AS LastName,
-                    email AS Email
-                FROM users
-                WHERE identity_id = @IdentityId
-                """;
-
-            dbConnectionMock.SetupQuery(sql).Returns(expectedUser);
+            dbConnectionMock.SetupQuery(Sql).Returns(expectedUser);
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
@@ -70,17 +70,7 @@ namespace Trendlink.Application.UnitTests.Users
             // Arrange
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
 
-            const string sql = """
-                SELECT
-                    id AS Id,
-                    first_name AS FirstName,
-                    last_name AS LastName,
-                    email AS Email
-                FROM users
-                WHERE identity_id = @IdentityId
-                """;
-
-            dbConnectionMock.SetupQuery(sql).Throws(new Exception("Database exception"));
+            dbConnectionMock.SetupQuery(Sql).Throws(new Exception("Database exception"));
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnectionMock);
 
