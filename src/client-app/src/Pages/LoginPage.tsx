@@ -1,34 +1,41 @@
-import {SyntheticEvent, useState} from "react";
+import React, {useState} from 'react';
+//import { Formik, Field, Form, ErrorMessage } from 'formik';
+//import * as Yup from 'yup';
+import { useAuth } from '../context/AuthContext';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
 
-    const submit = async (e : SyntheticEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        await fetch("http://localhost:5001/users/login", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({
-                email,
-                password
-            })
-        })
-    }
+        await login(email, password);
+    };
 
     return (
-        <section className="LoginPage">
-            <h2>TrendLink</h2>
-            <h1>Мережа для успішної співпраці з блогерами</h1>
-            <form onSubmit={submit}>
-                <input type="email" id="inputEmail" placeholder="e-mail" required onChange={ e => setEmail(e.target.value) } />
-                <input type="password" id="inputePassword" placeholder="password" required onChange={ e => setPassword(e.target.value) } />
-                <button type="submit">Увійти</button>
-            </form>
-        </section>
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label>Email</label>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+            </div>
+            <div>
+                <label>Password</label>
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+            </div>
+            <button type="submit">Login</button>
+        </form>
     );
-}
+};
 
 export default LoginPage;
