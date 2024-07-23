@@ -47,6 +47,8 @@ namespace Trendlink.Infrastructure.Configurations
                         .HasConversion(currency => currency.Code, code => Currency.FromCode(code))
                         .IsRequired()
             );
+
+            builder.Property<uint>("Version").IsRowVersion();
         }
     }
 }

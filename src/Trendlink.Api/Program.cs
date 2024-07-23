@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     app.ApplyMigrations();
-    await app.SeedData(builder.Configuration);
+    await app.SeedDataAsync(builder.Configuration);
 }
 
 app.UseHttpsRedirection();

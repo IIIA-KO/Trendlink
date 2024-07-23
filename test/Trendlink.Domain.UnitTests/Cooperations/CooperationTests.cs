@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
+using Trendlink.Domain.UnitTests.Advertisements;
 using Trendlink.Domain.UnitTests.Infrastructure;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -14,7 +15,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Pend_Should_SetPropertyValues()
         {
             // Arrange
-            var advertisementId = AdvertisementId.New();
+            Advertisement advertisement = AdvertisementData.Create();
             var buyerId = UserId.New();
             var sellerId = UserId.New();
             DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
@@ -26,7 +27,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
-                    advertisementId,
+                    advertisement,
                     buyerId,
                     sellerId,
                     utcNow
@@ -37,7 +38,8 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             cooperation.Name.Should().Be(CooperationData.Name);
             cooperation.Description.Should().Be(CooperationData.Description);
             cooperation.ScheduledOnUtc.Should().Be(scheduledOnUtc);
-            cooperation.AdvertisementId.Should().Be(advertisementId);
+            cooperation.AdvertisementId.Should().Be(advertisement.Id);
+            cooperation.Advertisement.Should().BeNull();
             cooperation.BuyerId.Should().Be(buyerId);
             cooperation.Buyer.Should().BeNull();
             cooperation.SellerId.Should().Be(sellerId);
@@ -49,7 +51,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Pend_Should_RaiseCooperationPendedDomainEvent()
         {
             // Arrange
-            var advertisementId = AdvertisementId.New();
+            Advertisement advertisement = AdvertisementData.Create();
             var buyerId = UserId.New();
             var sellerId = UserId.New();
             DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
@@ -61,7 +63,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
-                    advertisementId,
+                    advertisement,
                     buyerId,
                     sellerId,
                     utcNow
@@ -81,7 +83,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Pend_Should_ReturnError_WhenBuyerAndSellerAreSame()
         {
             // Arrange
-            var advertisementId = AdvertisementId.New();
+            Advertisement advertisement = AdvertisementData.Create();
             var userId = UserId.New(); // same buyer and seller
             DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
             DateTime utcNow = DateTime.UtcNow;
@@ -91,7 +93,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 scheduledOnUtc,
-                advertisementId,
+                advertisement,
                 userId,
                 userId,
                 utcNow
@@ -324,7 +326,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     DateTimeOffset.UtcNow.AddDays(7),
-                    AdvertisementId.New(),
+                    AdvertisementData.Create(),
                     UserId.New(),
                     UserId.New(),
                     DateTime.UtcNow

@@ -1,5 +1,4 @@
 ﻿using Trendlink.Domain.Shared;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.UnitTests.Cooperations
 {

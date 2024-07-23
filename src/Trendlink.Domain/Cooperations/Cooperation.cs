@@ -53,7 +53,7 @@ namespace Trendlink.Domain.Cooperations
 
         public User Seller { get; init; }
 
-        public CooperationStatus Status { get; set; }
+        public CooperationStatus Status { get; private set; }
 
         public DateTime PendedOnUtc { get; private set; }
 
@@ -69,7 +69,7 @@ namespace Trendlink.Domain.Cooperations
             Name name,
             Description description,
             DateTimeOffset scheduledOnUtc,
-            AdvertisementId advertisementId,
+            Advertisement advertisement,
             UserId buyerId,
             UserId selllerId,
             DateTime utcNow
@@ -85,7 +85,7 @@ namespace Trendlink.Domain.Cooperations
                 name,
                 description,
                 scheduledOnUtc,
-                advertisementId,
+                advertisement.Id,
                 buyerId,
                 selllerId,
                 CooperationStatus.Pending,
@@ -93,6 +93,8 @@ namespace Trendlink.Domain.Cooperations
             );
 
             cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation.Id));
+
+            advertisement.LastCooperatedOnUtc = utcNow;
 
             return cooperation;
         }

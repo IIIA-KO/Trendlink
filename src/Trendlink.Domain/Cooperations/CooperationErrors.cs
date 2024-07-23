@@ -2,7 +2,7 @@
 
 namespace Trendlink.Domain.Cooperations
 {
-    internal static class CooperationErrors
+    public static class CooperationErrors
     {
         public static readonly NotFoundError NotFound =
             new(

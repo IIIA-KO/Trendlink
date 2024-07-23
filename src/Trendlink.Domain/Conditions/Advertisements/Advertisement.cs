@@ -33,6 +33,8 @@ namespace Trendlink.Domain.Conditions.Advertisements
 
         public Description Description { get; private set; }
 
+        public DateTime? LastCooperatedOnUtc { get; internal set; }
+
         public static Result<Advertisement> Create(
             ConditionId conditionId,
             Name name,
