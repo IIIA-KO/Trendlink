@@ -4,9 +4,7 @@ using NSubstitute;
 using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
-using Trendlink.Application.Conditions.GetLoggedInUserCondition;
 using Trendlink.Application.Cooperations.GetLoggedInUserCooperations;
-using Trendlink.Application.Countries.GetAllCountries;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 

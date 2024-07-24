@@ -8,12 +8,10 @@ using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.UnitTests.Advertisements;
 using Trendlink.Application.UnitTests.Conditions;
-using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Cooperations

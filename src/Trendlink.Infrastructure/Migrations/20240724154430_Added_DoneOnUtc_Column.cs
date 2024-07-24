@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,15 +14,14 @@ namespace Trendlink.Infrastructure.Migrations
                 name: "done_on_utc",
                 table: "cooperations",
                 type: "timestamp with time zone",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "done_on_utc",
-                table: "cooperations");
+            migrationBuilder.DropColumn(name: "done_on_utc", table: "cooperations");
         }
     }
 }

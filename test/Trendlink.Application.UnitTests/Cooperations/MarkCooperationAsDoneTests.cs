@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
 using NSubstitute;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
-using Trendlink.Application.Cooperations.ConfirmCooperation;
 using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
@@ -14,6 +16,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
             new(CooperationData.Create().Id);
 
         private readonly ICooperationRepository _cooperationRepositoryMock;
+        private readonly IUserContext _userContextMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
         private readonly MarkCooperationAsDoneCommandHandler _handler;
@@ -21,6 +24,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public MarkCooperationAsDoneTests()
         {
             this._cooperationRepositoryMock = Substitute.For<ICooperationRepository>();
+            this._userContextMock = Substitute.For<IUserContext>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
             IDateTimeProvider dateTimeProvider = Substitute.For<IDateTimeProvider>();
@@ -28,6 +32,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
             this._handler = new MarkCooperationAsDoneCommandHandler(
                 this._cooperationRepositoryMock,
+                this._userContextMock,
                 dateTimeProvider,
                 this._unitOfWorkMock
             );
@@ -49,6 +54,25 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenUserIsNotAuthorized()
+        {
+            // Arrange
+            Cooperation cooperation = this.CreatePendingCooperation();
+
+            this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
+                .Returns(cooperation);
+
+            this._userContextMock.UserId.Returns(UserId.New());
+
+            // Act
+            Result result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(UserErrors.NotAuthorized);
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnFailure_WhenMarkingFails()
         {
             // Arrange
@@ -56,6 +80,8 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
+
+            this._userContextMock.UserId.Returns(cooperation.SellerId);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
@@ -73,6 +99,8 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
+
+            this._userContextMock.UserId.Returns(cooperation.SellerId);
 
             // Act
             Result result = await this._handler.Handle(Command, default);
