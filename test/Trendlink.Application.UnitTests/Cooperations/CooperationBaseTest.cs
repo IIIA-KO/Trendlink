@@ -27,5 +27,12 @@ namespace Trendlink.Application.UnitTests.Cooperations
             cooperation.Confirm(DateTime.UtcNow);
             return cooperation;
         }
+
+        public Cooperation CreateDoneCooperation()
+        {
+            Cooperation cooperation = this.CreateConfirmedCooperation();
+            cooperation.MarkAsDone(DateTime.UtcNow);
+            return cooperation;
+        }
     }
 }

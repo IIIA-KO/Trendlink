@@ -1,23 +1,24 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Clock;
-using Trendlink.Application.Cooperations.CompleteCooperation;
+using Trendlink.Application.Cooperations.ConfirmCooperation;
+using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
-    public class CompleteCooperationTests : CooperationBaseTest
+    public class MarkCooperationAsDoneTests : CooperationBaseTest
     {
-        public static readonly CompleteCooperationCommand Command =
+        public static readonly MarkCooperationAsDoneCommand Command =
             new(CooperationData.Create().Id);
 
         private readonly ICooperationRepository _cooperationRepositoryMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
-        private readonly CompleteCooperationCommandHandler _handler;
+        private readonly MarkCooperationAsDoneCommandHandler _handler;
 
-        public CompleteCooperationTests()
+        public MarkCooperationAsDoneTests()
         {
             this._cooperationRepositoryMock = Substitute.For<ICooperationRepository>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
@@ -25,7 +26,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
             IDateTimeProvider dateTimeProvider = Substitute.For<IDateTimeProvider>();
             dateTimeProvider.UtcNow.Returns(CooperationData.UtcNow);
 
-            this._handler = new CompleteCooperationCommandHandler(
+            this._handler = new MarkCooperationAsDoneCommandHandler(
                 this._cooperationRepositoryMock,
                 dateTimeProvider,
                 this._unitOfWorkMock
@@ -48,7 +49,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenCompletionFails()
+        public async Task Handle_Should_ReturnFailure_WhenMarkingFails()
         {
             // Arrange
             Cooperation cooperation = this.CreatePendingCooperation();
@@ -61,14 +62,14 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(CooperationErrors.NotDone);
+            result.Error.Should().Be(CooperationErrors.NotConfirmed);
         }
 
         [Fact]
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            Cooperation cooperation = this.CreateDoneCooperation();
+            Cooperation cooperation = this.CreateConfirmedCooperation();
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);

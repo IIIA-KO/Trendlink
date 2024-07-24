@@ -1,20 +1,22 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.DomainEvents;
 
-namespace Trendlink.Application.Users.RegisterUser
+namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
 {
-    internal sealed class UserCreatedDomainEventHandler
-        : INotificationHandler<UserCreatedDomainEvent>
+    internal class CooperationDoneDomainEventHandler
+        : INotificationHandler<CooperationDoneDomainEvent>
     {
         private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.WelcomeMessage
+            Resources.NotificationMessages.CooperationDone
         );
 
         private readonly IUserRepository _userRepository;
@@ -22,7 +24,7 @@ namespace Trendlink.Application.Users.RegisterUser
         private readonly INotificationRepository _notificationRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserCreatedDomainEventHandler(
+        public CooperationDoneDomainEventHandler(
             IUserRepository userRepository,
             IDateTimeProvider dateTimeProvider,
             INotificationRepository notificationRepository,
@@ -36,30 +38,30 @@ namespace Trendlink.Application.Users.RegisterUser
         }
 
         public async Task Handle(
-            UserCreatedDomainEvent notification,
+            CooperationDoneDomainEvent notification,
             CancellationToken cancellationToken
         )
         {
-            User? user = await this._userRepository.GetByIdAsync(
-                notification.UserId,
+            User? seller = await this._userRepository.GetByIdAsync(
+                notification.Cooperation.SellerId,
                 cancellationToken
             );
-            if (user is null)
+            if (seller is null)
             {
                 return;
             }
 
-            string welcomeMessage = string.Format(
+            string cooperationDoneMessage = string.Format(
                 CultureInfo.CurrentCulture,
                 MessageFormat,
-                user.FirstName.Value
+                seller.FirstName.Value
             );
 
             Result<Notification> result = Notification.Create(
-                user.Id,
-                NotificationType.News,
-                new Title("Welcome to Trendlink!"),
-                new Message(welcomeMessage),
+                notification.Cooperation.BuyerId,
+                NotificationType.Message,
+                new Title("Advertisement Done!"),
+                new Message(cooperationDoneMessage),
                 this._dateTimeProvider.UtcNow
             );
 

@@ -3,63 +3,77 @@ using System.Text;
 using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.DomainEvents;
 
-namespace Trendlink.Application.Users.RegisterUser
+namespace Trendlink.Application.Cooperations.PendCooperation
 {
-    internal sealed class UserCreatedDomainEventHandler
-        : INotificationHandler<UserCreatedDomainEvent>
+    internal sealed class CooperationPendedDomainEventHandler
+        : INotificationHandler<CooperationPendedDomainEvent>
     {
         private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.WelcomeMessage
+            Resources.NotificationMessages.CooperationPending
         );
 
         private readonly IUserRepository _userRepository;
+        private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly INotificationRepository _notificationRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserCreatedDomainEventHandler(
+        public CooperationPendedDomainEventHandler(
             IUserRepository userRepository,
+            IAdvertisementRepository advertisementRepository,
             IDateTimeProvider dateTimeProvider,
             INotificationRepository notificationRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._userRepository = userRepository;
+            this._advertisementRepository = advertisementRepository;
             this._dateTimeProvider = dateTimeProvider;
             this._notificationRepository = notificationRepository;
             this._unitOfWork = unitOfWork;
         }
 
         public async Task Handle(
-            UserCreatedDomainEvent notification,
+            CooperationPendedDomainEvent notification,
             CancellationToken cancellationToken
         )
         {
-            User? user = await this._userRepository.GetByIdAsync(
-                notification.UserId,
+            User? seller = await this._userRepository.GetByIdAsync(
+                notification.Cooperation.SellerId,
                 cancellationToken
             );
-            if (user is null)
+            if (seller is null)
             {
                 return;
             }
 
-            string welcomeMessage = string.Format(
+            Advertisement? advertisement = await this._advertisementRepository.GetByIdAsync(
+                notification.Cooperation.AdvertisementId,
+                cancellationToken
+            );
+            if (advertisement is null)
+            {
+                return;
+            }
+
+            string cooperationPendedMessage = string.Format(
                 CultureInfo.CurrentCulture,
                 MessageFormat,
-                user.FirstName.Value
+                seller.FirstName.Value,
+                advertisement.Name.Value
             );
 
             Result<Notification> result = Notification.Create(
-                user.Id,
-                NotificationType.News,
-                new Title("Welcome to Trendlink!"),
-                new Message(welcomeMessage),
+                notification.Cooperation.SellerId,
+                NotificationType.Message,
+                new Title("New Cooperation Request"),
+                new Message(cooperationPendedMessage),
                 this._dateTimeProvider.UtcNow
             );
 

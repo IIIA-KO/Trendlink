@@ -63,6 +63,8 @@ namespace Trendlink.Domain.Cooperations
 
         public DateTime? CancelledOnUtc { get; private set; }
 
+        public DateTime? DoneOnUtc { get; private set; }
+
         public DateTime? CompletedOnUtc { get; private set; }
 
         public static Result<Cooperation> Pend(
@@ -92,7 +94,7 @@ namespace Trendlink.Domain.Cooperations
                 utcNow
             );
 
-            cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation.Id));
+            cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation));
 
             advertisement.LastCooperatedOnUtc = utcNow;
 
@@ -109,7 +111,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Confirmed;
             this.ConfirmedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationConfirmedDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationConfirmedDomainEvent(this));
 
             return Result.Success();
         }
@@ -124,21 +126,36 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Rejected;
             this.RejectedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationRejectedDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationRejectedDomainEvent(this));
             return Result.Success();
         }
 
-        public Result Complete(DateTime utcNow)
+        public Result MarkAsDone(DateTime utcNow)
         {
             if (this.Status != CooperationStatus.Confirmed)
             {
                 return Result.Failure(CooperationErrors.NotConfirmed);
             }
 
+            this.Status = CooperationStatus.Done;
+            this.DoneOnUtc = utcNow;
+
+            this.RaiseDomainEvent(new CooperationDoneDomainEvent(this));
+
+            return Result.Success();
+        }
+
+        public Result Complete(DateTime utcNow)
+        {
+            if (this.Status != CooperationStatus.Done)
+            {
+                return Result.Failure(CooperationErrors.NotDone);
+            }
+
             this.Status = CooperationStatus.Completed;
             this.CompletedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationCompletedDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationCompletedDomainEvent(this));
             return Result.Success();
         }
 
@@ -157,7 +174,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Cancelled;
             this.CancelledOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this));
             return Result.Success();
         }
     }
