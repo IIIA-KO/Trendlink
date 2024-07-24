@@ -1,8 +1,8 @@
 import './App.css'
-import LoginPage from "./pages/LoginPage.tsx";
+import LoginPage from "./Pages/LoginPage.tsx";
 //import RegisterPage from "./pages/RegisterPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
-import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom";
+import HomePage from "./Pages/HomePage.tsx";
+import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import {AuthProvider, useAuth} from './context/AuthContext';
 //import PrivateRoute from "./components/PrivateRoute.tsx";
 
@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 function App() {
   return (
       <AuthProvider>
-          <Router>
+          <BrowserRouter>
               <Routes>
                   <Route path="/login" element={<LoginPage />} />
                   <Route
@@ -26,7 +26,7 @@ function App() {
                       }
                   />
               </Routes>
-          </Router>
+          </BrowserRouter>
       </AuthProvider>
   );
 }

@@ -36,7 +36,7 @@ namespace Trendlink.Api.Extensions
                         policy
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("https://localhost:3000")
+                            .WithOrigins("http://localhost:3000")
                 )
             );
 
