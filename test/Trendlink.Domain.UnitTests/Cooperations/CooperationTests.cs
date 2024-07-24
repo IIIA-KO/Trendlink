@@ -84,7 +84,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         {
             // Arrange
             Advertisement advertisement = AdvertisementData.Create();
-            var userId = UserId.New(); // same buyer and seller
+            var userId = UserId.New();
             DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
             DateTime utcNow = DateTime.UtcNow;
 
@@ -102,6 +102,31 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(CooperationErrors.SameUser);
+        }
+
+        [Fact]
+        public void Pend_Should_ReturnFailure_WhenCooperationScheduledOnPastTime()
+        {
+            Advertisement advertisement = AdvertisementData.Create();
+            var buyerId = UserId.New();
+            var sellerId = UserId.New();
+            DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(-7);
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result<Cooperation> result = Cooperation.Pend(
+                CooperationData.Name,
+                CooperationData.Description,
+                scheduledOnUtc,
+                advertisement,
+                buyerId,
+                sellerId,
+                utcNow
+            );
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(CooperationErrors.InvalidTime);
         }
 
         [Fact]

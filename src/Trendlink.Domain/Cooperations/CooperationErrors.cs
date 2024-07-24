@@ -13,6 +13,9 @@ namespace Trendlink.Domain.Cooperations
         public static readonly Error SameUser =
             new("Cooperation.SameUser", "The buyer and seller cannot be the same person");
 
+        public static readonly Error InvalidTime =
+            new("Cooperation.InvalidTime", "Scheduled time cannot be in the past");
+
         public static readonly Error NotPending =
             new("Cooperation.NotPending", "The cooperation is not pending");
 

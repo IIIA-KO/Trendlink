@@ -6,7 +6,6 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Cooperations.PendCooperation
@@ -14,7 +13,6 @@ namespace Trendlink.Application.Cooperations.PendCooperation
     internal sealed class PendCooperationCommandHandler
         : ICommandHandler<PendCooperationCommand, CooperationId>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IConditionRepository _conditionRepository;
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly ICooperationRepository _cooperationRepository;
@@ -23,7 +21,6 @@ namespace Trendlink.Application.Cooperations.PendCooperation
         private readonly IUnitOfWork _unitOfWork;
 
         public PendCooperationCommandHandler(
-            IUserRepository userRepository,
             IConditionRepository conditionRepository,
             IAdvertisementRepository advertisementRepository,
             ICooperationRepository cooperationRepository,
@@ -32,7 +29,6 @@ namespace Trendlink.Application.Cooperations.PendCooperation
             IUnitOfWork unitOfWork
         )
         {
-            this._userRepository = userRepository;
             this._conditionRepository = conditionRepository;
             this._advertisementRepository = advertisementRepository;
             this._cooperationRepository = cooperationRepository;
@@ -46,31 +42,6 @@ namespace Trendlink.Application.Cooperations.PendCooperation
             CancellationToken cancellationToken
         )
         {
-            User seller = await this._userRepository.GetByIdAsync(
-                request.SellerId,
-                cancellationToken
-            );
-            if (seller is null)
-            {
-                return Result.Failure<CooperationId>(UserErrors.NotFound);
-            }
-
-            UserId buyerId = this._userContext.UserId;
-            if (buyerId == request.SellerId)
-            {
-                return Result.Failure<CooperationId>(CooperationErrors.SameUser);
-            }
-
-            Condition sellerCondition =
-                await this._conditionRepository.GetByUserIdWithAdvertisementAsync(
-                    request.SellerId,
-                    cancellationToken
-                );
-            if (sellerCondition is null)
-            {
-                return Result.Failure<CooperationId>(ConditionErrors.NotFound);
-            }
-
             Advertisement? advertisement = await this._advertisementRepository.GetByIdAsync(
                 request.AdvertisementId,
                 cancellationToken
@@ -78,6 +49,22 @@ namespace Trendlink.Application.Cooperations.PendCooperation
             if (advertisement is null)
             {
                 return Result.Failure<CooperationId>(AdvertisementErrors.NotFound);
+            }
+
+            Condition sellerCondition =
+                await this._conditionRepository.GetByIdWithAdvertisementsAsync(
+                    advertisement.ConditionId,
+                    cancellationToken
+                );
+            if (sellerCondition is null)
+            {
+                return Result.Failure<CooperationId>(ConditionErrors.NotFound);
+            }
+
+            UserId buyerId = this._userContext.UserId;
+            if (buyerId == sellerCondition.UserId)
+            {
+                return Result.Failure<CooperationId>(CooperationErrors.SameUser);
             }
 
             if (!sellerCondition.HasAdvertisement(advertisement.Name))
@@ -104,7 +91,7 @@ namespace Trendlink.Application.Cooperations.PendCooperation
                     request.ScheduledOnUtc,
                     advertisement,
                     buyerId,
-                    request.SellerId,
+                    sellerCondition.UserId,
                     this._dateTimeProvider.UtcNow
                 );
                 if (result.IsFailure)

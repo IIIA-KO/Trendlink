@@ -82,6 +82,11 @@ namespace Trendlink.Domain.Cooperations
                 return Result.Failure<Cooperation>(CooperationErrors.SameUser);
             }
 
+            if (scheduledOnUtc <= DateTimeOffset.UtcNow)
+            {
+                return Result.Failure<Cooperation>(CooperationErrors.InvalidTime);
+            }
+
             var cooperation = new Cooperation(
                 CooperationId.New(),
                 name,
