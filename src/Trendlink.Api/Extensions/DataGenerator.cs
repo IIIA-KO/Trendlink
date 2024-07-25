@@ -76,38 +76,42 @@ namespace Trendlink.Api.Extensions
 
         public static (User admin, List<User> users) GenerateUsers()
         {
-            Faker<User> userFaker = new Faker<User>()
-                .RuleFor(u => u.FirstName, f => new FirstName(f.Name.FirstName()))
-                .RuleFor(u => u.LastName, f => new LastName(f.Name.LastName()))
-                .RuleFor(
-                    u => u.BirthDate,
-                    f =>
-                    {
-                        DateTime birthDateTime = f.Date.Past(
-                            30,
-                            DateTime.Now.AddYears(-18).AddDays(-1)
-                        );
-                        return new DateOnly(
-                            birthDateTime.Year,
-                            birthDateTime.Month,
-                            birthDateTime.Day
-                        );
-                    }
-                )
-                .RuleFor(
-                    u => u.Email,
-                    (f, u) =>
-                        new Email(
-                            $"{u.FirstName.Value.Normalize()}.{u.LastName.Value.Normalize()}@test.com"
-                        )
-                )
-                .RuleFor(
-                    u => u.PhoneNumber,
-                    f => new PhoneNumber(f.Phone.PhoneNumber("##########"))
-                );
+            User admin = User.Create(
+                new FirstName("Trendlink"),
+                new LastName("Administrator"),
+                new DateOnly(1999, 1, 1),
+                StateId.New(),
+                new Email("admin@trendlink.com"),
+                new PhoneNumber("0123456789")
+            ).Value;
 
-            User admin = userFaker.Generate();
-            List<User> users = userFaker.Generate(3);
+            List<User> users =
+            [
+                User.Create(
+                    new FirstName("Firstname1"),
+                    new LastName("Lastname1"),
+                    new DateOnly(1999, 1, 1),
+                    StateId.New(),
+                    new Email("user1@trendlink.com"),
+                    new PhoneNumber("0123456789")
+                ).Value,
+                User.Create(
+                    new FirstName("Firstname2"),
+                    new LastName("Lastname2"),
+                    new DateOnly(1999, 1, 1),
+                    StateId.New(),
+                    new Email("user2@trendlink.com"),
+                    new PhoneNumber("0123456789")
+                ).Value,
+                User.Create(
+                    new FirstName("Firstname3"),
+                    new LastName("Lastname3"),
+                    new DateOnly(1999, 1, 1),
+                    StateId.New(),
+                    new Email("user3@trendlink.com"),
+                    new PhoneNumber("0123456789")
+                ).Value,
+            ];
 
             return (admin, users);
         }
