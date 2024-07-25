@@ -36,7 +36,8 @@ namespace Trendlink.Api.Extensions
                         policy
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:3000")
+                            .WithOrigins("http://localhost:3000", "http://localhost:3000")
+                            .AllowCredentials()
                 )
             );
 
