@@ -99,7 +99,7 @@ namespace Trendlink.Domain.Cooperations
                 utcNow
             );
 
-            cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation));
+            cooperation.RaiseDomainEvent(new CooperationPendedDomainEvent(cooperation.Id));
 
             advertisement.LastCooperatedOnUtc = utcNow;
 
@@ -116,7 +116,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Confirmed;
             this.ConfirmedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationConfirmedDomainEvent(this));
+            this.RaiseDomainEvent(new CooperationConfirmedDomainEvent(this.Id));
 
             return Result.Success();
         }
@@ -131,7 +131,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Rejected;
             this.RejectedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationRejectedDomainEvent(this));
+            this.RaiseDomainEvent(new CooperationRejectedDomainEvent(this.Id));
             return Result.Success();
         }
 
@@ -145,7 +145,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Done;
             this.DoneOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationDoneDomainEvent(this));
+            this.RaiseDomainEvent(new CooperationDoneDomainEvent(this.Id));
 
             return Result.Success();
         }
@@ -160,7 +160,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Completed;
             this.CompletedOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationCompletedDomainEvent(this));
+            this.RaiseDomainEvent(new CooperationCompletedDomainEvent(this.Id));
             return Result.Success();
         }
 
@@ -179,7 +179,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Cancelled;
             this.CancelledOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this));
+            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this.Id));
             return Result.Success();
         }
     }

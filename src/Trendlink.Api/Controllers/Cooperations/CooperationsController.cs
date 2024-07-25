@@ -41,7 +41,7 @@ namespace Trendlink.Api.Controllers.Cooperations
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("confirm/{id:guid}")]
+        [HttpPost("{id:guid}/confirm")]
         public async Task<IActionResult> ConfirmCooperation(
             Guid id,
             CancellationToken cancellationToken
@@ -52,7 +52,7 @@ namespace Trendlink.Api.Controllers.Cooperations
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("reject/{id:guid}")]
+        [HttpPost("{id:guid}/reject")]
         public async Task<IActionResult> RejectCooperation(
             Guid id,
             CancellationToken cancellationToken
@@ -63,7 +63,7 @@ namespace Trendlink.Api.Controllers.Cooperations
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("cancel/{id:guid}")]
+        [HttpPost("{id:guid}/cancel")]
         public async Task<IActionResult> CancelCooperation(
             Guid id,
             CancellationToken cancellationToken
@@ -74,7 +74,7 @@ namespace Trendlink.Api.Controllers.Cooperations
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("mark-as-done/{id:guid}")]
+        [HttpPost("{id:guid}/mark-as-done")]
         public async Task<IActionResult> MarkCooperationAsDone(
             Guid id,
             CancellationToken cancellationToken
@@ -85,7 +85,7 @@ namespace Trendlink.Api.Controllers.Cooperations
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("complete/{id:guid}")]
+        [HttpPost("{id:guid}/complete")]
         public async Task<IActionResult> CompleteCooperation(
             Guid id,
             CancellationToken cancellationToken

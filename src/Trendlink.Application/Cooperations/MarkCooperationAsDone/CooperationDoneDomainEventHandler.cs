@@ -3,6 +3,7 @@ using System.Text;
 using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
@@ -17,18 +18,21 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             Resources.NotificationMessages.CooperationDone
         );
 
+        private readonly ICooperationRepository _cooperationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly INotificationRepository _notificationRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CooperationDoneDomainEventHandler(
+            ICooperationRepository cooperationRepository,
             IUserRepository userRepository,
             IDateTimeProvider dateTimeProvider,
             INotificationRepository notificationRepository,
             IUnitOfWork unitOfWork
         )
         {
+            this._cooperationRepository = cooperationRepository;
             this._userRepository = userRepository;
             this._dateTimeProvider = dateTimeProvider;
             this._notificationRepository = notificationRepository;
@@ -40,8 +44,17 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             CancellationToken cancellationToken
         )
         {
+            Cooperation? cooperation = await this._cooperationRepository.GetByIdAsync(
+                notification.CooperationId,
+                cancellationToken
+            );
+            if (cooperation is null)
+            {
+                return;
+            }
+
             User? seller = await this._userRepository.GetByIdAsync(
-                notification.Cooperation.SellerId,
+                cooperation.SellerId,
                 cancellationToken
             );
             if (seller is null)
@@ -56,7 +69,7 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             );
 
             Result<Notification> result = Notification.Create(
-                notification.Cooperation.BuyerId,
+                cooperation.BuyerId,
                 NotificationType.Message,
                 new Title("Advertisement Done!"),
                 new Message(cooperationDoneMessage),

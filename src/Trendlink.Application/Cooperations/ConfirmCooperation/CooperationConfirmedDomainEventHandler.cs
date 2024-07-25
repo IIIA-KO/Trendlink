@@ -4,6 +4,7 @@ using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
@@ -18,6 +19,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             Resources.NotificationMessages.CooperationConfirmed
         );
 
+        private readonly ICooperationRepository _cooperationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -25,6 +27,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
         private readonly IUnitOfWork _unitOfWork;
 
         public CooperationConfirmedDomainEventHandler(
+            ICooperationRepository cooperationRepository,
             IUserRepository userRepository,
             IAdvertisementRepository advertisementRepository,
             IDateTimeProvider dateTimeProvider,
@@ -32,6 +35,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             IUnitOfWork unitOfWork
         )
         {
+            this._cooperationRepository = cooperationRepository;
             this._userRepository = userRepository;
             this._advertisementRepository = advertisementRepository;
             this._dateTimeProvider = dateTimeProvider;
@@ -44,8 +48,17 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             CancellationToken cancellationToken
         )
         {
+            Cooperation? cooperation = await this._cooperationRepository.GetByIdAsync(
+                notification.CooperationId,
+                cancellationToken
+            );
+            if (cooperation is null)
+            {
+                return;
+            }
+
             Advertisement? advertisement = await this._advertisementRepository.GetByIdAsync(
-                notification.Cooperation.AdvertisementId,
+                cooperation.AdvertisementId,
                 cancellationToken
             );
             if (advertisement is null)
@@ -54,7 +67,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             }
 
             User? seller = await this._userRepository.GetByIdAsync(
-                notification.Cooperation.SellerId,
+                cooperation.SellerId,
                 cancellationToken
             );
             if (seller is null)
@@ -70,7 +83,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             );
 
             Result<Notification> result = Notification.Create(
-                notification.Cooperation.BuyerId,
+                cooperation.BuyerId,
                 NotificationType.Message,
                 new Title("Cooperation Confirmed"),
                 new Message(cooperationConfirmedMessage),

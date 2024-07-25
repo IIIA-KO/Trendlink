@@ -2,5 +2,5 @@
 
 namespace Trendlink.Domain.Cooperations.DomainEvents
 {
-    public sealed record CooperationRejectedDomainEvent(Cooperation Cooperation) : IDomainEvent;
+    public sealed record CooperationRejectedDomainEvent(CooperationId CooperationId) : IDomainEvent;
 }
