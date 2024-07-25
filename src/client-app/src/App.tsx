@@ -1,33 +1,27 @@
 import './App.css'
-import LoginPage from "./Pages/LoginPage.tsx";
-//import RegisterPage from "./pages/RegisterPage.tsx";
-import HomePage from "./Pages/HomePage.tsx";
-import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
-import {AuthProvider, useAuth} from './context/AuthContext';
-//import PrivateRoute from "./components/PrivateRoute.tsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './context/AuthContext';
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import ProtectedRoute from './components/ProtectedRoute';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { isAuthenticated } = useAuth();
-    return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
-};
-
-function App() {
+const App: React.FC = () => {
   return (
-      <AuthProvider>
-          <BrowserRouter>
+      <BrowserRouter>
+          <AuthProvider>
               <Routes>
                   <Route path="/login" element={<LoginPage />} />
-                  <Route
-                      path="/"
-                      element={
-                          <ProtectedRoute>
-                              <HomePage />
-                          </ProtectedRoute>
-                      }
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/" element={
+                      <ProtectedRoute>
+                          <HomePage />
+                      </ProtectedRoute>
+                  }
                   />
               </Routes>
-          </BrowserRouter>
-      </AuthProvider>
+          </AuthProvider>
+      </BrowserRouter>
   );
 }
 
