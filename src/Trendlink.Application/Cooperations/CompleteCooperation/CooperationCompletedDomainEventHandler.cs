@@ -84,7 +84,7 @@ namespace Trendlink.Application.Cooperations.CompleteCooperation
 
             Result<Notification> result = Notification.Create(
                 cooperation.SellerId,
-                NotificationType.Message,
+                NotificationType.System,
                 new Title("Cooperation Cancelled"),
                 new Message(cooperationCompletedMessage),
                 this._dateTimeProvider.UtcNow

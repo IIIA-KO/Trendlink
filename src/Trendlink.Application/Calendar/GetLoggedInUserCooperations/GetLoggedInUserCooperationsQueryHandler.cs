@@ -5,10 +5,10 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
+namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
 {
     internal sealed class GetLoggedInUserCooperationsQueryHandler
-        : IQueryHandler<GetLoggedInUserCooperationsQuery, IReadOnlyList<CooperationResponse>>
+        : IQueryHandler<GetLoggedInUserCooperationsQuery, IReadOnlyList<DateResponse>>
     {
         private readonly IUserContext _userContext;
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
@@ -22,14 +22,14 @@ namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
             this._sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task<Result<IReadOnlyList<CooperationResponse>>> Handle(
+        public async Task<Result<IReadOnlyList<DateResponse>>> Handle(
             GetLoggedInUserCooperationsQuery request,
             CancellationToken cancellationToken
         )
         {
             using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
 
-            const string sql = """
+            const string sqlCooperations = """
                 SELECT
                     id AS Id,
                     name AS Name,
@@ -40,21 +40,44 @@ namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
                     seller_id AS SellerId,
                     status AS Status
                 FROM cooperations
-                WHERE buyer_id = @UserId OR seller_id = @UserId
+                WHERE buyer_id = @UserId 
+                    OR seller_id = @UserId
+                """;
+
+            const string sqlBlockedDates = """
+                SELECT 
+                    date AS Date
+                FROM blocked_dates
+                WHERE user_id = @UserId
                 """;
 
             try
             {
-                return (
+                IEnumerable<CooperationResponse> cooperations =
                     await dbConnection.QueryAsync<CooperationResponse>(
-                        sql,
+                        sqlCooperations,
                         new { UserId = this._userContext.UserId.Value }
-                    )
-                ).ToList();
+                    );
+
+                IEnumerable<DateOnly> blockedDates = await dbConnection.QueryAsync<DateOnly>(
+                    sqlBlockedDates,
+                    new { UserId = this._userContext.UserId.Value }
+                );
+
+                return cooperations
+                    .GroupBy(c => DateOnly.FromDateTime(c.ScheduledOnUtc.UtcDateTime))
+                    .Select(g => new DateResponse
+                    {
+                        Date = g.Key,
+                        IsBlocked = blockedDates.Contains(g.Key),
+                        Cooperations = g.ToList()
+                    })
+                    .OrderBy(g => g.Date)
+                    .ToList();
             }
             catch (Exception)
             {
-                return Result.Failure<IReadOnlyList<CooperationResponse>>(Error.Unexpected);
+                return Result.Failure<IReadOnlyList<DateResponse>>(Error.Unexpected);
             }
         }
     }

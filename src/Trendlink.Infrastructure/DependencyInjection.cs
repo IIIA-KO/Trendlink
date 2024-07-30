@@ -15,6 +15,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
@@ -83,6 +84,7 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IConditionRepository, ConditionRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<ICooperationRepository, CooperationRepository>();
+            services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()

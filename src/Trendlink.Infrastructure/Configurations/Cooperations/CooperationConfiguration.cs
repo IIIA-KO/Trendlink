@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 
-namespace Trendlink.Infrastructure.Configurations
+namespace Trendlink.Infrastructure.Configurations.Cooperations
 {
     internal sealed class CooperationConfiguration : IEntityTypeConfiguration<Cooperation>
     {

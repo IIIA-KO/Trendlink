@@ -12,6 +12,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Cooperations
@@ -29,6 +30,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         private readonly IConditionRepository _conditionRepositoryMock;
         private readonly IAdvertisementRepository _advertisementRepositoryMock;
         private readonly ICooperationRepository _cooperationRepositoryMock;
+        private readonly IBlockedDateRepository _blockedDateRepositoryMock;
         private readonly IUserContext _userContextMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
@@ -39,6 +41,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
             this._conditionRepositoryMock = Substitute.For<IConditionRepository>();
             this._advertisementRepositoryMock = Substitute.For<IAdvertisementRepository>();
             this._cooperationRepositoryMock = Substitute.For<ICooperationRepository>();
+            this._blockedDateRepositoryMock = Substitute.For<IBlockedDateRepository>();
             this._userContextMock = Substitute.For<IUserContext>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
@@ -49,6 +52,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 this._conditionRepositoryMock,
                 this._advertisementRepositoryMock,
                 this._cooperationRepositoryMock,
+                this._blockedDateRepositoryMock,
                 this._userContextMock,
                 dateTimeProvider,
                 this._unitOfWorkMock
@@ -140,6 +144,48 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenDateIsBlocked()
+        {
+            // Arrange
+            Advertisement advertisement = AdvertisementData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(advertisement);
+
+            Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
+                default
+            )
+                .Returns(condition);
+
+            this._userContextMock.UserId.Returns(UserId.New());
+
+            FieldInfo? advertisementsField = typeof(Condition).GetField(
+                "_advertisements",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (advertisementsField is not null)
+            {
+                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
+                advertisements!.Add(advertisement);
+            }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(true);
+
+            // Act
+            Result<CooperationId> result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(CooperationErrors.BlockedDate);
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnFailure_WhenCooperationIsAlreadyStarted()
         {
             // Arrange
@@ -165,6 +211,13 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
                 advertisements!.Add(advertisement);
             }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,
@@ -207,6 +260,13 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
                 advertisements!.Add(advertisement);
             }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,
@@ -252,6 +312,13 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
                 advertisements!.Add(advertisement);
             }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,

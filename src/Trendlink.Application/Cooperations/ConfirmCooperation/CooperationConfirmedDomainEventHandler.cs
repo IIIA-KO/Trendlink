@@ -84,7 +84,7 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
 
             Result<Notification> result = Notification.Create(
                 cooperation.BuyerId,
-                NotificationType.Message,
+                NotificationType.System,
                 new Title("Cooperation Confirmed"),
                 new Message(cooperationConfirmedMessage),
                 this._dateTimeProvider.UtcNow

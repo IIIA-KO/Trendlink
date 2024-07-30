@@ -70,7 +70,7 @@ namespace Trendlink.Application.Cooperations.RejectCooperation
 
             Result<Notification> result = Notification.Create(
                 cooperation.BuyerId,
-                NotificationType.Message,
+                NotificationType.System,
                 new Title("Cooperation Rejected"),
                 new Message(cooperationRejectedMessage),
                 this._dateTimeProvider.UtcNow

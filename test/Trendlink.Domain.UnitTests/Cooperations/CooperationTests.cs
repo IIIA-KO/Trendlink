@@ -76,7 +76,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     cooperation
                 );
 
-            cooperationPendedDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationPendedDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     cooperation
                 );
 
-            cooperationConfirmedDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationConfirmedDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]
@@ -211,7 +211,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     cooperation
                 );
 
-            cooperationRejectedDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationRejectedDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]
@@ -261,7 +261,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationId
             >(cooperation);
 
-            cooperationDoneDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationDoneDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]
@@ -311,7 +311,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     cooperation
                 );
 
-            cooperationCompletedDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationCompletedDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]
@@ -361,7 +361,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     cooperation
                 );
 
-            cooperationCancelledDomainEvent.Cooperation.Id.Should().Be(cooperation.Id);
+            cooperationCancelledDomainEvent.CooperationId.Should().Be(cooperation.Id);
         }
 
         [Fact]

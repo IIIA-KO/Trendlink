@@ -84,7 +84,7 @@ namespace Trendlink.Application.Cooperations.PendCooperation
 
             Result<Notification> result = Notification.Create(
                 cooperation.SellerId,
-                NotificationType.Message,
+                NotificationType.System,
                 new Title("New Cooperation Request"),
                 new Message(cooperationPendedMessage),
                 this._dateTimeProvider.UtcNow

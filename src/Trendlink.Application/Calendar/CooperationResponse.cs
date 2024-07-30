@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Cooperations;
 
-namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
+namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
 {
     public sealed class CooperationResponse
     {

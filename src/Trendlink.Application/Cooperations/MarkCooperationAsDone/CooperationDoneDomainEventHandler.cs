@@ -70,7 +70,7 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
 
             Result<Notification> result = Notification.Create(
                 cooperation.BuyerId,
-                NotificationType.Message,
+                NotificationType.System,
                 new Title("Advertisement Done!"),
                 new Message(cooperationDoneMessage),
                 this._dateTimeProvider.UtcNow

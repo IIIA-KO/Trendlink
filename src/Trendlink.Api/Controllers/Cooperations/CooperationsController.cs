@@ -2,7 +2,6 @@
 using Trendlink.Application.Cooperations.CancelCooperation;
 using Trendlink.Application.Cooperations.CompleteCooperation;
 using Trendlink.Application.Cooperations.ConfirmCooperation;
-using Trendlink.Application.Cooperations.GetLoggedInUserCooperations;
 using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Cooperations.RejectCooperation;
@@ -15,16 +14,6 @@ namespace Trendlink.Api.Controllers.Cooperations
     [Route("api/cooperations")]
     public class CooperationsController : BaseApiController
     {
-        [HttpGet]
-        public async Task<IActionResult> GetLoggedInUserCooperations(
-            CancellationToken cancellationToken
-        )
-        {
-            var query = new GetLoggedInUserCooperationsQuery();
-
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
-        }
-
         [HttpPost("request-cooperation")]
         public async Task<IActionResult> PendCooperation(
             PendCooperationRequest request,

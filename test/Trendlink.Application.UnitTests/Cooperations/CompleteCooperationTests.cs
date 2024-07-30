@@ -57,7 +57,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenUserIsNotAuthorized()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation();
+            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
@@ -76,7 +76,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenCompletionFails()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation();
+            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);

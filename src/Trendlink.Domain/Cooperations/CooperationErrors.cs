@@ -27,5 +27,8 @@ namespace Trendlink.Domain.Cooperations
 
         public static readonly Error AlreadyStarted =
             new("Cooperation.AlreadyStarted", "The cooperation has already started");
+
+        public static readonly Error BlockedDate =
+            new("Cooperation.BlockedDate", "The selected date is blocked for cooperation.");
     }
 }

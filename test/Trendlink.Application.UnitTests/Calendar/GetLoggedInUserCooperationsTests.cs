@@ -4,15 +4,16 @@ using NSubstitute;
 using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
-using Trendlink.Application.Cooperations.GetLoggedInUserCooperations;
+using Trendlink.Application.Calendar;
+using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Application.UnitTests.Cooperations
+namespace Trendlink.Application.UnitTests.Calendar
 {
     public class GetLoggedInUserCooperationsTests
     {
-        private const string Sql = """
+        private const string SqlCooperations = """
             SELECT
                 id AS Id,
                 name AS Name,
@@ -23,7 +24,15 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 seller_id AS SellerId,
                 status AS Status
             FROM cooperations
-            WHERE buyer_id = @UserId OR seller_id = @UserId
+            WHERE buyer_id = @UserId 
+                OR seller_id = @UserId
+            """;
+
+        private const string SqlBlockedDates = """
+            SELECT 
+                date AS Date
+            FROM blocked_dates
+            WHERE user_id = @UserId
             """;
 
         public static readonly GetLoggedInUserCooperationsQuery Query = new();
@@ -45,20 +54,39 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenConnectionThrows()
+        public async Task Handle_Should_ReturnFailure_WhenCooperationsQueryThrows()
         {
             // Arrange
             using IDbConnection dbConnection = Substitute.For<IDbConnection>().SetupCommands();
 
-            dbConnection.SetupQuery(Sql).Throws(new Exception("Database exception"));
+            dbConnection.SetupQuery(SqlCooperations).Throws(new Exception("Database exception"));
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<CooperationResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(Error.Unexpected);
+        }
+
+        [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenBlockedDatesQueryThrows()
+        {
+            // Arrange
+            List<CooperationResponse> expectedCooperations = [];
+
+            using IDbConnection dbConnection = Substitute.For<IDbConnection>().SetupCommands();
+
+            dbConnection.SetupQuery(SqlCooperations).Returns(expectedCooperations);
+
+            dbConnection.SetupQuery(SqlBlockedDates).Throws(new Exception("Database exception"));
+
+            this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
+
+            // Act
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -70,20 +98,19 @@ namespace Trendlink.Application.UnitTests.Cooperations
         {
             // Arrange
             List<CooperationResponse> expectedCooperations = [];
+            List<DateOnly> expectedBlockedDates = [];
 
             using IDbConnection dbConnection = Substitute.For<IDbConnection>().SetupCommands();
 
-            dbConnection.SetupQuery(Sql).Returns(expectedCooperations);
+            dbConnection.SetupQuery(SqlCooperations).Returns(expectedCooperations);
+            dbConnection.SetupQuery(SqlBlockedDates).Returns(expectedBlockedDates);
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             this._userContextMock.UserId.Returns(UserData.Create().Id);
 
             // Act
-            Result<IReadOnlyList<CooperationResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();

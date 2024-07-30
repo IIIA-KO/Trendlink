@@ -42,6 +42,11 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
                 return Result.Failure(CooperationErrors.NotFound);
             }
 
+            if (cooperation.ScheduledOnUtc <= this._dateTimeProvider.UtcNow)
+            {
+                return Result.Failure(CooperationErrors.InvalidTime);
+            }
+
             if (cooperation.SellerId != this._userContext.UserId)
             {
                 return Result.Failure(UserErrors.NotAuthorized);
