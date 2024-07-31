@@ -6,7 +6,7 @@ namespace Trendlink.Application.Calendar
     {
         public DateOnly Date { get; init; }
 
-        public bool IsBlocked { get; init; }
+        public bool IsBlocked { get; set; }
 
         public List<CooperationResponse> Cooperations { get; init; }
     }

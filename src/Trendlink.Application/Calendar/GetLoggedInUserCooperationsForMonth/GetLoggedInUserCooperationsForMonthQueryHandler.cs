@@ -57,28 +57,22 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
 
             try
             {
+                var parameters = new
+                {
+                    UserId = this._userContext.UserId.Value,
+                    request.Month,
+                    request.Year
+                };
+
                 IEnumerable<CooperationResponse> cooperations =
-                    await dbConnection.QueryAsync<CooperationResponse>(
-                        sqlCooperations,
-                        new
-                        {
-                            UserId = this._userContext.UserId.Value,
-                            request.Month,
-                            request.Year
-                        }
-                    );
+                    await dbConnection.QueryAsync<CooperationResponse>(sqlCooperations, parameters);
 
                 IEnumerable<DateOnly> blockedDates = await dbConnection.QueryAsync<DateOnly>(
                     sqlBlockedDates,
-                    new
-                    {
-                        UserId = this._userContext.UserId.Value,
-                        request.Month,
-                        request.Year
-                    }
+                    parameters
                 );
 
-                var groupedCooperations = cooperations
+                var dateResponses = cooperations
                     .GroupBy(c => DateOnly.FromDateTime(c.ScheduledOnUtc.UtcDateTime))
                     .Select(g => new DateResponse
                     {
@@ -86,10 +80,20 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
                         IsBlocked = blockedDates.Contains(g.Key),
                         Cooperations = g.ToList()
                     })
-                    .OrderBy(g => g.Date)
                     .ToList();
 
-                return Result.Success<IReadOnlyList<DateResponse>>(groupedCooperations);
+                IEnumerable<DateResponse> additionalBlockedDates = blockedDates
+                    .Where(d => !dateResponses.Any(dr => dr.Date == d))
+                    .Select(d => new DateResponse
+                    {
+                        Date = d,
+                        IsBlocked = true,
+                        Cooperations = []
+                    });
+
+                dateResponses.AddRange(additionalBlockedDates);
+
+                return dateResponses.OrderBy(d => d.Date).ToList();
             }
             catch (Exception ex)
             {

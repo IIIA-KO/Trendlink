@@ -32,22 +32,22 @@ namespace Trendlink.Api.Controllers.Calendar
 
         [HttpPost("block-date")]
         public async Task<IActionResult> BlockDate(
-            [FromBody] DateOnly date,
+            [FromBody] BlockDateRequest request,
             CancellationToken cancellationToken
         )
         {
-            var command = new BlockDateCommand(date);
+            var command = new BlockDateCommand(request.Date);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
         [HttpDelete("unblock-date")]
         public async Task<IActionResult> UnblockDate(
-            [FromBody] DateOnly date,
+            [FromBody] UnblockDateRequest request,
             CancellationToken cancellationToken
         )
         {
-            var command = new UnblockDateCommand(date);
+            var command = new UnblockDateCommand(request.Date);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
