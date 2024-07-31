@@ -1,14 +1,12 @@
-﻿using FluentAssertions;
-using Microsoft.VisualBasic;
+﻿using System.Reflection;
+using FluentAssertions;
 using NSubstitute;
-using System.Reflection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Advertisements.EditAdvertisement;
 using Trendlink.Application.UnitTests.Conditions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Advertisements
 {

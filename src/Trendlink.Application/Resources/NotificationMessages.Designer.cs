@@ -61,6 +61,104 @@ namespace Trendlink.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We regret to inform you that the collaboration for &quot;{0}&quot; advertisement has been cancelled by &quot;{1}&quot;.
+        ///
+        ///We understand that circumstances change, and we hope you&apos;ll find another opportunity that aligns with your goals.
+        ///
+        ///Thank you for being a part of our community.
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationCancelled {
+            get {
+                return ResourceManager.GetString("CooperationCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your advertisement has been confirmed by the {0}
+        ///
+        ///Great job on completing cooperation for &quot;{1}&quot; advertisement successfully! Your effort and dedication are appreciated.
+        ///
+        ///Thank you for being an integral part of our community.
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationCompleted {
+            get {
+                return ResourceManager.GetString("CooperationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Great news! Your collaboration request for &quot;{0}&quot; advertisement has been confirmed.
+        ///
+        ///We&apos;re thrilled to see this partnership come to life. Stay tuned for updates and further instructions from {1}.
+        ///
+        ///Let&apos;s make this a successful collaboration!
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationConfirmed {
+            get {
+                return ResourceManager.GetString("CooperationConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} has notified us that your advertisement is complete.
+        ///
+        ///Please review the final work for &quot;{1}&quot; advertisement and confirm its completion. Your approval is essential to finalize this collaboration.
+        ///
+        ///Thank you for your cooperation!
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationDone {
+            get {
+                return ResourceManager.GetString("CooperationDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello, {0}
+        ///
+        ///You&apos;ve been invited to collaborate on Trendlink for &quot;{1}&quot; advertisement!
+        ///
+        ///We&apos;re excited about the potential of this partnership and hope you are too. Please review the details and confirm your participation or decline if it doesn&apos;t align with your current goals.
+        ///
+        ///Thank you for considering this opportunity to connect and collaborate.
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationPending {
+            get {
+                return ResourceManager.GetString("CooperationPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We&apos;re sorry to inform you that your collaboration request for &quot;{0}&quot; advertisement was declined.
+        ///
+        ///While this opportunity didn&apos;t work out, there are many other potential partners on Trendlink. Keep exploring and don&apos;t hesitate to submit new requests.
+        ///
+        ///We appreciate your enthusiasm and look forward to your next collaboration.
+        ///
+        ///Best regards,
+        ///The Trendlink team..
+        /// </summary>
+        internal static string CooperationRejected {
+            get {
+                return ResourceManager.GetString("CooperationRejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello, {0}
         ///
         ///Welcome to Trendlink, the ultimate platform for bloggers to connect, collaborate, and grow!

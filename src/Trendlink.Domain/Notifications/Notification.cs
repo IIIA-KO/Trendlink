@@ -29,7 +29,7 @@ namespace Trendlink.Domain.Notifications
 
         public UserId UserId { get; private set; }
 
-        public User User { get; private set; }
+        public User User { get; init; }
 
         public NotificationType NotificationType { get; private set; }
 

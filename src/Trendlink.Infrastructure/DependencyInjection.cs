@@ -1,7 +1,4 @@
-﻿using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
-using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
-using Dapper;
-using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
+﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +14,8 @@ using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
@@ -29,6 +28,9 @@ using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Outbox;
 using Trendlink.Infrastructure.Repositories;
 using Trendlink.Infrastructure.SignalR;
+using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
+using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
+using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
 
 namespace Trendlink.Infrastructure
 {
@@ -81,6 +83,8 @@ namespace Trendlink.Infrastructure
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IConditionRepository, ConditionRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
+            services.AddScoped<ICooperationRepository, CooperationRepository>();
+            services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()

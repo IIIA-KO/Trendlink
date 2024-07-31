@@ -1,10 +1,15 @@
-﻿using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
-using Trendlink.Domain.Conditions.ValueObjects;
+﻿using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Shared;
 
 namespace Trendlink.Domain.UnitTests.Advertisements
 {
     internal static class AdvertisementData
     {
+        public static Advertisement Create() =>
+            Advertisement.Create(ConditionId, Name, Price, Description).Value;
+
         public static readonly ConditionId ConditionId = ConditionId.New();
 
         public static readonly Name Name = new("Name");

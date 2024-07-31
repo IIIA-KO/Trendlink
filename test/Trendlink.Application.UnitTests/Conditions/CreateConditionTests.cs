@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Conditions.CreateCondition;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {

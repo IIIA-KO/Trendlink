@@ -56,10 +56,20 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
+                    b.Property<DateTime?>("LastCooperatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_cooperated_on_utc");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
 
                     b.HasKey("Id")
                         .HasName("pk_advertisements");
@@ -93,6 +103,105 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasDatabaseName("ix_conditions_user_id");
 
                     b.ToTable("conditions", (string)null);
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.BlockedDates.BlockedDate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
+                        .HasColumnName("date");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_blocked_dates");
+
+                    b.HasIndex("UserId", "Date")
+                        .IsUnique()
+                        .HasDatabaseName("ix_blocked_dates_user_id_date");
+
+                    b.ToTable("blocked_dates", (string)null);
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.Cooperation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AdvertisementId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("advertisement_id");
+
+                    b.Property<Guid>("BuyerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("buyer_id");
+
+                    b.Property<DateTime?>("CancelledOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("cancelled_on_utc");
+
+                    b.Property<DateTime?>("CompletedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("completed_on_utc");
+
+                    b.Property<DateTime?>("ConfirmedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("confirmed_on_utc");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime?>("DoneOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("done_on_utc");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("PendedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("pended_on_utc");
+
+                    b.Property<DateTime?>("RejectedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("rejected_on_utc");
+
+                    b.Property<DateTimeOffset>("ScheduledOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("scheduled_on_utc");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("seller_id");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.HasKey("Id")
+                        .HasName("pk_cooperations");
+
+                    b.HasIndex("AdvertisementId")
+                        .HasDatabaseName("ix_cooperations_advertisement_id");
+
+                    b.HasIndex("BuyerId")
+                        .HasDatabaseName("ix_cooperations_buyer_id");
+
+                    b.HasIndex("SellerId")
+                        .HasDatabaseName("ix_cooperations_seller_id");
+
+                    b.ToTable("cooperations", (string)null);
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>
@@ -386,6 +495,48 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_conditions_users_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.BlockedDates.BlockedDate", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_blocked_dates_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.Cooperation", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Conditions.Advertisements.Advertisement", "Advertisement")
+                        .WithMany()
+                        .HasForeignKey("AdvertisementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_cooperations_advertisements_advertisement_id");
+
+                    b.HasOne("Trendlink.Domain.Users.User", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_cooperations_users_buyer_id");
+
+                    b.HasOne("Trendlink.Domain.Users.User", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_cooperations_users_seller_id");
+
+                    b.Navigation("Advertisement");
+
+                    b.Navigation("Buyer");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Notifications.Notification", b =>

@@ -1,6 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
@@ -47,7 +46,7 @@ namespace Trendlink.Domain.Users
 
         public StateId StateId { get; private set; }
 
-        public State State { get; private set; }
+        public State State { get; init; }
 
         public PhoneNumber PhoneNumber { get; private set; }
 
@@ -59,7 +58,7 @@ namespace Trendlink.Domain.Users
 
         public string IdentityId { get; private set; } = string.Empty;
 
-        public Condition? Condition { get; private set; }
+        public Condition? Condition { get; init; }
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 

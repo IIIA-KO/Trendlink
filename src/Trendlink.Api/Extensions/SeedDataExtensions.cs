@@ -11,7 +11,7 @@ namespace Trendlink.Api.Extensions
 {
     public static class SeedDataExtensions
     {
-        public static async Task SeedData(
+        public static async Task SeedDataAsync(
             this IApplicationBuilder app,
             IConfiguration configuration
         )

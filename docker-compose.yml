@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   trendlink.api:
     image: ${DOCKER_REGISTRY-}trendlinkapi

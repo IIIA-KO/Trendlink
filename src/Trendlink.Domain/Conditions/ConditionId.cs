@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Conditions.ValueObjects
+﻿namespace Trendlink.Domain.Conditions
 {
     public sealed record ConditionId(Guid Value)
     {

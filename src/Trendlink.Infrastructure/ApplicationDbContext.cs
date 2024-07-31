@@ -10,7 +10,11 @@ namespace Trendlink.Infrastructure
     public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     {
         private static readonly JsonSerializerSettings JsonSerializerSettings =
-            new() { TypeNameHandling = TypeNameHandling.All };
+            new()
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
 
         private readonly IDateTimeProvider _dateTimeProvider;
 
