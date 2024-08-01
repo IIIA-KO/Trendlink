@@ -4,6 +4,7 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.GoogleLogin;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
@@ -77,13 +78,25 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
+        [AllowAnonymous]
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin(
+            [FromBody] GoogleLoginRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new GoogleLogInUserCommand(request.AccessToken);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken(
             [FromBody] RefreshTokenRequest request,
             CancellationToken cancellationToken
         )
         {
-            var command = new RefreshTokenCommand(request.RefreshToken);
+            var command = new RefreshTokenCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

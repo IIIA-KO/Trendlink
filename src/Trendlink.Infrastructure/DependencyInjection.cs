@@ -1,10 +1,14 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
@@ -98,13 +102,54 @@ namespace Trendlink.Infrastructure
             IConfiguration configuration
         )
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                })
+                .AddCookie()
+                .AddOpenIdConnect(
+                    "oidc",
+                    options =>
+                    {
+                        KeycloakOptions keycloakOptions =
+                            configuration.GetSection("Keycloak").Get<KeycloakOptions>()
+                            ?? throw new ArgumentNullException(nameof(options));
+
+                        options.Authority = keycloakOptions.Authority;
+                        options.ClientId = keycloakOptions.AuthClientId;
+                        options.ClientSecret = keycloakOptions.AuthClientSecret;
+                        options.ResponseType = OpenIdConnectResponseType.Code;
+                        options.SaveTokens = true;
+
+                        options.Scope.Add("openid");
+                        options.Scope.Add("profile");
+                        options.Scope.Add("email");
+
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            NameClaimType = "name",
+                            RoleClaimType = "role"
+                        };
+
+                        options.RequireHttpsMetadata = false;
+
+                        options.Events = new OpenIdConnectEvents
+                        {
+                            OnTokenValidated = ctx => Task.CompletedTask
+                        };
+                    }
+                );
 
             services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
 
-            services.ConfigureOptions<JwtBearerOptionsSetup>();
+            services.Configure<GoogleOptions>(configuration.GetSection("Google"));
 
-            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+            services.ConfigureOptions<JwtBearerOptionsSetup>();
 
             services.AddTransient<AdminAuthorizationDelegatingHandler>();
 
@@ -135,6 +180,8 @@ namespace Trendlink.Infrastructure
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUserContext, UserContext>();
+
+            services.AddScoped<IGoogleService, GoogleService>();
         }
 
         private static void AddAuthorization(IServiceCollection services)
