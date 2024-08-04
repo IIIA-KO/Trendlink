@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Infrastructure.Authentication
+﻿namespace Trendlink.Infrastructure.Authentication.Keycloak
 {
     public sealed class KeycloakOptions
     {

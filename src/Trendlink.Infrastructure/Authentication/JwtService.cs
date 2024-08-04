@@ -1,26 +1,26 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 
 namespace Trendlink.Infrastructure.Authentication
 {
-    public record CachedAuthorizationToken(
-        string AccessToken,
-        string RefreshToken,
-        DateTimeOffset AcquiredAt,
-        int ExpiresIn
-    );
-
     internal sealed class JwtService : IJwtService
     {
+        internal record CachedAuthorizationToken(
+            string AccessToken,
+            string RefreshToken,
+            DateTimeOffset AcquiredAt,
+            int ExpiresIn
+        );
+
         private static readonly Error AuthenticationFailed =
             new(
                 "Keycloak.AuthenticationFailed",
@@ -213,20 +213,6 @@ namespace Trendlink.Infrastructure.Authentication
         {
             try
             {
-                bool userExists = await this.CheckUserExistsInKeycloak(
-                    userInfo.Email,
-                    cancellationToken
-                );
-
-                if (!userExists)
-                {
-                    bool userCreated = await this.CreateUserInKeycloak(userInfo, cancellationToken);
-                    if (!userCreated)
-                    {
-                        return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
-                    }
-                }
-
                 var authRequestParameters = new KeyValuePair<string, string>[]
                 {
                     new("client_id", this._keycloakOptions.AuthClientId),
@@ -281,10 +267,6 @@ namespace Trendlink.Infrastructure.Authentication
                 }
                 else
                 {
-                    string errorContent = await response.Content.ReadAsStringAsync(
-                        cancellationToken
-                    );
-                    Console.WriteLine(errorContent);
                     return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
                 }
             }
@@ -294,13 +276,14 @@ namespace Trendlink.Infrastructure.Authentication
             }
         }
 
-        private async Task<bool> CheckUserExistsInKeycloak(
+        public async Task<bool> CheckUserExistsInKeycloak(
             string email,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             string requestUrl =
                 $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users?email={email}";
+
             using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             request.Headers.Authorization = new AuthenticationHeaderValue(
                 "Bearer",
@@ -311,49 +294,9 @@ namespace Trendlink.Infrastructure.Authentication
                 request,
                 cancellationToken
             );
+
             return response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
-        }
-
-        private async Task<bool> CreateUserInKeycloak(
-            UserInfo userInfo,
-            CancellationToken cancellationToken
-        )
-        {
-            string requestUrl =
-                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users";
-            using var request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
-            request.Headers.Authorization = new AuthenticationHeaderValue(
-                "Bearer",
-                await this.GetAdminAccessTokenAsync(cancellationToken)
-            );
-            var userRepresentation = new
-            {
-                username = userInfo.Email,
-                email = userInfo.Email,
-                enabled = true,
-                emailVerified = true,
-                credentials = new[]
-                {
-                    new
-                    {
-                        type = "password",
-                        value = userInfo.Email,
-                        temporary = false
-                    }
-                }
-            };
-
-            request.Content = new StringContent(
-                JsonSerializer.Serialize(userRepresentation),
-                Encoding.UTF8,
-                "application/json"
-            );
-            HttpResponseMessage response = await this._httpClient.SendAsync(
-                request,
-                cancellationToken
-            );
-            return response.IsSuccessStatusCode;
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
@@ -374,9 +317,11 @@ namespace Trendlink.Infrastructure.Authentication
             );
 
             response.EnsureSuccessStatusCode();
+
             AuthorizationToken? tokenResponse = JsonSerializer.Deserialize<AuthorizationToken>(
                 await response.Content.ReadAsStringAsync(cancellationToken)
             );
+
             return tokenResponse?.AccessToken;
         }
     }

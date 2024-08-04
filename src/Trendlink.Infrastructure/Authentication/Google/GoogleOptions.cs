@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Infrastructure.Authentication
+﻿namespace Trendlink.Infrastructure.Authentication.Google
 {
     public sealed class GoogleOptions
     {
@@ -11,5 +11,7 @@
         public string TokenUrl { get; set; } = string.Empty;
 
         public string UserInfoUrl { get; set; } = string.Empty;
+
+        public string AdditionalUserInfoUrl { get; set; } = string.Empty;
     }
 }

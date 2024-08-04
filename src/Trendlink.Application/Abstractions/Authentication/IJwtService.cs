@@ -21,5 +21,10 @@ namespace Trendlink.Application.Abstractions.Authentication
             UserInfo userInfo,
             CancellationToken cancellationToken = default
         );
+
+        Task<bool> CheckUserExistsInKeycloak(
+            string email,
+            CancellationToken cancellationToken = default
+        );
     }
 }

@@ -7,6 +7,16 @@ namespace Trendlink.Application.Abstractions.Authentication
         [JsonPropertyName("email")]
         public string Email { get; set; }
 
-        public string Code { get; set; }
+        [JsonPropertyName("verified_email")]
+        public bool VerifiedEmail { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("given_name")]
+        public string GivenName { get; set; }
+
+        [JsonPropertyName("picture")]
+        public string Picture { get; set; }
     }
 }

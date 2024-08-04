@@ -25,6 +25,8 @@ using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
+using Trendlink.Infrastructure.Authentication.Google;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Trendlink.Infrastructure.Authentication
+namespace Trendlink.Infrastructure.Authentication.Google
 {
     public class GoogleTokenResponse
     {

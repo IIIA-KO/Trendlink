@@ -8,6 +8,7 @@ using Trendlink.Application.Users.GoogleLogin;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
+using Trendlink.Application.Users.RegisterUserWithGoogle;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -79,13 +80,30 @@ namespace Trendlink.Api.Controllers.Users
         }
 
         [AllowAnonymous]
+        [HttpPost("google-register")]
+        public async Task<IActionResult> RegisterUserWithGoogle(
+            [FromBody] RegisterUserWithGoogleRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new RegisterUserWithGoogleCommand(
+                request.AccessToken,
+                request.BirthDate,
+                new PhoneNumber(request.PhoneNumber),
+                new StateId(request.StateId)
+            );
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [AllowAnonymous]
         [HttpPost("google-login")]
-        public async Task<IActionResult> GoogleLogin(
+        public async Task<IActionResult> LoginUserWithGoogle(
             [FromBody] GoogleLoginRequest request,
             CancellationToken cancellationToken
         )
         {
-            var command = new GoogleLogInUserCommand(request.AccessToken);
+            var command = new LoginUserWithGoogleCommand(request.AccessToken);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

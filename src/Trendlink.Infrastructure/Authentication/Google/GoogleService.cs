@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 
-namespace Trendlink.Infrastructure.Authentication
+namespace Trendlink.Infrastructure.Authentication.Google
 {
     public sealed class GoogleService : IGoogleService
     {

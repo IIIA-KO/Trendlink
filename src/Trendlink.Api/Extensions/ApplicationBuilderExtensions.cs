@@ -32,7 +32,11 @@ namespace Trendlink.Api.Extensions
             services.AddCors(options =>
                 options.AddPolicy(
                     "CorsPolicy",
-                    policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+                    policy =>
+                        policy
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithOrigins("http://localhost:3000", "https://localhost:3000")
                 )
             );
 
