@@ -142,7 +142,7 @@ namespace Trendlink.Infrastructure
 
                         options.Events = new OpenIdConnectEvents
                         {
-                            OnTokenValidated = ctx => Task.CompletedTask
+                            OnTokenValidated = _ => Task.CompletedTask
                         };
                     }
                 );

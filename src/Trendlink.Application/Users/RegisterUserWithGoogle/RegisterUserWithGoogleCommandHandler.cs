@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
@@ -127,7 +128,10 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                 return tokenResult.Value;
             }
             catch (Exception exception)
-                when (exception is HttpRequestException || exception is ArgumentNullException)
+                when (exception is HttpRequestException
+                    || exception is ArgumentNullException
+                    || exception is ConcurrencyException
+                )
             {
                 return Result.Failure<AccessTokenResponse>(UserErrors.RegistrationFailed);
             }

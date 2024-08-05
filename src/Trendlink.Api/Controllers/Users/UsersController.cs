@@ -87,7 +87,7 @@ namespace Trendlink.Api.Controllers.Users
         )
         {
             var command = new RegisterUserWithGoogleCommand(
-                request.AccessToken,
+                request.Code,
                 request.BirthDate,
                 new PhoneNumber(request.PhoneNumber),
                 new StateId(request.StateId)
@@ -103,7 +103,7 @@ namespace Trendlink.Api.Controllers.Users
             CancellationToken cancellationToken
         )
         {
-            var command = new LoginUserWithGoogleCommand(request.AccessToken);
+            var command = new LogInUserWithGoogleCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

@@ -4,7 +4,7 @@ namespace Trendlink.Api.Controllers.Users
 {
     public sealed class RegisterUserWithGoogleRequest
     {
-        public string AccessToken { get; set; }
+        public string Code { get; set; }
 
         [JsonRequired]
         public DateOnly BirthDate { get; init; }

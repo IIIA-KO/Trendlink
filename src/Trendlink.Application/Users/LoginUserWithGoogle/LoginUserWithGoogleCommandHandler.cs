@@ -7,14 +7,14 @@ using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.GoogleLogin
 {
-    internal sealed class LoginUserWithGoogleCommandHandler
-        : ICommandHandler<LoginUserWithGoogleCommand, AccessTokenResponse>
+    internal sealed class LogInUserWithGoogleCommandHandler
+        : ICommandHandler<LogInUserWithGoogleCommand, AccessTokenResponse>
     {
         private readonly IGoogleService _googleService;
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
 
-        public LoginUserWithGoogleCommandHandler(
+        public LogInUserWithGoogleCommandHandler(
             IGoogleService googleService,
             IUserRepository userRepository,
             IJwtService jwtService
@@ -26,7 +26,7 @@ namespace Trendlink.Application.Users.GoogleLogin
         }
 
         public async Task<Result<AccessTokenResponse>> Handle(
-            LoginUserWithGoogleCommand request,
+            LogInUserWithGoogleCommand request,
             CancellationToken cancellationToken
         )
         {

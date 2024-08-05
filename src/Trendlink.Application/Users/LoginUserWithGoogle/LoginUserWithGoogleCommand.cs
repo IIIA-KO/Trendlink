@@ -3,5 +3,5 @@ using Trendlink.Application.Users.LogInUser;
 
 namespace Trendlink.Application.Users.GoogleLogin
 {
-    public sealed record LoginUserWithGoogleCommand(string Code) : ICommand<AccessTokenResponse>;
+    public sealed record LogInUserWithGoogleCommand(string Code) : ICommand<AccessTokenResponse>;
 }

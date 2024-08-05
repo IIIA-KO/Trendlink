@@ -2,6 +2,6 @@
 {
     public sealed class GoogleLoginRequest
     {
-        public string AccessToken { get; set; }
+        public string Code { get; set; }
     }
 }
