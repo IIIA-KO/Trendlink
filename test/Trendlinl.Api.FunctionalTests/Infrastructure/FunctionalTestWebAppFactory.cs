@@ -15,6 +15,7 @@ using Trendlink.Application.Countries.GetAllCountries;
 using Trendlink.Application.Countries.GetStates;
 using Trendlink.Infrastructure;
 using Trendlink.Infrastructure.Authentication;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Data;
 
 namespace Trendlinl.Api.FunctionalTests.Infrastructure

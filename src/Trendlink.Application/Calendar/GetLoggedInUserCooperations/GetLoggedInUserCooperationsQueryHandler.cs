@@ -53,18 +53,17 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
 
             try
             {
+                var userId = new { UserId = this._userContext.UserId.Value };
+
                 IEnumerable<CooperationResponse> cooperations =
-                    await dbConnection.QueryAsync<CooperationResponse>(
-                        sqlCooperations,
-                        new { UserId = this._userContext.UserId.Value }
-                    );
+                    await dbConnection.QueryAsync<CooperationResponse>(sqlCooperations, userId);
 
                 IEnumerable<DateOnly> blockedDates = await dbConnection.QueryAsync<DateOnly>(
                     sqlBlockedDates,
-                    new { UserId = this._userContext.UserId.Value }
+                    userId
                 );
 
-                return cooperations
+                var dateResponses = cooperations
                     .GroupBy(c => DateOnly.FromDateTime(c.ScheduledOnUtc.UtcDateTime))
                     .Select(g => new DateResponse
                     {
@@ -72,8 +71,20 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
                         IsBlocked = blockedDates.Contains(g.Key),
                         Cooperations = g.ToList()
                     })
-                    .OrderBy(g => g.Date)
                     .ToList();
+
+                IEnumerable<DateResponse> additionalBlockedDates = blockedDates
+                    .Where(d => !dateResponses.Any(dr => dr.Date == d))
+                    .Select(d => new DateResponse
+                    {
+                        Date = d,
+                        IsBlocked = true,
+                        Cooperations = []
+                    });
+
+                dateResponses.AddRange(additionalBlockedDates);
+
+                return dateResponses.OrderBy(g => g.Date).ToList();
             }
             catch (Exception)
             {

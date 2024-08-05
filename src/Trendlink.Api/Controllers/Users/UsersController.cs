@@ -4,9 +4,11 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.GoogleLogin;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
+using Trendlink.Application.Users.RegisterUserWithGoogle;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;
 
@@ -77,13 +79,42 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
+        [AllowAnonymous]
+        [HttpPost("google-register")]
+        public async Task<IActionResult> RegisterUserWithGoogle(
+            [FromBody] RegisterUserWithGoogleRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new RegisterUserWithGoogleCommand(
+                request.Code,
+                request.BirthDate,
+                new PhoneNumber(request.PhoneNumber),
+                new StateId(request.StateId)
+            );
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("google-login")]
+        public async Task<IActionResult> LoginUserWithGoogle(
+            [FromBody] GoogleLoginRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new LogInUserWithGoogleCommand(request.Code);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
         [HttpPost("refresh")]
         public async Task<IActionResult> RefreshToken(
             [FromBody] RefreshTokenRequest request,
             CancellationToken cancellationToken
         )
         {
-            var command = new RefreshTokenCommand(request.RefreshToken);
+            var command = new RefreshTokenCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
