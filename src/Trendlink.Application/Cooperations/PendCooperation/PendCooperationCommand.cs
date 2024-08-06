@@ -9,6 +9,7 @@ namespace Trendlink.Application.Cooperations.PendCooperation
         Name Name,
         Description Description,
         DateTimeOffset ScheduledOnUtc,
+        Money Price,
         AdvertisementId AdvertisementId
     ) : ICommand<CooperationId>;
 }

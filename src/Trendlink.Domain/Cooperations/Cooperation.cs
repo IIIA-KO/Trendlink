@@ -17,6 +17,7 @@ namespace Trendlink.Domain.Cooperations
             Name name,
             Description description,
             DateTimeOffset scheduledOnUtc,
+            Money price,
             AdvertisementId advertisementId,
             UserId buyerId,
             UserId selllerId,
@@ -28,6 +29,7 @@ namespace Trendlink.Domain.Cooperations
             this.Name = name;
             this.Description = description;
             this.ScheduledOnUtc = scheduledOnUtc;
+            this.Price = price;
             this.AdvertisementId = advertisementId;
             this.BuyerId = buyerId;
             this.SellerId = selllerId;
@@ -35,27 +37,29 @@ namespace Trendlink.Domain.Cooperations
             this.PendedOnUtc = pendedOnUtc;
         }
 
-        public Name Name { get; private set; }
+        public Name Name { get; init; }
 
-        public Description Description { get; private set; }
+        public Description Description { get; init; }
 
-        public DateTimeOffset ScheduledOnUtc { get; private set; }
+        public DateTimeOffset ScheduledOnUtc { get; init; }
 
-        public AdvertisementId AdvertisementId { get; private set; }
+        public Money Price { get; init; }
+
+        public AdvertisementId AdvertisementId { get; init; }
 
         public Advertisement Advertisement { get; init; }
 
-        public UserId BuyerId { get; private set; }
+        public UserId BuyerId { get; init; }
 
         public User Buyer { get; init; }
 
-        public UserId SellerId { get; private set; }
+        public UserId SellerId { get; init; }
 
         public User Seller { get; init; }
 
         public CooperationStatus Status { get; private set; }
 
-        public DateTime PendedOnUtc { get; private set; }
+        public DateTime PendedOnUtc { get; init; }
 
         public DateTime? ConfirmedOnUtc { get; private set; }
 
@@ -71,6 +75,7 @@ namespace Trendlink.Domain.Cooperations
             Name name,
             Description description,
             DateTimeOffset scheduledOnUtc,
+            Money price,
             Advertisement advertisement,
             UserId buyerId,
             UserId selllerId,
@@ -87,11 +92,17 @@ namespace Trendlink.Domain.Cooperations
                 return Result.Failure<Cooperation>(CooperationErrors.InvalidTime);
             }
 
+            if (price.Amount <= 0)
+            {
+                return Result.Failure<Cooperation>(AdvertisementErrors.InvalidPrice);
+            }
+
             var cooperation = new Cooperation(
                 CooperationId.New(),
                 name,
                 description,
                 scheduledOnUtc,
+                price,
                 advertisement.Id,
                 buyerId,
                 selllerId,
