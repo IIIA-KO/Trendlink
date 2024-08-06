@@ -149,7 +149,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 scheduledOnUtc,
-                new Money(-1, Currency.FromCode("INVALID")),
+                new Money(-1, Currency.FromCode("USD")),
                 advertisement,
                 buyerId,
                 sellerId,

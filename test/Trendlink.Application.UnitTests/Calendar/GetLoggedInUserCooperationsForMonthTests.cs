@@ -20,14 +20,16 @@ namespace Trendlink.Application.UnitTests.Calendar
                 name AS Name,
                 description AS Description,
                 scheduled_on_utc AS ScheduledOnUtc,
+                price_amount AS PriceAmount,
+                price_currency AS PriceCurrency,
                 advertisement_id AS AdvertisementId,
                 buyer_id AS BuyerId,
                 seller_id AS SellerId,
                 status AS Status
             FROM cooperations
             WHERE (buyer_id = @UserId OR seller_id = @UserId)
-                AND MONTH(scheduled_on_utc) = @Month
-                AND YEAR(scheduled_on_utc) = @Year
+                AND EXTRACT(MONTH FROM scheduled_on_utc) = @Month
+                AND EXTRACT(YEAR FROM scheduled_on_utc) = @Year
             """;
 
         private const string SqlBlockedDates = """
@@ -35,8 +37,8 @@ namespace Trendlink.Application.UnitTests.Calendar
                 date AS Date
             FROM blocked_dates
             WHERE user_id = @UserId
-                AND MONTH(date) = @Month
-                AND YEAR(date) = @Year
+                AND EXTRACT(MONTH FROM date) = @Month
+                AND EXTRACT(YEAR FROM date) = @Year
             """;
 
         private static readonly GetLoggedInUserCooperationsForMonthQuery Query =
