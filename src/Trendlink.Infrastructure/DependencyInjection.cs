@@ -26,6 +26,7 @@ using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authentication.Google;
+using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
@@ -151,6 +152,8 @@ namespace Trendlink.Infrastructure
 
             services.Configure<GoogleOptions>(configuration.GetSection("Google"));
 
+            services.Configure<InstagramOptions>(configuration.GetSection("Instagram"));
+
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
             services.AddTransient<AdminAuthorizationDelegatingHandler>();
@@ -184,6 +187,17 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IUserContext, UserContext>();
 
             services.AddScoped<IGoogleService, GoogleService>();
+
+            services.AddHttpClient<IInstagramService, InstagramService>(
+                (serviceProvider, httpClient) =>
+                {
+                    InstagramOptions instagramOptions = serviceProvider
+                        .GetRequiredService<IOptions<InstagramOptions>>()
+                        .Value;
+
+                    httpClient.BaseAddress = new Uri(instagramOptions.TokenUrl);
+                }
+            );
         }
 
         private static void AddAuthorization(IServiceCollection services)

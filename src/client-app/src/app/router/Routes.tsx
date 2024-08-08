@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import Login from '../../Login';
-import AuthCallback from "../../AuthCallback";
+import LoginCallback from "../../LoginCallback";
 import App from "../../App";
 import Home from "../../Home";
+import LinkInstagram from "../../LinkInstagram";
+import LinkInstagramCallback from "../../LinkInstagramCallback";
 
 export const routes: RouteObject[] = [
     {
@@ -11,7 +13,9 @@ export const routes: RouteObject[] = [
         children: [
             { path: "", element: <Home /> },
             { path: "login", element: <Login /> },
-            { path: "auth/callback", element: <AuthCallback /> },
+            { path: "link-instagram", element: <LinkInstagram /> },
+            { path: "login/callback", element: <LoginCallback /> },
+            { path: "ling-instagram/callback", element: <LinkInstagramCallback /> },
         ]
     }
 ]

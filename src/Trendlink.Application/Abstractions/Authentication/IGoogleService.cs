@@ -4,6 +4,9 @@
     {
         Task<string?> GetAccessTokenAsync(string code, CancellationToken cancellationToken);
 
-        Task<UserInfo?> GetUserInfoAsync(string accessToken, CancellationToken cancellationToken);
+        Task<GoogleUserInfo?> GetUserInfoAsync(
+            string accessToken,
+            CancellationToken cancellationToken
+        );
     }
 }

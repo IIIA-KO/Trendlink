@@ -5,6 +5,7 @@ using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetLoggedInUser;
 using Trendlink.Application.Users.GoogleLogin;
+using Trendlink.Application.Users.LinkInstagram;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
@@ -21,28 +22,6 @@ namespace Trendlink.Api.Controllers.Users
         public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
         {
             var query = new GetLoggedInUserQuery();
-
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
-        }
-
-        [HttpGet("notifications")]
-        public async Task<IActionResult> GetLoggedInUserNotifications(
-            CancellationToken cancellationToken
-        )
-        {
-            var query = new GetLoggedInUserNotificationsQuery();
-
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
-        }
-
-        [HttpGet("{id:guid}/notifications")]
-        [Authorize(Roles = Roles.Administrator)]
-        public async Task<IActionResult> GetUserNotifications(
-            Guid id,
-            CancellationToken cancellationToken
-        )
-        {
-            var query = new GetUserNotificationsQuery(new UserId(id));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -99,7 +78,7 @@ namespace Trendlink.Api.Controllers.Users
         [AllowAnonymous]
         [HttpPost("google-login")]
         public async Task<IActionResult> LoginUserWithGoogle(
-            [FromBody] GoogleLoginRequest request,
+            [FromBody] LoginUserWithGoogleRequest request,
             CancellationToken cancellationToken
         )
         {
@@ -117,6 +96,40 @@ namespace Trendlink.Api.Controllers.Users
             var command = new RefreshTokenCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("link-instagram")]
+        public async Task<IActionResult> LinkInstagram(
+            [FromBody] LinkInstagramRequest request,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new LinkInstagramCommand(request.Code);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpGet("notifications")]
+        public async Task<IActionResult> GetLoggedInUserNotifications(
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetLoggedInUserNotificationsQuery();
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("{id:guid}/notifications")]
+        [Authorize(Roles = Roles.Administrator)]
+        public async Task<IActionResult> GetUserNotifications(
+            Guid id,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserNotificationsQuery(new UserId(id));
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
         [HttpPut("{id:guid}/edit")]

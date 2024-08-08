@@ -12,6 +12,12 @@ const Home = () => {
             <Link to="/login">
                 <button>Login with Google</button>
             </Link>
+
+            <br />
+
+            <Link to="/link-instagram">
+                <button>Link Instagram</button>
+            </Link>
         </>
     )
 };

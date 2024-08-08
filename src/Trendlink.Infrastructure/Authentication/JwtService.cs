@@ -1,14 +1,17 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
+using System.Text;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Authentication
 {
@@ -33,16 +36,20 @@ namespace Trendlink.Infrastructure.Authentication
 
         private readonly KeycloakOptions _keycloakOptions;
 
+        private readonly InstagramOptions _instagramOptions;
+
         private readonly ICacheService _cacheService;
 
         public JwtService(
             HttpClient httpClient,
             IOptions<KeycloakOptions> keycloakOptions,
+            IOptions<InstagramOptions> instagramOptions,
             ICacheService cacheService
         )
         {
             this._httpClient = httpClient;
             this._keycloakOptions = keycloakOptions.Value;
+            this._instagramOptions = instagramOptions.Value;
             this._cacheService = cacheService;
         }
 
@@ -207,7 +214,7 @@ namespace Trendlink.Infrastructure.Authentication
         }
 
         public async Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
-            UserInfo userInfo,
+            GoogleUserInfo userInfo,
             CancellationToken cancellationToken = default
         )
         {
@@ -297,6 +304,113 @@ namespace Trendlink.Infrastructure.Authentication
 
             return response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
+        }
+
+        public async Task<string?> RefreshInstagramAccessTokenAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var request = new HttpRequestMessage(
+                HttpMethod.Get,
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userId}"
+            );
+            request.Headers.Authorization = new AuthenticationHeaderValue(
+                "Bearer",
+                await this.GetAdminAccessTokenAsync(cancellationToken)
+            );
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            string contentString = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            KeycloakUser? user = JsonConvert.DeserializeObject<KeycloakUser>(contentString);
+            if (user is null)
+            {
+                return null;
+            }
+
+            string? refreshToken = user.Attributes["instagram_refresh_token"].FirstOrDefault();
+            if (refreshToken is null)
+            {
+                return null;
+            }
+
+            var parameters = new Dictionary<string, string>
+            {
+                { "grant_type", "refresh_token" },
+                { "refresh_token", refreshToken },
+                { "client_id", this._instagramOptions.ClientId },
+                { "client_secret", this._instagramOptions.ClientSecret }
+            };
+            using var content = new FormUrlEncodedContent(parameters);
+
+            HttpResponseMessage tokenResponse = await this._httpClient.PostAsync(
+                this._instagramOptions.TokenUrl,
+                content,
+                cancellationToken
+            );
+            if (!tokenResponse.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            AuthorizationToken? authenticationToken =
+                JsonConvert.DeserializeObject<AuthorizationToken>(responseContent);
+            if (authenticationToken is null)
+            {
+                return null;
+            }
+
+            bool isUpdated = await this.UpdateUserAttributesAsync(
+                userId,
+                new Dictionary<string, string>
+                {
+                    { "instagram_access_token", authenticationToken.AccessToken },
+                    {
+                        "access_token_expiry",
+                        DateTime.UtcNow.AddSeconds(authenticationToken.ExpiresIn).ToString("o")
+                    }
+                },
+                cancellationToken
+            );
+
+            return isUpdated ? authenticationToken.AccessToken : null;
+        }
+
+        public async Task<bool> UpdateUserAttributesAsync(
+            Guid userId,
+            Dictionary<string, string> attributes,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var request = new HttpRequestMessage(
+                HttpMethod.Put,
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userId}"
+            );
+            request.Headers.Authorization = new AuthenticationHeaderValue(
+                "Bearer",
+                await this.GetAdminAccessTokenAsync(cancellationToken)
+            );
+            request.Content = new StringContent(
+                JsonConvert.SerializeObject(new { attributes }),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+            return response.IsSuccessStatusCode;
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)

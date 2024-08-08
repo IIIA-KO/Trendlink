@@ -61,7 +61,7 @@ namespace Trendlink.Infrastructure.Authentication.Google
             return null;
         }
 
-        public async Task<UserInfo?> GetUserInfoAsync(
+        public async Task<GoogleUserInfo?> GetUserInfoAsync(
             string accessToken,
             CancellationToken cancellationToken
         )
@@ -79,7 +79,7 @@ namespace Trendlink.Infrastructure.Authentication.Google
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync(cancellationToken);
-                return JsonSerializer.Deserialize<UserInfo>(content);
+                return JsonSerializer.Deserialize<GoogleUserInfo>(content);
             }
 
             return null;

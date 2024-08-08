@@ -18,12 +18,23 @@ namespace Trendlink.Application.Abstractions.Authentication
         );
 
         Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
-            UserInfo userInfo,
+            GoogleUserInfo userInfo,
             CancellationToken cancellationToken = default
         );
 
         Task<bool> CheckUserExistsInKeycloak(
             string email,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<string?> RefreshInstagramAccessTokenAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<bool> UpdateUserAttributesAsync(
+            Guid userId,
+            Dictionary<string, string> attributes,
             CancellationToken cancellationToken = default
         );
     }

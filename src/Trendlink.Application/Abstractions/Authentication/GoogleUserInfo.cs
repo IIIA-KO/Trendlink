@@ -2,7 +2,7 @@
 
 namespace Trendlink.Application.Abstractions.Authentication
 {
-    public class UserInfo
+    public sealed class GoogleUserInfo
     {
         [JsonPropertyName("email")]
         public string Email { get; set; }

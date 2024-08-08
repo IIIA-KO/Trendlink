@@ -51,7 +51,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                 return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
             }
 
-            UserInfo? userInfo = await this._googleService.GetUserInfoAsync(
+            GoogleUserInfo? userInfo = await this._googleService.GetUserInfoAsync(
                 accessToken,
                 cancellationToken
             );

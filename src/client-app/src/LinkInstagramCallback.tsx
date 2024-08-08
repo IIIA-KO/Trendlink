@@ -1,8 +1,8 @@
 import queryString from 'query-string';
 import { useEffect } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const AuthCallback = () => {
+const LinkInstagramCallback = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,35 +12,38 @@ const AuthCallback = () => {
 
             if (code) {
                 try {
-                    const response = await fetch('https://localhost:5001/api/users/google-login', {
+                    const response = await fetch('https://localhost:5001/api/users/link-instagram', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            accessToken: code,
+                            code: code,
                         }),
                     });
 
                     console.log('Response:', response);
 
                     if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem('access_token', data.access_token);
-                        alert("You're logged in!");
+                        alert("Instagram account linked");
+                        navigate('/');
                     } else {
-                        console.error('Failed to exchange code for token');
+                        console.error('Failed to link Instagram account');
                     }
                 } catch (error) {
                     console.error('Error:', error);
                 }
             }
-        };
+        }
 
         fetchToken();
     }, [navigate]);
 
-    return <div>Loading...</div>;
-};
+    return (
+        <>
+            <div>Loading...</div>
+        </>
+    );
+}
 
-export default AuthCallback;
+export default LinkInstagramCallback;
