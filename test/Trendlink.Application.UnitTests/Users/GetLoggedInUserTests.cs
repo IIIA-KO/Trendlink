@@ -4,6 +4,7 @@ using NSubstitute;
 using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Users;
 using Trendlink.Application.Users.GetLoggedInUser;
 using Trendlink.Domain.Abstraction;
 

@@ -18,5 +18,7 @@ namespace Trendlink.Domain.Users
         Task<bool> ExistsByIdAsync(UserId id, CancellationToken cancellationToken = default);
 
         Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default);
+
+        IQueryable<User> DbSetAsQueryable();
     }
 }
