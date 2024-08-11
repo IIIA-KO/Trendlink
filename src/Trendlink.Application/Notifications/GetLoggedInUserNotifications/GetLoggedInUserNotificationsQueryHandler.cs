@@ -1,61 +1,76 @@
-﻿using System.Data;
-using Dapper;
+﻿using System.Linq.Expressions;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Pagination;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Notifications;
 
 namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
 {
     internal sealed class GetLoggedInUserNotificationsQueryHandler
-        : IQueryHandler<GetLoggedInUserNotificationsQuery, IReadOnlyList<NotificationResponse>>
+        : IQueryHandler<GetLoggedInUserNotificationsQuery, PagedList<NotificationResponse>>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IUserContext _userContext;
 
         public GetLoggedInUserNotificationsQueryHandler(
-            ISqlConnectionFactory sqlConnectionFactory,
+            INotificationRepository notificationRepository,
             IUserContext userContext
         )
         {
-            this._sqlConnectionFactory = sqlConnectionFactory;
+            this._notificationRepository = notificationRepository;
             this._userContext = userContext;
         }
 
-        public async Task<Result<IReadOnlyList<NotificationResponse>>> Handle(
+        public async Task<Result<PagedList<NotificationResponse>>> Handle(
             GetLoggedInUserNotificationsQuery request,
             CancellationToken cancellationToken
         )
         {
-            using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
+            IQueryable<Notification> notificationsQuery =
+                this._notificationRepository.DbSetAsQueryable();
 
-            const string sql = """
-                SELECT
-                    id AS Id,
-                    user_id AS UserId,
-                    notification_type AS NotificationType,
-                    title AS Title,
-                    message AS Message,
-                    is_read AS IsRead,
-                    created_on_utc AS CreatedOnUtc
-                FROM notifications
-                WHERE user_id = @UserId
-                ORDER BY created_on_utc DESC
-                """;
+            notificationsQuery = notificationsQuery.Where(notification =>
+                notification.UserId == this._userContext.UserId
+            );
 
-            try
+            notificationsQuery =
+                request.SortOrder?.ToUpperInvariant() == "DESC"
+                    ? notificationsQuery.OrderByDescending(GetSortProperty(request))
+                    : notificationsQuery.OrderBy(GetSortProperty(request));
+
+            IQueryable<NotificationResponse> notificationResponsesQuery = notificationsQuery.Select(
+                notification => new NotificationResponse(
+                    notification.Id.Value,
+                    notification.UserId.Value,
+                    notification.NotificationType,
+                    notification.Title.Value,
+                    notification.Message.Value,
+                    notification.IsRead,
+                    notification.CreatedOnUtc
+                )
+            );
+
+            return await PagedList<NotificationResponse>.CreateAsync(
+                notificationResponsesQuery,
+                request.PageNumber,
+                request.PageSize
+            );
+        }
+
+        private static Expression<Func<Notification, object>> GetSortProperty(
+            GetLoggedInUserNotificationsQuery request
+        )
+        {
+            return request.SortColumn?.ToUpperInvariant() switch
             {
-                return (
-                    await dbConnection.QueryAsync<NotificationResponse>(
-                        sql,
-                        new { UserId = this._userContext.UserId.Value }
-                    )
-                ).ToList();
-            }
-            catch (Exception)
-            {
-                return Result.Failure<IReadOnlyList<NotificationResponse>>(Error.Unexpected);
-            }
+                "NOTIFICATIONTYPE" => notification => notification.NotificationType,
+                "TITLE" => notification => notification.Title,
+                "MESSAGE" => notification => notification.Message,
+                "ISREAD" => notification => notification.IsRead,
+                "CREATEDONUTC" => notification => notification.CreatedOnUtc,
+                _ => notification => notification.Id
+            };
         }
     }
 }

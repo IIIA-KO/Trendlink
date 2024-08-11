@@ -4,6 +4,7 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.GetUsers;
 using Trendlink.Application.Users.GoogleLogin;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
@@ -25,26 +26,60 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
-        [HttpGet("notifications")]
-        public async Task<IActionResult> GetLoggedInUserNotifications(
-            CancellationToken cancellationToken
+        [HttpGet]
+        public async Task<IActionResult> GetUsers(
+            [FromQuery] string? searchTerm,
+            [FromQuery] string? sortColumn,
+            [FromQuery] string? sortOrder,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            CancellationToken cancellationToken = default
         )
         {
-            var query = new GetLoggedInUserNotificationsQuery();
+            var query = new GetUsersQuery(searchTerm, sortColumn, sortOrder, pageNumber, pageSize);
 
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+            return this.HandlePagedResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("notifications")]
+        public async Task<IActionResult> GetLoggedInUserNotifications(
+            [FromQuery] string? sortColumn,
+            [FromQuery] string? sortOrder,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            CancellationToken cancellationToken = default
+        )
+        {
+            var query = new GetLoggedInUserNotificationsQuery(
+                sortColumn,
+                sortOrder,
+                pageNumber,
+                pageSize
+            );
+
+            return this.HandlePagedResult(await this.Sender.Send(query, cancellationToken));
         }
 
         [HttpGet("{id:guid}/notifications")]
         [Authorize(Roles = Roles.Administrator)]
         public async Task<IActionResult> GetUserNotifications(
             Guid id,
-            CancellationToken cancellationToken
+            [FromQuery] string? sortColumn,
+            [FromQuery] string? sortOrder,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            CancellationToken cancellationToken = default
         )
         {
-            var query = new GetUserNotificationsQuery(new UserId(id));
+            var query = new GetUserNotificationsQuery(
+                new UserId(id),
+                sortColumn,
+                sortOrder,
+                pageNumber,
+                pageSize
+            );
 
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+            return this.HandlePagedResult(await this.Sender.Send(query, cancellationToken));
         }
 
         [AllowAnonymous]

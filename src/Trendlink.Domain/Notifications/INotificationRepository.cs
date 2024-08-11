@@ -1,5 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Notifications
 {
@@ -26,5 +27,7 @@ namespace Trendlink.Domain.Notifications
             NotificationId notificationId,
             CancellationToken cancellationToken = default
         );
+
+        IQueryable<Notification> DbSetAsQueryable();
     }
 }

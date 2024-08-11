@@ -1,12 +1,13 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Pagination;
 
-namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
+namespace Trendlink.Application.Users.GetUsers
 {
-    public sealed record GetLoggedInUserNotificationsQuery(
+    public sealed record GetUsersQuery(
+        string? SearchTerm,
         string? SortColumn,
         string? SortOrder,
         int PageNumber,
         int PageSize
-    ) : IQuery<PagedList<NotificationResponse>>;
+    ) : IQuery<PagedList<UserResponse>>;
 }

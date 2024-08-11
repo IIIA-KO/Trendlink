@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Notifications;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Cooperations.BlockedDates
 {
@@ -24,5 +25,7 @@ namespace Trendlink.Domain.Cooperations.BlockedDates
         void Add(BlockedDate date);
 
         void Remove(BlockedDate date);
+
+        IQueryable<BlockedDate> DbSetAsQueryable();
     }
 }
