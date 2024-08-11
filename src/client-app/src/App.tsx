@@ -1,9 +1,8 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './context/AuthContext';
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
+import AuthPage from "./Pages/AuthPage.tsx";
+import HomePage from "./Pages/HomePage";
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -11,8 +10,7 @@ const App: React.FC = () => {
       <BrowserRouter>
           <AuthProvider>
               <Routes>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/login" element={<AuthPage />} />
                   <Route path="/" element={
                       <ProtectedRoute>
                           <HomePage />
