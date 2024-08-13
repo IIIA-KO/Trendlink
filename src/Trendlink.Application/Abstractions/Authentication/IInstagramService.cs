@@ -1,16 +1,15 @@
-﻿using Trendlink.Application.Users.LogInUser;
-
-namespace Trendlink.Application.Abstractions.Authentication
+﻿namespace Trendlink.Application.Abstractions.Authentication
 {
     public interface IInstagramService
     {
-        Task<AccessTokenResponse> GetAccessTokenAsync(
+        Task<(string?, long?)> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         );
 
         Task<InstagramUserInfo?> GetUserInfoAsync(
             string accessToken,
+            long instagramUserId,
             CancellationToken cancellationToken = default
         );
     }

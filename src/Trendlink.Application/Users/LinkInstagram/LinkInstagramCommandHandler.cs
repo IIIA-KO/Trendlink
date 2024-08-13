@@ -1,9 +1,8 @@
-﻿using Trendlink.Application.Abstractions.Authentication;
+﻿using System.Globalization;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.LinkInstagram
 {
@@ -29,23 +28,16 @@ namespace Trendlink.Application.Users.LinkInstagram
             CancellationToken cancellationToken
         )
         {
-            /*
-             * Implementation
-             */
-
-            UserId userId = this._userContext.UserId;
-
-            AccessTokenResponse accessToken = await this._instagramService.GetAccessTokenAsync(
-                request.Code,
-                cancellationToken
-            );
-            if (accessToken == null)
+            (string? accessToken, long? instagramUserId) =
+                await this._instagramService.GetAccessTokenAsync(request.Code, cancellationToken);
+            if (accessToken is null || instagramUserId is null)
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
             }
 
             InstagramUserInfo? userInfo = await this._instagramService.GetUserInfoAsync(
-                accessToken.AccessToken,
+                accessToken,
+                instagramUserId.Value,
                 cancellationToken
             );
             if (userInfo is null)
@@ -53,22 +45,13 @@ namespace Trendlink.Application.Users.LinkInstagram
                 return Result.Failure(UserErrors.InvalidCredentials);
             }
 
-            bool isUpdated = await this._jwtService.UpdateUserAttributesAsync(
-                userId.Value,
-                new Dictionary<string, string>
-                {
-                    { "instagram_access_token", accessToken.AccessToken },
-                    { "instagram_refresh_token", accessToken.RefreshToken },
-                    { "instagram_username", userInfo.Username },
-                    {
-                        "access_token_expiry",
-                        DateTime.UtcNow.AddSeconds(accessToken.ExpiresIn).ToString("o")
-                    }
-                },
+            bool isLinked = await this._jwtService.LinkInstagramAccountToKeycloakUserAsync(
+                this._userContext.IdentityId,
+                instagramUserId.Value.ToString(CultureInfo.InvariantCulture),
+                userInfo.Username,
                 cancellationToken
             );
-
-            if (!isUpdated)
+            if (!isLinked)
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
             }

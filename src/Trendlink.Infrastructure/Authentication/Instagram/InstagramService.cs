@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
+using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
-using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 
 namespace Trendlink.Infrastructure.Authentication.Instagram
 {
@@ -9,61 +9,66 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
         private readonly HttpClient _httpClient;
         private readonly InstagramOptions _instagramOptions;
 
-        public InstagramService(HttpClient httpClient, InstagramOptions instagramOptions)
+        public InstagramService(HttpClient httpClient, IOptions<InstagramOptions> instagramOptions)
         {
             this._httpClient = httpClient;
-            this._instagramOptions = instagramOptions;
+            this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<AccessTokenResponse> GetAccessTokenAsync(
+        public async Task<(string?, long?)> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         )
         {
-            var parameters = new Dictionary<string, string>
-            {
-                { "client_id", this._instagramOptions.ClientId },
-                { "client_secret", this._instagramOptions.ClientSecret },
-                { "grant_type", "authorization_code" },
-                { "redirect_uri", this._instagramOptions.RedirectUri },
-                { "code", code }
-            };
-
-            using var content = new FormUrlEncodedContent(parameters);
+            using var accessTokenRequestContent = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "client_id", this._instagramOptions.ClientId },
+                    { "client_secret", this._instagramOptions.ClientSecret },
+                    { "grant_type", "authorization_code" },
+                    { "redirect_uri", this._instagramOptions.RedirectUri },
+                    { "code", code }
+                }
+            );
 
             HttpResponseMessage response = await this._httpClient.PostAsync(
                 this._instagramOptions.TokenUrl,
-                content,
+                accessTokenRequestContent,
                 cancellationToken
             );
+
             if (response.IsSuccessStatusCode)
             {
-                string responseContent = await response.Content.ReadAsStringAsync(
-                    cancellationToken
-                );
-                return JsonSerializer.Deserialize<AccessTokenResponse>(responseContent);
+                string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                InstagramTokenResponse? tokenResponse =
+                    JsonSerializer.Deserialize<InstagramTokenResponse>(content);
+
+                return (tokenResponse?.AccessToken, tokenResponse?.UserId);
             }
 
-            return null;
+            return (null, null);
         }
 
         public async Task<InstagramUserInfo?> GetUserInfoAsync(
             string accessToken,
+            long instagramUserId,
             CancellationToken cancellationToken = default
         )
         {
-            string requestUri = $"{this._instagramOptions.UserInfoUrl}&access_token={accessToken}";
+            string requestUri =
+                $"{this._instagramOptions.UserInfoUrl}{instagramUserId}?fields=id,username&access_token={accessToken}";
 
             HttpResponseMessage response = await this._httpClient.GetAsync(
                 requestUri,
                 cancellationToken
             );
+
             if (response.IsSuccessStatusCode)
             {
-                string responseContent = await response.Content.ReadAsStringAsync(
-                    cancellationToken
-                );
-                return JsonSerializer.Deserialize<InstagramUserInfo>(responseContent);
+                string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                return JsonSerializer.Deserialize<InstagramUserInfo>(content);
             }
 
             return null;

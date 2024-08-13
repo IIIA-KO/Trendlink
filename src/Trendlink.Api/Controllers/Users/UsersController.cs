@@ -98,7 +98,6 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [AllowAnonymous]
         [HttpPost("link-instagram")]
         public async Task<IActionResult> LinkInstagram(
             [FromBody] LinkInstagramRequest request,

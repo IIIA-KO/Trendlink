@@ -53,8 +53,10 @@ namespace Trendlink.Infrastructure.Authentication.Google
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
                 GoogleTokenResponse? tokenResponse =
                     JsonSerializer.Deserialize<GoogleTokenResponse>(content);
+
                 return tokenResponse?.AccessToken;
             }
 

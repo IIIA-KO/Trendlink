@@ -105,56 +105,17 @@ namespace Trendlink.Infrastructure
             IConfiguration configuration
         )
         {
-            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                })
-                .AddCookie()
-                .AddOpenIdConnect(
-                    "oidc",
-                    options =>
-                    {
-                        KeycloakOptions keycloakOptions =
-                            configuration.GetSection("Keycloak").Get<KeycloakOptions>()
-                            ?? throw new ArgumentNullException(nameof(options));
-
-                        options.Authority = keycloakOptions.Authority;
-                        options.ClientId = keycloakOptions.AuthClientId;
-                        options.ClientSecret = keycloakOptions.AuthClientSecret;
-                        options.ResponseType = OpenIdConnectResponseType.Code;
-                        options.SaveTokens = true;
-
-                        options.Scope.Add("openid");
-                        options.Scope.Add("profile");
-                        options.Scope.Add("email");
-
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            NameClaimType = "name",
-                            RoleClaimType = "role"
-                        };
-
-                        options.RequireHttpsMetadata = false;
-
-                        options.Events = new OpenIdConnectEvents
-                        {
-                            OnTokenValidated = _ => Task.CompletedTask
-                        };
-                    }
-                );
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
             services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+
+            services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+            services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
 
             services.Configure<GoogleOptions>(configuration.GetSection("Google"));
 
             services.Configure<InstagramOptions>(configuration.GetSection("Instagram"));
-
-            services.ConfigureOptions<JwtBearerOptionsSetup>();
 
             services.AddTransient<AdminAuthorizationDelegatingHandler>();
 

@@ -27,14 +27,10 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
-        Task<string?> RefreshInstagramAccessTokenAsync(
-            Guid userId,
-            CancellationToken cancellationToken = default
-        );
-
-        Task<bool> UpdateUserAttributesAsync(
-            Guid userId,
-            Dictionary<string, string> attributes,
+        Task<bool> LinkInstagramAccountToKeycloakUserAsync(
+            string userId,
+            string providerUserId,
+            string providerUsername,
             CancellationToken cancellationToken = default
         );
     }
