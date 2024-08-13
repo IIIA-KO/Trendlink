@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../api/authApi';
-import { getCountries, getStates } from '../api/countriesAndStatesApi.ts';
-import useAuth from '../hooks/useAuth';
-import { CountryType } from "../models/CountryType.ts";
-import { StateType } from "../models/StateType.ts";
+import { register } from '../../api/authApi.ts';
+import { getCountries, getStates } from '../../api/countriesAndStatesApi.ts';
+import useAuth from '../../hooks/useAuth.ts';
+import { CountryType } from "../../models/CountryType.ts";
+import { StateType } from "../../models/StateType.ts";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
+import PasswordInputField from "../Input/PasswordInputField.tsx";
+import EmailInputFiled from "../Input/EmailInputField.tsx";
 
 const RegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -27,14 +29,14 @@ const RegisterForm: React.FC = () => {
     };
 
     const validationSchema = Yup.object({
-        firstName: Yup.string().required('First Name is required'),
-        lastName: Yup.string().required('Last Name is required'),
-        birthDate: Yup.string().required('Birth Date is required'),
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        phoneNumber: Yup.string().required('Phone Number is required'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-        countryId: Yup.string().required('Country is required'),
-        stateId: Yup.string().required('State is required'),
+        firstName: Yup.string().required('Required field'),
+        lastName: Yup.string().required('Required field'),
+        birthDate: Yup.string().required('Required field'),
+        email: Yup.string().email('Invalid email address').required('Required field'),
+        phoneNumber: Yup.string().required('Required field'),
+        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required field'),
+        countryId: Yup.string().required('Required field'),
+        stateId: Yup.string().required('Required field'),
     });
 
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
@@ -72,7 +74,7 @@ const RegisterForm: React.FC = () => {
     }, [initialValues.countryId]);
 
     const getFieldClasses = (touched: boolean | undefined, error: string | undefined) => {
-        return `w-full px-4 py-2 border-b-2 focus:outline-none ${touched && error ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'}`;
+        return `bg-transparent w-full px-4 py-2 border-b-2 focus:outline-none ${touched && error ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'}`;
     };
 
     return (
@@ -93,7 +95,7 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="firstName"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
                     <div className="text-[0.85rem]">
@@ -106,7 +108,7 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="lastName"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
                     <div className="text-[0.85rem]">
@@ -119,22 +121,12 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="birthDate"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
-                    <div className="text-[0.85rem]">
-                        <Field
-                            name="email"
-                            type="email"
-                            placeholder="Email"
-                            className={getFieldClasses(touched.email, errors.email)}
-                        />
-                        <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="text-red-500 text-xs mt-1"
-                        />
-                    </div>
+
+                    <EmailInputFiled/>
+
                     <div className="text-[0.85rem]">
                         <Field
                             name="phoneNumber"
@@ -145,22 +137,12 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="phoneNumber"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
-                    <div className="text-[0.85rem]">
-                        <Field
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            className={getFieldClasses(touched.password, errors.password)}
-                        />
-                        <ErrorMessage
-                            name="password"
-                            component="div"
-                            className="text-red-500 text-xs mt-1"
-                        />
-                    </div>
+
+                    <PasswordInputField/>
+
                     <div className="text-[0.85rem]">
                         <Field
                             as="select"
@@ -177,7 +159,7 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="countryId"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
                     <div className="text-[0.85rem]">
@@ -196,13 +178,13 @@ const RegisterForm: React.FC = () => {
                         <ErrorMessage
                             name="stateId"
                             component="div"
-                            className="text-red-500 text-xs mt-1"
+                            className="text-red-500 text-xs mt-1 px-4"
                         />
                     </div>
                     <div className="flex justify-between items-center">
                         <button
                             type="submit"
-                            className="w-full h-[47px] py-2 bg-gray-800 text-white text-[1rem] mt-4 rounded-full hover:bg-gray-700 transition-colors"
+                            className="w-full h-[47px] py-2 bg-gray-800 text-white text-[1rem] mt-4 rounded-full transition duration-500 ease-in-out hover:bg-gray-700 hover:scale-110 active:scale-90 focus:scale-100 transform"
                         >
                             Register
                         </button>
