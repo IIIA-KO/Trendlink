@@ -3,7 +3,7 @@ using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.Advertisements.DeleteAdvertisement;
 using Trendlink.Application.Advertisements.EditAdvertisement;
 using Trendlink.Application.Conditions.CreateCondition;
-using Trendlink.Application.Conditions.EditCondition;
+using Trendlink.Application.Conditions.EditLoggedInUserCondition;
 using Trendlink.Application.Conditions.GetLoggedInUserCondition;
 using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Shared;

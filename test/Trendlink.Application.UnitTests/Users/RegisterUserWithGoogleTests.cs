@@ -2,6 +2,7 @@
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RegisterUserWithGoogle;

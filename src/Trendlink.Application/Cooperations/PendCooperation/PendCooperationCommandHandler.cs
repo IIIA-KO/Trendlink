@@ -1,5 +1,4 @@
-﻿using System.Net.Cache;
-using Trendlink.Application.Abstractions.Authentication;
+﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Exceptions;

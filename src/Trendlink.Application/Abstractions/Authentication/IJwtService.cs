@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Abstraction;
+﻿using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 

@@ -1,6 +1,4 @@
-﻿using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
-
-namespace Trendlink.Application.Calendar
+﻿namespace Trendlink.Application.Calendar
 {
     public sealed class DateResponse
     {

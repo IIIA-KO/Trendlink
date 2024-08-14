@@ -1,11 +1,12 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 
-namespace Trendlink.Application.Users.GoogleLogin
+namespace Trendlink.Application.Users.LoginUserWithGoogle
 {
     internal sealed class LogInUserWithGoogleCommandHandler
         : ICommandHandler<LogInUserWithGoogleCommand, AccessTokenResponse>
@@ -30,7 +31,7 @@ namespace Trendlink.Application.Users.GoogleLogin
             CancellationToken cancellationToken
         )
         {
-            string? accessToken = await this._googleService.GetAccessTokenAsync(
+            GoogleTokenResponse? accessToken = await this._googleService.GetAccessTokenAsync(
                 request.Code,
                 cancellationToken
             );
@@ -40,7 +41,7 @@ namespace Trendlink.Application.Users.GoogleLogin
             }
 
             GoogleUserInfo? userInfo = await this._googleService.GetUserInfoAsync(
-                accessToken,
+                accessToken.AccessToken,
                 cancellationToken
             );
             if (userInfo is null)

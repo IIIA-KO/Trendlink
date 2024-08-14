@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;
@@ -312,9 +313,6 @@ namespace Trendlink.Infrastructure.Authentication
                 request,
                 cancellationToken
             );
-
-            string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-            Console.WriteLine(responseContent);
 
             return response.IsSuccessStatusCode;
         }

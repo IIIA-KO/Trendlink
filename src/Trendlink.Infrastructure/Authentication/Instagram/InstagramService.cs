@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 
 namespace Trendlink.Infrastructure.Authentication.Instagram
 {
@@ -15,7 +16,7 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<(string?, long?)> GetAccessTokenAsync(
+        public async Task<InstagramTokenResponse?> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         )
@@ -44,10 +45,10 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
                 InstagramTokenResponse? tokenResponse =
                     JsonSerializer.Deserialize<InstagramTokenResponse>(content);
 
-                return (tokenResponse?.AccessToken, tokenResponse?.UserId);
+                return tokenResponse;
             }
 
-            return (null, null);
+            return null;
         }
 
         public async Task<InstagramUserInfo?> GetUserInfoAsync(

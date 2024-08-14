@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Trendlink.Application.Abstractions.Authentication
+namespace Trendlink.Application.Abstractions.Authentication.Models
 {
     public sealed class GoogleUserInfo
     {

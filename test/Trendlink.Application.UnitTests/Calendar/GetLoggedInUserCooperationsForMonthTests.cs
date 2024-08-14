@@ -5,7 +5,6 @@ using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
-using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
 using Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;

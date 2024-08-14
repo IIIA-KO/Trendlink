@@ -1,5 +1,4 @@
-﻿using Bogus;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;

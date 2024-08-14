@@ -3,7 +3,7 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 
-namespace Trendlink.Application.Conditions.EditCondition
+namespace Trendlink.Application.Conditions.EditLoggedInUserCondition
 {
     internal sealed class EditLoggedInUserConditionCommandHandler
         : ICommandHandler<EditLoggedInUserConditionCommand>

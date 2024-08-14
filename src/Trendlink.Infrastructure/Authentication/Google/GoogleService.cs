@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 
 namespace Trendlink.Infrastructure.Authentication.Google
 {
@@ -17,7 +17,7 @@ namespace Trendlink.Infrastructure.Authentication.Google
             this._googleOptions = googleOptions.Value;
         }
 
-        public async Task<string?> GetAccessTokenAsync(
+        public async Task<GoogleTokenResponse?> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken
         )
@@ -54,10 +54,7 @@ namespace Trendlink.Infrastructure.Authentication.Google
             {
                 string content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                GoogleTokenResponse? tokenResponse =
-                    JsonSerializer.Deserialize<GoogleTokenResponse>(content);
-
-                return tokenResponse?.AccessToken;
+                return JsonSerializer.Deserialize<GoogleTokenResponse>(content);
             }
 
             return null;

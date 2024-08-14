@@ -2,7 +2,6 @@
 using Trendlink.Api.Controllers.Users;
 using Trendlink.Api.FunctionalTests.Users;
 using Trendlink.Application.Users.LogInUser;
-using Trendlinl.Api.FunctionalTests.Infrastructure;
 
 namespace Trendlink.Api.FunctionalTests.Infrastructure
 {

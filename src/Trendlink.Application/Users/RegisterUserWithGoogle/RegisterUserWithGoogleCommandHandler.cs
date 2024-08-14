@@ -1,4 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
@@ -42,7 +43,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
             CancellationToken cancellationToken
         )
         {
-            string? accessToken = await this._googleService.GetAccessTokenAsync(
+            GoogleTokenResponse? accessToken = await this._googleService.GetAccessTokenAsync(
                 request.Code,
                 cancellationToken
             );
@@ -52,7 +53,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
             }
 
             GoogleUserInfo? userInfo = await this._googleService.GetUserInfoAsync(
-                accessToken,
+                accessToken.AccessToken,
                 cancellationToken
             );
             if (userInfo is null)

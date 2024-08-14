@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Trendlink.Infrastructure.Authentication.Instagram
+namespace Trendlink.Application.Abstractions.Authentication.Models
 {
     public class InstagramTokenResponse
     {
