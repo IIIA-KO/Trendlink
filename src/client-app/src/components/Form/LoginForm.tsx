@@ -18,8 +18,14 @@ const LoginForm: React.FC = () => {
     };
 
     const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email address').required('Required field'),
-        password: Yup.string().required('Required field'),
+        email: Yup.string()
+            .email('Invalid email format')
+            .required('Required field'),
+
+        password: Yup.string()
+            .required('Required field')
+            .min(8, 'Password length must be at least 8.')
+            .max(16, 'Password length must not exceed 16.')
     });
 
     const handleSubmit = async (values: { email: string; password: string }) => {

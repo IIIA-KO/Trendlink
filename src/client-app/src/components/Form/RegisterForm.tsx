@@ -29,14 +29,40 @@ const RegisterForm: React.FC = () => {
     };
 
     const validationSchema = Yup.object({
-        firstName: Yup.string().required('Required field'),
-        lastName: Yup.string().required('Required field'),
-        birthDate: Yup.string().required('Required field'),
-        email: Yup.string().email('Invalid email address').required('Required field'),
-        phoneNumber: Yup.string().required('Required field'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required field'),
-        countryId: Yup.string().required('Required field'),
-        stateId: Yup.string().required('Required field'),
+        firstName: Yup.string()
+            .required('Required field'),
+
+        lastName: Yup.string()
+            .required('Required field'),
+
+        birthDate: Yup.date()
+            .required('Required field')
+            .max(new Date(new Date().setFullYear(new Date().getFullYear() - 18)), 'You must be at least 18 years old'),
+
+        email: Yup.string()
+            .email('Invalid email format')
+            .required('Required field'),
+
+        phoneNumber: Yup.string()
+            .required('Required field')
+            .min(10, 'PhoneNumber must not be less than 10 characters.')
+            .max(20, 'PhoneNumber must not exceed 20 characters.')
+            .matches(/^\d{10,20}$/, 'PhoneNumber not valid'),
+
+        password: Yup.string()
+            .required('Required field')
+            .min(8, 'Password length must be at least 8.')
+            .max(16, 'Password length must not exceed 16.')
+            .matches(/[A-Z]/, 'Password must contain at least one uppercase letter.')
+            .matches(/[a-z]/, 'Password must contain at least one lowercase letter.')
+            .matches(/\d/, 'Password must contain at least one digit.')
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character.'),
+
+        countryId: Yup.string()
+            .required('Required field'),
+
+        stateId: Yup.string()
+            .required('Required field')
     });
 
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
