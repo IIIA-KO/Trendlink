@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../api/authApi.ts';
@@ -14,6 +14,7 @@ import EmailInputFiled from "../Input/EmailInputField.tsx";
 const RegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
     const [states, setStates] = useState<StateType[]>([]);
+    const [selectedCountryId, setSelectedCountryId] = useState<string>('');
     const { login: authLogin } = useAuth();
     const navigate = useNavigate();
 
@@ -91,13 +92,14 @@ const RegisterForm: React.FC = () => {
 
     useEffect(() => {
         const fetchStates = async () => {
-            if (initialValues.countryId) {
-                const statesData = await getStates(initialValues.countryId);
+            if (selectedCountryId) {
+                const statesData = await getStates(selectedCountryId);
                 setStates(statesData);
             }
         };
+
         fetchStates();
-    }, [initialValues.countryId]);
+    }, [selectedCountryId])
 
     const getFieldClasses = (touched: boolean | undefined, error: string | undefined) => {
         return `bg-transparent w-full px-4 py-2 border-b-2 focus:outline-none ${touched && error ? 'border-red-500' : 'border-gray-300 focus:border-blue-500'}`;
@@ -109,7 +111,7 @@ const RegisterForm: React.FC = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
         >
-            {({touched, errors }) => (
+            {({touched, errors, setFieldValue }) => (
                 <Form className="space-y-6">
                     <div className="text-[0.85rem]">
                         <Field
@@ -174,6 +176,13 @@ const RegisterForm: React.FC = () => {
                             as="select"
                             name="countryId"
                             className={getFieldClasses(touched.countryId, errors.countryId)}
+                            onChange={async (e: ChangeEvent<HTMLSelectElement>) => {
+                                const countryId = e.target.value;
+                                setFieldValue('countryId', countryId);
+                                setFieldValue('stateId', ''); // Сбрасываем выбранный штат при изменении страны
+
+                                setSelectedCountryId(countryId); // Обновляем состояние для выбранной страны
+                            }}
                         >
                             <option value="">Select Country</option>
                             {countries.map((country) => (
