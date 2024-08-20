@@ -22,42 +22,14 @@ namespace Trendlink.Infrastructure.Authentication.Google
             CancellationToken cancellationToken
         )
         {
-            using var accessTokenRequestContent = new FormUrlEncodedContent(
-                new Dictionary<string, string>
-                {
-                    { "code", code },
-                    { "client_id", this._googleOptions.ClientId },
-                    { "client_secret", this._googleOptions.ClientSecret },
-                    { "redirect_uri", this._googleOptions.RedirectUri },
-                    { "grant_type", "authorization_code" }
-                }
-            );
-
-            using var request = new HttpRequestMessage(
-                HttpMethod.Post,
-                this._googleOptions.TokenUrl
-            )
-            {
-                Content = accessTokenRequestContent
-            };
-
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue(
-                "application/x-www-form-urlencoded"
-            );
+            using HttpRequestMessage request = this.CreateAccessTokenRequest(code);
 
             HttpResponseMessage response = await this._httpClient.SendAsync(
                 request,
                 cancellationToken
             );
 
-            if (response.IsSuccessStatusCode)
-            {
-                string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                return JsonSerializer.Deserialize<GoogleTokenResponse>(content);
-            }
-
-            return null;
+            return await ProcessResponseAsync<GoogleTokenResponse>(response, cancellationToken);
         }
 
         public async Task<GoogleUserInfo?> GetUserInfoAsync(
@@ -75,14 +47,46 @@ namespace Trendlink.Infrastructure.Authentication.Google
                 cancellationToken
             );
 
+            return await ProcessResponseAsync<GoogleUserInfo>(response, cancellationToken);
+        }
+
+        private HttpRequestMessage CreateAccessTokenRequest(string code)
+        {
+            var content = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "code", code },
+                    { "client_id", this._googleOptions.ClientId },
+                    { "client_secret", this._googleOptions.ClientSecret },
+                    { "redirect_uri", this._googleOptions.RedirectUri },
+                    { "grant_type", "authorization_code" }
+                }
+            );
+
+            var request = new HttpRequestMessage(HttpMethod.Post, this._googleOptions.TokenUrl)
+            {
+                Content = content
+            };
+
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue(
+                "application/x-www-form-urlencoded"
+            );
+
+            return request;
+        }
+
+        private static async Task<T?> ProcessResponseAsync<T>(
+            HttpResponseMessage response,
+            CancellationToken cancellationToken
+        )
+        {
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                return JsonSerializer.Deserialize<GoogleUserInfo>(content);
+                return JsonSerializer.Deserialize<T>(content);
             }
 
-            return null;
+            return default;
         }
     }
 }
