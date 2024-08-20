@@ -29,34 +29,45 @@ namespace Trendlink.Application.Users.LinkInstagram
             CancellationToken cancellationToken
         )
         {
-            InstagramTokenResponse? accessToken = await this._instagramService.GetAccessTokenAsync(
-                request.Code,
-                cancellationToken
-            );
-            if (accessToken is null)
-            {
-                return Result.Failure(UserErrors.InvalidCredentials);
-            }
-
-            InstagramUserInfo? userInfo = await this._instagramService.GetUserInfoAsync(
-                accessToken.AccessToken,
-                accessToken.UserId,
-                cancellationToken
-            );
-            if (userInfo is null)
-            {
-                return Result.Failure(UserErrors.InvalidCredentials);
-            }
-
-            bool isLinked = await this._jwtService.LinkInstagramAccountToKeycloakUserAsync(
+            bool isAlreadyLinked = await this._jwtService.IsInstagramAccountLinkedAsync(
                 this._userContext.IdentityId,
-                accessToken.UserId.ToString(CultureInfo.InvariantCulture),
-                userInfo.Username,
                 cancellationToken
             );
-            if (!isLinked)
+            if (isAlreadyLinked)
+            {
+                return Result.Failure(UserErrors.InstagramAccountAlreadyLinked);
+            }
+
+            FacebookTokenResponse? facebookAccessToken =
+                await this._instagramService.GetAccessTokenAsync(request.Code, cancellationToken);
+            if (facebookAccessToken is null)
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
+            }
+
+            Result<InstagramUserInfo> userInfoResult =
+                await this._instagramService.GetUserInfoAsync(
+                    facebookAccessToken.AccessToken,
+                    cancellationToken
+                );
+            if (userInfoResult.IsFailure)
+            {
+                return Result.Failure(userInfoResult.Error);
+            }
+
+            InstagramUserInfo userInfo = userInfoResult.Value;
+
+            Result result =
+                await this._jwtService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                    this._userContext.IdentityId,
+                    "instagram",
+                    userInfo.Id.ToString(CultureInfo.InvariantCulture),
+                    userInfo.BusinessDiscovery.Username,
+                    cancellationToken
+                );
+            if (result.IsFailure)
+            {
+                return Result.Failure(result.Error);
             }
 
             return Result.Success();

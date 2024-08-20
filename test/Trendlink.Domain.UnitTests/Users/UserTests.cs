@@ -31,7 +31,7 @@ namespace Trendlink.Domain.UnitTests.Users
             user.StateId.Should().Be(UserData.State.Id);
             user.Email.Should().Be(UserData.Email);
             user.PhoneNumber.Should().Be(UserData.PhoneNumber);
-            user.AccountType.Should().Be(AccountType.Personal);
+            user.AccountType.Should().Be(AccountType.Business);
             user.AccountCategory.Should().Be(AccountCategory.None);
             user.IdentityId.Should().Be(string.Empty);
         }

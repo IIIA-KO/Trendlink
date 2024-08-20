@@ -28,10 +28,16 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
-        Task<bool> LinkInstagramAccountToKeycloakUserAsync(
-            string userId,
+        Task<Result> LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+            string userIdentityId,
+            string providerName,
             string providerUserId,
             string providerUsername,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<bool> IsInstagramAccountLinkedAsync(
+            string userTdentityId,
             CancellationToken cancellationToken = default
         );
     }

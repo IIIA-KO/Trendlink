@@ -4,6 +4,9 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
 {
     public sealed class GoogleUserInfo
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
         [JsonPropertyName("email")]
         public string Email { get; set; }
 

@@ -13,6 +13,8 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
     internal sealed class RegisterUserWithGoogleCommandHandler
         : ICommandHandler<RegisterUserWithGoogleCommand, AccessTokenResponse>
     {
+        private const string ProviderName = "google";
+
         private readonly IGoogleService _googleService;
         private readonly IJwtService _jwtService;
         private readonly IAuthenticationService _authenticationService;
@@ -118,6 +120,19 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                 this._userRepository.Add(user);
 
                 await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+                Result linkGoogleResult =
+                    await this._jwtService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                        user.IdentityId,
+                        ProviderName,
+                        userInfo.Id,
+                        userInfo.Name,
+                        cancellationToken
+                    );
+                if (linkGoogleResult.IsFailure)
+                {
+                    return Result.Failure<AccessTokenResponse>(result.Error);
+                }
 
                 Result<AccessTokenResponse> tokenResult =
                     await this._jwtService.AuthenticateWithGoogleAsync(userInfo, cancellationToken);

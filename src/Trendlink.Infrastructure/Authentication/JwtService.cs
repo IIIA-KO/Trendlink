@@ -6,6 +6,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
@@ -22,6 +23,8 @@ namespace Trendlink.Infrastructure.Authentication
             DateTimeOffset AcquiredAt,
             int ExpiresIn
         );
+
+        internal record FederatedIdentity(string IdentityProvider, string UserId, string UserName);
 
         private static readonly Error AuthenticationFailed =
             new(
@@ -278,8 +281,9 @@ namespace Trendlink.Infrastructure.Authentication
             }
         }
 
-        public async Task<bool> LinkInstagramAccountToKeycloakUserAsync(
-            string userId,
+        public async Task<Result> LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+            string userIdentityId,
+            string providerName,
             string providerUserId,
             string providerUsername,
             CancellationToken cancellationToken = default
@@ -289,7 +293,7 @@ namespace Trendlink.Infrastructure.Authentication
 
             var identityProviderLink = new
             {
-                identityProvider = "instagram",
+                identityProvider = providerName,
                 userId = providerUserId,
                 userName = providerUsername
             };
@@ -302,7 +306,7 @@ namespace Trendlink.Infrastructure.Authentication
 
             using var request = new HttpRequestMessage(
                 HttpMethod.Post,
-                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userId}/federated-identity/instagram"
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}/federated-identity/{providerName}"
             )
             {
                 Content = requestContent
@@ -314,7 +318,39 @@ namespace Trendlink.Infrastructure.Authentication
                 cancellationToken
             );
 
-            return response.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode
+                ? Result.Success()
+                : Result.Failure(UserErrors.InvalidCredentials);
+        }
+
+        public async Task<bool> IsInstagramAccountLinkedAsync(
+            string userTdentityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
+
+            string requestUrl =
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userTdentityId}/federated-identity";
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return false;
+            }
+
+            List<FederatedIdentity>? federatedIdentities = JsonSerializer.Deserialize<
+                List<FederatedIdentity>
+            >(await response.Content.ReadAsStringAsync(cancellationToken));
+
+            return federatedIdentities?.Any(f => f.IdentityProvider == "instagram") ?? false;
         }
 
         public async Task<bool> CheckUserExistsInKeycloak(

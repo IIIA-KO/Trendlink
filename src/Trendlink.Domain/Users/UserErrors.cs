@@ -24,5 +24,20 @@ namespace Trendlink.Domain.Users
                 "User.RegistrationFailed ",
                 "Failed to register user authentication service failure"
             );
+
+        public static readonly Error InstagramAccountAlreadyLinked =
+            new("User.InstagramAccountAlreadyLinked ", "User has already linked instagram account");
+
+        public static readonly Error FailedToGetFacebookPage =
+            new(
+                "User.FailedToGetFacebookPage",
+                "Failed to get access to user's Facebook Business Page"
+            );
+
+        public static readonly Error MoreThanOneFacebookPage =
+            new(
+                "User.MoreThanOneFacebookPage",
+                "User has selected more than one Facebook Business Page"
+            );
     }
 }

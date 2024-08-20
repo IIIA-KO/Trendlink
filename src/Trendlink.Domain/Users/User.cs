@@ -52,7 +52,7 @@ namespace Trendlink.Domain.Users
 
         public Bio Bio { get; set; } = new Bio(string.Empty);
 
-        public AccountType AccountType { get; set; } = AccountType.Personal;
+        public AccountType AccountType { get; set; } = AccountType.Business;
 
         public AccountCategory AccountCategory { get; set; } = AccountCategory.None;
 
