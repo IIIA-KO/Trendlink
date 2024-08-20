@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Infrastructure.Authentication.Instagram
 {
@@ -25,7 +23,7 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            using var accessTokenRequestContent = new FormUrlEncodedContent(
+            using var content = new FormUrlEncodedContent(
                 new Dictionary<string, string>
                 {
                     { "client_id", this._instagramOptions.ClientId },
@@ -36,20 +34,17 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
                 }
             );
 
-            HttpResponseMessage response = await this._httpClient.PostAsync(
+            HttpResponseMessage response = await this.SendPostRequestAsync(
                 this._instagramOptions.TokenUrl,
-                accessTokenRequestContent,
+                content,
                 cancellationToken
             );
 
-            if (response.IsSuccessStatusCode)
-            {
-                string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                return JsonSerializer.Deserialize<FacebookTokenResponse>(content);
-            }
-
-            return null;
+            return response.IsSuccessStatusCode
+                ? JsonSerializer.Deserialize<FacebookTokenResponse>(
+                    await response.Content.ReadAsStringAsync(cancellationToken)
+                )
+                : null;
         }
 
         public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
@@ -101,49 +96,31 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            FacebookUserInfo? facebookUserInfo = await this.GetFacebookUserInfoAsync(
+            FacebookUserInfo? userInfo = await this.GetFacebookUserInfoAsync(
                 accessToken,
                 cancellationToken
             );
-            if (facebookUserInfo is null)
+            if (userInfo == null)
             {
                 return Result.Failure<string>(UserErrors.FailedToGetFacebookPage);
             }
 
-            string facebookUserAccountsRequestUrl =
-                $"{this._instagramOptions.BaseUrl}/{facebookUserInfo.Id}/accounts?access_token={accessToken}";
+            string accountsUrl =
+                $"{this._instagramOptions.BaseUrl}/{userInfo.Id}/accounts?access_token={accessToken}";
 
-            HttpResponseMessage facebookUserAccountsResponse = await this._httpClient.GetAsync(
-                facebookUserAccountsRequestUrl,
-                cancellationToken
-            );
-            if (!facebookUserAccountsResponse.IsSuccessStatusCode)
-            {
-                return Result.Failure<string>(UserErrors.FailedToGetFacebookPage);
-            }
-
-            string accountsResponse = await facebookUserAccountsResponse.Content.ReadAsStringAsync(
+            HttpResponseMessage response = await this.SendGetRequestAsync(
+                accountsUrl,
                 cancellationToken
             );
 
             FacebookAccountsResponse? accountsData =
-                JsonSerializer.Deserialize<FacebookAccountsResponse>(accountsResponse);
-            if (accountsData is null)
-            {
-                return Result.Failure<string>(UserErrors.FailedToGetFacebookPage);
-            }
+                JsonSerializer.Deserialize<FacebookAccountsResponse>(
+                    await response.Content.ReadAsStringAsync(cancellationToken)
+                );
 
-            if (accountsData.Data.Length == 0)
-            {
-                return Result.Failure<string>(UserErrors.FailedToGetFacebookPage);
-            }
-
-            if (accountsData.Data.Length > 1)
-            {
-                return Result.Failure<string>(UserErrors.MoreThanOneFacebookPage);
-            }
-
-            return accountsData.Data[0].Id;
+            return accountsData?.Data.Length == 1
+                ? Result.Success(accountsData.Data[0].Id)
+                : Result.Failure<string>(UserErrors.IncorrectFacebookPagesCount);
         }
 
         private async Task<FacebookUserInfo?> GetFacebookUserInfoAsync(
@@ -151,21 +128,17 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string facebookUserInforRequestUrl =
-                $"{this._instagramOptions.BaseUrl}me?access_token={accessToken}";
-
-            HttpResponseMessage facebookUserInfoResponse = await this._httpClient.GetAsync(
-                facebookUserInforRequestUrl,
+            string userInfoUrl = $"{this._instagramOptions.BaseUrl}me?access_token={accessToken}";
+            HttpResponseMessage response = await this.SendGetRequestAsync(
+                userInfoUrl,
                 cancellationToken
             );
-            if (!facebookUserInfoResponse.IsSuccessStatusCode)
-            {
-                return null;
-            }
 
-            string facebookUserInfoResponseContent =
-                await facebookUserInfoResponse.Content.ReadAsStringAsync(cancellationToken);
-            return JsonSerializer.Deserialize<FacebookUserInfo>(facebookUserInfoResponseContent);
+            return response.IsSuccessStatusCode
+                ? JsonSerializer.Deserialize<FacebookUserInfo>(
+                    await response.Content.ReadAsStringAsync(cancellationToken)
+                )
+                : null;
         }
 
         private async Task<InstagramBusinessAccountResponse> GetInstagramBusinessAccountAsync(
@@ -174,30 +147,33 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string instagramBusinessAccountRequestUrl =
+            string businessAccountUrl =
                 $"{this._instagramOptions.BaseUrl}{facebookPageId}?fields=instagram_business_account{{id,username}}&access_token={accessToken}";
-
-            HttpResponseMessage instagramBusinessAccountResponse = await this._httpClient.GetAsync(
-                instagramBusinessAccountRequestUrl,
+            HttpResponseMessage response = await this.SendGetRequestAsync(
+                businessAccountUrl,
                 cancellationToken
             );
 
-            string content = await instagramBusinessAccountResponse.Content.ReadAsStringAsync(
-                cancellationToken
+            return JsonSerializer.Deserialize<InstagramBusinessAccountResponse>(
+                await response.Content.ReadAsStringAsync(cancellationToken)
             );
+        }
 
-            InstagramBusinessAccountResponse? instagramBusinessAccount =
-                JsonSerializer.Deserialize<InstagramBusinessAccountResponse>(content);
+        private async Task<HttpResponseMessage> SendPostRequestAsync(
+            string url,
+            HttpContent content,
+            CancellationToken cancellationToken
+        )
+        {
+            return await this._httpClient.PostAsync(url, content, cancellationToken);
+        }
 
-            if (
-                instagramBusinessAccount is null
-                || instagramBusinessAccount.InstagramAccount is null
-            )
-            {
-                return null;
-            }
-
-            return instagramBusinessAccount;
+        private async Task<HttpResponseMessage> SendGetRequestAsync(
+            string url,
+            CancellationToken cancellationToken
+        )
+        {
+            return await this._httpClient.GetAsync(url, cancellationToken);
         }
     }
 }

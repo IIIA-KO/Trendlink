@@ -34,10 +34,10 @@ namespace Trendlink.Domain.Users
                 "Failed to get access to user's Facebook Business Page"
             );
 
-        public static readonly Error MoreThanOneFacebookPage =
+        public static readonly Error IncorrectFacebookPagesCount =
             new(
-                "User.MoreThanOneFacebookPage",
-                "User has selected more than one Facebook Business Page"
+                "User.IncorrectFacebookPagesCount",
+                "User has selected incorrect quantity of Facebook Pages. Required count is exactly one"
             );
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Net.Http;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
