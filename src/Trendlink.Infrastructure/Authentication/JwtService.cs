@@ -131,8 +131,9 @@ namespace Trendlink.Infrastructure.Authentication
                 : Result.Failure(UserErrors.InvalidCredentials);
         }
 
-        public async Task<bool> IsInstagramAccountLinkedAsync(
+        public async Task<bool> IsExternalIdentityProviderAccountAccountLinkedAsync(
             string userIdentityId,
+            string providerName,
             CancellationToken cancellationToken = default
         )
         {
@@ -155,7 +156,7 @@ namespace Trendlink.Infrastructure.Authentication
             List<FederatedIdentity>? federatedIdentities = await DeserializeResponseAsync<
                 List<FederatedIdentity>
             >(response, cancellationToken);
-            return federatedIdentities?.Any(f => f.IdentityProvider == "instagram") ?? false;
+            return federatedIdentities?.Any(f => f.IdentityProvider == providerName) ?? false;
         }
 
         public async Task<bool> CheckUserExistsInKeycloak(
@@ -179,8 +180,6 @@ namespace Trendlink.Infrastructure.Authentication
             return response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
         }
-
-        //---
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
         {

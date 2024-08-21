@@ -36,8 +36,9 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
-        Task<bool> IsInstagramAccountLinkedAsync(
+        Task<bool> IsExternalIdentityProviderAccountAccountLinkedAsync(
             string userIdentityId,
+            string providerName,
             CancellationToken cancellationToken = default
         );
     }

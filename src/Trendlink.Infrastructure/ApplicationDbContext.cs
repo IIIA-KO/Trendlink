@@ -39,9 +39,7 @@ namespace Trendlink.Infrastructure
             {
                 this.AddDomainEventsAsOutboxMessages();
 
-                int result = await base.SaveChangesAsync(cancellationToken);
-
-                return result;
+                return await base.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateConcurrencyException exception)
             {
