@@ -3,6 +3,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RegisterUserWithGoogle;
@@ -58,7 +59,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns((string?)null);
+                .Returns((GoogleTokenResponse?)null);
 
             // Act
             Result<AccessTokenResponse> result = await this._handler.Handle(Command, default);
@@ -73,7 +74,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
                 .Returns((GoogleUserInfo?)null);
@@ -91,7 +92,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
                 .Returns(new GoogleUserInfo());
@@ -111,7 +112,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo() { Email = UserData.Email.Value };
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
@@ -135,7 +136,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo() { Email = UserData.Email.Value };
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
@@ -161,7 +162,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo()
             {
@@ -202,7 +203,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo()
             {
@@ -236,7 +237,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo()
             {
@@ -273,7 +274,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo()
             {
@@ -310,7 +311,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             // Arrange
             this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
-                .Returns(UserData.Token.AccessToken);
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
 
             var userInfo = new GoogleUserInfo()
             {

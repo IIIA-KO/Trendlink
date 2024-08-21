@@ -1,12 +1,12 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Cooperations.PendCooperation

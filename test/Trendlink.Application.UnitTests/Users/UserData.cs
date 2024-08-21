@@ -38,7 +38,7 @@ namespace Trendlink.Application.UnitTests.Users
 
         public static readonly Bio Bio = new("Bio");
 
-        public static readonly AccountType AccountType = AccountType.Personal;
+        public static readonly AccountType AccountType = AccountType.Business;
 
         public static readonly AccountCategory AccountCategory = AccountCategory.Education;
     }

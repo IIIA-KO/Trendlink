@@ -3,6 +3,7 @@ using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Countries.GetStates;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.Countries;

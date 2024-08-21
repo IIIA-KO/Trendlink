@@ -1,6 +1,7 @@
 ﻿using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations;
 
-namespace Trendlink.Domain.Cooperations
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface ICooperationRepository
     {

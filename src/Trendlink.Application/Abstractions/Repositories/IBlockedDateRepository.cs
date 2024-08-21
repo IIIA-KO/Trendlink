@@ -1,6 +1,7 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Cooperations.BlockedDates;
+using Trendlink.Domain.Users.ValueObjects;
 
-namespace Trendlink.Domain.Cooperations.BlockedDates
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface IBlockedDateRepository
     {

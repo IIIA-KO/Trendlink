@@ -4,6 +4,7 @@ using NSubstitute;
 using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Notifications;
 using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.UnitTests.Users;

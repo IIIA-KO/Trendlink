@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
@@ -217,7 +218,7 @@ namespace Trendlink.Application.UnitTests.Users
                 DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-(UserData.MinimumAge - 1))),
                 UserData.State.Id,
                 UserData.Bio,
-                AccountType.Personal,
+                AccountType.Business,
                 AccountCategory.Education
             );
 

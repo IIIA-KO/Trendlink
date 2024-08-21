@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;

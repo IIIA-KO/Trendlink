@@ -1,7 +1,8 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Notifications.ValueObjects;
 
-namespace Trendlink.Domain.Notifications
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface INotificationRepository
     {

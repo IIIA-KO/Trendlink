@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure.Specifications.Conditions;

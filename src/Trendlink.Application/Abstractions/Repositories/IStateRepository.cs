@@ -1,4 +1,6 @@
-﻿namespace Trendlink.Domain.Users.States
+﻿using Trendlink.Domain.Users.States;
+
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface IStateRepository
     {

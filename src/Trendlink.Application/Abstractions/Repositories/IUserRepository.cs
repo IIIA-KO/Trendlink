@@ -1,6 +1,7 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.ValueObjects;
 
-namespace Trendlink.Domain.Users
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface IUserRepository
     {

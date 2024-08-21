@@ -1,6 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;

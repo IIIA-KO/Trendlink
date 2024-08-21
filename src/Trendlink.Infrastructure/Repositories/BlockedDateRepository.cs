@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Users.ValueObjects;
 

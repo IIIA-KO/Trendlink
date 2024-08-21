@@ -2,6 +2,7 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Calendar.UblockDate;
 using Trendlink.Application.UnitTests.Cooperations;
 using Trendlink.Domain.Abstraction;

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.UnitTests.Conditions;
 using Trendlink.Domain.Abstraction;

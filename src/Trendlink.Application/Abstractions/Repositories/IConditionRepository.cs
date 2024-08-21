@@ -1,6 +1,7 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Users.ValueObjects;
 
-namespace Trendlink.Domain.Conditions
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface IConditionRepository
     {

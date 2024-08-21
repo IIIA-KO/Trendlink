@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Application.Notifications.CreateNotification;
 using Trendlink.Application.UnitTests.Users;

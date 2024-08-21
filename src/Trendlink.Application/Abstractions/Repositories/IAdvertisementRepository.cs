@@ -1,6 +1,7 @@
-﻿using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+﻿using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 
-namespace Trendlink.Domain.Conditions.Advertisements
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface IAdvertisementRepository
     {

@@ -1,4 +1,6 @@
-﻿namespace Trendlink.Domain.Users.Countries
+﻿using Trendlink.Domain.Users.Countries;
+
+namespace Trendlink.Application.Abstractions.Repositories
 {
     public interface ICountryRepository
     {

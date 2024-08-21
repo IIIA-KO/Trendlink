@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using System.Net.Http;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
@@ -13,16 +13,22 @@ namespace Trendlink.Application.Users.LinkInstagram
         private readonly IUserContext _userContext;
         private readonly IInstagramService _instagramService;
         private readonly IJwtService _jwtService;
+        private readonly IUserTokenRepository _userTokenRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public LinkInstagramCommandHandler(
             IUserContext userContext,
             IInstagramService instagramService,
-            IJwtService jwtService
+            IJwtService jwtService,
+            IUserTokenRepository userTokenRepository,
+            IUnitOfWork unitOfWork
         )
         {
             this._userContext = userContext;
             this._instagramService = instagramService;
             this._jwtService = jwtService;
+            this._userTokenRepository = userTokenRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         public async Task<Result> Handle(
@@ -30,10 +36,12 @@ namespace Trendlink.Application.Users.LinkInstagram
             CancellationToken cancellationToken
         )
         {
-            bool isAlreadyLinked = await this._jwtService.IsInstagramAccountLinkedAsync(
-                this._userContext.IdentityId,
-                cancellationToken
-            );
+            bool isAlreadyLinked =
+                await this._jwtService.IsExternalIdentityProviderAccountAccountLinkedAsync(
+                    this._userContext.IdentityId,
+                    "instagram",
+                    cancellationToken
+                );
             if (isAlreadyLinked)
             {
                 return Result.Failure(UserErrors.InstagramAccountAlreadyLinked);
@@ -70,6 +78,11 @@ namespace Trendlink.Application.Users.LinkInstagram
             {
                 return Result.Failure(result.Error);
             }
+
+            var userToken = new UserToken(facebookAccessToken.AccessToken);
+            this._userTokenRepository.Add(userToken);
+
+            await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

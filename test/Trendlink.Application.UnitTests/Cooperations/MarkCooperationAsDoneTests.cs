@@ -2,6 +2,7 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
@@ -57,7 +58,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenUserIsNotAuthorized()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
+            Cooperation cooperation = CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
@@ -76,7 +77,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenMarkingFails()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
+            Cooperation cooperation = CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
@@ -95,9 +96,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            Cooperation cooperation = this.CreateConfirmedCooperation(
-                CooperationData.ScheduledOnUtc
-            );
+            Cooperation cooperation = CreateConfirmedCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);

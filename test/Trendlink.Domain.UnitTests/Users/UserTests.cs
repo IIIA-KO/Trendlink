@@ -209,7 +209,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 underageBirthDate,
                 UserData.State.Id,
                 UserData.Bio,
-                AccountType.Personal,
+                AccountType.Business,
                 AccountCategory.None
             );
 
