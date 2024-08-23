@@ -179,9 +179,9 @@ const RegisterForm: React.FC = () => {
                             onChange={async (e: ChangeEvent<HTMLSelectElement>) => {
                                 const countryId = e.target.value;
                                 setFieldValue('countryId', countryId);
-                                setFieldValue('stateId', ''); // Сбрасываем выбранный штат при изменении страны
+                                setFieldValue('stateId', '');
 
-                                setSelectedCountryId(countryId); // Обновляем состояние для выбранной страны
+                                setSelectedCountryId(countryId);
                             }}
                         >
                             <option value="">Select Country</option>
