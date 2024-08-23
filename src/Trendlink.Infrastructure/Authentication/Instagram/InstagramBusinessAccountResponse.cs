@@ -5,13 +5,13 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
     internal class InstagramBusinessAccountResponse
     {
         [JsonPropertyName("instagram_business_account")]
-        public InstagramAccount? InstagramAccount { get; set; }
+        public InstagramAccountResponse? InstagramAccount { get; set; }
 
         [JsonPropertyName("id")]
         public string FacebookBusinessPageId { get; set; }
     }
 
-    internal class InstagramAccount
+    internal class InstagramAccountResponse
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }

@@ -5,7 +5,6 @@ using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.UnitTests.Users
 {

@@ -6,7 +6,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Conditions.GetLoggedInUserCondition;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {

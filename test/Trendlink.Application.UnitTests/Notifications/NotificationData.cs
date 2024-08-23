@@ -1,6 +1,5 @@
 ﻿using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Notifications
 {

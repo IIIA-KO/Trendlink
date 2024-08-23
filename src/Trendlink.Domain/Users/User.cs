@@ -2,8 +2,9 @@
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Domain.Users
 {
@@ -40,6 +41,8 @@ namespace Trendlink.Domain.Users
 
         public LastName LastName { get; private set; }
 
+        public ProfilePicture? ProfilePicture { get; private set; }
+
         public DateOnly BirthDate { get; private set; }
 
         public Email Email { get; private set; }
@@ -59,6 +62,10 @@ namespace Trendlink.Domain.Users
         public string IdentityId { get; private set; } = string.Empty;
 
         public Condition? Condition { get; init; }
+
+        public UserToken? Token { get; set; }
+
+        public InstagramAccount? InstagramAccount { get; set; }
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 
@@ -189,6 +196,32 @@ namespace Trendlink.Domain.Users
                     nameof(identityId),
                     "IdentityId cannot be null."
                 );
+        }
+
+        public void SetProfilePicture(Uri uri)
+        {
+            ArgumentNullException.ThrowIfNull(uri);
+
+            this.ProfilePicture = new ProfilePicture(uri);
+        }
+
+        public void LinkInstagramAccount(
+            InstagramAccount instagramAccount,
+            string facebookAccessToken
+        )
+        {
+            ArgumentNullException.ThrowIfNull(instagramAccount);
+            ArgumentException.ThrowIfNullOrEmpty(facebookAccessToken);
+
+            this.InstagramAccount = instagramAccount;
+
+            this.RaiseDomainEvent(
+                new InstagramAccountLinkedDomainEvent(
+                    this.Id,
+                    instagramAccount,
+                    facebookAccessToken
+                )
+            );
         }
     }
 }

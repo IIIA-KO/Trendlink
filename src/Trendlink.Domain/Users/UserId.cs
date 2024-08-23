@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Users.ValueObjects
+﻿namespace Trendlink.Domain.Users
 {
     public record UserId(Guid Value)
     {

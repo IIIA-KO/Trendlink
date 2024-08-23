@@ -7,7 +7,6 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Cooperations.MarkCooperationAsDone

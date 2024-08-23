@@ -1,4 +1,4 @@
-﻿using Trendlink.Domain.Users;
+﻿using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {

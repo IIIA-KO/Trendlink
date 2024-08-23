@@ -8,7 +8,6 @@ using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 
 namespace Trendlink.Application.Cooperations.RejectCooperation
 {

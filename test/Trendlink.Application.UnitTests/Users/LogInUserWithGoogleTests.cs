@@ -8,7 +8,6 @@ using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.LoginUserWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Users
 {

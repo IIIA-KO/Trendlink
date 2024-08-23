@@ -2,7 +2,6 @@
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Infrastructure.Specifications.Notifications;
 
 namespace Trendlink.Infrastructure.Repositories

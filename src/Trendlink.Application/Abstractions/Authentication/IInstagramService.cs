@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Abstractions.Authentication
 {

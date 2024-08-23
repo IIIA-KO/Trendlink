@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Conditions.Advertisements;
 
 namespace Trendlink.Domain.UnitTests.Currencies
 {

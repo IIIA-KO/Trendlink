@@ -1,5 +1,4 @@
 ﻿using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {

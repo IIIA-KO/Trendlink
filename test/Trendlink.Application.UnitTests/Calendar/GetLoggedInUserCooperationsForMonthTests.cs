@@ -7,7 +7,7 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
 using Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Calendar
 {

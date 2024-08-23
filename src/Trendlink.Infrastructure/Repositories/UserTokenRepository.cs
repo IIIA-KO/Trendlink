@@ -1,5 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Infrastructure.Repositories
 {

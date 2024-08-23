@@ -5,7 +5,7 @@ using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.UnitTests.Advertisements;
 using Trendlink.Domain.UnitTests.Infrastructure;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.UnitTests.Cooperations
 {

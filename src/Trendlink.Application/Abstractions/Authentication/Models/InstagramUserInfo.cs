@@ -1,4 +1,7 @@
 ﻿using System.Text.Json.Serialization;
+using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Abstractions.Authentication.Models
 {
@@ -9,6 +12,25 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
 
         [JsonPropertyName("id")]
         public string Id { get; set; }
+
+        public string FacebookPageId { get; set; }
+
+        public InstagramAccount CreateInstagramAccount(UserId userId)
+        {
+            Result<InstagramAccount> result = InstagramAccount.Create(
+                userId,
+                new FacebookPageId(this.FacebookPageId),
+                new Metadata(
+                    this.Id,
+                    this.BusinessDiscovery.IgId,
+                    this.BusinessDiscovery.Username,
+                    this.BusinessDiscovery.FollowersCount,
+                    this.BusinessDiscovery.MediaCount
+                )
+            );
+
+            return result.Value;
+        }
     }
 
     public class BusinessDiscovery

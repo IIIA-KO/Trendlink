@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Notifications.CreateNotification;
 using Trendlink.Application.Notifications.MarkNotificationAsRead;
-using Trendlink.Domain.Notifications.ValueObjects;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Api.Controllers.Notifications
 {

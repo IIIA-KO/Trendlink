@@ -1,10 +1,8 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Cooperations
 {

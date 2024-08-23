@@ -1,5 +1,4 @@
 ﻿using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 
 namespace Trendlink.Infrastructure.Specifications.Notifications
 {

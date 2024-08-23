@@ -5,7 +5,7 @@ using Trendlink.Application.Advertisements.EditAdvertisement;
 using Trendlink.Application.Conditions.CreateCondition;
 using Trendlink.Application.Conditions.EditLoggedInUserCondition;
 using Trendlink.Application.Conditions.GetLoggedInUserCondition;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
 
 namespace Trendlink.Api.Controllers.Conditions

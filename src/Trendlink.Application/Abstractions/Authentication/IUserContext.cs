@@ -1,4 +1,4 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
+﻿using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Authentication
 {

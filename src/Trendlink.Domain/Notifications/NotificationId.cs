@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Notifications.ValueObjects
+﻿namespace Trendlink.Domain.Notifications
 {
     public sealed record NotificationId(Guid Value)
     {

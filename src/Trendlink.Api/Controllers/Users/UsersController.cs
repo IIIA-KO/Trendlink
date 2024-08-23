@@ -11,7 +11,6 @@ using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Application.Users.RegisterUserWithGoogle;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Api.Controllers.Users
 {

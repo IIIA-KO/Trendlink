@@ -1,5 +1,4 @@
 ﻿using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 
 namespace Trendlink.Infrastructure.Specifications.Advertisements
 {

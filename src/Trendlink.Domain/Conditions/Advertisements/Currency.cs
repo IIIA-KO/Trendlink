@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Conditions.Advertisements.ValueObjects
+﻿namespace Trendlink.Domain.Conditions.Advertisements
 {
     public sealed class Currency
     {

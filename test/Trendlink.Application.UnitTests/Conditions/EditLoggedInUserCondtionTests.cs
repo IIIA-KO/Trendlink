@@ -5,7 +5,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Conditions.EditLoggedInUserCondition;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {

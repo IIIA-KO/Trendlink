@@ -1,5 +1,5 @@
 ﻿using Trendlink.Domain.Cooperations.BlockedDates;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {

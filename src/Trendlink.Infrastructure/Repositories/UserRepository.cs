@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure.Specifications.Users;
 
 namespace Trendlink.Infrastructure.Repositories

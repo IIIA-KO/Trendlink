@@ -28,6 +28,12 @@ namespace Trendlink.Domain.Users
         public static readonly Error InstagramAccountAlreadyLinked =
             new("User.InstagramAccountAlreadyLinked ", "User has already linked instagram account");
 
+        public static readonly Error InstagramAccountDuplicate =
+            new(
+                "User.InstagramAccountDuplicate",
+                "Provided instagram account has already been linked"
+            );
+
         public static readonly Error FailedToGetFacebookPage =
             new(
                 "User.FailedToGetFacebookPage",

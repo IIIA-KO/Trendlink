@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.UnitTests.Infrastructure;
 
 namespace Trendlink.Domain.UnitTests.Notifications

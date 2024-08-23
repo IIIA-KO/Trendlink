@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Conditions.Advertisements.ValueObjects
+﻿namespace Trendlink.Domain.Conditions.Advertisements
 {
     public sealed record Money(decimal Amount, Currency Currency)
     {
