@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import AuthPage from "./pages/AuthPage.tsx";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from './components/ProtectedRoute';
+import CallBackPage from "./pages/CallBackPage.tsx";
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const App: React.FC = () => {
           <AuthProvider>
               <Routes>
                   <Route path="/login" element={<AuthPage />} />
+                  <Route path="/login/callback" element={<CallBackPage />}/>
                   <Route path="/" element={
                       <ProtectedRoute>
                           <HomePage />
