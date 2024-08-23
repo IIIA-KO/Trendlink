@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Authentication
 {

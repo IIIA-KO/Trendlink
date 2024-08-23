@@ -1,8 +1,8 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
+using System.Data;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Infrastructure.Authentication.Instagram;
@@ -72,7 +72,7 @@ namespace Trendlink.Infrastructure.Token
                     );
                 }
 
-                await this.UpdateUserTokensAsync(connection, transaction, userToken);
+                await this.UpdateUserTokenAsync(connection, transaction, userToken);
             }
 
             transaction.Commit();
@@ -86,10 +86,12 @@ namespace Trendlink.Infrastructure.Token
         )
         {
             string sql = $"""
-                SELECT id, access_token,
-                FROM user_token
+                SELECT 
+                    id AS Id, 
+                    access_token AS AccessToken
+                FROM user_tokens
                 WHERE last_checked_on_utc IS NULL
-                    OR last_checked_on_utc < NOW() - INTERVAL '{DaysToCheck} days'
+                    OR last_checked_on_utc < CURRENT_DATE - INTERVAL '{DaysToCheck} days'
                 ORDER BY last_checked_on_utc ASC NULLS FIRST
                 LIMIT {this._tokenOptions.BatchSize}
                 """;
@@ -100,7 +102,7 @@ namespace Trendlink.Infrastructure.Token
             return userTokens.ToList();
         }
 
-        private async Task UpdateUserTokensAsync(
+        private async Task UpdateUserTokenAsync(
             IDbConnection connection,
             IDbTransaction transaction,
             UserTokenResponse userToken

@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
@@ -7,7 +6,6 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
