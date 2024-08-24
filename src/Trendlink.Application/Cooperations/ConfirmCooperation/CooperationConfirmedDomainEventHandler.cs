@@ -13,19 +13,8 @@ using Trendlink.Domain.Users;
 namespace Trendlink.Application.Cooperations.ConfirmCooperation
 {
     internal sealed class CooperationConfirmedDomainEventHandler
-        : INotificationHandler<CooperationConfirmedDomainEvent>
+        : CooperationDomainEventHandler<CooperationConfirmedDomainEvent>
     {
-        private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.CooperationConfirmed
-        );
-
-        private readonly ICooperationRepository _cooperationRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IAdvertisementRepository _advertisementRepository;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
         public CooperationConfirmedDomainEventHandler(
             ICooperationRepository cooperationRepository,
             IUserRepository userRepository,
@@ -34,70 +23,39 @@ namespace Trendlink.Application.Cooperations.ConfirmCooperation
             INotificationRepository notificationRepository,
             IUnitOfWork unitOfWork
         )
+            : base(
+                cooperationRepository,
+                userRepository,
+                advertisementRepository,
+                dateTimeProvider,
+                notificationRepository,
+                unitOfWork
+            ) { }
+
+        protected override CompositeFormat MessageFormat =>
+            CompositeFormat.Parse(Resources.NotificationMessages.CooperationConfirmed);
+
+        protected override string GenerateMessage(Advertisement advertisement, User user)
         {
-            this._cooperationRepository = cooperationRepository;
-            this._userRepository = userRepository;
-            this._advertisementRepository = advertisementRepository;
-            this._dateTimeProvider = dateTimeProvider;
-            this._notificationRepository = notificationRepository;
-            this._unitOfWork = unitOfWork;
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                this.MessageFormat,
+                advertisement.Name.Value,
+                user.FirstName.Value
+            );
         }
 
-        public async Task Handle(
-            CooperationConfirmedDomainEvent notification,
+        protected override string GetNotificationTitle()
+        {
+            return "Cooperation Confirmed";
+        }
+
+        protected override async Task<User?> GetUserAsync(
+            Cooperation cooperation,
             CancellationToken cancellationToken
         )
         {
-            Cooperation? cooperation = await this._cooperationRepository.GetByIdAsync(
-                notification.CooperationId,
-                cancellationToken
-            );
-            if (cooperation is null)
-            {
-                return;
-            }
-
-            Advertisement? advertisement = await this._advertisementRepository.GetByIdAsync(
-                cooperation.AdvertisementId,
-                cancellationToken
-            );
-            if (advertisement is null)
-            {
-                return;
-            }
-
-            User? seller = await this._userRepository.GetByIdAsync(
-                cooperation.SellerId,
-                cancellationToken
-            );
-            if (seller is null)
-            {
-                return;
-            }
-
-            string cooperationConfirmedMessage = string.Format(
-                CultureInfo.CurrentCulture,
-                MessageFormat,
-                advertisement.Name.Value,
-                seller.FirstName.Value
-            );
-
-            Result<Notification> result = Notification.Create(
-                cooperation.BuyerId,
-                NotificationType.System,
-                new Title("Cooperation Confirmed"),
-                new Message(cooperationConfirmedMessage),
-                this._dateTimeProvider.UtcNow
-            );
-
-            if (result.IsFailure)
-            {
-                return;
-            }
-
-            this._notificationRepository.Add(result.Value);
-
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+            return await this._userRepository.GetByIdAsync(cooperation.SellerId, cancellationToken);
         }
     }
 }

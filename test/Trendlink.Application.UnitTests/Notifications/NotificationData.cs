@@ -6,7 +6,15 @@ namespace Trendlink.Application.UnitTests.Notifications
     internal static class NotificationData
     {
         public static Notification Create() =>
-            Notification.Create(UserId, NotificationType, Title, Message, CreatedOnUtc).Value;
+            NotificationBuilder
+                .CreateBuilder()
+                .ForUser(UserId)
+                .WithType(NotificationType)
+                .WithTitle(Title.Value)
+                .WithMessage(Message.Value)
+                .CreatedOn(CreatedOnUtc)
+                .Build()
+                .Value;
 
         public static readonly UserId UserId = UserId.New();
 

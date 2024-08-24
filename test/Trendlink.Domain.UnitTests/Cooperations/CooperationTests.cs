@@ -356,8 +356,8 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             cooperation.Cancel(utcNow);
 
             // Assert
-            CooperationsCancelledDomainEvent cooperationCancelledDomainEvent =
-                AssertDomainEventWasPublished<CooperationsCancelledDomainEvent, CooperationId>(
+            CooperationCancelledDomainEvent cooperationCancelledDomainEvent =
+                AssertDomainEventWasPublished<CooperationCancelledDomainEvent, CooperationId>(
                     cooperation
                 );
 

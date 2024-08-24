@@ -43,13 +43,14 @@ namespace Trendlink.Application.Notifications.CreateNotification
                 return Result.Failure<NotificationId>(UserErrors.NotFound);
             }
 
-            Result<Notification> result = Notification.Create(
-                user.Id,
-                request.NotificationType,
-                request.Title,
-                request.Message,
-                this._dateTimeProvider.UtcNow
-            );
+            Result<Notification> result = NotificationBuilder
+                .CreateBuilder()
+                .ForUser(user.Id)
+                .WithType(request.NotificationType)
+                .WithTitle(request.Title.Value)
+                .WithMessage(request.Message.Value)
+                .CreatedOn(this._dateTimeProvider.UtcNow)
+                .Build();
             if (result.IsFailure)
             {
                 return Result.Failure<NotificationId>(result.Error);

@@ -55,14 +55,14 @@ namespace Trendlink.Application.Users.RegisterUser
                 user.FirstName.Value
             );
 
-            Result<Notification> result = Notification.Create(
-                user.Id,
-                NotificationType.News,
-                new Title("Welcome to Trendlink!"),
-                new Message(welcomeMessage),
-                this._dateTimeProvider.UtcNow
-            );
-
+            Result<Notification> result = NotificationBuilder
+                .CreateBuilder()
+                .ForUser(user.Id)
+                .WithType(NotificationType.System)
+                .WithTitle("Welcome to Trendlink!")
+                .WithMessage(welcomeMessage)
+                .CreatedOn(this._dateTimeProvider.UtcNow)
+                .Build();
             if (result.IsFailure)
             {
                 return;
