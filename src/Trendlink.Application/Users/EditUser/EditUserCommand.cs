@@ -11,7 +11,6 @@ namespace Trendlink.Application.Users.EditUser
         DateOnly BirthDate,
         StateId StateId,
         Bio Bio,
-        AccountType AccountType,
         AccountCategory AccountCategory
     ) : ICommand;
 }

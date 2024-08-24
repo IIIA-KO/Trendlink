@@ -64,7 +64,6 @@ namespace Trendlink.Application.Users.EditUser
                 request.BirthDate,
                 request.StateId,
                 request.Bio,
-                request.AccountType,
                 request.AccountCategory
             );
 

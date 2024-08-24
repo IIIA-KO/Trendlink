@@ -5,6 +5,7 @@ using Trendlink.Application.Cooperations.ConfirmCooperation;
 using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Cooperations.RejectCooperation;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 

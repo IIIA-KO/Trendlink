@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Cooperations.BlockedDates;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Configurations.Cooperations
 {

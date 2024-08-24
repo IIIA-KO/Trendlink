@@ -10,6 +10,7 @@ using Trendlink.Application.Users.LoginUserWithGoogle;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Application.Users.RegisterUserWithGoogle;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Api.Controllers.Users
@@ -144,7 +145,6 @@ namespace Trendlink.Api.Controllers.Users
                 request.BirthDate,
                 new StateId(request.StateId),
                 new Bio(request.Bio),
-                request.AccountType,
                 request.AccountCategory
             );
 

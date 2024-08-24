@@ -19,7 +19,6 @@ namespace Trendlink.Application.UnitTests.Users
                 UserData.BirthDate,
                 UserData.State.Id,
                 UserData.Bio,
-                UserData.AccountType,
                 UserData.AccountCategory
             );
 
@@ -217,7 +216,6 @@ namespace Trendlink.Application.UnitTests.Users
                 DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-(UserData.MinimumAge - 1))),
                 UserData.State.Id,
                 UserData.Bio,
-                AccountType.Business,
                 AccountCategory.Education
             );
 

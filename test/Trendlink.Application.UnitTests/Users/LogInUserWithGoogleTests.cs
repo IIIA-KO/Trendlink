@@ -17,7 +17,7 @@ namespace Trendlink.Application.UnitTests.Users
 
         private readonly IGoogleService _googleServiceMock;
         private readonly IUserRepository _userRepositoryMock;
-        private readonly IJwtService _jwtServiceMock;
+        private readonly IKeycloakService _jwtServiceMock;
 
         private readonly LogInUserWithGoogleCommandHandler _handler;
 
@@ -25,7 +25,7 @@ namespace Trendlink.Application.UnitTests.Users
         {
             this._googleServiceMock = Substitute.For<IGoogleService>();
             this._userRepositoryMock = Substitute.For<IUserRepository>();
-            this._jwtServiceMock = Substitute.For<IJwtService>();
+            this._jwtServiceMock = Substitute.For<IKeycloakService>();
 
             this._handler = new LogInUserWithGoogleCommandHandler(
                 this._googleServiceMock,

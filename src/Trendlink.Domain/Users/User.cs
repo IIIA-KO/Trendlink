@@ -55,8 +55,6 @@ namespace Trendlink.Domain.Users
 
         public Bio Bio { get; set; } = new Bio(string.Empty);
 
-        public AccountType AccountType { get; set; } = AccountType.Business;
-
         public AccountCategory AccountCategory { get; set; } = AccountCategory.None;
 
         public string IdentityId { get; private set; } = string.Empty;
@@ -90,7 +88,6 @@ namespace Trendlink.Domain.Users
             DateOnly birthDate,
             StateId stateId,
             Bio bio,
-            AccountType accountType,
             AccountCategory accountCategory
         )
         {
@@ -104,7 +101,6 @@ namespace Trendlink.Domain.Users
             this.BirthDate = birthDate;
             this.StateId = stateId;
             this.Bio = bio;
-            this.AccountType = accountType;
             this.AccountCategory = accountCategory;
 
             return Result.Success();
@@ -207,7 +203,8 @@ namespace Trendlink.Domain.Users
 
         public void LinkInstagramAccount(
             InstagramAccount instagramAccount,
-            string facebookAccessToken
+            string facebookAccessToken,
+            DateTimeOffset expiresAt
         )
         {
             ArgumentNullException.ThrowIfNull(instagramAccount);
@@ -219,7 +216,8 @@ namespace Trendlink.Domain.Users
                 new InstagramAccountLinkedDomainEvent(
                     this.Id,
                     instagramAccount,
-                    facebookAccessToken
+                    facebookAccessToken,
+                    expiresAt
                 )
             );
         }

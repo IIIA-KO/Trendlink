@@ -12,13 +12,13 @@ namespace Trendlink.Application.UnitTests.Users
     {
         public static readonly RefreshTokenCommand Command = new(UserData.Token.RefreshToken);
 
-        private readonly IJwtService _jwtServiceMock;
+        private readonly IKeycloakService _jwtServiceMock;
 
         private readonly RefreshTokenCommandHandler _handler;
 
         public RefreshTokenTests()
         {
-            this._jwtServiceMock = Substitute.For<IJwtService>();
+            this._jwtServiceMock = Substitute.For<IKeycloakService>();
 
             this._handler = new RefreshTokenCommandHandler(this._jwtServiceMock);
         }

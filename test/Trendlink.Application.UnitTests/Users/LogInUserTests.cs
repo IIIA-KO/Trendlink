@@ -11,13 +11,13 @@ namespace Trendlink.Application.UnitTests.Users
     {
         public static readonly LogInUserCommand Command = new(UserData.Email, UserData.Password);
 
-        private readonly IJwtService _jwtServicMock;
+        private readonly IKeycloakService _jwtServicMock;
 
         private readonly LogInUserCommandHandler _handler;
 
         public LogInUserTests()
         {
-            this._jwtServicMock = Substitute.For<IJwtService>();
+            this._jwtServicMock = Substitute.For<IKeycloakService>();
 
             this._handler = new LogInUserCommandHandler(this._jwtServicMock);
         }
