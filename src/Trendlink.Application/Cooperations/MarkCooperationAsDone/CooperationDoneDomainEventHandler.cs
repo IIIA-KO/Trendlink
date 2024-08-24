@@ -1,89 +1,58 @@
 ﻿using System.Globalization;
 using System.Text;
-using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
 {
     internal class CooperationDoneDomainEventHandler
-        : INotificationHandler<CooperationDoneDomainEvent>
+        : CooperationDomainEventHandler<CooperationDoneDomainEvent>
     {
-        private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.CooperationDone
-        );
-
-        private readonly ICooperationRepository _cooperationRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly INotificationRepository _notificationRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
         public CooperationDoneDomainEventHandler(
             ICooperationRepository cooperationRepository,
             IUserRepository userRepository,
+            IAdvertisementRepository advertisementRepository,
             IDateTimeProvider dateTimeProvider,
             INotificationRepository notificationRepository,
             IUnitOfWork unitOfWork
         )
+            : base(
+                cooperationRepository,
+                userRepository,
+                advertisementRepository,
+                dateTimeProvider,
+                notificationRepository,
+                unitOfWork
+            ) { }
+
+        protected override CompositeFormat MessageFormat =>
+            CompositeFormat.Parse(Resources.NotificationMessages.CooperationDone);
+
+        protected override string GenerateMessage(Advertisement advertisement, User user)
         {
-            this._cooperationRepository = cooperationRepository;
-            this._userRepository = userRepository;
-            this._dateTimeProvider = dateTimeProvider;
-            this._notificationRepository = notificationRepository;
-            this._unitOfWork = unitOfWork;
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                this.MessageFormat,
+                user.FirstName.Value
+            );
         }
 
-        public async Task Handle(
-            CooperationDoneDomainEvent notification,
+        protected override string GetNotificationTitle()
+        {
+            return "Advertisement Done!";
+        }
+
+        protected override async Task<User?> GetUserAsync(
+            Cooperation cooperation,
             CancellationToken cancellationToken
         )
         {
-            Cooperation? cooperation = await this._cooperationRepository.GetByIdAsync(
-                notification.CooperationId,
-                cancellationToken
-            );
-            if (cooperation is null)
-            {
-                return;
-            }
-
-            User? seller = await this._userRepository.GetByIdAsync(
-                cooperation.SellerId,
-                cancellationToken
-            );
-            if (seller is null)
-            {
-                return;
-            }
-
-            string cooperationDoneMessage = string.Format(
-                CultureInfo.CurrentCulture,
-                MessageFormat,
-                seller.FirstName.Value
-            );
-
-            Result<Notification> result = Notification.Create(
-                cooperation.BuyerId,
-                NotificationType.System,
-                new Title("Advertisement Done!"),
-                new Message(cooperationDoneMessage),
-                this._dateTimeProvider.UtcNow
-            );
-
-            if (result.IsFailure)
-            {
-                return;
-            }
-
-            this._notificationRepository.Add(result.Value);
-
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+            return await this._userRepository.GetByIdAsync(cooperation.SellerId, cancellationToken);
         }
     }
 }

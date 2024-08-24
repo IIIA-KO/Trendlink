@@ -177,7 +177,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Cancelled;
             this.CancelledOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationCancelledDomainEvent(this.Id));
             return Result.Success();
         }
     }
