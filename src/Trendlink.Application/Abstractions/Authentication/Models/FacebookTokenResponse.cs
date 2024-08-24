@@ -6,5 +6,7 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
     {
         [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
+
+        public DateTimeOffset ExpiresAtUtc { get; set; }
     }
 }
