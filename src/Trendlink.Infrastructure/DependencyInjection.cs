@@ -179,8 +179,6 @@ namespace Trendlink.Infrastructure
             IConfiguration configuration
         )
         {
-            services.AddHttpClient<CheckUserTokensJob>();
-
             services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
             services.Configure<TokenOptions>(configuration.GetSection("Token"));
 
