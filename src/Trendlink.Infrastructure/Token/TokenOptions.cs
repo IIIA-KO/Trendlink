@@ -2,8 +2,6 @@
 {
     internal sealed class TokenOptions
     {
-        public int IntervalInSeconds { get; init; }
-
-        public int BatchSize { get; init; }
+        public int IntervalInHours { get; init; }
     }
 }

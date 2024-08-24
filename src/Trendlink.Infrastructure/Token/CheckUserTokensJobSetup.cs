@@ -23,7 +23,7 @@ namespace Trendlink.Infrastructure.Token
                         .ForJob(jobName)
                         .WithSimpleSchedule(schedule =>
                             schedule
-                                .WithIntervalInSeconds(this._tokenOptions.IntervalInSeconds)
+                                .WithIntervalInHours(this._tokenOptions.IntervalInHours)
                                 .RepeatForever()
                         )
                 );
