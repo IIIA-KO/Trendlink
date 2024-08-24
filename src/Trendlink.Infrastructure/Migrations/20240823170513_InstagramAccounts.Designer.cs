@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Trendlink.Infrastructure;
@@ -11,9 +12,11 @@ using Trendlink.Infrastructure;
 namespace Trendlink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823170513_InstagramAccounts")]
+    partial class InstagramAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,14 +362,6 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("access_token");
 
-                    b.Property<string>("Error")
-                        .HasColumnType("text")
-                        .HasColumnName("error");
-
-                    b.Property<DateTimeOffset>("ExpiresAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expires_at_utc");
-
                     b.Property<DateTime?>("LastCheckedOnUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_checked_on_utc");
@@ -555,7 +550,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasOne("Trendlink.Domain.Users.User", "User")
                         .WithOne("Condition")
                         .HasForeignKey("Trendlink.Domain.Conditions.Condition", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_conditions_users_user_id");
 
                     b.Navigation("User");
@@ -620,7 +614,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasOne("Trendlink.Domain.Users.User", "User")
                         .WithOne("InstagramAccount")
                         .HasForeignKey("Trendlink.Domain.Users.InstagramBusinessAccount.InstagramAccount", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_instagram_accounts_users_user_id");
 
                     b.OwnsOne("Trendlink.Domain.Users.InstagramBusinessAccount.Metadata", "Metadata", b1 =>
@@ -682,7 +675,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasOne("Trendlink.Domain.Users.User", "User")
                         .WithOne("Token")
                         .HasForeignKey("Trendlink.Domain.Users.Token.UserToken", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_user_tokens_users_user_id");
 
                     b.Navigation("User");

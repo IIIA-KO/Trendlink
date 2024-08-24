@@ -6,11 +6,12 @@ namespace Trendlink.Domain.Users.Token
     {
         private UserToken() { }
 
-        private UserToken(string accessToken, UserId userId)
+        private UserToken(UserId userId, string accessToken, DateTimeOffset expiresAtUtc)
         {
             this.Id = Guid.NewGuid();
-            this.AccessToken = accessToken;
             this.UserId = userId;
+            this.AccessToken = accessToken;
+            this.ExpiresAtUtc = expiresAtUtc;
         }
 
         public Guid Id { get; init; }
@@ -23,14 +24,22 @@ namespace Trendlink.Domain.Users.Token
 
         public DateTime? LastCheckedOnUtc { get; init; }
 
-        public static Result<UserToken> Create(string accessToken, UserId userId)
+        public DateTimeOffset ExpiresAtUtc { get; init; }
+
+        public string? Error { get; init; }
+
+        public static Result<UserToken> Create(
+            UserId userId,
+            string accessToken,
+            DateTimeOffset expiresAtUtc
+        )
         {
             if (string.IsNullOrEmpty(accessToken))
             {
                 return Result.Failure<UserToken>(UserTokenErrors.AccessTokenInvalid);
             }
 
-            return new UserToken(accessToken, userId);
+            return new UserToken(userId, accessToken, expiresAtUtc);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,6 +84,7 @@ namespace Trendlink.Infrastructure
             services.AddScoped<ICooperationRepository, CooperationRepository>();
             services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
             services.AddScoped<IUserTokenRepository, UserTokenRepository>();
+            services.AddScoped<IInstagramAccountRepository, InstagramAccountRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
@@ -125,7 +125,7 @@ namespace Trendlink.Infrastructure
                 )
                 .AddHttpMessageHandler<AdminAuthorizationDelegatingHandler>();
 
-            services.AddHttpClient<IJwtService, JwtService>(
+            services.AddHttpClient<IKeycloakService, KeycloakService>(
                 (serviceProvider, httpClient) =>
                 {
                     KeycloakOptions keycloakOptions = serviceProvider

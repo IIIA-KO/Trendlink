@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Token;
 
-namespace Trendlink.Infrastructure.Configurations
+namespace Trendlink.Infrastructure.Configurations.Users
 {
     internal sealed class UserTokenConfiguration : IEntityTypeConfiguration<UserToken>
     {
