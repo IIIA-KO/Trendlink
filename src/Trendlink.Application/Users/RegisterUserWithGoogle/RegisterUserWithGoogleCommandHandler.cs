@@ -16,7 +16,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
         private const string ProviderName = "google";
 
         private readonly IGoogleService _googleService;
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _jwtService;
         private readonly IAuthenticationService _authenticationService;
 
         private readonly IUserRepository _userRepository;
@@ -25,7 +25,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
 
         public RegisterUserWithGoogleCommandHandler(
             IGoogleService googleService,
-            IJwtService jwtService,
+            IKeycloakService jwtService,
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
             IStateRepository stateRepository,

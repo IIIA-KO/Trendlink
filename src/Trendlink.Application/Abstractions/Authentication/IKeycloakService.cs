@@ -5,7 +5,7 @@ using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenRes
 
 namespace Trendlink.Application.Abstractions.Authentication
 {
-    public interface IJwtService
+    public interface IKeycloakService
     {
         Task<Result<AccessTokenResponse>> GetAccessTokenAsync(
             Email email,
@@ -36,7 +36,7 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
-        Task<bool> IsExternalIdentityProviderAccountAccountLinkedAsync(
+        Task<bool> IsExternalIdentityProviderAccountLinkedAsync(
             string userIdentityId,
             string providerName,
             CancellationToken cancellationToken = default

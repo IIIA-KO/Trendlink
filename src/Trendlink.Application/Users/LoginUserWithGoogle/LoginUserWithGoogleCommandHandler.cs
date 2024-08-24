@@ -13,12 +13,12 @@ namespace Trendlink.Application.Users.LoginUserWithGoogle
     {
         private readonly IGoogleService _googleService;
         private readonly IUserRepository _userRepository;
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _jwtService;
 
         public LogInUserWithGoogleCommandHandler(
             IGoogleService googleService,
             IUserRepository userRepository,
-            IJwtService jwtService
+            IKeycloakService jwtService
         )
         {
             this._jwtService = jwtService;

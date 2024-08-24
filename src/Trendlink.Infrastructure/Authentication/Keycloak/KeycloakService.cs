@@ -1,28 +1,19 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Trendlink.Infrastructure.Authentication
+namespace Trendlink.Infrastructure.Authentication.Keycloak
 {
-    internal record CachedAuthorizationToken(
-        string AccessToken,
-        string RefreshToken,
-        DateTimeOffset AcquiredAt,
-        int ExpiresIn
-    );
-
-    internal record FederatedIdentity(string IdentityProvider, string UserId, string UserName);
-
-    internal sealed class JwtService : IJwtService
+    internal sealed class KeycloakService : IKeycloakService
     {
         private static readonly Error AuthenticationFailed =
             new(
@@ -33,20 +24,21 @@ namespace Trendlink.Infrastructure.Authentication
         private const string CacheKeyPrefix = "jwt:user-";
 
         private readonly HttpClient _httpClient;
-
         private readonly KeycloakOptions _keycloakOptions;
-
         private readonly ICacheService _cacheService;
+        private readonly ILogger<KeycloakService> _logger;
 
-        public JwtService(
+        public KeycloakService(
             HttpClient httpClient,
             IOptions<KeycloakOptions> keycloakOptions,
-            ICacheService cacheService
+            ICacheService cacheService,
+            ILogger<KeycloakService> logger
         )
         {
             this._httpClient = httpClient;
             this._keycloakOptions = keycloakOptions.Value;
             this._cacheService = cacheService;
+            this._logger = logger;
         }
 
         public async Task<Result<AccessTokenResponse>> GetAccessTokenAsync(
@@ -55,12 +47,21 @@ namespace Trendlink.Infrastructure.Authentication
             CancellationToken cancellationToken = default
         )
         {
+            this._logger.LogInformation(
+                "Attempting to get access token for email: {Email}",
+                email.Value
+            );
+
             CachedAuthorizationToken? cachedToken = await this.GetCachedAuthorizationTokenAsync(
                 email.Value,
                 cancellationToken
             );
             if (cachedToken is not null)
             {
+                this._logger.LogInformation(
+                    "Access token found in cache for email: {Email}",
+                    email.Value
+                );
                 return new AccessTokenResponse(
                     cachedToken.AccessToken,
                     cachedToken.RefreshToken,
@@ -68,11 +69,18 @@ namespace Trendlink.Infrastructure.Authentication
                 );
             }
 
-            return await this.RequestTokenAsync(
+            Result<AccessTokenResponse> result = await this.RequestTokenAsync(
                 this.GetPasswordGrantParameters(email.Value, password),
                 email: email.Value,
                 cancellationToken
             );
+
+            this._logger.LogInformation(
+                "Access token request completed for email: {Email}",
+                email.Value
+            );
+
+            return result;
         }
 
         public async Task<Result<AccessTokenResponse>> RefreshTokenAsync(
@@ -80,11 +88,17 @@ namespace Trendlink.Infrastructure.Authentication
             CancellationToken cancellationToken = default
         )
         {
-            return await this.RequestTokenAsync(
+            this._logger.LogInformation("Attempting to refresh access token");
+
+            Result<AccessTokenResponse> result = await this.RequestTokenAsync(
                 this.GetRefreshTokenGrantParameters(refreshToken),
                 email: null,
                 cancellationToken
             );
+
+            this._logger.LogInformation("Access token refresh completed");
+
+            return result;
         }
 
         public async Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
@@ -92,11 +106,23 @@ namespace Trendlink.Infrastructure.Authentication
             CancellationToken cancellationToken = default
         )
         {
-            return await this.RequestTokenAsync(
+            this._logger.LogInformation(
+                "Attempting to authenticate with Google for email: {Email}",
+                userInfo.Email
+            );
+
+            Result<AccessTokenResponse> result = await this.RequestTokenAsync(
                 this.GetPasswordGrantParameters(userInfo.Email, userInfo.Email),
                 email: userInfo.Email,
                 cancellationToken
             );
+
+            this._logger.LogInformation(
+                "Google authentication completed for email: {Email}",
+                userInfo.Email
+            );
+
+            return result;
         }
 
         public async Task<Result> LinkExternalIdentityProviderAccountToKeycloakUserAsync(
@@ -107,6 +133,12 @@ namespace Trendlink.Infrastructure.Authentication
             CancellationToken cancellationToken = default
         )
         {
+            this._logger.LogInformation(
+                "Linking external provider {ProviderName} to user {UserIdentityId}",
+                providerName,
+                userIdentityId
+            );
+
             string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
             string requestUrl =
                 $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}/federated-identity/{providerName}";
@@ -124,17 +156,38 @@ namespace Trendlink.Infrastructure.Authentication
                 cancellationToken
             );
 
-            return response.IsSuccessStatusCode
-                ? Result.Success()
-                : Result.Failure(UserErrors.InvalidCredentials);
+            if (response.IsSuccessStatusCode)
+            {
+                this._logger.LogInformation(
+                    "Successfully linked {ProviderName} account to user {UserIdentityId}",
+                    providerName,
+                    userIdentityId
+                );
+                return Result.Success();
+            }
+            else
+            {
+                this._logger.LogWarning(
+                    "Failed to link {ProviderName} account to user {UserIdentityId}",
+                    providerName,
+                    userIdentityId
+                );
+                return Result.Failure(UserErrors.InvalidCredentials);
+            }
         }
 
-        public async Task<bool> IsExternalIdentityProviderAccountAccountLinkedAsync(
+        public async Task<bool> IsExternalIdentityProviderAccountLinkedAsync(
             string userIdentityId,
             string providerName,
             CancellationToken cancellationToken = default
         )
         {
+            this._logger.LogInformation(
+                "Checking if external provider {ProviderName} is linked to user {UserIdentityId}",
+                providerName,
+                userIdentityId
+            );
+
             string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
             string requestUrl =
                 $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}/federated-identity";
@@ -148,13 +201,41 @@ namespace Trendlink.Infrastructure.Authentication
             );
             if (!response.IsSuccessStatusCode)
             {
+                this._logger.LogWarning(
+                    "Failed to get federated identities for user {UserIdentityId}. Status code: {StatusCode}",
+                    userIdentityId,
+                    response.StatusCode
+                );
                 return false;
             }
 
             List<FederatedIdentity>? federatedIdentities = await DeserializeResponseAsync<
                 List<FederatedIdentity>
             >(response, cancellationToken);
-            return federatedIdentities?.Any(f => f.IdentityProvider == providerName) ?? false;
+
+            bool isLinked =
+                federatedIdentities?.Any(f =>
+                    f.IdentityProvider.Equals(providerName, StringComparison.OrdinalIgnoreCase)
+                ) ?? false;
+
+            if (isLinked)
+            {
+                this._logger.LogInformation(
+                    "Provider {ProviderName} is linked to user {UserId}",
+                    providerName,
+                    userIdentityId
+                );
+            }
+            else
+            {
+                this._logger.LogInformation(
+                    "Provider {ProviderName} is not linked to user {UserId}",
+                    providerName,
+                    userIdentityId
+                );
+            }
+
+            return isLinked;
         }
 
         public async Task<bool> CheckUserExistsInKeycloak(
@@ -162,6 +243,11 @@ namespace Trendlink.Infrastructure.Authentication
             CancellationToken cancellationToken = default
         )
         {
+            this._logger.LogInformation(
+                "Checking if user with email {Email} exists in Keycloak",
+                email
+            );
+
             string requestUrl =
                 $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users?email={email}";
 
@@ -175,8 +261,17 @@ namespace Trendlink.Infrastructure.Authentication
                 cancellationToken
             );
 
-            return response.IsSuccessStatusCode
+            bool exists =
+                response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
+
+            this._logger.LogInformation(
+                "User with email {Email} {Exists} in Keycloak",
+                email,
+                exists ? "exists" : "does not exist"
+            );
+
+            return exists;
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)

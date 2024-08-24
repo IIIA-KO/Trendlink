@@ -9,9 +9,9 @@ namespace Trendlink.Application.Users.RefreshToken
     internal sealed class RefreshTokenCommandHandler
         : ICommandHandler<RefreshTokenCommand, AccessTokenResponse>
     {
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _jwtService;
 
-        public RefreshTokenCommandHandler(IJwtService jwtService)
+        public RefreshTokenCommandHandler(IKeycloakService jwtService)
         {
             this._jwtService = jwtService;
         }

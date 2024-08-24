@@ -8,9 +8,9 @@ namespace Trendlink.Application.Users.LogInUser
     internal sealed class LogInUserCommandHandler
         : ICommandHandler<LogInUserCommand, AccessTokenResponse>
     {
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _jwtService;
 
-        public LogInUserCommandHandler(IJwtService jwtService)
+        public LogInUserCommandHandler(IKeycloakService jwtService)
         {
             this._jwtService = jwtService;
         }
