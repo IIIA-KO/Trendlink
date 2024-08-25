@@ -55,20 +55,15 @@ namespace Trendlink.Application.Users.RegisterUser
                 user.FirstName.Value
             );
 
-            Result<Notification> result = NotificationBuilder
-                .CreateBuilder()
+            Notification builtNotification = NotificationBuilder
                 .ForUser(user.Id)
                 .WithType(NotificationType.System)
                 .WithTitle("Welcome to Trendlink!")
                 .WithMessage(welcomeMessage)
                 .CreatedOn(this._dateTimeProvider.UtcNow)
                 .Build();
-            if (result.IsFailure)
-            {
-                return;
-            }
 
-            this._notificationRepository.Add(result.Value);
+            this._notificationRepository.Add(builtNotification);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
         }

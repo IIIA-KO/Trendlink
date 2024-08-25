@@ -102,16 +102,14 @@ namespace Trendlink.Infrastructure.Token
         private void SendNotification(UserTokenResponse userToken)
         {
             Notification notification = NotificationBuilder
-                .CreateBuilder()
                 .ForUser(new UserId(userToken.UserId))
-                .WithType(NotificationType.System)
+                .WithType(NotificationType.Alert)
                 .WithTitle("Instagram permissions are expiring")
                 .WithMessage(
                     "We are going to lost access to your Instagram account in 7 days. Please, consider to give required permissions again in order to continue using Trendlink!"
                 )
                 .CreatedOn(this._dateTimeProvider.UtcNow)
-                .Build()
-                .Value;
+                .Build();
 
             this._notificationRepository.Add(notification);
         }

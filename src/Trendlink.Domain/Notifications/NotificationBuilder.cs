@@ -3,70 +3,75 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Notifications
 {
-    public sealed class NotificationBuilder
+    public sealed class NotificationBuilder : INotificationBuilder
     {
-        private UserId _userId;
-        private NotificationType _type;
-        private Title _title;
-        private Message _message;
-        private DateTime _createdOnUtc;
+        public UserId UserId { get; set; }
+        public NotificationType Type { get; set; }
+        public Title Title { get; set; }
+        public Message Message { get; set; }
+        public DateTime CreatedOnUtc { get; set; }
 
-        private NotificationBuilder() { }
-
-        public static NotificationBuilder CreateBuilder()
+        public NotificationBuilder()
         {
-            return new NotificationBuilder();
+            this.UserId = UserId.New();
+            this.Type = NotificationType.System;
+            this.Title = new Title(string.Empty);
+            this.Message = new Message(string.Empty);
+            this.CreatedOnUtc = DateTime.UtcNow;
         }
 
-        public NotificationBuilder ForUser(UserId userId)
+        public static IExpectsType ForUser(UserId userId)
         {
-            this._userId = userId;
+            return new NotificationBuilder { UserId = userId };
+        }
+
+        public IExpectsTitle WithType(NotificationType type)
+        {
+            this.Type = type;
             return this;
         }
 
-        public NotificationBuilder WithType(NotificationType type)
+        public IExpectsMessage WithTitle(string title)
         {
-            this._type = type;
+            this.Title = new Title(ValidateTitle(title));
             return this;
         }
 
-        public NotificationBuilder WithTitle(string title)
+        private static string ValidateTitle(string title)
         {
-            this._title = new Title(title);
+            return !string.IsNullOrEmpty(title)
+                ? title
+                : throw new ArgumentException("Title is required.", nameof(title));
+        }
+
+        public IExpectsCreationDate WithMessage(string message)
+        {
+            this.Message = new Message(ValidateMessage(message));
             return this;
         }
 
-        public NotificationBuilder WithMessage(string message)
+        private static string ValidateMessage(string message)
         {
-            this._message = new Message(message);
+            return !string.IsNullOrEmpty(message)
+                ? message
+                : throw new ArgumentException("Message is required.", nameof(message));
+        }
+
+        public INotificationBuilder CreatedOn(DateTime createdOnUtc)
+        {
+            this.CreatedOnUtc = createdOnUtc;
             return this;
         }
 
-        public NotificationBuilder CreatedOn(DateTime createdOnUtc)
+        public Notification Build()
         {
-            this._createdOnUtc = createdOnUtc;
-            return this;
-        }
-
-        public Result<Notification> Build()
-        {
-            if (
-                this._title is null
-                || string.IsNullOrEmpty(this._title.Value)
-                || this._message is null
-                || string.IsNullOrEmpty(this._message.Value)
-            )
-            {
-                return Result.Failure<Notification>(NotificationErrors.Invalid);
-            }
-
             return new Notification(
                 NotificationId.New(),
-                this._userId,
-                this._type,
-                this._title,
-                this._message,
-                this._createdOnUtc
+                this.UserId,
+                this.Type,
+                this.Title,
+                this.Message,
+                this.CreatedOnUtc
             );
         }
     }

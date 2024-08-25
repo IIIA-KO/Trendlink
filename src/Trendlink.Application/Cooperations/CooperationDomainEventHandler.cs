@@ -69,20 +69,15 @@ namespace Trendlink.Application.Cooperations
 
             string message = this.GenerateMessage(advertisement, user);
 
-            Result<Notification> result = NotificationBuilder
-                .CreateBuilder()
+            Notification builtNotification = NotificationBuilder
                 .ForUser(cooperation.SellerId)
                 .WithType(NotificationType.System)
                 .WithTitle(this.GetNotificationTitle())
                 .WithMessage(message)
                 .CreatedOn(this._dateTimeProvider.UtcNow)
                 .Build();
-            if (result.IsFailure)
-            {
-                return;
-            }
 
-            this._notificationRepository.Add(result.Value);
+            this._notificationRepository.Add(builtNotification);
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
