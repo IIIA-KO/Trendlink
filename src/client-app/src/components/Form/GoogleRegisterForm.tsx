@@ -4,16 +4,12 @@ import { getCountries, getStates } from '../../api/countriesAndStatesApi.ts';
 import { CountryType } from "../../models/CountryType.ts";
 import { StateType } from "../../models/StateType.ts";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import {clientId, redirectUri, scope, responseType} from "../../variables/GoogleAuthVar.ts";
 
 const GoogleRegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
     const [states, setStates] = useState<StateType[]>([]);
     const [selectedCountryId, setSelectedCountryId] = useState<string>('');
-
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const redirectUri = 'https://localhost:3000/login/callback';
-    const scope = 'openid profile email';
-    const responseType = 'code';
 
     const initialValues = {
         birthDate: '',
