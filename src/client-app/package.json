@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.0.20",
+    "@fontsource/kodchasan": "^5.0.21",
     "@microsoft/signalr": "^8.0.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/yup": "^0.32.0",
