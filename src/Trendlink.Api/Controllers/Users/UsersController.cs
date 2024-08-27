@@ -98,17 +98,6 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpPost("link-instagram")]
-        public async Task<IActionResult> LinkInstagram(
-            [FromBody] LinkInstagramRequest request,
-            CancellationToken cancellationToken
-        )
-        {
-            var command = new LinkInstagramCommand(request.Code);
-
-            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
-        }
-
         [HttpGet("notifications")]
         public async Task<IActionResult> GetLoggedInUserNotifications(
             CancellationToken cancellationToken

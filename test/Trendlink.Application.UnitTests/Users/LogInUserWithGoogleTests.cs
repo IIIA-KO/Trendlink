@@ -8,6 +8,7 @@ using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.LoginUserWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Users
 {
@@ -17,7 +18,7 @@ namespace Trendlink.Application.UnitTests.Users
 
         private readonly IGoogleService _googleServiceMock;
         private readonly IUserRepository _userRepositoryMock;
-        private readonly IKeycloakService _jwtServiceMock;
+        private readonly IKeycloakService _keycloakServiceMock;
 
         private readonly LogInUserWithGoogleCommandHandler _handler;
 
@@ -25,12 +26,12 @@ namespace Trendlink.Application.UnitTests.Users
         {
             this._googleServiceMock = Substitute.For<IGoogleService>();
             this._userRepositoryMock = Substitute.For<IUserRepository>();
-            this._jwtServiceMock = Substitute.For<IKeycloakService>();
+            this._keycloakServiceMock = Substitute.For<IKeycloakService>();
 
             this._handler = new LogInUserWithGoogleCommandHandler(
                 this._googleServiceMock,
                 this._userRepositoryMock,
-                this._jwtServiceMock
+                this._keycloakServiceMock
             );
         }
 
@@ -101,7 +102,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
                 .Returns(true);
 
-            this._jwtServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
+            this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Returns(Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials));
 
             // Act
@@ -126,7 +127,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
                 .Returns(true);
 
-            this._jwtServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
+            this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Throws(new HttpRequestException("Google service exception"));
 
             // Act
@@ -151,7 +152,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
                 .Returns(true);
 
-            this._jwtServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
+            this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Returns(UserData.Token);
 
             // Act

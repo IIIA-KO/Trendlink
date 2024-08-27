@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
 
-namespace Trendlink.Infrastructure.Token
+namespace Trendlink.Infrastructure.BackgroundJobs.Token
 {
     internal class CheckUserTokensJobSetup : IConfigureOptions<QuartzOptions>
     {

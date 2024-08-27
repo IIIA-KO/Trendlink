@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Infrastructure.Authentication.Instagram
 {
@@ -76,6 +76,71 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
                     "Failed to retrieve access token. Status code: {StatusCode}",
                     response.StatusCode
                 );
+
+                string errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                Console.WriteLine(errorContent);
+
+                return null;
+            }
+        }
+
+        public async Task<FacebookTokenResponse?> RenewAccessTokenAsync(
+            string code,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation(
+                "Attempting to renew access token using authorization code."
+            );
+
+            using var content = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    { "client_id", this._instagramOptions.ClientId },
+                    { "client_secret", this._instagramOptions.ClientSecret },
+                    { "grant_type", "authorization_code" },
+                    { "redirect_uri", this._instagramOptions.RenewRedirectUri },
+                    { "code", code }
+                }
+            );
+
+            HttpResponseMessage response = await this.SendPostRequestAsync(
+                this._instagramOptions.TokenUrl,
+                content,
+                cancellationToken
+            );
+
+            if (response.IsSuccessStatusCode)
+            {
+                this._logger.LogInformation("Successfully retrieved access token.");
+
+                FacebookTokenResponse? result = JsonSerializer.Deserialize<FacebookTokenResponse>(
+                    await response.Content.ReadAsStringAsync(cancellationToken)
+                );
+
+                DateTimeOffset? expiresAt = await this.GetDataExpirationTime(
+                    result!.AccessToken,
+                    cancellationToken
+                );
+                if (!expiresAt.HasValue)
+                {
+                    return null;
+                }
+
+                result.ExpiresAtUtc = expiresAt.Value;
+
+                return result;
+            }
+            else
+            {
+                this._logger.LogWarning(
+                    "Failed to renew access token. Status code: {StatusCode}",
+                    response.StatusCode
+                );
+
+                string errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                Console.WriteLine(errorContent);
+
                 return null;
             }
         }
@@ -215,7 +280,7 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             if (userInfo == null)
             {
                 this._logger.LogWarning("Failed to retrieve Facebook user info.");
-                return Result.Failure<string>(UserErrors.FailedToGetFacebookPage);
+                return Result.Failure<string>(InstagramAccountErrors.FailedToGetFacebookPage);
             }
 
             string accountsUrl =
@@ -239,7 +304,7 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             else
             {
                 this._logger.LogWarning("Incorrect number of Facebook pages found.");
-                return Result.Failure<string>(UserErrors.IncorrectFacebookPagesCount);
+                return Result.Failure<string>(InstagramAccountErrors.IncorrectFacebookPagesCount);
             }
         }
 

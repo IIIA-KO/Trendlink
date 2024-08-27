@@ -1,4 +1,6 @@
-﻿using Trendlink.Application.Abstractions.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Trendlink.Application.Abstractions.Repositories;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Infrastructure.Repositories
@@ -12,19 +14,37 @@ namespace Trendlink.Infrastructure.Repositories
             this._dbContext = dbContext;
         }
 
-        public async Task<UserToken?> GetByIdAsync(Guid id)
+        public async Task<UserToken?> GetByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken = default
+        )
         {
-            return await this._dbContext.Set<UserToken>().FindAsync(id);
+            return await this
+                ._dbContext.Set<UserToken>()
+                .FirstOrDefaultAsync(userToken => userToken.Id == id, cancellationToken);
+        }
+
+        public async Task<UserToken?> GetByUserIdAsync(
+            UserId userId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                ._dbContext.Set<UserToken>()
+                .FirstOrDefaultAsync<UserToken>(
+                    userToken => userToken.UserId == userId,
+                    cancellationToken
+                );
         }
 
         public void Add(UserToken userToken)
         {
-            this._dbContext.Set<UserToken>().Add(userToken);
+            this._dbContext.Add(userToken);
         }
 
-        public void Update(UserToken userToken)
+        public void Remove(UserToken userToken)
         {
-            this._dbContext.Set<UserToken>().Update(userToken);
+            this._dbContext.Remove(userToken);
         }
     }
 }

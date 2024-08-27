@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
 
-namespace Trendlink.Infrastructure.Outbox
+namespace Trendlink.Infrastructure.BackgroundJobs.Outbox
 {
     internal sealed class ProcessOutboxMessagesJobSetup : IConfigureOptions<QuartzOptions>
     {

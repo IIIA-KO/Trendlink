@@ -2,18 +2,18 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Users.RefreshToken
 {
     internal sealed class RefreshTokenCommandHandler
         : ICommandHandler<RefreshTokenCommand, AccessTokenResponse>
     {
-        private readonly IKeycloakService _jwtService;
+        private readonly IKeycloakService _keycloakService;
 
-        public RefreshTokenCommandHandler(IKeycloakService jwtService)
+        public RefreshTokenCommandHandler(IKeycloakService keycloakService)
         {
-            this._jwtService = jwtService;
+            this._keycloakService = keycloakService;
         }
 
         public async Task<Result<AccessTokenResponse>> Handle(
@@ -21,7 +21,7 @@ namespace Trendlink.Application.Users.RefreshToken
             CancellationToken cancellationToken
         )
         {
-            Result<AccessTokenResponse> result = await this._jwtService.RefreshTokenAsync(
+            Result<AccessTokenResponse> result = await this._keycloakService.RefreshTokenAsync(
                 request.RefreshToken,
                 cancellationToken
             );

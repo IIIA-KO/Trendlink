@@ -5,6 +5,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Application.UnitTests.Users

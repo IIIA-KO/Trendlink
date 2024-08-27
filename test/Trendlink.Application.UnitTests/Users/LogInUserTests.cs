@@ -3,7 +3,7 @@ using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Users
 {
@@ -61,7 +61,7 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenJwtServiceThrowsException()
+        public async Task Handle_Should_ReturnFailure_WhenKeycloakServiceThrowsException()
         {
             // Arrange
             this._jwtServicMock.GetAccessTokenAsync(

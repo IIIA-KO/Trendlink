@@ -9,7 +9,7 @@ using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Infrastructure.Outbox
+namespace Trendlink.Infrastructure.BackgroundJobs.Outbox
 {
     [DisallowConcurrentExecution]
     internal sealed class ProcessOutboxMessagesJob : IJob

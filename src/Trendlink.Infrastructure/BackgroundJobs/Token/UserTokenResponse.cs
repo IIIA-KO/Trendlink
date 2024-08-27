@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Infrastructure.Token
+﻿namespace Trendlink.Infrastructure.BackgroundJobs.Token
 {
     internal sealed record UserTokenResponse(
         Guid Id,

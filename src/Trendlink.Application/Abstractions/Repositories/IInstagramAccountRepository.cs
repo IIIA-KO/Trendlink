@@ -10,5 +10,7 @@ namespace Trendlink.Application.Abstractions.Repositories
         );
 
         void Add(InstagramAccount instagramAccount);
+
+        void Remove(InstagramAccount instagramAccount);
     }
 }

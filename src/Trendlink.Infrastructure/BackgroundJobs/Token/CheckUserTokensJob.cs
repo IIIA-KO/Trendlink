@@ -9,7 +9,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Infrastructure.Token
+namespace Trendlink.Infrastructure.BackgroundJobs.Token
 {
     internal class CheckUserTokensJob : IJob
     {
@@ -104,9 +104,9 @@ namespace Trendlink.Infrastructure.Token
             Notification notification = NotificationBuilder
                 .ForUser(new UserId(userToken.UserId))
                 .WithType(NotificationType.Alert)
-                .WithTitle("Instagram permissions are expiring")
+                .WithTitle("Renew Instagram Permissions to Continue Using Trendlink")
                 .WithMessage(
-                    "We are going to lost access to your Instagram account in 7 days. Please, consider to give required permissions again in order to continue using Trendlink!"
+                    "Your Instagram permissions will expire in 7 days.\r\nTo continue using all the features of Trendlink, please renew your permissions."
                 )
                 .CreatedOn(this._dateTimeProvider.UtcNow)
                 .Build();

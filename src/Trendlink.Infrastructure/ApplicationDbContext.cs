@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Exceptions;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Infrastructure.Outbox;
+using Trendlink.Infrastructure.BackgroundJobs.Outbox;
 
 namespace Trendlink.Infrastructure
 {

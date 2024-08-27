@@ -10,6 +10,11 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
+        Task<FacebookTokenResponse?> RenewAccessTokenAsync(
+            string code,
+            CancellationToken cancellationToken = default
+        );
+
         Task<Result<InstagramUserInfo>> GetUserInfoAsync(
             string accessToken,
             CancellationToken cancellationToken = default

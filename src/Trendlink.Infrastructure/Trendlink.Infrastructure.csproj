@@ -36,4 +36,8 @@
 		<InternalsVisibleTo Include="Trendlink.Api.FunctionalTests" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="BackgroundJobs\InstagramAccounts\" />
+	</ItemGroup>
+
 </Project>

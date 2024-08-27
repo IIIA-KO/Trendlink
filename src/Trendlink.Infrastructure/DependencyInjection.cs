@@ -18,17 +18,17 @@ using Trendlink.Infrastructure.Authentication.Google;
 using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
+using Trendlink.Infrastructure.BackgroundJobs.Outbox;
+using Trendlink.Infrastructure.BackgroundJobs.Token;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
-using Trendlink.Infrastructure.Outbox;
 using Trendlink.Infrastructure.Repositories;
 using Trendlink.Infrastructure.SignalR;
-using Trendlink.Infrastructure.Token;
 using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
 using AuthenticationService = Trendlink.Infrastructure.Authentication.AuthenticationService;
 using IAuthenticationService = Trendlink.Application.Abstractions.Authentication.IAuthenticationService;
-using TokenOptions = Trendlink.Infrastructure.Token.TokenOptions;
+using TokenOptions = Trendlink.Infrastructure.BackgroundJobs.Token.TokenOptions;
 
 namespace Trendlink.Infrastructure
 {

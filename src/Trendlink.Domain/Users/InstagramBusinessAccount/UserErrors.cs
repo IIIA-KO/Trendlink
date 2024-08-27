@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Domain.Users
+namespace Trendlink.Domain.Users.InstagramBusinessAccount
 {
     public static class UserErrors
     {
@@ -23,27 +23,6 @@ namespace Trendlink.Domain.Users
             new(
                 "User.RegistrationFailed ",
                 "Failed to register user authentication service failure"
-            );
-
-        public static readonly Error InstagramAccountAlreadyLinked =
-            new("User.InstagramAccountAlreadyLinked ", "User has already linked instagram account");
-
-        public static readonly Error InstagramAccountDuplicate =
-            new(
-                "User.InstagramAccountDuplicate",
-                "Provided instagram account has already been linked"
-            );
-
-        public static readonly Error FailedToGetFacebookPage =
-            new(
-                "User.FailedToGetFacebookPage",
-                "Failed to get access to user's Facebook Business Page"
-            );
-
-        public static readonly Error IncorrectFacebookPagesCount =
-            new(
-                "User.IncorrectFacebookPagesCount",
-                "User has selected incorrect quantity of Facebook Pages. Required count is exactly one"
             );
     }
 }

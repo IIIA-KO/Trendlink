@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Infrastructure.Outbox
+﻿namespace Trendlink.Infrastructure.BackgroundJobs.Outbox
 {
     internal sealed class OutboxOptions
     {

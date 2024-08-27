@@ -10,6 +10,8 @@
 
         public string RedirectUri { get; set; } = string.Empty;
 
+        public string RenewRedirectUri { get; set; } = string.Empty;
+
         public string TokenUrl { get; set; } = string.Empty;
 
         public string UserInfoUrl { get; set; } = string.Empty;

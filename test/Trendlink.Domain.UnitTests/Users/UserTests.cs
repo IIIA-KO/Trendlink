@@ -4,6 +4,7 @@ using Trendlink.Domain.UnitTests.Infrastructure;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Domain.UnitTests.Users

@@ -7,6 +7,7 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;

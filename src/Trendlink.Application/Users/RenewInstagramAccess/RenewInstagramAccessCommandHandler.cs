@@ -5,38 +5,46 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
+using Trendlink.Domain.Users.Token;
 
-namespace Trendlink.Application.Users.LinkInstagram
+namespace Trendlink.Application.Users.RelinkInstagram
 {
-    internal sealed class LinkInstagramCommandHandler : ICommandHandler<LinkInstagramCommand>
+    internal sealed class RenewInstagramAccessCommandHandler
+        : ICommandHandler<RenewInstagramAccessCommand>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IUserContext _userContext;
-        private readonly IInstagramService _instagramService;
+        private readonly IUserRepository _userRepository;
         private readonly IKeycloakService _keycloakService;
+        private readonly IInstagramService _instagramService;
+        private readonly IUserTokenRepository _userTokenRepository;
+        private readonly IInstagramAccountRepository _instagramAccountRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public LinkInstagramCommandHandler(
-            IUserRepository userRepository,
+        public RenewInstagramAccessCommandHandler(
             IUserContext userContext,
-            IInstagramService instagramService,
+            IUserRepository userRepository,
             IKeycloakService keycloakService,
+            IInstagramService instagramService,
+            IUserTokenRepository userTokenRepository,
+            IInstagramAccountRepository instagramAccountRepository,
             IUnitOfWork unitOfWork
         )
         {
-            this._userRepository = userRepository;
             this._userContext = userContext;
-            this._instagramService = instagramService;
+            this._userRepository = userRepository;
             this._keycloakService = keycloakService;
+            this._instagramService = instagramService;
+            this._userTokenRepository = userTokenRepository;
+            this._instagramAccountRepository = instagramAccountRepository;
             this._unitOfWork = unitOfWork;
         }
 
         public async Task<Result> Handle(
-            LinkInstagramCommand request,
+            RenewInstagramAccessCommand request,
             CancellationToken cancellationToken
         )
         {
-            User user = await this._userRepository.GetByIdAsync(
+            User user = await this._userRepository.GetByIdWithInstagramAccountAsync(
                 this._userContext.UserId,
                 cancellationToken
             );
@@ -47,15 +55,13 @@ namespace Trendlink.Application.Users.LinkInstagram
                     "instagram",
                     cancellationToken
                 );
-            if (isInstagramLinked)
+            if (!isInstagramLinked)
             {
-                return Result.Failure(InstagramAccountErrors.InstagramAccountAlreadyLinked);
+                return Result.Failure(InstagramAccountErrors.InstagramAccountNotLinked);
             }
 
-            FacebookTokenResponse? facebookToken = await this._instagramService.GetAccessTokenAsync(
-                request.Code,
-                cancellationToken
-            );
+            FacebookTokenResponse? facebookToken =
+                await this._instagramService.RenewAccessTokenAsync(request.Code, cancellationToken);
             if (facebookToken is null)
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
@@ -70,26 +76,22 @@ namespace Trendlink.Application.Users.LinkInstagram
             {
                 return Result.Failure(instagramUserInfoResult.Error);
             }
-            InstagramUserInfo instagramUserInfo = instagramUserInfoResult.Value;
 
-            user.Bio = new Bio(instagramUserInfo.BusinessDiscovery.Biography);
-            user.SetProfilePicture(new Uri(instagramUserInfo.BusinessDiscovery.ProfilePictureUrl));
+            InstagramAccount instagramAccount =
+                instagramUserInfoResult.Value.CreateInstagramAccount(user.Id);
 
-            InstagramAccount instagramAccount = instagramUserInfo.CreateInstagramAccount(user.Id);
-
-            Result linkInstagramResult =
-                await this._keycloakService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
-                    user.IdentityId,
-                    "instagram",
-                    instagramAccount.Metadata.Id,
-                    "instagram",
-                    cancellationToken
-                );
-            if (linkInstagramResult.IsFailure)
+            if (user.InstagramAccount!.Metadata.Id != instagramAccount.Metadata.Id)
             {
-                return Result.Failure(linkInstagramResult.Error);
+                return Result.Failure(InstagramAccountErrors.WrongInstagramAccount);
             }
 
+            UserToken? userToken = await this._userTokenRepository.GetByUserIdAsync(
+                user.Id,
+                cancellationToken
+            );
+            this._userTokenRepository.Remove(userToken!);
+
+            this._instagramAccountRepository.Remove(user.InstagramAccount);
             user.LinkInstagramAccount(
                 instagramAccount,
                 facebookToken.AccessToken,
