@@ -219,7 +219,7 @@ const RegisterForm: React.FC = () => {
                     <div className="flex justify-between items-center">
                         <button
                             type="submit"
-                            className="w-full h-[47px] py-2 bg-gray-800 text-white text-[1rem] mt-4 rounded-full transition duration-500 ease-in-out hover:bg-gray-700 hover:scale-110 active:scale-90 focus:scale-100 transform"
+                            className="w-full h-[47px] py-2 border-2 border-primary bg-primary text-textPrimary text-[1rem] mt-4 rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-110 active:bg-transparent active:border-primary active:text-textSecondary active:scale-90 focus:scale-100 transform"
                         >
                             Register
                         </button>
