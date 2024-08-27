@@ -5,6 +5,8 @@ import AuthPage from "./pages/AuthPage.tsx";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from './components/ProtectedRoute';
 import CallBackPage from "./pages/CallBackPage.tsx";
+import '@fontsource/kodchasan';
+import '@fontsource/inter'
 
 const App: React.FC = () => {
   return (
