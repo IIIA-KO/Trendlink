@@ -8,8 +8,9 @@ import { CountryType } from "../../models/CountryType.ts";
 import { StateType } from "../../models/StateType.ts";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
-import PasswordInputField from "../Input/PasswordInputField.tsx";
-import EmailInputFiled from "../Input/EmailInputField.tsx";
+import PasswordInputField from "../Inputs/PasswordInputField.tsx";
+import EmailInputFiled from "../Inputs/EmailInputField.tsx";
+import AuthSubButton from "../Buttons/AuthSubButton.tsx";
 
 const RegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -217,12 +218,7 @@ const RegisterForm: React.FC = () => {
                         />
                     </div>
                     <div className="flex justify-between items-center">
-                        <button
-                            type="submit"
-                            className="w-full h-[47px] py-2 border-2 border-primary bg-primary text-textPrimary text-[1rem] mt-4 rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-110 active:bg-transparent active:border-primary active:text-textSecondary active:scale-90 focus:scale-100 transform"
-                        >
-                            Register
-                        </button>
+                        <AuthSubButton buttonText="Register" />
                     </div>
                 </Form>
             )}

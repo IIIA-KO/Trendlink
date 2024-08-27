@@ -4,8 +4,9 @@ import useAuth from '../../hooks/useAuth.ts';
 import axios from "axios";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import PasswordInputField from "../Input/PasswordInputField.tsx";
-import EmailInputFiled from "../Input/EmailInputField.tsx";
+import PasswordInputField from "../Inputs/PasswordInputField.tsx";
+import EmailInputFiled from "../Inputs/EmailInputField.tsx";
+import AuthSubButton from "../Buttons/AuthSubButton.tsx";
 
 const LoginForm: React.FC = () => {
 
@@ -62,12 +63,7 @@ const LoginForm: React.FC = () => {
                     </div>
 
                     <div className="flex justify-between items-center">
-                        <button
-                            type="submit"
-                            className="w-full h-[47px] py-2 border-2 border-primary bg-primary text-textPrimary text-[1rem] mt-4 rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-110 active:scale-90 active:bg-transparent active:border-primary active:text-textSecondary focus:scale-100 transform"
-                        >
-                            Login
-                        </button>
+                        <AuthSubButton buttonText="Login" />
                     </div>
                 </Form>
         </Formik>
