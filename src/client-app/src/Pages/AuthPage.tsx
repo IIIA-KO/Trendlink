@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import LoginForm from '../components/Form/LoginForm.tsx';
+import LoginForm from '../components/Forms/LoginForm.tsx';
 import googleIcon from "../assets/icon-google.svg";
 import imgOne from "../assets/img1AuthPage.svg";
-import RegisterForm from "../components/Form/RegisterForm.tsx";
-import GoogleRegisterForm from "../components/Form/GoogleRegisterForm.tsx";
-import GoogleLoginForm from "../components/Form/GoogleLoginForm.tsx";
+import RegisterForm from "../components/Forms/RegisterForm.tsx";
+import GoogleRegisterForm from "../components/Forms/GoogleRegisterForm.tsx";
+import GoogleLoginForm from "../components/Forms/GoogleLoginForm.tsx";
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -15,11 +15,10 @@ const AuthPage: React.FC = () => {
     };
 
     return (
-        // min-h-screen flex flex-col items-start justify-between
         <div className="bg-background flex justify-between items-center h-screen w-screen">
             <div className="p-8 pt-16 max-w-xl w-full">
                 <div className="ml-16">
-                    <h1 className="text-center text-[1rem] font-inter font-bold mb-[2.7rem]">TrendLink</h1>
+                    <h1 className="text-center text-[1rem] font-inter font-bold mb-[2.3rem]">TrendLink</h1>
                     <p className="text-center text-[1.50rem] font-inter font-normal text-gray-600 mb-8">
                         A network for successful cooperation with bloggers
                     </p>
