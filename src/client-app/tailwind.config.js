@@ -6,10 +6,13 @@ export default {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
+        kodchasan: ['Kodchasan', 'sans-serif'],
       },
       fontWeight: {
         light: '300',
-        normal: '450',
+        regular: '400',
+        medium: '500',
+        semibold: '600',
         bold: '700',
       },
       colors: {
