@@ -18,8 +18,8 @@ const AuthPage: React.FC = () => {
         <div className="bg-background flex justify-between items-center h-screen w-screen">
             <div className="p-8 pt-16 max-w-xl w-full">
                 <div className="ml-16">
-                    <h1 className="text-center text-[1rem] font-inter font-bold mb-[2.3rem]">TrendLink</h1>
-                    <p className="text-center text-[1.50rem] font-inter font-normal text-gray-600 mb-8">
+                    <h1 className="text-center text-[1rem] font-kodchasan font-bold mb-[2.3rem]">TrendLink</h1>
+                    <p className="text-center text-[1.50rem] font-inter font-regular text-textSecondary mb-8">
                         A network for successful cooperation with bloggers
                     </p>
 
