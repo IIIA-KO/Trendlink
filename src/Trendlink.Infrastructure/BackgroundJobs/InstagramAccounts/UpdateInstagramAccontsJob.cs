@@ -146,6 +146,7 @@ namespace Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts
                 currentInstagramAccount.FacebookPageId,
                 currentInstagramAccount.MetadataUserName
             );
+
             if (userInfo is null)
             {
                 this._logger.LogWarning("Unable to get Instagram account metadata");
