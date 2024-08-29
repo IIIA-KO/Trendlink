@@ -18,6 +18,7 @@ using Trendlink.Infrastructure.Authentication.Google;
 using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
+using Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts;
 using Trendlink.Infrastructure.BackgroundJobs.Outbox;
 using Trendlink.Infrastructure.BackgroundJobs.Token;
 using Trendlink.Infrastructure.Caching;
@@ -188,6 +189,7 @@ namespace Trendlink.Infrastructure
 
             services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
             services.ConfigureOptions<CheckUserTokensJobSetup>();
+            services.ConfigureOptions<UpdateInstagramAccountJobSetup>();
         }
 
         private static void AddRealTimeServices(IServiceCollection services)

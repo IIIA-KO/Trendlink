@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Users.InstagramBusinessAccount;
+﻿using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {
@@ -6,6 +7,11 @@ namespace Trendlink.Application.Abstractions.Repositories
     {
         Task<InstagramAccount?> GetByIdAsync(
             InstagramAccountId id,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<InstagramAccount?> GetByUserIdAsync(
+            UserId userId,
             CancellationToken cancellationToken = default
         );
 

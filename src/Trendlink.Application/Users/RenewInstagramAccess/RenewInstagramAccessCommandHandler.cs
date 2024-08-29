@@ -7,7 +7,7 @@ using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.Token;
 
-namespace Trendlink.Application.Users.RelinkInstagram
+namespace Trendlink.Application.Users.RenewInstagramAccess
 {
     internal sealed class RenewInstagramAccessCommandHandler
         : ICommandHandler<RenewInstagramAccessCommand>

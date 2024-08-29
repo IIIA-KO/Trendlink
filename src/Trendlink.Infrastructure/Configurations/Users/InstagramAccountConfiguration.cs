@@ -37,6 +37,8 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .IsRequired();
 
             builder.OwnsOne(instagramAccount => instagramAccount.Metadata);
+
+            builder.HasIndex(instagramAccount => instagramAccount.LastUpdatedAtUtc);
         }
     }
 }

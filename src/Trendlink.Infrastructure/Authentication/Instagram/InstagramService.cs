@@ -196,6 +196,66 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
 
         public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
             string accessToken,
+            string facebookPageId,
+            string instagramUsername,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation("Attempting to get Instagram user info.");
+
+            InstagramBusinessAccountResponse instagramBusinessAccount =
+                await this.GetInstagramBusinessAccountAsync(
+                    accessToken,
+                    facebookPageId,
+                    cancellationToken
+                );
+
+            string instagramUserMetadataRequestUrl =
+                this._instagramOptions.BaseUrl
+                + (instagramBusinessAccount.InstagramAccount?.Id)
+                + $"?fields=business_discovery.username({instagramBusinessAccount.InstagramAccount?.UserName})"
+                + "{username,name,ig_id,id,profile_picture_url,biography,followers_count,media_count}"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage instagramUserMetadataResponse = await this._httpClient.GetAsync(
+                instagramUserMetadataRequestUrl,
+                cancellationToken
+            );
+            if (!instagramUserMetadataResponse.IsSuccessStatusCode)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Instagram user info. Status code: {StatusCode}",
+                    instagramUserMetadataResponse.StatusCode
+                );
+                return Result.Failure<InstagramUserInfo>(UserErrors.InvalidCredentials);
+            }
+
+            string content = await instagramUserMetadataResponse.Content.ReadAsStringAsync(
+                cancellationToken
+            );
+
+            InstagramUserInfo? instagramUserInfo = JsonSerializer.Deserialize<InstagramUserInfo>(
+                content
+            );
+
+            if (instagramUserInfo != null)
+            {
+                instagramUserInfo.FacebookPageId = facebookPageId;
+                this._logger.LogInformation(
+                    "Successfully retrieved Instagram user info for user {Username}",
+                    instagramUserInfo.BusinessDiscovery.Username
+                );
+            }
+            else
+            {
+                this._logger.LogWarning("Failed to deserialize Instagram user info.");
+            }
+
+            return instagramUserInfo;
+        }
+
+        public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+            string accessToken,
             CancellationToken cancellationToken = default
         )
         {

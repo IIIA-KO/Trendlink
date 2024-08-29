@@ -31,10 +31,7 @@ namespace Trendlink.Infrastructure.Repositories
         {
             return await this
                 ._dbContext.Set<UserToken>()
-                .FirstOrDefaultAsync<UserToken>(
-                    userToken => userToken.UserId == userId,
-                    cancellationToken
-                );
+                .FirstOrDefaultAsync(userToken => userToken.UserId == userId, cancellationToken);
         }
 
         public void Add(UserToken userToken)

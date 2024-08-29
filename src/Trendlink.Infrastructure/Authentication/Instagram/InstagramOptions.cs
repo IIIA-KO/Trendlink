@@ -15,5 +15,9 @@
         public string TokenUrl { get; set; } = string.Empty;
 
         public string UserInfoUrl { get; set; } = string.Empty;
+
+        public int IntervalInSeconds { get; init; }
+
+        public int BatchSize { get; init; }
     }
 }
