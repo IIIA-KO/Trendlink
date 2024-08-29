@@ -14,6 +14,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
                     Name,
                     Description,
                     ScheduledOnUtc,
+                    AdvertisementData.Price,
                     AdvertisementData.Create(),
                     BuyerId,
                     SellerId,

@@ -1,5 +1,4 @@
-﻿using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+﻿using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Notifications
 {

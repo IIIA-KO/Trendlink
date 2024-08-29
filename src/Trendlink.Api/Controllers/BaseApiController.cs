@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Trendlink.Api.Extensions;
+using Trendlink.Application.Pagination;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Api.Controllers
@@ -30,6 +32,26 @@ namespace Trendlink.Api.Controllers
             }
 
             return this.HandleError(result.Error);
+        }
+
+        protected IActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
+        {
+            switch (result.IsSuccess)
+            {
+                case true when result.Value is not null:
+                    this.Response.AddPaginationHeader(
+                        result.Value.PageNumber,
+                        result.Value.PageSize,
+                        result.Value.TotalCount,
+                        result.Value.TotalPages,
+                        result.Value.HasNextPage,
+                        result.Value.HasPreviousPage
+                    );
+                    return this.Ok(result.Value);
+
+                default:
+                    return this.HandleError(result.Error);
+            }
         }
 
         private IActionResult HandleError(Error error)

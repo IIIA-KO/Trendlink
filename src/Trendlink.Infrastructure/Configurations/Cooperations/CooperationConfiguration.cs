@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 
@@ -28,6 +29,15 @@ namespace Trendlink.Infrastructure.Configurations.Cooperations
                 .IsRequired();
 
             builder.Property(cooperation => cooperation.ScheduledOnUtc).IsRequired();
+
+            builder.OwnsOne(
+                cooperation => cooperation.Price,
+                priceBuilder =>
+                    priceBuilder
+                        .Property(money => money.Currency)
+                        .HasConversion(currency => currency.Code, code => Currency.FromCode(code))
+                        .IsRequired()
+            );
 
             builder
                 .HasOne(cooperation => cooperation.Advertisement)

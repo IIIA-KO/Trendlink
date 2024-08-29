@@ -104,6 +104,7 @@ namespace Trendlink.Application.Cooperations.PendCooperation
                     request.Name,
                     request.Description,
                     request.ScheduledOnUtc,
+                    advertisement.Price,
                     advertisement,
                     buyerId,
                     sellerCondition.UserId,

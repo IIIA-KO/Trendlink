@@ -12,6 +12,10 @@ namespace Trendlink.Application.Calendar
 
         public DateTimeOffset ScheduledOnUtc { get; init; }
 
+        public decimal PriceAmount { get; init; }
+
+        public string PriceCurrency { get; init; }
+
         public Guid AdvertisementId { get; init; }
 
         public Guid BuyerId { get; init; }

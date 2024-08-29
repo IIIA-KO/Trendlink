@@ -26,5 +26,7 @@ namespace Trendlink.Application.Abstractions.Repositories
             NotificationId notificationId,
             CancellationToken cancellationToken = default
         );
+
+        IQueryable<Notification> DbSetAsQueryable();
     }
 }

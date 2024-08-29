@@ -25,5 +25,7 @@ namespace Trendlink.Application.Abstractions.Repositories
         void Add(BlockedDate date);
 
         void Remove(BlockedDate date);
+
+        IQueryable<BlockedDate> DbSetAsQueryable();
     }
 }

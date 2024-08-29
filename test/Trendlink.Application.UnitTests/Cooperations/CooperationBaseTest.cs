@@ -13,6 +13,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
+                    AdvertisementData.Price,
                     AdvertisementData.Create(),
                     UserId.New(),
                     UserId.New(),
