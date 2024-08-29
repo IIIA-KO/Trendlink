@@ -17,6 +17,8 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .Property(userToken => userToken.UserId)
                 .HasConversion(userId => userId.Value, value => new UserId(value))
                 .IsRequired();
+
+            builder.HasIndex(userToken => userToken.ExpiresAtUtc);
         }
     }
 }

@@ -10,6 +10,8 @@ namespace Trendlink.Application.Users.LinkInstagram
 {
     internal sealed class LinkInstagramCommandHandler : ICommandHandler<LinkInstagramCommand>
     {
+        private const string ProviderName = "instagram";
+
         private readonly IUserRepository _userRepository;
         private readonly IUserContext _userContext;
         private readonly IInstagramService _instagramService;
@@ -44,7 +46,7 @@ namespace Trendlink.Application.Users.LinkInstagram
             bool isInstagramLinked =
                 await this._keycloakService.IsExternalIdentityProviderAccountLinkedAsync(
                     user!.IdentityId,
-                    "instagram",
+                    ProviderName,
                     cancellationToken
                 );
             if (isInstagramLinked)
@@ -80,9 +82,9 @@ namespace Trendlink.Application.Users.LinkInstagram
             Result linkInstagramResult =
                 await this._keycloakService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
                     user.IdentityId,
-                    "instagram",
+                    ProviderName,
                     instagramAccount.Metadata.Id,
-                    "instagram",
+                    instagramAccount.Metadata.UserName,
                     cancellationToken
                 );
             if (linkInstagramResult.IsFailure)

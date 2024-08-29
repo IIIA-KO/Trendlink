@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Trendlink.Infrastructure;
@@ -11,9 +12,11 @@ using Trendlink.Infrastructure;
 namespace Trendlink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240828125632_Added_LastUpdatedAtUtc_Property_for_InstagramAccount")]
+    partial class Added_LastUpdatedAtUtc_Property_for_InstagramAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,9 +288,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_instagram_accounts");
 
-                    b.HasIndex("LastUpdatedAtUtc")
-                        .HasDatabaseName("ix_instagram_accounts_last_updated_at_utc");
-
                     b.HasIndex("UserId")
                         .IsUnique()
                         .HasDatabaseName("ix_instagram_accounts_user_id");
@@ -384,9 +384,6 @@ namespace Trendlink.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_user_tokens");
-
-                    b.HasIndex("ExpiresAtUtc")
-                        .HasDatabaseName("ix_user_tokens_expires_at_utc");
 
                     b.HasIndex("UserId")
                         .IsUnique()

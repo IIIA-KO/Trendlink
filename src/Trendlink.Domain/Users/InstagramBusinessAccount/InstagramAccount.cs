@@ -27,6 +27,8 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
 
         public Metadata Metadata { get; private set; }
 
+        public DateTime? LastUpdatedAtUtc { get; set; }
+
         public static Result<InstagramAccount> Create(
             UserId userId,
             FacebookPageId facebookPageId,
@@ -46,6 +48,11 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
             }
 
             return new InstagramAccount(InstagramAccountId.New(), userId, facebookPageId, metadata);
+        }
+
+        public void Update(InstagramAccount updatedInstagramAccount)
+        {
+            this.Metadata = updatedInstagramAccount.Metadata;
         }
     }
 }

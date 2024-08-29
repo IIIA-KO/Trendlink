@@ -14,7 +14,7 @@ namespace Trendlink.Infrastructure.BackgroundJobs.Token
 
         public void Configure(QuartzOptions options)
         {
-            const string jobName = nameof(CheckUserTokensJobSetup);
+            const string jobName = nameof(CheckUserTokensJob);
 
             options
                 .AddJob<CheckUserTokensJob>(configure => configure.WithIdentity(jobName))

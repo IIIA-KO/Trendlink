@@ -11,7 +11,8 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.BackgroundJobs.Token
 {
-    internal class CheckUserTokensJob : IJob
+    [DisallowConcurrentExecution]
+    internal sealed class CheckUserTokensJob : IJob
     {
         private const int DaysToCheck = 7;
 
@@ -77,6 +78,21 @@ namespace Trendlink.Infrastructure.BackgroundJobs.Token
             this._logger.LogInformation("Completed checking user tokens");
         }
 
+        private void SendNotification(UserTokenResponse userToken)
+        {
+            Notification notification = NotificationBuilder
+                .ForUser(new UserId(userToken.UserId))
+                .WithType(NotificationType.Alert)
+                .WithTitle("Renew Instagram Permissions to Continue Using Trendlink")
+                .WithMessage(
+                    "Your Instagram permissions will expire in 7 days.\r\nTo continue using all the features of Trendlink, please renew your permissions."
+                )
+                .CreatedOn(this._dateTimeProvider.UtcNow)
+                .Build();
+
+            this._notificationRepository.Add(notification);
+        }
+
         private static async Task<IReadOnlyList<UserTokenResponse>> GetUserTokensAsync(
             IDbConnection connection,
             IDbTransaction transaction
@@ -97,21 +113,6 @@ namespace Trendlink.Infrastructure.BackgroundJobs.Token
                 await connection.QueryAsync<UserTokenResponse>(sql, transaction: transaction);
 
             return userTokens.ToList();
-        }
-
-        private void SendNotification(UserTokenResponse userToken)
-        {
-            Notification notification = NotificationBuilder
-                .ForUser(new UserId(userToken.UserId))
-                .WithType(NotificationType.Alert)
-                .WithTitle("Renew Instagram Permissions to Continue Using Trendlink")
-                .WithMessage(
-                    "Your Instagram permissions will expire in 7 days.\r\nTo continue using all the features of Trendlink, please renew your permissions."
-                )
-                .CreatedOn(this._dateTimeProvider.UtcNow)
-                .Build();
-
-            this._notificationRepository.Add(notification);
         }
 
         private async Task UpdateUserTokenAsync(
