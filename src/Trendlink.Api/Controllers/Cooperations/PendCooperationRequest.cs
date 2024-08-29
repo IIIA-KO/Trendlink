@@ -12,6 +12,11 @@ namespace Trendlink.Api.Controllers.Cooperations
         public DateTimeOffset ScheduledOnUtc { get; init; }
 
         [JsonRequired]
+        public decimal PriceAmount { get; init; }
+
+        public string PriceCurrency { get; init; }
+
+        [JsonRequired]
         public Guid AdvertisementId { get; init; }
     }
 }

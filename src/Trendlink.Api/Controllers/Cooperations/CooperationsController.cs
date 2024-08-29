@@ -24,6 +24,7 @@ namespace Trendlink.Api.Controllers.Cooperations
                 new Name(request.Name),
                 new Description(request.Description),
                 request.ScheduledOnUtc,
+                new Money(request.PriceAmount, Currency.FromCode(request.PriceCurrency)),
                 new AdvertisementId(request.AdvertisementId)
             );
 

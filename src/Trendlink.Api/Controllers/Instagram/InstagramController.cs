@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Users.Instagarm.Instagarm.GetUserPosts;
 using Trendlink.Application.Users.Instagarm.LinkInstagram;

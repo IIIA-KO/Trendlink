@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Trendlink.Infrastructure;
@@ -11,9 +12,11 @@ using Trendlink.Infrastructure;
 namespace Trendlink.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240806155217_Added_Price_to_Cooperation")]
+    partial class Added_Price_to_Cooperation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,38 +266,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("countries", (string)null);
                 });
 
-            modelBuilder.Entity("Trendlink.Domain.Users.InstagramBusinessAccount.InstagramAccount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("FacebookPageId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("facebook_page_id");
-
-                    b.Property<DateTime?>("LastUpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_updated_at_utc");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_instagram_accounts");
-
-                    b.HasIndex("LastUpdatedAtUtc")
-                        .HasDatabaseName("ix_instagram_accounts_last_updated_at_utc");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_instagram_accounts_user_id");
-
-                    b.ToTable("instagram_accounts", (string)null);
-                });
-
             modelBuilder.Entity("Trendlink.Domain.Users.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -354,47 +325,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("states", (string)null);
                 });
 
-            modelBuilder.Entity("Trendlink.Domain.Users.Token.UserToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("AccessToken")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("access_token");
-
-                    b.Property<string>("Error")
-                        .HasColumnType("text")
-                        .HasColumnName("error");
-
-                    b.Property<DateTimeOffset>("ExpiresAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expires_at_utc");
-
-                    b.Property<DateTime?>("LastCheckedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_checked_on_utc");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_user_tokens");
-
-                    b.HasIndex("ExpiresAtUtc")
-                        .HasDatabaseName("ix_user_tokens_expires_at_utc");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_user_tokens_user_id");
-
-                    b.ToTable("user_tokens", (string)null);
-                });
-
             modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -404,6 +334,10 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Property<int>("AccountCategory")
                         .HasColumnType("integer")
                         .HasColumnName("account_category");
+
+                    b.Property<int>("AccountType")
+                        .HasColumnType("integer")
+                        .HasColumnName("account_type");
 
                     b.Property<string>("Bio")
                         .IsRequired()
@@ -444,10 +378,6 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone_number");
 
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("text")
-                        .HasColumnName("profile_picture");
-
                     b.Property<Guid>("StateId")
                         .HasColumnType("uuid")
                         .HasColumnName("state_id");
@@ -469,7 +399,7 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("Trendlink.Infrastructure.BackgroundJobs.Outbox.OutboxMessage", b =>
+            modelBuilder.Entity("Trendlink.Infrastructure.Outbox.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -530,7 +460,7 @@ namespace Trendlink.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_advertisements_conditions_condition_id");
 
-                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.Money", "Price", b1 =>
+                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.ValueObjects.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("AdvertisementId")
                                 .HasColumnType("uuid")
@@ -565,7 +495,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.HasOne("Trendlink.Domain.Users.User", "User")
                         .WithOne("Condition")
                         .HasForeignKey("Trendlink.Domain.Conditions.Condition", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_conditions_users_user_id");
 
                     b.Navigation("User");
@@ -652,56 +581,6 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Trendlink.Domain.Users.InstagramBusinessAccount.InstagramAccount", b =>
-                {
-                    b.HasOne("Trendlink.Domain.Users.User", "User")
-                        .WithOne("InstagramAccount")
-                        .HasForeignKey("Trendlink.Domain.Users.InstagramBusinessAccount.InstagramAccount", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_instagram_accounts_users_user_id");
-
-                    b.OwnsOne("Trendlink.Domain.Users.InstagramBusinessAccount.Metadata", "Metadata", b1 =>
-                        {
-                            b1.Property<Guid>("InstagramAccountId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.Property<int>("FollowersCount")
-                                .HasColumnType("integer")
-                                .HasColumnName("metadata_followers_count");
-
-                            b1.Property<string>("Id")
-                                .HasColumnType("text")
-                                .HasColumnName("metadata_id");
-
-                            b1.Property<long>("IgId")
-                                .HasColumnType("bigint")
-                                .HasColumnName("metadata_ig_id");
-
-                            b1.Property<int>("MediaCount")
-                                .HasColumnType("integer")
-                                .HasColumnName("metadata_media_count");
-
-                            b1.Property<string>("UserName")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("metadata_user_name");
-
-                            b1.HasKey("InstagramAccountId");
-
-                            b1.ToTable("instagram_accounts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("InstagramAccountId")
-                                .HasConstraintName("fk_instagram_accounts_instagram_accounts_id");
-                        });
-
-                    b.Navigation("Metadata")
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Trendlink.Domain.Users.States.State", b =>
                 {
                     b.HasOne("Trendlink.Domain.Users.Countries.Country", "Country")
@@ -712,17 +591,6 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_states_countries_country_id");
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("Trendlink.Domain.Users.Token.UserToken", b =>
-                {
-                    b.HasOne("Trendlink.Domain.Users.User", "User")
-                        .WithOne("Token")
-                        .HasForeignKey("Trendlink.Domain.Users.Token.UserToken", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .HasConstraintName("fk_user_tokens_users_user_id");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Users.User", b =>
@@ -751,11 +619,7 @@ namespace Trendlink.Infrastructure.Migrations
                 {
                     b.Navigation("Condition");
 
-                    b.Navigation("InstagramAccount");
-
                     b.Navigation("Notifications");
-
-                    b.Navigation("Token");
                 });
 #pragma warning restore 612, 618
         }

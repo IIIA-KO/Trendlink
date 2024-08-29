@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.UnitTests.Infrastructure;
 

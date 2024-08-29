@@ -27,6 +27,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
+                    AdvertisementData.Price,
                     advertisement,
                     buyerId,
                     sellerId,
@@ -63,6 +64,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
+                    AdvertisementData.Price,
                     advertisement,
                     buyerId,
                     sellerId,
@@ -93,6 +95,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 scheduledOnUtc,
+                AdvertisementData.Price,
                 advertisement,
                 userId,
                 userId,
@@ -118,6 +121,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 scheduledOnUtc,
+                AdvertisementData.Price,
                 advertisement,
                 buyerId,
                 sellerId,
@@ -127,6 +131,33 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(CooperationErrors.InvalidTime);
+        }
+
+        [Fact]
+        public void Pend_Should_ReturnFailure_WhenPriceIsInvalid()
+        {
+            // Arrange
+            Advertisement advertisement = AdvertisementData.Create();
+            var buyerId = UserId.New();
+            var sellerId = UserId.New();
+            DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result<Cooperation> result = Cooperation.Pend(
+                CooperationData.Name,
+                CooperationData.Description,
+                scheduledOnUtc,
+                new Money(-1, Currency.FromCode("USD")),
+                advertisement,
+                buyerId,
+                sellerId,
+                utcNow
+            );
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(AdvertisementErrors.InvalidPrice);
         }
 
         [Fact]
@@ -401,6 +432,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     DateTimeOffset.UtcNow.AddDays(7),
+                    AdvertisementData.Price,
                     AdvertisementData.Create(),
                     UserId.New(),
                     UserId.New(),

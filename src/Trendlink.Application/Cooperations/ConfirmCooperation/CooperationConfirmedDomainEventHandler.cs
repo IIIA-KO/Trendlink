@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
 using System.Text;
-using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Cooperations.ConfirmCooperation

@@ -74,5 +74,10 @@
         public static Money Zero(Currency currency) => new(0, currency);
 
         public bool IsZero() => this == Zero(this.Currency);
+
+        public override string ToString()
+        {
+            return $"{this.Amount} {this.Currency}";
+        }
     }
 }

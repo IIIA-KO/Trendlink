@@ -19,6 +19,8 @@ namespace Trendlink.Application.UnitTests.Calendar
                 name AS Name,
                 description AS Description,
                 scheduled_on_utc AS ScheduledOnUtc,
+                price_amount AS PriceAmount,
+                price_currency AS PriceCurrency,
                 advertisement_id AS AdvertisementId,
                 buyer_id AS BuyerId,
                 seller_id AS SellerId,

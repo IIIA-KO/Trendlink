@@ -1,7 +1,4 @@
-﻿using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
-
-namespace Trendlink.Domain.Notifications
+﻿namespace Trendlink.Domain.Notifications
 {
     public interface IExpectsType
     {

@@ -48,6 +48,11 @@ namespace Trendlink.Infrastructure.Repositories
                 .AnyAsync(cancellationToken);
         }
 
+        public IQueryable<TEntity> DbSetAsQueryable()
+        {
+            return this.dbContext.Set<TEntity>().AsNoTrackingWithIdentityResolution().AsQueryable();
+        }
+
         protected IQueryable<TEntity> ApplySpecification(
             Specification<TEntity, TEntityId> specification
         )
