@@ -6,7 +6,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.LinkInstagram
+namespace Trendlink.Application.Users.Instagarm.LinkInstagram
 {
     internal sealed class LinkInstagramCommandHandler : ICommandHandler<LinkInstagramCommand>
     {

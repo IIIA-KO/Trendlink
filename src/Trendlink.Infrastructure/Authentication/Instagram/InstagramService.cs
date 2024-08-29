@@ -431,6 +431,33 @@ namespace Trendlink.Infrastructure.Authentication.Instagram
             );
         }
 
+        public async Task<string> GetUserPosts(
+            string accessToken,
+            string instagramAccountId,
+            int limit,
+            string cursorType,
+            string cursor,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string postsUrl =
+                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/media"
+                + "?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp"
+                + $"&limit={limit}"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage response = await this.SendGetRequestAsync(
+                postsUrl,
+                cancellationToken
+            );
+
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            Console.WriteLine(content);
+
+            throw new NotImplementedException();
+        }
+
         private async Task<HttpResponseMessage> SendPostRequestAsync(
             string url,
             HttpContent content,

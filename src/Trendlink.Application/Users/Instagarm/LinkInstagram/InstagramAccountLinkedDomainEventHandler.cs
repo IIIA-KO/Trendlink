@@ -4,7 +4,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.Token;
 
-namespace Trendlink.Application.Users.LinkInstagram
+namespace Trendlink.Application.Users.Instagarm.LinkInstagram
 {
     internal sealed class InstagramAccountLinkedDomainEventHandler
         : INotificationHandler<InstagramAccountLinkedDomainEvent>

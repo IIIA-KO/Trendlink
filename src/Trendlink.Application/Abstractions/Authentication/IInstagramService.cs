@@ -1,6 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Authentication
 {
@@ -25,6 +24,15 @@ namespace Trendlink.Application.Abstractions.Authentication
 
         Task<Result<InstagramUserInfo>> GetUserInfoAsync(
             string accessToken,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<string> GetUserPosts(
+            string accessToken,
+            string instagramAccountId,
+            int limit,
+            string cursorType,
+            string cursor,
             CancellationToken cancellationToken = default
         );
     }

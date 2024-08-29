@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Trendlink.Application.Users.LinkInstagram;
-using Trendlink.Application.Users.RenewInstagramAccess;
+﻿using System.Threading;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Users.Instagarm.Instagarm.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.LinkInstagram;
+using Trendlink.Application.Users.Instagarm.RenewInstagramAccess;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram
 {
@@ -27,6 +32,28 @@ namespace Trendlink.Api.Controllers.Instagram
             var command = new RenewInstagramAccessCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpGet("{userId:guid}/posts")]
+        public async Task<IActionResult> GetUserPosts(
+            Guid userId,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserPostsQuery(new UserId(userId));
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("posts")]
+        public async Task<IActionResult> GetLoggedInUserPosts(
+            IUserContext userContext,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserPostsQuery(userContext.UserId);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
     }
 }
