@@ -42,13 +42,13 @@ namespace Trendlink.Domain.Users
 
         public DateOnly BirthDate { get; private set; }
 
-        public Email Email { get; private set; }
+        public Email Email { get; init; }
 
         public StateId StateId { get; private set; }
 
         public State State { get; init; }
 
-        public PhoneNumber PhoneNumber { get; private set; }
+        public PhoneNumber PhoneNumber { get; init; }
 
         public Bio Bio { get; set; } = new Bio(string.Empty);
 

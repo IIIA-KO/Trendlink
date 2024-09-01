@@ -2,7 +2,6 @@
 using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Cooperations.PendCooperation
 {
@@ -10,7 +9,7 @@ namespace Trendlink.Application.Cooperations.PendCooperation
         Name Name,
         Description Description,
         DateTimeOffset ScheduledOnUtc,
-        AdvertisementId AdvertisementId,
-        UserId SellerId
+        Money Price,
+        AdvertisementId AdvertisementId
     ) : ICommand<CooperationId>;
 }

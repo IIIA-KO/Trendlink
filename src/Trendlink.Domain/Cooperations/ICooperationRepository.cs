@@ -1,4 +1,5 @@
 ﻿using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Notifications;
 
 namespace Trendlink.Domain.Cooperations
 {
@@ -16,5 +17,7 @@ namespace Trendlink.Domain.Cooperations
         );
 
         void Add(Cooperation cooperation);
+
+        IQueryable<Cooperation> DbSetAsQueryable();
     }
 }

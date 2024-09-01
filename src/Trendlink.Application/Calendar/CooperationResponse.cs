@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Cooperations;
 
-namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
+namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
 {
     public sealed class CooperationResponse
     {
@@ -11,6 +11,10 @@ namespace Trendlink.Application.Cooperations.GetLoggedInUserCooperations
         public string Description { get; init; }
 
         public DateTimeOffset ScheduledOnUtc { get; init; }
+
+        public decimal PriceAmount { get; init; }
+
+        public string PriceCurrency { get; init; }
 
         public Guid AdvertisementId { get; init; }
 

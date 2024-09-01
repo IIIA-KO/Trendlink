@@ -6,13 +6,14 @@ namespace Trendlink.Application.UnitTests.Cooperations
 {
     public abstract class CooperationBaseTest
     {
-        public Cooperation CreatePendingCooperation()
+        public Cooperation CreatePendingCooperation(DateTimeOffset scheduledOnUtc)
         {
             return Cooperation
                 .Pend(
                     CooperationData.Name,
                     CooperationData.Description,
-                    DateTimeOffset.UtcNow.AddDays(7),
+                    scheduledOnUtc,
+                    AdvertisementData.Price,
                     AdvertisementData.Create(),
                     UserId.New(),
                     UserId.New(),
@@ -21,10 +22,19 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 .Value;
         }
 
-        public Cooperation CreateConfirmedCooperation()
+        public Cooperation CreateConfirmedCooperation(DateTimeOffset scheduledOnUtc)
         {
-            Cooperation cooperation = this.CreatePendingCooperation();
+            Cooperation cooperation = this.CreatePendingCooperation(scheduledOnUtc);
             cooperation.Confirm(DateTime.UtcNow);
+            return cooperation;
+        }
+
+        public Cooperation CreateDoneCooperation()
+        {
+            Cooperation cooperation = this.CreateConfirmedCooperation(
+                DateTimeOffset.UtcNow.AddDays(7)
+            );
+            cooperation.MarkAsDone(DateTime.UtcNow);
             return cooperation;
         }
     }

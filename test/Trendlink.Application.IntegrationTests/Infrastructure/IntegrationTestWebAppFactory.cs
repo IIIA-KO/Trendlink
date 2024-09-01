@@ -10,7 +10,7 @@ using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Infrastructure;
-using Trendlink.Infrastructure.Authentication;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Data;
 
 namespace Trendlink.Application.IntegrationTests.Infrastructure

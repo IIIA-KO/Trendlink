@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Domain.UnitTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Application.UnitTests", "test\Trendlink.Application.UnitTests\Trendlink.Application.UnitTests.csproj", "{EF917F2E-0A6C-4925-8B11-74064FC21E0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Application.IntegrationTests", "test\Trendlink.Application.IntegrationTests\Trendlink.Application.IntegrationTests.csproj", "{0162E482-FBB2-4525-BCC8-9815BCF0D341}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Application.IntegrationTests", "test\Trendlink.Application.IntegrationTests\Trendlink.Application.IntegrationTests.csproj", "{0162E482-FBB2-4525-BCC8-9815BCF0D341}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trendlink.Api.FunctionalTests", "test\Trendlinl.Api.FunctionalTests\Trendlink.Api.FunctionalTests.csproj", "{89AE0EE3-ED37-4981-9F65-51E1E3E21482}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trendlink.Api.FunctionalTests", "test\Trendlinl.Api.FunctionalTests\Trendlink.Api.FunctionalTests.csproj", "{89AE0EE3-ED37-4981-9F65-51E1E3E21482}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

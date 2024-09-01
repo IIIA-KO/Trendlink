@@ -23,7 +23,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "query-string": "^9.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.11",

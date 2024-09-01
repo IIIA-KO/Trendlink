@@ -15,11 +15,14 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 using Trendlink.Infrastructure.Authentication;
+using Trendlink.Infrastructure.Authentication.Google;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
@@ -83,6 +86,7 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IConditionRepository, ConditionRepository>();
             services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             services.AddScoped<ICooperationRepository, CooperationRepository>();
+            services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
@@ -103,6 +107,8 @@ namespace Trendlink.Infrastructure
             services.ConfigureOptions<JwtBearerOptionsSetup>();
 
             services.Configure<KeycloakOptions>(configuration.GetSection("Keycloak"));
+
+            services.Configure<GoogleOptions>(configuration.GetSection("Google"));
 
             services.AddTransient<AdminAuthorizationDelegatingHandler>();
 
@@ -133,6 +139,8 @@ namespace Trendlink.Infrastructure
             services.AddHttpContextAccessor();
 
             services.AddScoped<IUserContext, UserContext>();
+
+            services.AddScoped<IGoogleService, GoogleService>();
         }
 
         private static void AddAuthorization(IServiceCollection services)

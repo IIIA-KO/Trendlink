@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.UnitTests.Advertisements;
@@ -27,6 +28,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
+                    AdvertisementData.Price,
                     advertisement,
                     buyerId,
                     sellerId,
@@ -63,6 +65,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     scheduledOnUtc,
+                    AdvertisementData.Price,
                     advertisement,
                     buyerId,
                     sellerId,
@@ -84,7 +87,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         {
             // Arrange
             Advertisement advertisement = AdvertisementData.Create();
-            var userId = UserId.New(); // same buyer and seller
+            var userId = UserId.New();
             DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
             DateTime utcNow = DateTime.UtcNow;
 
@@ -93,6 +96,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 scheduledOnUtc,
+                AdvertisementData.Price,
                 advertisement,
                 userId,
                 userId,
@@ -102,6 +106,59 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(CooperationErrors.SameUser);
+        }
+
+        [Fact]
+        public void Pend_Should_ReturnFailure_WhenCooperationScheduledOnPastTime()
+        {
+            Advertisement advertisement = AdvertisementData.Create();
+            var buyerId = UserId.New();
+            var sellerId = UserId.New();
+            DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(-7);
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result<Cooperation> result = Cooperation.Pend(
+                CooperationData.Name,
+                CooperationData.Description,
+                scheduledOnUtc,
+                AdvertisementData.Price,
+                advertisement,
+                buyerId,
+                sellerId,
+                utcNow
+            );
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(CooperationErrors.InvalidTime);
+        }
+
+        [Fact]
+        public void Pend_Should_ReturnFailure_WhenPriceIsInvalid()
+        {
+            // Arrange
+            Advertisement advertisement = AdvertisementData.Create();
+            var buyerId = UserId.New();
+            var sellerId = UserId.New();
+            DateTimeOffset scheduledOnUtc = DateTimeOffset.UtcNow.AddDays(7);
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result<Cooperation> result = Cooperation.Pend(
+                CooperationData.Name,
+                CooperationData.Description,
+                scheduledOnUtc,
+                new Money(-1, Currency.FromCode("USD")),
+                advertisement,
+                buyerId,
+                sellerId,
+                utcNow
+            );
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(AdvertisementErrors.InvalidPrice);
         }
 
         [Fact]
@@ -205,10 +262,60 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         }
 
         [Fact]
-        public void Complete_Should_SetStatusAndCompletedOnUtc()
+        public void MarkAsDone_Should_SetStatusAndDoneOnUtc()
         {
             // Arrange
             Cooperation cooperation = this.CreateConfirmedCooperation();
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result result = cooperation.MarkAsDone(utcNow);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            cooperation.Status.Should().Be(CooperationStatus.Done);
+            cooperation.DoneOnUtc.Should().Be(utcNow);
+        }
+
+        [Fact]
+        public void MarkAsDone_Should_RaiseCooperationDoneDomainEvent()
+        {
+            // Arrange
+            Cooperation cooperation = this.CreateConfirmedCooperation();
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            cooperation.MarkAsDone(utcNow);
+
+            // Assert
+            CooperationDoneDomainEvent cooperationDoneDomainEvent = AssertDomainEventWasPublished<
+                CooperationDoneDomainEvent,
+                CooperationId
+            >(cooperation);
+
+            cooperationDoneDomainEvent.CooperationId.Should().Be(cooperation.Id);
+        }
+
+        [Fact]
+        public void MarkAsDone_Should_ReturnFailure_WhenStatusIsNotConfirmed()
+        {
+            // Arrange
+            Cooperation cooperation = this.CreatePendingCooperation();
+            DateTime utcNow = DateTime.UtcNow;
+
+            // Act
+            Result result = cooperation.MarkAsDone(utcNow);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(CooperationErrors.NotConfirmed);
+        }
+
+        [Fact]
+        public void Complete_Should_SetStatusAndCompletedOnUtc()
+        {
+            // Arrange
+            Cooperation cooperation = this.CreateDoneCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -224,7 +331,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Complete_Should_RaiseCooperationCompletedDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = this.CreateConfirmedCooperation();
+            Cooperation cooperation = this.CreateDoneCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -240,10 +347,10 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         }
 
         [Fact]
-        public void Complete_Should_ReturnFailure_WhenStatusIsNotConfirmed()
+        public void Complete_Should_ReturnFailure_WhenStatusIsNotDone()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation();
+            Cooperation cooperation = this.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -251,7 +358,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(CooperationErrors.NotConfirmed);
+            result.Error.Should().Be(CooperationErrors.NotDone);
         }
 
         [Fact]
@@ -326,6 +433,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
                     CooperationData.Name,
                     CooperationData.Description,
                     DateTimeOffset.UtcNow.AddDays(7),
+                    AdvertisementData.Price,
                     AdvertisementData.Create(),
                     UserId.New(),
                     UserId.New(),
@@ -338,6 +446,13 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         {
             Cooperation cooperation = this.CreatePendingCooperation();
             cooperation.Confirm(DateTime.UtcNow);
+            return cooperation;
+        }
+
+        private Cooperation CreateDoneCooperation()
+        {
+            Cooperation cooperation = this.CreateConfirmedCooperation();
+            cooperation.MarkAsDone(DateTime.UtcNow);
             return cooperation;
         }
     }

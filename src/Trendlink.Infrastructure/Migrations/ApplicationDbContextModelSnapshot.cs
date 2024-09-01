@@ -105,6 +105,30 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("conditions", (string)null);
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.BlockedDates.BlockedDate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
+                        .HasColumnName("date");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_blocked_dates");
+
+                    b.HasIndex("UserId", "Date")
+                        .IsUnique()
+                        .HasDatabaseName("ix_blocked_dates_user_id_date");
+
+                    b.ToTable("blocked_dates", (string)null);
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Cooperations.Cooperation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -135,6 +159,10 @@ namespace Trendlink.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
+
+                    b.Property<DateTime?>("DoneOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("done_on_utc");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -469,6 +497,18 @@ namespace Trendlink.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Cooperations.BlockedDates.BlockedDate", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_blocked_dates_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Cooperations.Cooperation", b =>
                 {
                     b.HasOne("Trendlink.Domain.Conditions.Advertisements.Advertisement", "Advertisement")
@@ -492,9 +532,36 @@ namespace Trendlink.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_cooperations_users_seller_id");
 
+                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.ValueObjects.Money", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("CooperationId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("numeric")
+                                .HasColumnName("price_amount");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("price_currency");
+
+                            b1.HasKey("CooperationId");
+
+                            b1.ToTable("cooperations");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CooperationId")
+                                .HasConstraintName("fk_cooperations_cooperations_id");
+                        });
+
                     b.Navigation("Advertisement");
 
                     b.Navigation("Buyer");
+
+                    b.Navigation("Price")
+                        .IsRequired();
 
                     b.Navigation("Seller");
                 });

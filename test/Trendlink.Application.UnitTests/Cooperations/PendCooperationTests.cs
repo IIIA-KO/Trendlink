@@ -8,12 +8,12 @@ using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.UnitTests.Advertisements;
 using Trendlink.Application.UnitTests.Conditions;
-using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Cooperations.BlockedDates;
+using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
@@ -24,14 +24,14 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 CooperationData.ScheduledOnUtc,
-                CooperationData.AdvertisementId,
-                CooperationData.SellerId
+                AdvertisementData.Price,
+                CooperationData.AdvertisementId
             );
 
-        private readonly IUserRepository _userRepositoryMock;
         private readonly IConditionRepository _conditionRepositoryMock;
         private readonly IAdvertisementRepository _advertisementRepositoryMock;
         private readonly ICooperationRepository _cooperationRepositoryMock;
+        private readonly IBlockedDateRepository _blockedDateRepositoryMock;
         private readonly IUserContext _userContextMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
@@ -39,10 +39,10 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
         public PendCooperationTests()
         {
-            this._userRepositoryMock = Substitute.For<IUserRepository>();
             this._conditionRepositoryMock = Substitute.For<IConditionRepository>();
             this._advertisementRepositoryMock = Substitute.For<IAdvertisementRepository>();
             this._cooperationRepositoryMock = Substitute.For<ICooperationRepository>();
+            this._blockedDateRepositoryMock = Substitute.For<IBlockedDateRepository>();
             this._userContextMock = Substitute.For<IUserContext>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
@@ -50,86 +50,40 @@ namespace Trendlink.Application.UnitTests.Cooperations
             dateTimeProvider.UtcNow.Returns(CooperationData.UtcNow);
 
             this._handler = new PendCooperationCommandHandler(
-                this._userRepositoryMock,
                 this._conditionRepositoryMock,
                 this._advertisementRepositoryMock,
                 this._cooperationRepositoryMock,
+                this._blockedDateRepositoryMock,
                 this._userContextMock,
                 dateTimeProvider,
                 this._unitOfWorkMock
             );
         }
 
-        private void SetupCommonMocks(User user, Condition condition, Advertisement advertisement)
+        [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenAdvertisementIsNull()
         {
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns(user);
-
-            this._userContextMock.UserId.Returns(user.Id);
-
-            this._conditionRepositoryMock.GetByUserIdWithAdvertisementAsync(
-                Command.SellerId,
-                default
-            )
-                .Returns(condition);
-
+            // Arrange
             this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
-                .Returns(advertisement);
-
-            FieldInfo? advertisementsField = typeof(Condition).GetField(
-                "_advertisements",
-                BindingFlags.NonPublic | BindingFlags.Instance
-            );
-            if (advertisementsField is not null)
-            {
-                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
-                advertisements!.Add(advertisement);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenSellerIsNull()
-        {
-            // Arrange
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns((User?)null);
+                .Returns((Advertisement?)null);
 
             // Act
             Result<CooperationId> result = await this._handler.Handle(Command, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(UserErrors.NotFound);
+            result.Error.Should().Be(AdvertisementErrors.NotFound);
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenBuyerAndSellerAreSameUser()
+        public async Task Handle_Should_ReturnFailuer_WhenConditionIsNull()
         {
             // Arrange
-            User user = UserData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(AdvertisementData.Create());
 
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns(user);
-
-            this._userContextMock.UserId.Returns(Command.SellerId);
-
-            // Act
-            Result<CooperationId> result = await this._handler.Handle(Command, default);
-
-            // Assert
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(CooperationErrors.SameUser);
-        }
-
-        [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenSellerHasNoCondition()
-        {
-            // Arrange
-            User user = UserData.Create();
-
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns(user);
-
-            this._userContextMock.UserId.Returns(user.Id);
-
-            this._conditionRepositoryMock.GetByUserIdWithAdvertisementAsync(
-                Command.SellerId,
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
                 default
             )
                 .Returns((Condition?)null);
@@ -143,23 +97,44 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenAdvertisementIsNull()
+        public async Task Handle_Should_ReturnFailure_WhenBuyerAndSellerAreSameUser()
         {
             // Arrange
-            User user = UserData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(AdvertisementData.Create());
 
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns(user);
-
-            this._userContextMock.UserId.Returns(user.Id);
-
-            this._conditionRepositoryMock.GetByUserIdWithAdvertisementAsync(
-                Command.SellerId,
+            Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
                 default
             )
-                .Returns(ConditionData.Create());
+                .Returns(condition);
 
+            this._userContextMock.UserId.Returns(condition.UserId);
+
+            // Act
+            Result<CooperationId> result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(CooperationErrors.SameUser);
+        }
+
+        [Fact]
+        public async Task Handle_Should_Returnfailure_WhenConditionDoesNotHaveAdvertisement()
+        {
+            // Arrange
             this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
-                .Returns((Advertisement?)null);
+                .Returns(AdvertisementData.Create());
+
+            Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
+                default
+            )
+                .Returns(condition);
+
+            this._userContextMock.UserId.Returns(UserId.New());
 
             // Act
             Result<CooperationId> result = await this._handler.Handle(Command, default);
@@ -170,41 +145,80 @@ namespace Trendlink.Application.UnitTests.Cooperations
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenAdvertisementNotFound()
+        public async Task Handle_Should_ReturnFailure_WhenDateIsBlocked()
         {
             // Arrange
-            User user = UserData.Create();
+            Advertisement advertisement = AdvertisementData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(advertisement);
 
-            this._userRepositoryMock.GetByIdAsync(Command.SellerId, default).Returns(user);
-
-            this._userContextMock.UserId.Returns(user.Id);
-
-            this._conditionRepositoryMock.GetByUserIdWithAdvertisementAsync(
-                Command.SellerId,
+            Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
                 default
             )
-                .Returns(ConditionData.Create());
+                .Returns(condition);
 
-            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
-                .Returns(AdvertisementData.Create());
+            this._userContextMock.UserId.Returns(UserId.New());
+
+            FieldInfo? advertisementsField = typeof(Condition).GetField(
+                "_advertisements",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (advertisementsField is not null)
+            {
+                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
+                advertisements!.Add(advertisement);
+            }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(true);
 
             // Act
             Result<CooperationId> result = await this._handler.Handle(Command, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(AdvertisementErrors.NotFound);
+            result.Error.Should().Be(CooperationErrors.BlockedDate);
         }
 
         [Fact]
         public async Task Handle_Should_ReturnFailure_WhenCooperationIsAlreadyStarted()
         {
             // Arrange
-            User user = UserData.Create();
-            Condition condition = ConditionData.Create();
             Advertisement advertisement = AdvertisementData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(advertisement);
 
-            this.SetupCommonMocks(user, condition, advertisement);
+            Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
+                default
+            )
+                .Returns(condition);
+
+            this._userContextMock.UserId.Returns(UserId.New());
+
+            FieldInfo? advertisementsField = typeof(Condition).GetField(
+                "_advertisements",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (advertisementsField is not null)
+            {
+                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
+                advertisements!.Add(advertisement);
+            }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,
@@ -225,13 +239,35 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenUnitOfWorkThrows()
         {
             // Arrange
-            User user = UserData.Create();
+            Advertisement advertisement = AdvertisementData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(advertisement);
 
             Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
+                default
+            )
+                .Returns(condition);
 
-            Advertisement advertisement = AdvertisementData.Create();
+            this._userContextMock.UserId.Returns(UserId.New());
 
-            this.SetupCommonMocks(user, condition, advertisement);
+            FieldInfo? advertisementsField = typeof(Condition).GetField(
+                "_advertisements",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (advertisementsField is not null)
+            {
+                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
+                advertisements!.Add(advertisement);
+            }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,
@@ -241,7 +277,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 .Returns(false);
 
             this._unitOfWorkMock.SaveChangesAsync(default)
-                .Throws(new ConcurrencyException("Concurrency", new Exception()));
+                .Throws(new ConcurrencyException("Database exception", new Exception()));
 
             // Act
             Result<CooperationId> result = await this._handler.Handle(Command, default);
@@ -255,13 +291,35 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            User user = UserData.Create();
+            Advertisement advertisement = AdvertisementData.Create();
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(advertisement);
 
             Condition condition = ConditionData.Create();
+            this._conditionRepositoryMock.GetByIdWithAdvertisementsAsync(
+                Arg.Any<ConditionId>(),
+                default
+            )
+                .Returns(condition);
 
-            Advertisement advertisement = AdvertisementData.Create();
+            this._userContextMock.UserId.Returns(UserId.New());
 
-            this.SetupCommonMocks(user, condition, advertisement);
+            FieldInfo? advertisementsField = typeof(Condition).GetField(
+                "_advertisements",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+            if (advertisementsField is not null)
+            {
+                var advertisements = (List<Advertisement>)advertisementsField.GetValue(condition);
+                advertisements!.Add(advertisement);
+            }
+
+            this._blockedDateRepositoryMock.ExistsByDateAndUserIdAsync(
+                DateOnly.FromDateTime(Command.ScheduledOnUtc.DateTime),
+                condition.UserId,
+                default
+            )
+                .Returns(false);
 
             this._cooperationRepositoryMock.IsAlreadyStarted(
                 advertisement,
@@ -275,7 +333,6 @@ namespace Trendlink.Application.UnitTests.Cooperations
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-
             this._cooperationRepositoryMock.Received(1)
                 .Add(Arg.Is<Cooperation>(cooperation => cooperation.Id == result.Value));
         }
