@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import { refreshAccessToken } from '../api/authApi';
 import { AuthContextType} from '../models/AuthContextType.ts';
 import {AuthResponseType } from "../models/AuthResponseType.ts";
@@ -8,7 +8,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<AuthResponseType | null>(null);
-    const [redirect, setRedirect] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -45,7 +45,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         localStorage.setItem('expiresIn', String(expiresIn));
         localStorage.setItem('storedTime', String(Date.now()));
         setUser(userData);
-        setRedirect('/');
+        navigate('/');
         scheduleTokenRefresh(expiresIn);
     };
 
@@ -55,7 +55,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         localStorage.removeItem('expiresIn');
         localStorage.removeItem('storedTime');
         setUser(null);
-        setRedirect('/login');
+        navigate('/login');
     };
 
     const refreshTokens = async () => {
@@ -77,7 +77,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, login, logout, refreshTokens }}>
-            {redirect && <Navigate to={redirect} />}
             {children}
         </AuthContext.Provider>
     );
