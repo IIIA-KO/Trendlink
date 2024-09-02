@@ -13,16 +13,19 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
+        private readonly IKeycloakService _keycloakService;
 
         public GetUserPostsQueryHandler(
             IUserContext userContext,
             IUserRepository userRepository,
-            IInstagramService instagramService
+            IInstagramService instagramService,
+            IKeycloakService keycloakService
         )
         {
             this._userContext = userContext;
             this._userRepository = userRepository;
             this._instagramService = instagramService;
+            this._keycloakService = keycloakService;
         }
 
         public async Task<Result<IReadOnlyList<PostResponse>>> Handle(
@@ -37,6 +40,19 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
             if (user is null)
             {
                 return Result.Failure<IReadOnlyList<PostResponse>>(UserErrors.NotFound);
+            }
+
+            bool isInstagramLinked =
+                await this._keycloakService.IsExternalIdentityProviderAccountLinkedAsync(
+                    user.IdentityId,
+                    "instagram",
+                    cancellationToken
+                );
+            if (!isInstagramLinked)
+            {
+                return Result.Failure<IReadOnlyList<PostResponse>>(
+                    InstagramAccountErrors.InstagramAccountNotLinked
+                );
             }
 
             string result = await this._instagramService.GetUserPosts(

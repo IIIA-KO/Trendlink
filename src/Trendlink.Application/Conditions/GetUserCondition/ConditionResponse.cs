@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Conditions.GetLoggedInUserCondition
+﻿namespace Trendlink.Application.Conditions.GetUserCondition
 {
     public sealed class ConditionResponse
     {

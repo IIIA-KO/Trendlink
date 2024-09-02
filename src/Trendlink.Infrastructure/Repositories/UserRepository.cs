@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Quartz.Util;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
-using Trendlink.Infrastructure.Specifications.Users.ById;
+using Trendlink.Infrastructure.Specifications.Users;
 
 namespace Trendlink.Infrastructure.Repositories
 {

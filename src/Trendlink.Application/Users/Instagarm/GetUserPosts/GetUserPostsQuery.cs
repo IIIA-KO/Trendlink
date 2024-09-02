@@ -8,6 +8,6 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
     {
         public string CacheKey => $"posts-{this.UserId.Value}";
 
-        public TimeSpan? Expiration => TimeSpan.FromMinutes(2);
+        public TimeSpan? Expiration => TimeSpan.FromMinutes(10);
     }
 }

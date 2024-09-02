@@ -1,36 +1,30 @@
-﻿using Dapper;
-using System.Data;
-using Trendlink.Application.Abstractions.Authentication;
+﻿using System.Data;
+using Dapper;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 
-namespace Trendlink.Application.Conditions.GetLoggedInUserCondition
+namespace Trendlink.Application.Conditions.GetUserCondition
 {
-    internal sealed class GetLoggedInUserConditionQueryHandler
-        : IQueryHandler<GetLoggedInUserConditionQuery, ConditionResponse>
+    internal sealed class GetLUserConditionQueryHandler
+        : IQueryHandler<GetUserConditionQuery, ConditionResponse>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
-        private readonly IUserContext _userContext;
 
-        public GetLoggedInUserConditionQueryHandler(
-            ISqlConnectionFactory sqlConnectionFactory,
-            IUserContext userContext
-        )
+        public GetLUserConditionQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
             this._sqlConnectionFactory = sqlConnectionFactory;
-            this._userContext = userContext;
         }
 
         public async Task<Result<ConditionResponse>> Handle(
-            GetLoggedInUserConditionQuery request,
+            GetUserConditionQuery request,
             CancellationToken cancellationToken
         )
         {
             using IDbConnection dbConnection = this._sqlConnectionFactory.CreateConnection();
 
-            Guid userId = this._userContext.UserId.Value;
+            Guid userId = request.UserId.Value;
 
             const string sql = """
                 SELECT 

@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Trendlink.Application.Abstractions.Authentication;
+﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Pagination;
@@ -29,16 +28,10 @@ namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
         )
         {
             IQueryable<Notification> notificationsQuery =
-                this._notificationRepository.DbSetAsQueryable();
-
-            notificationsQuery = notificationsQuery.Where(notification =>
-                notification.UserId == this._userContext.UserId
-            );
-
-            notificationsQuery =
-                request.SortOrder?.ToUpperInvariant() == "DESC"
-                    ? notificationsQuery.OrderByDescending(GetSortProperty(request))
-                    : notificationsQuery.OrderBy(GetSortProperty(request));
+                this._notificationRepository.SearchNotificationsForUser(
+                    new NotificationSearchParameters(request.SortColumn, request.SortOrder),
+                    this._userContext.UserId
+                );
 
             IQueryable<NotificationResponse> notificationResponsesQuery = notificationsQuery.Select(
                 notification => new NotificationResponse(
@@ -57,21 +50,6 @@ namespace Trendlink.Application.Notifications.GetLoggedInUserNotifications
                 request.PageNumber,
                 request.PageSize
             );
-        }
-
-        private static Expression<Func<Notification, object>> GetSortProperty(
-            GetLoggedInUserNotificationsQuery request
-        )
-        {
-            return request.SortColumn?.ToUpperInvariant() switch
-            {
-                "NOTIFICATIONTYPE" => notification => notification.NotificationType,
-                "TITLE" => notification => notification.Title,
-                "MESSAGE" => notification => notification.Message,
-                "ISREAD" => notification => notification.IsRead,
-                "CREATEDONUTC" => notification => notification.CreatedOnUtc,
-                _ => notification => notification.Id
-            };
         }
     }
 }
