@@ -36,7 +36,7 @@ namespace Trendlink.Infrastructure.Specifications
         )
         {
             Expression<Func<TEntity, bool>>? combinedCriteria =
-                left.Criteria != null && right.Criteria != null
+                left.Criteria is not null && right.Criteria is not null
                     ? Expression.Lambda<Func<TEntity, bool>>(
                         Expression.AndAlso(
                             left.Criteria.Body,
@@ -55,7 +55,7 @@ namespace Trendlink.Infrastructure.Specifications
         )
         {
             Expression<Func<TEntity, bool>>? combinedCriteria =
-                left.Criteria != null && right.Criteria != null
+                left.Criteria is not null && right.Criteria is not null
                     ? Expression.Lambda<Func<TEntity, bool>>(
                         Expression.OrElse(
                             left.Criteria.Body,
@@ -72,13 +72,12 @@ namespace Trendlink.Infrastructure.Specifications
             Specification<TEntity, TEntityId> spec
         )
         {
-            Expression<Func<TEntity, bool>>? notCriteria =
-                spec.Criteria != null
-                    ? Expression.Lambda<Func<TEntity, bool>>(
-                        Expression.Not(spec.Criteria.Body),
-                        spec.Criteria.Parameters
-                    )
-                    : null;
+            Expression<Func<TEntity, bool>>? notCriteria = spec.Criteria is not null
+                ? Expression.Lambda<Func<TEntity, bool>>(
+                    Expression.Not(spec.Criteria.Body),
+                    spec.Criteria.Parameters
+                )
+                : null;
 
             return new CombinedSpecification<TEntity, TEntityId>(notCriteria, spec);
         }

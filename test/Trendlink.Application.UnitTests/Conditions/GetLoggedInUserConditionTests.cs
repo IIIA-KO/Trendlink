@@ -1,10 +1,11 @@
-﻿using FluentAssertions;
+﻿using System.Data;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using System.Data;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
-using Trendlink.Application.Conditions.GetLoggedInUserCondition;
+using Trendlink.Application.Conditions.GetUserCondition;
+using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
@@ -31,22 +32,19 @@ namespace Trendlink.Application.UnitTests.Conditions
                 c.user_id = @UserId;
             """;
 
-        private static readonly GetLoggedInUserConditionQuery Query = new();
+        private static readonly GetUserConditionQuery Query = new(UserData.Create().Id);
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
         private readonly IUserContext _userContextMock;
 
-        private readonly GetLoggedInUserConditionQueryHandler _handler;
+        private readonly GetLUserConditionQueryHandler _handler;
 
         public GetLoggedInUserConditionTests()
         {
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
             this._userContextMock = Substitute.For<IUserContext>();
 
-            this._handler = new GetLoggedInUserConditionQueryHandler(
-                this._sqlConnectionFactoryMock,
-                this._userContextMock
-            );
+            this._handler = new GetLUserConditionQueryHandler(this._sqlConnectionFactoryMock);
         }
 
         [Fact]

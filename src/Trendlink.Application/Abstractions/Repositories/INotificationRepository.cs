@@ -1,5 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {
@@ -27,6 +28,11 @@ namespace Trendlink.Application.Abstractions.Repositories
             CancellationToken cancellationToken = default
         );
 
-        IQueryable<Notification> DbSetAsQueryable();
+        IQueryable<Notification> SearchNotificationsForUser(
+            NotificationSearchParameters parameters,
+            UserId userId
+        );
     }
+
+    public sealed record NotificationSearchParameters(string? SortColumn, string? SortOrder);
 }

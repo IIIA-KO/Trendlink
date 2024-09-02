@@ -29,6 +29,16 @@ namespace Trendlink.Application.Abstractions.Repositories
 
         Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default);
 
-        IQueryable<User> DbSetAsQueryable();
+        IQueryable<User> SearchUsers(UserSeachParameters parameters);
     }
+
+    public sealed record UserSeachParameters(
+        string? SearchTerm,
+        string? SortColumn,
+        string? SortOrder,
+        string? Country,
+        string? AccountCategory,
+        int MinFollowersCount,
+        int MinMediaCount
+    );
 }

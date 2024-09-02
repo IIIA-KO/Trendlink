@@ -5,7 +5,7 @@ using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Users;
-using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.GetUser;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.UnitTests.Users
@@ -22,19 +22,19 @@ namespace Trendlink.Application.UnitTests.Users
             WHERE identity_id = @IdentityId
             """;
 
-        public static readonly GetLoggedInUserQuery Query = new();
+        public static readonly GetUserQuery Query = new(UserData.Create().Id);
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
         private readonly IUserContext _userContextMock;
 
-        private readonly GetLoggedInUserQueryHandler _handler;
+        private readonly GetUserQueryHandler _handler;
 
         public GetLoggedInUserTests()
         {
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
             this._userContextMock = Substitute.For<IUserContext>();
 
-            this._handler = new GetLoggedInUserQueryHandler(
+            this._handler = new GetUserQueryHandler(
                 this._sqlConnectionFactoryMock,
                 this._userContextMock
             );

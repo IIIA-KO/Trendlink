@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
-using Trendlink.Application.Notifications.GetUserNotifications;
 using Trendlink.Application.Users.EditUser;
-using Trendlink.Application.Users.GetLoggedInUser;
+using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.LoginUserWithGoogle;
@@ -18,10 +16,13 @@ namespace Trendlink.Api.Controllers.Users
     [Route("/api/users")]
     public class UsersController : BaseApiController
     {
-        [HttpGet("me")]
-        public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetUserById(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken
+        )
         {
-            var query = new GetLoggedInUserQuery();
+            var query = new GetUserQuery(new UserId(id));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -31,50 +32,23 @@ namespace Trendlink.Api.Controllers.Users
             [FromQuery] string? searchTerm,
             [FromQuery] string? sortColumn,
             [FromQuery] string? sortOrder,
+            [FromQuery] string? country,
+            [FromQuery] string? accountCategory,
+            [FromQuery] int minFollowersCount = 0,
+            [FromQuery] int minMediaCount = 0,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10,
             CancellationToken cancellationToken = default
         )
         {
-            var query = new GetUsersQuery(searchTerm, sortColumn, sortOrder, pageNumber, pageSize);
-
-            return this.HandlePagedResult(await this.Sender.Send(query, cancellationToken));
-        }
-
-        [HttpGet("notifications")]
-        public async Task<IActionResult> GetLoggedInUserNotifications(
-            [FromQuery] string? sortColumn,
-            [FromQuery] string? sortOrder,
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var query = new GetLoggedInUserNotificationsQuery(
+            var query = new GetUsersQuery(
+                searchTerm,
                 sortColumn,
                 sortOrder,
-                pageNumber,
-                pageSize
-            );
-
-            return this.HandlePagedResult(await this.Sender.Send(query, cancellationToken));
-        }
-
-        [HttpGet("{id:guid}/notifications")]
-        [Authorize(Roles = Roles.Administrator)]
-        public async Task<IActionResult> GetUserNotifications(
-            Guid id,
-            [FromQuery] string? sortColumn,
-            [FromQuery] string? sortOrder,
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 10,
-            CancellationToken cancellationToken = default
-        )
-        {
-            var query = new GetUserNotificationsQuery(
-                new UserId(id),
-                sortColumn,
-                sortOrder,
+                country,
+                accountCategory,
+                minFollowersCount,
+                minMediaCount,
                 pageNumber,
                 pageSize
             );

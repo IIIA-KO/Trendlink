@@ -7,6 +7,10 @@ namespace Trendlink.Application.Users.GetUsers
         string? SearchTerm,
         string? SortColumn,
         string? SortOrder,
+        string? Country,
+        string? AccountCategory,
+        int MinFollowersCount,
+        int MinMediaCount,
         int PageNumber,
         int PageSize
     ) : IQuery<PagedList<UserResponse>>;

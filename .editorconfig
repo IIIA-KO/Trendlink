@@ -16,6 +16,8 @@ insert_final_newline = true
 
 #### .NET Coding Conventions ####
 
+dotnet_diagnostic.CA1502.severity = warning
+
 # Instance fields are camelCase and start with _
 dotnet_naming_rule.instance_fields_should_be_camel_case.severity = suggestion
 dotnet_naming_rule.instance_fields_should_be_camel_case.symbols = instance_fields

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Users.Instagarm.Instagarm.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Application.Users.Instagarm.LinkInstagram;
 using Trendlink.Application.Users.Instagarm.RenewInstagramAccess;
 using Trendlink.Domain.Users;
@@ -39,17 +39,6 @@ namespace Trendlink.Api.Controllers.Instagram
         )
         {
             var query = new GetUserPostsQuery(new UserId(userId));
-
-            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
-        }
-
-        [HttpGet("posts")]
-        public async Task<IActionResult> GetLoggedInUserPosts(
-            IUserContext userContext,
-            CancellationToken cancellationToken
-        )
-        {
-            var query = new GetUserPostsQuery(userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

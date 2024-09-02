@@ -17,7 +17,5 @@ namespace Trendlink.Application.Abstractions.Repositories
         );
 
         void Add(Cooperation cooperation);
-
-        IQueryable<Cooperation> DbSetAsQueryable();
     }
 }
