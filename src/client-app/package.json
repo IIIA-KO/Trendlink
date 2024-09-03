@@ -11,13 +11,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.0.20",
+    "@fontsource/kodchasan": "^5.0.21",
     "@microsoft/signalr": "^8.0.7",
-    "query-string": "^9.1.0",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/yup": "^0.32.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "axios": "^1.7.2",
+    "formik": "^2.4.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.25.1"
+    "react-router-dom": "^6.25.1",
+    "react-toastify": "^10.0.5",
+    "yup": "^1.4.0",
+    "query-string": "^9.1.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.11",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
