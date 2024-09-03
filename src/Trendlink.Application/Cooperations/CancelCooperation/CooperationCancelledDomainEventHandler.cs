@@ -43,17 +43,13 @@ namespace Trendlink.Application.Cooperations.CancelCooperation
             );
         }
 
-        protected override string GetNotificationTitle()
-        {
-            return "Cooperation Cancelled";
-        }
+        protected override string GetNotificationTitle() => "Cooperation Cancelled";
+
+        protected override UserId GetReceiverId(Cooperation cooperation) => cooperation.BuyerId;
 
         protected override async Task<User?> GetUserAsync(
             Cooperation cooperation,
             CancellationToken cancellationToken
-        )
-        {
-            return await this._userRepository.GetByIdAsync(cooperation.BuyerId, cancellationToken);
-        }
+        ) => await this._userRepository.GetByIdAsync(cooperation.BuyerId, cancellationToken);
     }
 }

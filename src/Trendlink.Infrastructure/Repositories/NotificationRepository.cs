@@ -1,8 +1,6 @@
 ﻿using System.Linq.Expressions;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;

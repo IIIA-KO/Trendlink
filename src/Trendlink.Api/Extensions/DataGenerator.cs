@@ -1,14 +1,6 @@
-﻿using System;
-using System.Security.Cryptography;
-using Bogus;
-using MediatR;
+﻿using Bogus;
 using Newtonsoft.Json;
-using StackExchange.Redis;
-using Trendlink.Application.Conditions.CreateCondition;
-using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;

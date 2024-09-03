@@ -1,5 +1,4 @@
-﻿using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Abstractions.Messaging;
+﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Pagination;
 using Trendlink.Domain.Abstraction;

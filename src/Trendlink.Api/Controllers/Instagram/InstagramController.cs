@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Application.Users.Instagarm.LinkInstagram;
 using Trendlink.Application.Users.Instagarm.RenewInstagramAccess;

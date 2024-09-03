@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;

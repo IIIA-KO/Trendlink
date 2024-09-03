@@ -5,7 +5,7 @@ using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
-using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
+using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 
@@ -37,19 +37,19 @@ namespace Trendlink.Application.UnitTests.Calendar
             WHERE user_id = @UserId
             """;
 
-        public static readonly GetLoggedInUserCooperationsQuery Query = new();
+        public static readonly GetLoggedInUserCalendarQuery Query = new();
 
         private readonly IUserContext _userContextMock;
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
 
-        private readonly GetLoggedInUserCooperationsQueryHandler _handler;
+        private readonly GetLoggedInUserCalendarQueryHandler _handler;
 
         public GetLoggedInUserCooperationsTests()
         {
             this._userContextMock = Substitute.For<IUserContext>();
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
 
-            this._handler = new GetLoggedInUserCooperationsQueryHandler(
+            this._handler = new GetLoggedInUserCalendarQueryHandler(
                 this._userContextMock,
                 this._sqlConnectionFactoryMock
             );
@@ -66,7 +66,10 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
+            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
+                Query,
+                default
+            );
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -88,7 +91,10 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
+            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
+                Query,
+                default
+            );
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -112,7 +118,10 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._userContextMock.UserId.Returns(UserData.Create().Id);
 
             // Act
-            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
+            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
+                Query,
+                default
+            );
 
             // Assert
             result.IsSuccess.Should().BeTrue();

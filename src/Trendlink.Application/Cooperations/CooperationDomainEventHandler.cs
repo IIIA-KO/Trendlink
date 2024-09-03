@@ -70,7 +70,7 @@ namespace Trendlink.Application.Cooperations
             string message = this.GenerateMessage(advertisement, user);
 
             Notification builtNotification = NotificationBuilder
-                .ForUser(cooperation.SellerId)
+                .ForUser(this.GetReceiverId(cooperation))
                 .WithType(NotificationType.System)
                 .WithTitle(this.GetNotificationTitle())
                 .WithMessage(message)
@@ -85,6 +85,8 @@ namespace Trendlink.Application.Cooperations
             Cooperation cooperation,
             CancellationToken cancellationToken
         );
+
+        protected abstract UserId GetReceiverId(Cooperation cooperation);
 
         protected abstract string GenerateMessage(Advertisement advertisement, User user);
 

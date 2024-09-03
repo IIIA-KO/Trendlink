@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Trendlink.Api.Controllers.Calendar;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
-using Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth;
+using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
+using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.GetUser;
@@ -33,18 +32,18 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserCooperationsQuery();
+            var query = new GetLoggedInUserCalendarQuery();
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
         [HttpGet("calendar/month")]
         public async Task<IActionResult> GetLoggedInUserCooperationsForMonth(
-            [FromBody] GetLoggedInUserCooperationsForMonthRequest request,
+            [FromBody] GetLoggedInUserCalendarForMonthRequest request,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserCooperationsForMonthQuery(request.Month, request.Year);
+            var query = new GetLoggedInUserCalendarForMonthQuery(request.Month, request.Year);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
