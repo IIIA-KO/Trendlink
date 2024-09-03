@@ -1,29 +1,23 @@
 ﻿using System.Data;
 using Dapper;
-using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
+namespace Trendlink.Application.Calendar.GetUserCalendarForMonth
 {
-    internal sealed class GetLoggedInUserCooperationsForMonthQueryHandler
-        : IQueryHandler<GetLoggedInUserCooperationsForMonthQuery, IReadOnlyList<DateResponse>>
+    internal sealed class GetUserCalendarForMonthQueryHandler
+        : IQueryHandler<GetUserCalendarForMonthQuery, IReadOnlyList<DateResponse>>
     {
-        private readonly IUserContext _userContext;
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public GetLoggedInUserCooperationsForMonthQueryHandler(
-            IUserContext userContext,
-            ISqlConnectionFactory sqlConnectionFactory
-        )
+        public GetUserCalendarForMonthQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
-            this._userContext = userContext;
             this._sqlConnectionFactory = sqlConnectionFactory;
         }
 
         public async Task<Result<IReadOnlyList<DateResponse>>> Handle(
-            GetLoggedInUserCooperationsForMonthQuery request,
+            GetUserCalendarForMonthQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -31,18 +25,9 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
 
             const string sqlCooperations = """
                 SELECT
-                    id AS Id,
-                    name AS Name,
-                    description AS Description,
-                    scheduled_on_utc AS ScheduledOnUtc,
-                    price_amount AS PriceAmount,
-                    price_currency AS PriceCurrency,
-                    advertisement_id AS AdvertisementId,
-                    buyer_id AS BuyerId,
-                    seller_id AS SellerId,
-                    status AS Status
+                    scheduled_on_utc AS ScheduledOnUtc
                 FROM cooperations
-                WHERE (buyer_id = @UserId OR seller_id = @UserId)
+                WHERE (seller_id = @UserId)
                     AND EXTRACT(MONTH FROM scheduled_on_utc) = @Month
                     AND EXTRACT(YEAR FROM scheduled_on_utc) = @Year
                 """;
@@ -60,7 +45,7 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
             {
                 var parameters = new
                 {
-                    UserId = this._userContext.UserId.Value,
+                    UserId = request.UserId.Value,
                     request.Month,
                     request.Year
                 };
@@ -79,7 +64,7 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
                     {
                         Date = g.Key,
                         IsBlocked = blockedDates.Contains(g.Key),
-                        Cooperations = g.ToList()
+                        CooperationsCount = g.Count()
                     })
                     .ToList();
 
@@ -89,16 +74,15 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperationsForMonth
                     {
                         Date = d,
                         IsBlocked = true,
-                        Cooperations = []
+                        CooperationsCount = 0
                     });
 
                 dateResponses.AddRange(additionalBlockedDates);
 
                 return dateResponses.OrderBy(d => d.Date).ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message + "\n" + ex.InnerException?.Message);
                 return Result.Failure<IReadOnlyList<DateResponse>>(Error.Unexpected);
             }
         }

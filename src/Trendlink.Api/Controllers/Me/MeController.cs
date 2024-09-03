@@ -33,7 +33,7 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserCooperationsQuery();
+            var query = new GetLoggedInUserCalendarQuery();
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -44,7 +44,7 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserCooperationsForMonthQuery(request.Month, request.Year);
+            var query = new GetLoggedInUserCalendarForMonthQuery(request.Month, request.Year);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

@@ -42,17 +42,13 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             );
         }
 
-        protected override string GetNotificationTitle()
-        {
-            return "Advertisement Done!";
-        }
+        protected override string GetNotificationTitle() => "Advertisement Done!";
+
+        protected override UserId GetReceiverId(Cooperation cooperation) => cooperation.BuyerId;
 
         protected override async Task<User?> GetUserAsync(
             Cooperation cooperation,
             CancellationToken cancellationToken
-        )
-        {
-            return await this._userRepository.GetByIdAsync(cooperation.SellerId, cancellationToken);
-        }
+        ) => await this._userRepository.GetByIdAsync(cooperation.SellerId, cancellationToken);
     }
 }

@@ -1,19 +1,19 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
+namespace Trendlink.Application.Calendar.GetLoggedInUserCalendar
 {
-    internal sealed class GetLoggedInUserCooperationsQueryHandler
-        : IQueryHandler<GetLoggedInUserCooperationsQuery, IReadOnlyList<DateResponse>>
+    internal sealed class GetLoggedInUserCalendarQueryHandler
+        : IQueryHandler<GetLoggedInUserCalendarQuery, IReadOnlyList<LoggedInDateResponse>>
     {
         private readonly IUserContext _userContext;
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public GetLoggedInUserCooperationsQueryHandler(
+        public GetLoggedInUserCalendarQueryHandler(
             IUserContext userContext,
             ISqlConnectionFactory sqlConnectionFactory
         )
@@ -22,8 +22,8 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
             this._sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task<Result<IReadOnlyList<DateResponse>>> Handle(
-            GetLoggedInUserCooperationsQuery request,
+        public async Task<Result<IReadOnlyList<LoggedInDateResponse>>> Handle(
+            GetLoggedInUserCalendarQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -42,12 +42,12 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
                     seller_id AS SellerId,
                     status AS Status
                 FROM cooperations
-                WHERE buyer_id = @UserId 
+                WHERE buyer_id = @UserId
                     OR seller_id = @UserId
                 """;
 
             const string sqlBlockedDates = """
-                SELECT 
+                SELECT
                     date AS Date
                 FROM blocked_dates
                 WHERE user_id = @UserId
@@ -67,7 +67,7 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
 
                 var dateResponses = cooperations
                     .GroupBy(c => DateOnly.FromDateTime(c.ScheduledOnUtc.UtcDateTime))
-                    .Select(g => new DateResponse
+                    .Select(g => new LoggedInDateResponse
                     {
                         Date = g.Key,
                         IsBlocked = blockedDates.Contains(g.Key),
@@ -75,9 +75,9 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
                     })
                     .ToList();
 
-                IEnumerable<DateResponse> additionalBlockedDates = blockedDates
+                IEnumerable<LoggedInDateResponse> additionalBlockedDates = blockedDates
                     .Where(d => !dateResponses.Any(dr => dr.Date == d))
-                    .Select(d => new DateResponse
+                    .Select(d => new LoggedInDateResponse
                     {
                         Date = d,
                         IsBlocked = true,
@@ -90,7 +90,7 @@ namespace Trendlink.Application.Calendar.GetLoggedInUserCooperations
             }
             catch (Exception)
             {
-                return Result.Failure<IReadOnlyList<DateResponse>>(Error.Unexpected);
+                return Result.Failure<IReadOnlyList<LoggedInDateResponse>>(Error.Unexpected);
             }
         }
     }
