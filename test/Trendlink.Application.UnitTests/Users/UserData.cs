@@ -18,6 +18,8 @@ namespace Trendlink.Application.UnitTests.Users
         public static readonly AccessTokenResponse Token =
             new("access_token", "refresh_token", 900);
 
+        public const string Code = "Code";
+
         public static readonly FirstName FirstName = new("First");
 
         public static readonly LastName LastName = new("Last");

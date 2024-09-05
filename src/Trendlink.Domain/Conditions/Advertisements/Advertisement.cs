@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
-using Trendlink.Domain.Conditions.ValueObjects;
+using Trendlink.Domain.Shared;
 
 namespace Trendlink.Domain.Conditions.Advertisements
 {
@@ -32,6 +32,8 @@ namespace Trendlink.Domain.Conditions.Advertisements
         public Money Price { get; private set; }
 
         public Description Description { get; private set; }
+
+        public DateTime? LastCooperatedOnUtc { get; internal set; }
 
         public static Result<Advertisement> Create(
             ConditionId conditionId,

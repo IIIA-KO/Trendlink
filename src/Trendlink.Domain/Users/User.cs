@@ -1,6 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.States;
@@ -43,13 +42,13 @@ namespace Trendlink.Domain.Users
 
         public DateOnly BirthDate { get; private set; }
 
-        public Email Email { get; private set; }
+        public Email Email { get; init; }
 
         public StateId StateId { get; private set; }
 
-        public State State { get; private set; }
+        public State State { get; init; }
 
-        public PhoneNumber PhoneNumber { get; private set; }
+        public PhoneNumber PhoneNumber { get; init; }
 
         public Bio Bio { get; set; } = new Bio(string.Empty);
 
@@ -59,7 +58,7 @@ namespace Trendlink.Domain.Users
 
         public string IdentityId { get; private set; } = string.Empty;
 
-        public Condition? Condition { get; private set; }
+        public Condition? Condition { get; init; }
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 

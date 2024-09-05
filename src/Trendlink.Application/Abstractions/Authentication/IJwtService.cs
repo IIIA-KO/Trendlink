@@ -16,5 +16,15 @@ namespace Trendlink.Application.Abstractions.Authentication
             string refreshToken,
             CancellationToken cancellationToken = default
         );
+
+        Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
+            UserInfo userInfo,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<bool> CheckUserExistsInKeycloak(
+            string email,
+            CancellationToken cancellationToken = default
+        );
     }
 }

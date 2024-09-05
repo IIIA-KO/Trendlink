@@ -13,14 +13,14 @@ namespace Trendlink.Application.Users.RegisterUser
     internal sealed class UserCreatedDomainEventHandler
         : INotificationHandler<UserCreatedDomainEvent>
     {
+        private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
+            Resources.NotificationMessages.WelcomeMessage
+        );
+
         private readonly IUserRepository _userRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly INotificationRepository _notificationRepository;
         private readonly IUnitOfWork _unitOfWork;
-
-        private static readonly CompositeFormat WelcomeMessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.WelcomeMessage
-        );
 
         public UserCreatedDomainEventHandler(
             IUserRepository userRepository,
@@ -51,21 +51,24 @@ namespace Trendlink.Application.Users.RegisterUser
 
             string welcomeMessage = string.Format(
                 CultureInfo.CurrentCulture,
-                WelcomeMessageFormat,
+                MessageFormat,
                 user.FirstName.Value
             );
 
-            Notification greetingMessage = Notification
-                .Create(
-                    user.Id,
-                    NotificationType.News,
-                    new Title("Welcome to Trendlink!"),
-                    new Message(welcomeMessage),
-                    this._dateTimeProvider.UtcNow
-                )
-                .Value;
+            Result<Notification> result = Notification.Create(
+                user.Id,
+                NotificationType.News,
+                new Title("Welcome to Trendlink!"),
+                new Message(welcomeMessage),
+                this._dateTimeProvider.UtcNow
+            );
 
-            this._notificationRepository.Add(greetingMessage);
+            if (result.IsFailure)
+            {
+                return;
+            }
+
+            this._notificationRepository.Add(result.Value);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
         }

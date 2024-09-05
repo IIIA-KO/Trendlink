@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 
 namespace Trendlink.Infrastructure.Authentication

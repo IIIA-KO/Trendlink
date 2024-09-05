@@ -2,7 +2,6 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Conditions.CreateCondition

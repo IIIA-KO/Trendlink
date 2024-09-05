@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.ValueObjects;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.ValueObjects;

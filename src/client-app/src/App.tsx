@@ -1,21 +1,30 @@
 import './App.css'
-import LoginPage from "./Pages/LoginPage.tsx";
-import RegisterPage from "./Pages/RegisterPage.tsx";
-import HomePage from "./Pages/HomePage.tsx";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './context/AuthContext';
+import AuthPage from "./pages/AuthPage.tsx";
+import HomePage from "./pages/HomePage";
+import ProtectedRoute from './components/ProtectedRoute';
+import CallBackPage from "./pages/CallBackPage.tsx";
+import '@fontsource/kodchasan';
+import '@fontsource/inter'
 
-function App() {
+const App: React.FC = () => {
   return (
-      <div>
-          <BrowserRouter>
+      <BrowserRouter>
+          <AuthProvider>
               <Routes>
-                  <Route index path="/" element={<HomePage/>}/>
-                  <Route path="/login" element={<LoginPage/>} />
-                  <Route path="/register" element={<RegisterPage/>} />
+                  <Route path="/login" element={<AuthPage />} />
+                  <Route path="/login/callback" element={<CallBackPage />}/>
+                  <Route path="/" element={
+                      <ProtectedRoute>
+                          <HomePage />
+                      </ProtectedRoute>
+                  }
+                  />
               </Routes>
-          </BrowserRouter>
-      </div>
+          </AuthProvider>
+      </BrowserRouter>
   );
 }
 
-export default App
+export default App;

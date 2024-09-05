@@ -1,23 +1,26 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authentication.Models;
 using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
 
 namespace Trendlink.Infrastructure.Authentication
 {
-    public record CachedAuthorizationToken(
-        string AccessToken,
-        string RefreshToken,
-        DateTimeOffset AcquiredAt,
-        int ExpiresIn
-    );
-
     internal sealed class JwtService : IJwtService
     {
+        internal record CachedAuthorizationToken(
+            string AccessToken,
+            string RefreshToken,
+            DateTimeOffset AcquiredAt,
+            int ExpiresIn
+        );
+
         private static readonly Error AuthenticationFailed =
             new(
                 "Keycloak.AuthenticationFailed",
@@ -201,6 +204,125 @@ namespace Trendlink.Infrastructure.Authentication
             {
                 return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
             }
+        }
+
+        public async Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
+            UserInfo userInfo,
+            CancellationToken cancellationToken = default
+        )
+        {
+            try
+            {
+                var authRequestParameters = new KeyValuePair<string, string>[]
+                {
+                    new("client_id", this._keycloakOptions.AuthClientId),
+                    new("client_secret", this._keycloakOptions.AuthClientSecret),
+                    new("scope", "openid email"),
+                    new("grant_type", "password"),
+                    new("username", userInfo.Email),
+                    new("password", userInfo.Email),
+                };
+
+                using var authorizationRequestContent = new FormUrlEncodedContent(
+                    authRequestParameters
+                );
+
+                HttpResponseMessage response = await this._httpClient.PostAsync(
+                    this._keycloakOptions.TokenUrl,
+                    authorizationRequestContent,
+                    cancellationToken
+                );
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync(cancellationToken);
+                    AuthorizationToken? authorizationToken =
+                        JsonSerializer.Deserialize<AuthorizationToken>(content);
+
+                    if (authorizationToken is null)
+                    {
+                        return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
+                    }
+
+                    var cachedAuthorizationToken = new CachedAuthorizationToken(
+                        authorizationToken.AccessToken,
+                        authorizationToken.RefreshToken,
+                        DateTimeOffset.UtcNow,
+                        authorizationToken.ExpiresIn
+                    );
+
+                    string cacheKey = $"{CacheKeyPrefix}{userInfo.Email}";
+                    await this._cacheService.SetAsync(
+                        cacheKey,
+                        cachedAuthorizationToken,
+                        TimeSpan.FromSeconds(authorizationToken.ExpiresIn),
+                        cancellationToken
+                    );
+
+                    return new AccessTokenResponse(
+                        authorizationToken.AccessToken,
+                        authorizationToken.RefreshToken,
+                        authorizationToken.ExpiresIn
+                    );
+                }
+                else
+                {
+                    return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
+                }
+            }
+            catch (HttpRequestException)
+            {
+                return Result.Failure<AccessTokenResponse>(AuthenticationFailed);
+            }
+        }
+
+        public async Task<bool> CheckUserExistsInKeycloak(
+            string email,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string requestUrl =
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users?email={email}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            request.Headers.Authorization = new AuthenticationHeaderValue(
+                "Bearer",
+                await this.GetAdminAccessTokenAsync(cancellationToken)
+            );
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+
+            return response.IsSuccessStatusCode
+                && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
+        }
+
+        private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
+        {
+            var adminRequestParameters = new KeyValuePair<string, string>[]
+            {
+                new("client_id", this._keycloakOptions.AdminClientId),
+                new("client_secret", this._keycloakOptions.AdminClientSecret),
+                new("grant_type", "client_credentials")
+            };
+
+            using var adminRequestContent = new FormUrlEncodedContent(adminRequestParameters);
+
+            HttpResponseMessage response = await this._httpClient.PostAsync(
+                $"{this._keycloakOptions.BaseUrl}/realms/{this._keycloakOptions.Realm}/protocol/openid-connect/token",
+                adminRequestContent,
+                cancellationToken
+            );
+
+            response.EnsureSuccessStatusCode();
+
+            AuthorizationToken? tokenResponse = JsonSerializer.Deserialize<AuthorizationToken>(
+                await response.Content.ReadAsStringAsync(cancellationToken)
+            );
+
+            return tokenResponse?.AccessToken;
         }
     }
 }
