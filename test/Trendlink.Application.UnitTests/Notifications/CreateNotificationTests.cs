@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Application.Notifications.CreateNotification;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Notifications
 {
@@ -79,6 +79,7 @@ namespace Trendlink.Application.UnitTests.Notifications
 
             // Assert
             result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(NotificationErrors.Invalid);
         }
 
         [Fact]

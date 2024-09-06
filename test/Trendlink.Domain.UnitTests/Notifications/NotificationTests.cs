@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.UnitTests.Infrastructure;
 
 namespace Trendlink.Domain.UnitTests.Notifications
@@ -11,16 +9,13 @@ namespace Trendlink.Domain.UnitTests.Notifications
         [Fact]
         public void Create_Should_SetPropertyValues()
         {
-            // Act
-            Notification notification = Notification
-                .Create(
-                    NotificationData.UserId,
-                    NotificationData.NotificationType,
-                    NotificationData.Title,
-                    NotificationData.Message,
-                    NotificationData.CreatedOnUtc
-                )
-                .Value;
+            Notification notification = NotificationBuilder
+                .ForUser(NotificationData.UserId)
+                .WithType(NotificationData.NotificationType)
+                .WithTitle(NotificationData.Title.Value)
+                .WithMessage(NotificationData.Message.Value)
+                .CreatedOn(NotificationData.CreatedOnUtc)
+                .Build();
 
             // Assert
             notification.NotificationType.Should().Be(NotificationData.NotificationType);
@@ -31,52 +26,16 @@ namespace Trendlink.Domain.UnitTests.Notifications
         }
 
         [Fact]
-        public void Create_Should_ReturnFailure_WhenTitleIsNull()
-        {
-            // Act
-            Result<Notification> result = Notification.Create(
-                NotificationData.UserId,
-                NotificationData.NotificationType,
-                new Title(null!),
-                NotificationData.Message,
-                NotificationData.CreatedOnUtc
-            );
-
-            // Assert
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(NotificationErrors.Invalid);
-        }
-
-        [Fact]
-        public void Create_Should_ReturnFailure_WhenMessageIsNull()
-        {
-            // Act
-            Result<Notification> result = Notification.Create(
-                NotificationData.UserId,
-                NotificationData.NotificationType,
-                NotificationData.Title,
-                new Message(null!),
-                NotificationData.CreatedOnUtc
-            );
-
-            // Assert
-            result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(NotificationErrors.Invalid);
-        }
-
-        [Fact]
         public void MarkAsRead_Should_SetIsReadToTrue()
         {
             // Arrange
-            Notification notification = Notification
-                .Create(
-                    NotificationData.UserId,
-                    NotificationData.NotificationType,
-                    NotificationData.Title,
-                    NotificationData.Message,
-                    NotificationData.CreatedOnUtc
-                )
-                .Value;
+            Notification notification = NotificationBuilder
+                .ForUser(NotificationData.UserId)
+                .WithType(NotificationData.NotificationType)
+                .WithTitle(NotificationData.Title.Value)
+                .WithMessage(NotificationData.Message.Value)
+                .CreatedOn(NotificationData.CreatedOnUtc)
+                .Build();
 
             // Act
             notification.MarkAsRead();
@@ -89,15 +48,13 @@ namespace Trendlink.Domain.UnitTests.Notifications
         public void MarkAsRead_ShouldNot_AlreadyMarkAlreadyRead()
         {
             // Arrange
-            Notification notification = Notification
-                .Create(
-                    NotificationData.UserId,
-                    NotificationData.NotificationType,
-                    NotificationData.Title,
-                    NotificationData.Message,
-                    NotificationData.CreatedOnUtc
-                )
-                .Value;
+            Notification notification = NotificationBuilder
+                .ForUser(NotificationData.UserId)
+                .WithType(NotificationData.NotificationType)
+                .WithTitle(NotificationData.Title.Value)
+                .WithMessage(NotificationData.Message.Value)
+                .CreatedOn(NotificationData.CreatedOnUtc)
+                .Build();
 
             // Act
             notification.MarkAsRead();

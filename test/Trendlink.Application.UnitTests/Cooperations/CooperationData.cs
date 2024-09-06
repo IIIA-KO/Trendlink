@@ -1,8 +1,8 @@
 ﻿using Trendlink.Application.UnitTests.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using FluentAssertions;
 using Trendlink.Api.FunctionalTests.Infrastructure;
-using Trendlinl.Api.FunctionalTests.Infrastructure;
 
 namespace Trendlink.Api.FunctionalTests.Countries
 {

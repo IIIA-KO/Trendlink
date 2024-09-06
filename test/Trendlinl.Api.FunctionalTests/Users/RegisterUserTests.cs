@@ -4,7 +4,6 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using Trendlink.Api.Controllers.Users;
 using Trendlink.Api.FunctionalTests.Infrastructure;
-using Trendlinl.Api.FunctionalTests.Infrastructure;
 
 namespace Trendlink.Api.FunctionalTests.Users
 {

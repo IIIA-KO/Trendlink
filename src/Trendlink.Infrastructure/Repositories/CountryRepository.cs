@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Infrastructure.Specifications.Countries;
 

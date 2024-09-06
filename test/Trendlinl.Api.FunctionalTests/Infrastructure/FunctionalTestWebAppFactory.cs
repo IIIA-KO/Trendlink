@@ -18,7 +18,7 @@ using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Data;
 
-namespace Trendlinl.Api.FunctionalTests.Infrastructure
+namespace Trendlink.Api.FunctionalTests.Infrastructure
 {
     public class FunctionalTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {

@@ -1,26 +1,28 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.GoogleLogin
+namespace Trendlink.Application.Users.LoginUserWithGoogle
 {
     internal sealed class LogInUserWithGoogleCommandHandler
         : ICommandHandler<LogInUserWithGoogleCommand, AccessTokenResponse>
     {
         private readonly IGoogleService _googleService;
         private readonly IUserRepository _userRepository;
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _keycloakService;
 
         public LogInUserWithGoogleCommandHandler(
             IGoogleService googleService,
             IUserRepository userRepository,
-            IJwtService jwtService
+            IKeycloakService keycloakService
         )
         {
-            this._jwtService = jwtService;
+            this._keycloakService = keycloakService;
             this._userRepository = userRepository;
             this._googleService = googleService;
         }
@@ -30,7 +32,7 @@ namespace Trendlink.Application.Users.GoogleLogin
             CancellationToken cancellationToken
         )
         {
-            string? accessToken = await this._googleService.GetAccessTokenAsync(
+            GoogleTokenResponse? accessToken = await this._googleService.GetAccessTokenAsync(
                 request.Code,
                 cancellationToken
             );
@@ -39,8 +41,8 @@ namespace Trendlink.Application.Users.GoogleLogin
                 return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
             }
 
-            UserInfo? userInfo = await this._googleService.GetUserInfoAsync(
-                accessToken,
+            GoogleUserInfo? userInfo = await this._googleService.GetUserInfoAsync(
+                accessToken.AccessToken,
                 cancellationToken
             );
             if (userInfo is null)
@@ -60,7 +62,10 @@ namespace Trendlink.Application.Users.GoogleLogin
                 }
 
                 Result<AccessTokenResponse> tokenResult =
-                    await this._jwtService.AuthenticateWithGoogleAsync(userInfo, cancellationToken);
+                    await this._keycloakService.AuthenticateWithGoogleAsync(
+                        userInfo,
+                        cancellationToken
+                    );
                 if (tokenResult.IsFailure)
                 {
                     return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Trendlink.Infrastructure.Outbox;
+using Trendlink.Infrastructure.BackgroundJobs.Outbox;
 
 namespace Trendlink.Infrastructure.Configurations
 {

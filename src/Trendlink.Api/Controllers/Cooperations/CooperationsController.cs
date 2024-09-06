@@ -5,7 +5,7 @@ using Trendlink.Application.Cooperations.ConfirmCooperation;
 using Trendlink.Application.Cooperations.MarkCooperationAsDone;
 using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Cooperations.RejectCooperation;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 
@@ -24,7 +24,6 @@ namespace Trendlink.Api.Controllers.Cooperations
                 new Name(request.Name),
                 new Description(request.Description),
                 request.ScheduledOnUtc,
-                new Money(request.PriceAmount, Currency.FromCode(request.PriceCurrency)),
                 new AdvertisementId(request.AdvertisementId)
             );
 

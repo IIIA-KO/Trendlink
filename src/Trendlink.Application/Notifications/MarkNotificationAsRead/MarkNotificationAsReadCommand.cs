@@ -1,5 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Domain.Notifications.ValueObjects;
+using Trendlink.Domain.Notifications;
 
 namespace Trendlink.Application.Notifications.MarkNotificationAsRead
 {

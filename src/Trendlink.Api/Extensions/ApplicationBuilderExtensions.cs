@@ -13,7 +13,15 @@ namespace Trendlink.Api.Extensions
             using ApplicationDbContext dbContext =
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            dbContext.Database.Migrate();
+            try
+            {
+                dbContext.Database.Migrate();
+            }
+            catch (Npgsql.PostgresException)
+            {
+                Thread.Sleep(5000);
+                dbContext.Database.Migrate();
+            }
         }
 
         public static void UseCustomExceptionHandler(this IApplicationBuilder app)

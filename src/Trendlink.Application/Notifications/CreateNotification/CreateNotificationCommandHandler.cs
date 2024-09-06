@@ -1,10 +1,11 @@
 ﻿using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Notifications.CreateNotification
 {
@@ -43,31 +44,32 @@ namespace Trendlink.Application.Notifications.CreateNotification
                 return Result.Failure<NotificationId>(UserErrors.NotFound);
             }
 
-            Result<Notification> result = Notification.Create(
-                user.Id,
-                request.NotificationType,
-                request.Title,
-                request.Message,
-                this._dateTimeProvider.UtcNow
-            );
-            if (result.IsFailure)
+            try
             {
-                return Result.Failure<NotificationId>(result.Error);
+                Notification notification = NotificationBuilder
+                    .ForUser(user.Id)
+                    .WithType(request.NotificationType)
+                    .WithTitle(request.Title.Value)
+                    .WithMessage(request.Message.Value)
+                    .CreatedOn(this._dateTimeProvider.UtcNow)
+                    .Build();
+
+                this._notificationRepository.Add(notification);
+
+                await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+                await this._notificationService.SendNotificationAsync(
+                    user.Id.Value.ToString(),
+                    notification.Title.Value,
+                    notification.Message.Value
+                );
+
+                return notification.Id;
             }
-
-            Notification notification = result.Value;
-
-            this._notificationRepository.Add(notification);
-
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
-
-            await this._notificationService.SendNotificationAsync(
-                user.Id.Value.ToString(),
-                notification.Title.Value,
-                notification.Message.Value
-            );
-
-            return notification.Id;
+            catch (Exception)
+            {
+                return Result.Failure<NotificationId>(NotificationErrors.Invalid);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Users.States;
+﻿using Trendlink.Application.Abstractions.Repositories;
+using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Infrastructure.Repositories
 {

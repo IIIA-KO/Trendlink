@@ -15,6 +15,8 @@ namespace Trendlink.ArchitectureTests.Domain
                 .InAssembly(DomainAssembly)
                 .That()
                 .ImplementInterface(typeof(IDomainEvent))
+                .And()
+                .AreClasses()
                 .Should()
                 .BeSealed()
                 .GetResult();

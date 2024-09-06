@@ -21,10 +21,6 @@ namespace Trendlink.Application.Users.EditUser
 
             this.RuleFor(c => c.StateId).NotEmpty().WithMessage("State is required.");
 
-            this.RuleFor(c => c.AccountType)
-                .IsInEnum()
-                .WithMessage("Invalid account type specified.");
-
             this.RuleFor(c => c.AccountCategory)
                 .IsInEnum()
                 .WithMessage("Invalid account category specified");

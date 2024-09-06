@@ -1,9 +1,11 @@
 ﻿using Bogus;
 using Newtonsoft.Json;
+using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
+using Condition = Trendlink.Domain.Conditions.Condition;
 
 namespace Trendlink.Api.Extensions
 {
@@ -114,6 +116,43 @@ namespace Trendlink.Api.Extensions
             ];
 
             return (admin, users);
+        }
+
+        public static List<Condition> GenerateConditionsForUsers(List<User> users)
+        {
+            var faker = new Faker();
+            var conditions = new List<Condition>();
+
+            foreach (User user in users)
+            {
+                conditions.Add(
+                    Condition.Create(user.Id, new Description(faker.Lorem.Paragraphs(3))).Value
+                );
+            }
+
+            return conditions;
+        }
+
+        public static List<Advertisement> GenerateAdvertisementsForCondition(Condition condition)
+        {
+            var faker = new Faker();
+            var advertisements = new List<Advertisement>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                advertisements.Add(
+                    Advertisement
+                        .Create(
+                            condition.Id,
+                            new Name(faker.Lorem.Sentence()),
+                            new Money(Math.Round(faker.Random.Decimal(1, 100), 2), Currency.Usd),
+                            new Description(faker.Lorem.Sentence())
+                        )
+                        .Value
+                );
+            }
+
+            return advertisements;
         }
     }
 }

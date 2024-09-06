@@ -18,9 +18,6 @@ namespace Trendlink.Api.Controllers.Users
         public string Bio { get; init; }
 
         [JsonRequired]
-        public AccountType AccountType { get; init; }
-
-        [JsonRequired]
         public AccountCategory AccountCategory { get; init; }
     }
 }

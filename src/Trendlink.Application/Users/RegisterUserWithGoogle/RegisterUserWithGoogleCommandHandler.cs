@@ -1,19 +1,23 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.RegisterUserWithGoogle
 {
     internal sealed class RegisterUserWithGoogleCommandHandler
         : ICommandHandler<RegisterUserWithGoogleCommand, AccessTokenResponse>
     {
+        private const string ProviderName = "google";
+
         private readonly IGoogleService _googleService;
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _keycloakService;
         private readonly IAuthenticationService _authenticationService;
 
         private readonly IUserRepository _userRepository;
@@ -22,7 +26,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
 
         public RegisterUserWithGoogleCommandHandler(
             IGoogleService googleService,
-            IJwtService jwtService,
+            IKeycloakService keycloakService,
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
             IStateRepository stateRepository,
@@ -30,7 +34,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
         )
         {
             this._googleService = googleService;
-            this._jwtService = jwtService;
+            this._keycloakService = keycloakService;
             this._authenticationService = authenticationService;
             this._userRepository = userRepository;
             this._stateRepository = stateRepository;
@@ -42,7 +46,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
             CancellationToken cancellationToken
         )
         {
-            string? accessToken = await this._googleService.GetAccessTokenAsync(
+            GoogleTokenResponse? accessToken = await this._googleService.GetAccessTokenAsync(
                 request.Code,
                 cancellationToken
             );
@@ -51,8 +55,8 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                 return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
             }
 
-            UserInfo? userInfo = await this._googleService.GetUserInfoAsync(
-                accessToken,
+            GoogleUserInfo? userInfo = await this._googleService.GetUserInfoAsync(
+                accessToken.AccessToken,
                 cancellationToken
             );
             if (userInfo is null)
@@ -80,7 +84,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                 return Result.Failure<AccessTokenResponse>(UserErrors.DuplicateEmail);
             }
 
-            bool userExistsInKeycloak = await this._jwtService.CheckUserExistsInKeycloak(
+            bool userExistsInKeycloak = await this._keycloakService.CheckUserExistsInKeycloak(
                 userInfo.Email,
                 cancellationToken
             );
@@ -118,8 +122,24 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
 
                 await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
+                Result linkGoogleResult =
+                    await this._keycloakService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                        user.IdentityId,
+                        ProviderName,
+                        userInfo.Id,
+                        userInfo.Name,
+                        cancellationToken
+                    );
+                if (linkGoogleResult.IsFailure)
+                {
+                    return Result.Failure<AccessTokenResponse>(linkGoogleResult.Error);
+                }
+
                 Result<AccessTokenResponse> tokenResult =
-                    await this._jwtService.AuthenticateWithGoogleAsync(userInfo, cancellationToken);
+                    await this._keycloakService.AuthenticateWithGoogleAsync(
+                        userInfo,
+                        cancellationToken
+                    );
                 if (tokenResult.IsFailure)
                 {
                     return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
