@@ -1,9 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.RegisterUser
 {

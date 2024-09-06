@@ -1,6 +1,4 @@
-﻿using Trendlink.Application.Calendar.GetLoggedInUserCooperations;
-
-namespace Trendlink.Application.Calendar
+﻿namespace Trendlink.Application.Calendar
 {
     public sealed class DateResponse
     {
@@ -8,6 +6,6 @@ namespace Trendlink.Application.Calendar
 
         public bool IsBlocked { get; set; }
 
-        public List<CooperationResponse> Cooperations { get; init; }
+        public int CooperationsCount { get; init; }
     }
 }

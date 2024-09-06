@@ -1,7 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.Users.EditUser
 {
@@ -12,7 +11,6 @@ namespace Trendlink.Application.Users.EditUser
         DateOnly BirthDate,
         StateId StateId,
         Bio Bio,
-        AccountType AccountType,
         AccountCategory AccountCategory
     ) : ICommand;
 }

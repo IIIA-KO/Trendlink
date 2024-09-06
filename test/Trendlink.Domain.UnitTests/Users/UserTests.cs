@@ -4,8 +4,8 @@ using Trendlink.Domain.UnitTests.Infrastructure;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.UnitTests.Users
 {
@@ -31,7 +31,6 @@ namespace Trendlink.Domain.UnitTests.Users
             user.StateId.Should().Be(UserData.State.Id);
             user.Email.Should().Be(UserData.Email);
             user.PhoneNumber.Should().Be(UserData.PhoneNumber);
-            user.AccountType.Should().Be(AccountType.Personal);
             user.AccountCategory.Should().Be(AccountCategory.None);
             user.IdentityId.Should().Be(string.Empty);
         }
@@ -162,7 +161,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 )
                 .Value;
             var newBio = new Bio("New Bio");
-            AccountType newAccountType = AccountType.Business;
+
             AccountCategory newAccountCategory = AccountCategory.Education;
 
             // Act
@@ -172,7 +171,6 @@ namespace Trendlink.Domain.UnitTests.Users
                 newBirthDate,
                 newState.Id,
                 newBio,
-                newAccountType,
                 newAccountCategory
             );
 
@@ -182,7 +180,6 @@ namespace Trendlink.Domain.UnitTests.Users
             user.BirthDate.Should().Be(newBirthDate);
             user.StateId.Should().Be(newState.Id);
             user.Bio.Should().Be(newBio);
-            user.AccountType.Should().Be(newAccountType);
             user.AccountCategory.Should().Be(newAccountCategory);
         }
 
@@ -209,7 +206,6 @@ namespace Trendlink.Domain.UnitTests.Users
                 underageBirthDate,
                 UserData.State.Id,
                 UserData.Bio,
-                AccountType.Personal,
                 AccountCategory.None
             );
 
@@ -314,6 +310,64 @@ namespace Trendlink.Domain.UnitTests.Users
 
             // Assert
             isOfLegalAge.Should().BeFalse();
+        }
+
+        [Fact]
+        public void SetProfilePicture_Should_SetProfilePicture()
+        {
+            // Arrange
+            User user = User.Create(
+                UserData.FirstName,
+                UserData.LastName,
+                UserData.BirthDate,
+                UserData.State.Id,
+                UserData.Email,
+                UserData.PhoneNumber
+            ).Value;
+            var profilePictureUri = new Uri("https://example.com/profile.jpg");
+
+            // Act
+            user.SetProfilePicture(profilePictureUri);
+
+            // Assert
+            user.ProfilePicture.Should().NotBeNull();
+            user.ProfilePicture!.Uri.Should().Be(profilePictureUri);
+        }
+
+        [Fact]
+        public void LinkInstagramAccount_Should_RaiseInstagramAccountLinkedDomainEvent()
+        {
+            // Arrange
+            User user = User.Create(
+                UserData.FirstName,
+                UserData.LastName,
+                UserData.BirthDate,
+                UserData.State.Id,
+                UserData.Email,
+                UserData.PhoneNumber
+            ).Value;
+
+            InstagramAccount instagramAccount = InstagramAccount
+                .Create(
+                    user.Id,
+                    new FacebookPageId("dummy_id"),
+                    new Metadata("123", 1, "username", 1, 1)
+                )
+                .Value;
+
+            const string facebookAccessToken = "dummy_token";
+            DateTimeOffset expiresAt = DateTimeOffset.UtcNow.AddDays(7);
+
+            // Act
+            user.LinkInstagramAccount(instagramAccount, facebookAccessToken, expiresAt);
+
+            // Assert
+            InstagramAccountLinkedDomainEvent domainEvent = AssertDomainEventWasPublished<
+                InstagramAccountLinkedDomainEvent,
+                UserId
+            >(user);
+            domainEvent.UserId.Should().Be(user.Id);
+            domainEvent.InstagramAccount.Should().Be(instagramAccount);
         }
     }
 }

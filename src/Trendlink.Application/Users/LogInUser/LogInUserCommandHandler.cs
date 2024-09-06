@@ -1,18 +1,18 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Users.LogInUser
 {
     internal sealed class LogInUserCommandHandler
         : ICommandHandler<LogInUserCommand, AccessTokenResponse>
     {
-        private readonly IJwtService _jwtService;
+        private readonly IKeycloakService _keycloakService;
 
-        public LogInUserCommandHandler(IJwtService jwtService)
+        public LogInUserCommandHandler(IKeycloakService keycloakService)
         {
-            this._jwtService = jwtService;
+            this._keycloakService = keycloakService;
         }
 
         public async Task<Result<AccessTokenResponse>> Handle(
@@ -20,7 +20,7 @@ namespace Trendlink.Application.Users.LogInUser
             CancellationToken cancellationToken
         )
         {
-            Result<AccessTokenResponse> result = await this._jwtService.GetAccessTokenAsync(
+            Result<AccessTokenResponse> result = await this._keycloakService.GetAccessTokenAsync(
                 request.Email,
                 request.Password,
                 cancellationToken

@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MediatR" Version="12.3.0" />
+		<PackageReference Include="MediatR" Version="12.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="SonarAnalyzer.CSharp" Version="9.29.0.95321">
+	  <PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>

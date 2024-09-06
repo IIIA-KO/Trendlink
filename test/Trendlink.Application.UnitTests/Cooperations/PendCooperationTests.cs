@@ -4,6 +4,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Cooperations.PendCooperation;
 using Trendlink.Application.Exceptions;
 using Trendlink.Application.UnitTests.Advertisements;
@@ -12,8 +13,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Cooperations.BlockedDates;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
@@ -24,7 +24,6 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 CooperationData.ScheduledOnUtc,
-                AdvertisementData.Price,
                 CooperationData.AdvertisementId
             );
 

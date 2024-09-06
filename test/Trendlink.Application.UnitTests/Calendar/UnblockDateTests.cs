@@ -2,13 +2,13 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
-using Trendlink.Application.Calendar.BlockDate;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Calendar.UblockDate;
 using Trendlink.Application.UnitTests.Cooperations;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Calendar
 {

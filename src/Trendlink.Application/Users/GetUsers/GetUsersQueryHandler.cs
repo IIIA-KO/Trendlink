@@ -1,6 +1,5 @@
-﻿using System.Linq.Expressions;
-using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Abstractions.Messaging;
+﻿using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Pagination;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
@@ -11,12 +10,10 @@ namespace Trendlink.Application.Users.GetUsers
         : IQueryHandler<GetUsersQuery, PagedList<UserResponse>>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IUserContext _userContext;
 
-        public GetUsersQueryHandler(IUserRepository userRepository, IUserContext userContext)
+        public GetUsersQueryHandler(IUserRepository userRepository)
         {
             this._userRepository = userRepository;
-            this._userContext = userContext;
         }
 
         public async Task<Result<PagedList<UserResponse>>> Handle(
@@ -24,61 +21,48 @@ namespace Trendlink.Application.Users.GetUsers
             CancellationToken cancellationToken
         )
         {
-            IQueryable<User> usersQuery = this._userRepository.DbSetAsQueryable();
-
-            User user = await this._userRepository.GetByIdWithRolesAsync(
-                this._userContext.UserId,
-                cancellationToken
+            IQueryable<User> usersQuery = this._userRepository.SearchUsers(
+                new UserSeachParameters(
+                    request.SearchTerm,
+                    request.SortColumn,
+                    request.SortOrder,
+                    request.Country,
+                    request.AccountCategory,
+                    request.MinFollowersCount,
+                    request.MinMediaCount
+                )
             );
-
-            if (!user!.HasRole(Role.Administrator))
-            {
-                usersQuery = usersQuery.Where(user =>
-                    !user.Roles.Any(r => r.Name == Role.Administrator.Name)
-                );
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
-            {
-                usersQuery = usersQuery.Where(user =>
-                    ((string)user.FirstName).Contains(request.SearchTerm)
-                    || ((string)user.LastName).Contains(request.SearchTerm)
-                    || ((string)user.PhoneNumber).Contains(request.SearchTerm)
-                    || nameof(user.AccountType).Contains(request.SearchTerm)
-                );
-            }
-
-            usersQuery =
-                request.SortOrder?.ToUpperInvariant() == "DESC"
-                    ? usersQuery.OrderByDescending(GetSortProperty(request))
-                    : usersQuery.OrderBy(GetSortProperty(request));
 
             IQueryable<UserResponse> userResponsesQuery = usersQuery.Select(
                 user => new UserResponse(
                     user.Id.Value,
                     user.Email.Value,
                     user.FirstName.Value,
-                    user.LastName.Value
+                    user.LastName.Value,
+                    user.BirthDate,
+                    user.State.Country!.Name.Value,
+                    user.State.Name.Value,
+                    user.PhoneNumber.Value,
+                    user.Bio.Value,
+                    user.AccountCategory,
+                    user.ProfilePicture == null ? null : user.ProfilePicture.Uri.ToString()
                 )
             );
 
-            return await PagedList<UserResponse>.CreateAsync(
-                userResponsesQuery,
-                request.PageNumber,
-                request.PageSize
-            );
-        }
-
-        private static Expression<Func<User, object>> GetSortProperty(GetUsersQuery request)
-        {
-            return request.SortColumn?.ToUpperInvariant() switch
+            try
             {
-                "FIRSTNAME" => user => user.FirstName,
-                "LASTNAME" => user => user.LastName,
-                "PHONENUMBER" => user => user.PhoneNumber,
-                "ACCOUNTTYPE" => user => user.AccountType,
-                _ => user => user.Id,
-            };
+                return await PagedList<UserResponse>.CreateAsync(
+                    userResponsesQuery,
+                    request.PageNumber,
+                    request.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message + "\n" + ex.InnerException?.Message;
+                Console.WriteLine(message);
+                return null;
+            }
         }
     }
 }

@@ -3,22 +3,24 @@ using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.Advertisements.DeleteAdvertisement;
 using Trendlink.Application.Advertisements.EditAdvertisement;
 using Trendlink.Application.Conditions.CreateCondition;
-using Trendlink.Application.Conditions.EditCondition;
-using Trendlink.Application.Conditions.GetLoggedInUserCondition;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
+using Trendlink.Application.Conditions.EditLoggedInUserCondition;
+using Trendlink.Application.Conditions.GetUserCondition;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Conditions
 {
     [Route("/api/terms-and-conditions")]
     public class ConditionsController : BaseApiController
     {
-        [HttpGet]
-        public async Task<IActionResult> GetLoggedInUserConditions(
+        [HttpGet("{userId:guid}")]
+        public async Task<IActionResult> GetUserConditions(
+            [FromRoute] Guid userId,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserConditionQuery();
+            var query = new GetUserConditionQuery(new UserId(userId));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

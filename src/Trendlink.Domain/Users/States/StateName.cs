@@ -1,6 +1,4 @@
-﻿using Trendlink.Domain.Users.ValueObjects;
-
-namespace Trendlink.Domain.Users.States
+﻿namespace Trendlink.Domain.Users.States
 {
     public sealed record StateName(string Value)
     {

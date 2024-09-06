@@ -2,6 +2,7 @@
 using Dapper;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.Countries;
 

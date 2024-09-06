@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Infrastructure.Specifications.Advertisements;
 
 namespace Trendlink.Infrastructure.Repositories

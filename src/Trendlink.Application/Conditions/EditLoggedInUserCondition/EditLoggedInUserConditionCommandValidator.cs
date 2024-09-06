@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Conditions.EditCondition
+namespace Trendlink.Application.Conditions.EditLoggedInUserCondition
 {
     internal sealed class EditLoggedInUserConditionCommandValidator
         : AbstractValidator<EditLoggedInUserConditionCommand>

@@ -1,13 +1,18 @@
 ﻿using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Notifications
 {
     internal static class NotificationData
     {
         public static Notification Create() =>
-            Notification.Create(UserId, NotificationType, Title, Message, CreatedOnUtc).Value;
+            NotificationBuilder
+                .ForUser(UserId)
+                .WithType(NotificationType)
+                .WithTitle(Title.Value)
+                .WithMessage(Message.Value)
+                .CreatedOn(CreatedOnUtc)
+                .Build();
 
         public static readonly UserId UserId = UserId.New();
 

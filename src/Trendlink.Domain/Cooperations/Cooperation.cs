@@ -1,10 +1,8 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Conditions.Advertisements.ValueObjects;
 using Trendlink.Domain.Cooperations.DomainEvents;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Cooperations
 {
@@ -190,7 +188,7 @@ namespace Trendlink.Domain.Cooperations
             this.Status = CooperationStatus.Cancelled;
             this.CancelledOnUtc = utcNow;
 
-            this.RaiseDomainEvent(new CooperationsCancelledDomainEvent(this.Id));
+            this.RaiseDomainEvent(new CooperationCancelledDomainEvent(this.Id));
             return Result.Success();
         }
     }

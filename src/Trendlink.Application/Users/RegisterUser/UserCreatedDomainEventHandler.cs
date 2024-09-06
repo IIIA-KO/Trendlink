@@ -2,9 +2,9 @@
 using System.Text;
 using MediatR;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Notifications.ValueObjects;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.DomainEvents;
 
@@ -55,20 +55,15 @@ namespace Trendlink.Application.Users.RegisterUser
                 user.FirstName.Value
             );
 
-            Result<Notification> result = Notification.Create(
-                user.Id,
-                NotificationType.News,
-                new Title("Welcome to Trendlink!"),
-                new Message(welcomeMessage),
-                this._dateTimeProvider.UtcNow
-            );
+            Notification builtNotification = NotificationBuilder
+                .ForUser(user.Id)
+                .WithType(NotificationType.System)
+                .WithTitle("Welcome to Trendlink!")
+                .WithMessage(welcomeMessage)
+                .CreatedOn(this._dateTimeProvider.UtcNow)
+                .Build();
 
-            if (result.IsFailure)
-            {
-                return;
-            }
-
-            this._notificationRepository.Add(result.Value);
+            this._notificationRepository.Add(builtNotification);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
         }

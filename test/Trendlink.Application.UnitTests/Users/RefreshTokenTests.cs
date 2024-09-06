@@ -4,7 +4,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.RefreshToken;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Users
 {
@@ -12,22 +12,22 @@ namespace Trendlink.Application.UnitTests.Users
     {
         public static readonly RefreshTokenCommand Command = new(UserData.Token.RefreshToken);
 
-        private readonly IJwtService _jwtServiceMock;
+        private readonly IKeycloakService _keycloakServiceMock;
 
         private readonly RefreshTokenCommandHandler _handler;
 
         public RefreshTokenTests()
         {
-            this._jwtServiceMock = Substitute.For<IJwtService>();
+            this._keycloakServiceMock = Substitute.For<IKeycloakService>();
 
-            this._handler = new RefreshTokenCommandHandler(this._jwtServiceMock);
+            this._handler = new RefreshTokenCommandHandler(this._keycloakServiceMock);
         }
 
         [Fact]
         public async Task Handle_Should_ReturnAccessTokenResponse_WhenRefreshIsSuccessful()
         {
             // Arrange
-            this._jwtServiceMock.RefreshTokenAsync(
+            this._keycloakServiceMock.RefreshTokenAsync(
                 UserData.Token.RefreshToken,
                 Arg.Any<CancellationToken>()
             )
@@ -47,7 +47,7 @@ namespace Trendlink.Application.UnitTests.Users
         public async Task Handle_Should_ReturnFailure_WhenRefreshFails()
         {
             // Arrange
-            this._jwtServiceMock.RefreshTokenAsync(
+            this._keycloakServiceMock.RefreshTokenAsync(
                 Command.RefreshToken,
                 Arg.Any<CancellationToken>()
             )
@@ -62,10 +62,10 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailure_WhenJwtServiceThrowsException()
+        public async Task Handle_Should_ReturnFailure_WhenKeycloakServiceThrowsException()
         {
             // Arrange
-            this._jwtServiceMock.RefreshTokenAsync(
+            this._keycloakServiceMock.RefreshTokenAsync(
                 Command.RefreshToken,
                 Arg.Any<CancellationToken>()
             )

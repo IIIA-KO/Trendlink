@@ -5,7 +5,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Trendlink.Api.FunctionalTests.Infrastructure;
 using Trendlink.Application.Users.LogInUser;
-using Trendlinl.Api.FunctionalTests.Infrastructure;
 
 namespace Trendlink.Api.FunctionalTests.Users
 {

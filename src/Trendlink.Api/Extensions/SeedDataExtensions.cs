@@ -1,11 +1,15 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 using Trendlink.Infrastructure;
+using Condition = Trendlink.Domain.Conditions.Condition;
+using Role = Trendlink.Domain.Users.Role;
+using User = Trendlink.Domain.Users.User;
 
 namespace Trendlink.Api.Extensions
 {
@@ -23,7 +27,7 @@ namespace Trendlink.Api.Extensions
 
             ISender sender = scope.ServiceProvider.GetRequiredService<ISender>();
 
-            if (!dbContext.Set<Country>().Any())
+            if (!await dbContext.Set<Country>().AnyAsync())
             {
                 var countriesApiUrl = new Uri(configuration["Countries-API-URL"]!);
 
@@ -36,13 +40,13 @@ namespace Trendlink.Api.Extensions
                 await dbContext.SaveChangesAsync();
             }
 
-            if (!dbContext.Set<User>().Any())
+            if (!await dbContext.Set<User>().AnyAsync())
             {
                 const string password = "Pa$$w0rd";
 
                 (User admin, List<User> users) = DataGenerator.GenerateUsers();
 
-                StateId stateId = dbContext.Set<State>().First().Id;
+                StateId stateId = (await dbContext.Set<State>().FirstAsync()).Id;
 
                 RegisterUserCommand adminCommand =
                     new(
@@ -81,6 +85,28 @@ namespace Trendlink.Api.Extensions
                     );
 
                     await sender.Send(userRegisterCommand, default);
+                }
+
+                await dbContext.SaveChangesAsync();
+            }
+
+            if (!await dbContext.Set<Condition>().AnyAsync())
+            {
+                List<User> users = await dbContext.Set<User>().ToListAsync();
+                List<Condition> conditions = DataGenerator.GenerateConditionsForUsers(users);
+
+                dbContext.Set<Condition>().AddRange(conditions);
+                await dbContext.SaveChangesAsync();
+            }
+
+            if (!await dbContext.Set<Advertisement>().AnyAsync())
+            {
+                foreach (Condition? condition in await dbContext.Set<Condition>().ToListAsync())
+                {
+                    List<Advertisement> advertisements =
+                        DataGenerator.GenerateAdvertisementsForCondition(condition);
+
+                    dbContext.Set<Advertisement>().AddRange(advertisements);
                 }
 
                 await dbContext.SaveChangesAsync();

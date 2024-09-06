@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using Trendlink.Application.IntegrationTests.Infrastructure;
-using Trendlink.Application.UnitTests.Users;
 using Trendlink.Application.Users.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Application.IntegrationTests.Users
 {

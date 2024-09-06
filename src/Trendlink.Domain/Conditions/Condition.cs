@@ -2,7 +2,6 @@
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
 
 namespace Trendlink.Domain.Conditions
 {

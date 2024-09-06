@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Cooperations.BlockedDates;
-using Trendlink.Domain.Users.ValueObjects;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Configurations.Cooperations
 {

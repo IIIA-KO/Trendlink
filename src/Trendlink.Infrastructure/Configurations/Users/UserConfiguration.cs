@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Infrastructure.Configurations.Users
 {
@@ -30,6 +31,15 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .HasConversion(firstName => firstName.Value, value => new LastName(value));
 
             builder
+                .Property(user => user.ProfilePicture)
+                .HasConversion(
+                    profilePicture =>
+                        profilePicture == null ? string.Empty : profilePicture.Uri.ToString(),
+                    value => new ProfilePicture(new Uri(value ?? string.Empty))
+                )
+                .IsRequired(false);
+
+            builder
                 .Property(user => user.Email)
                 .HasMaxLength(400)
                 .HasConversion(email => email.Value, value => new Email(value));
@@ -48,6 +58,21 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .HasOne(user => user.Condition)
                 .WithOne(condition => condition.User)
                 .HasForeignKey<Condition>(condition => condition.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder
+                .HasOne(user => user.Token)
+                .WithOne(token => token.User)
+                .HasForeignKey<UserToken>(token => token.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            builder
+                .HasOne(user => user.InstagramAccount)
+                .WithOne(instagramAccount => instagramAccount.User)
+                .HasForeignKey<InstagramAccount>(instagramAccount => instagramAccount.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
 
             builder

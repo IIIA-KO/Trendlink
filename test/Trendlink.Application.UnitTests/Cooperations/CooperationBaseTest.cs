@@ -1,12 +1,12 @@
 ﻿using Trendlink.Application.UnitTests.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
     public abstract class CooperationBaseTest
     {
-        public Cooperation CreatePendingCooperation(DateTimeOffset scheduledOnUtc)
+        public static Cooperation CreatePendingCooperation(DateTimeOffset scheduledOnUtc)
         {
             return Cooperation
                 .Pend(
@@ -22,18 +22,16 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 .Value;
         }
 
-        public Cooperation CreateConfirmedCooperation(DateTimeOffset scheduledOnUtc)
+        public static Cooperation CreateConfirmedCooperation(DateTimeOffset scheduledOnUtc)
         {
-            Cooperation cooperation = this.CreatePendingCooperation(scheduledOnUtc);
+            Cooperation cooperation = CreatePendingCooperation(scheduledOnUtc);
             cooperation.Confirm(DateTime.UtcNow);
             return cooperation;
         }
 
-        public Cooperation CreateDoneCooperation()
+        public static Cooperation CreateDoneCooperation()
         {
-            Cooperation cooperation = this.CreateConfirmedCooperation(
-                DateTimeOffset.UtcNow.AddDays(7)
-            );
+            Cooperation cooperation = CreateConfirmedCooperation(DateTimeOffset.UtcNow.AddDays(7));
             cooperation.MarkAsDone(DateTime.UtcNow);
             return cooperation;
         }

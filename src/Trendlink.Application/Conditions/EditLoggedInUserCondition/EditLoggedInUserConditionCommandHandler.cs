@@ -1,9 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 
-namespace Trendlink.Application.Conditions.EditCondition
+namespace Trendlink.Application.Conditions.EditLoggedInUserCondition
 {
     internal sealed class EditLoggedInUserConditionCommandHandler
         : ICommandHandler<EditLoggedInUserConditionCommand>

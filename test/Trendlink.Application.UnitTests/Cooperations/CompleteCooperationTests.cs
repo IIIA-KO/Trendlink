@@ -2,11 +2,12 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Cooperations.CompleteCooperation;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
@@ -57,7 +58,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenUserIsNotAuthorized()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
+            Cooperation cooperation = CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
@@ -76,7 +77,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnFailure_WhenCompletionFails()
         {
             // Arrange
-            Cooperation cooperation = this.CreatePendingCooperation(CooperationData.ScheduledOnUtc);
+            Cooperation cooperation = CreatePendingCooperation(CooperationData.ScheduledOnUtc);
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);
@@ -95,7 +96,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            Cooperation cooperation = this.CreateDoneCooperation();
+            Cooperation cooperation = CreateDoneCooperation();
 
             this._cooperationRepositoryMock.GetByIdAsync(Command.CooperationId, default)
                 .Returns(cooperation);

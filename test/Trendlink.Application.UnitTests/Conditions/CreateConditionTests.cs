@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Conditions.CreateCondition;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;

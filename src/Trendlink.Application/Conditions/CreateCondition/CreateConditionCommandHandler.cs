@@ -1,8 +1,9 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Users.ValueObjects;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Conditions.CreateCondition
 {
