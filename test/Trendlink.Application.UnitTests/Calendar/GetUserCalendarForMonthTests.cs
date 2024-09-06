@@ -2,31 +2,21 @@
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
-using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
+using Trendlink.Application.Calendar.GetUserCalendarForMonth;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Calendar
 {
-    public class GetLoggedInUserCooperationsForMonthTests
+    public class GetUserCalendarForMonthTests
     {
         private const string SqlCooperations = """
             SELECT
-                id AS Id,
-                name AS Name,
-                description AS Description,
-                scheduled_on_utc AS ScheduledOnUtc,
-                price_amount AS PriceAmount,
-                price_currency AS PriceCurrency,
-                advertisement_id AS AdvertisementId,
-                buyer_id AS BuyerId,
-                seller_id AS SellerId,
-                status AS Status
+                scheduled_on_utc AS ScheduledOnUtc
             FROM cooperations
-            WHERE (buyer_id = @UserId OR seller_id = @UserId)
+            WHERE (seller_id = @UserId)
                 AND EXTRACT(MONTH FROM scheduled_on_utc) = @Month
                 AND EXTRACT(YEAR FROM scheduled_on_utc) = @Year
             """;
@@ -40,23 +30,18 @@ namespace Trendlink.Application.UnitTests.Calendar
                 AND EXTRACT(YEAR FROM date) = @Year
             """;
 
-        private static readonly GetLoggedInUserCalendarForMonthQuery Query =
-            new(DateTime.Now.Month, DateTime.Now.Year);
+        private static readonly GetUserCalendarForMonthQuery Query =
+            new(UserId.New(), DateTime.Now.Month, DateTime.Now.Year);
 
-        private readonly IUserContext _userContextMock;
+        private readonly GetUserCalendarForMonthQueryHandler _handler;
+
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
 
-        private readonly GetLoggedInUserCalendarForMonthQueryHandler _handler;
-
-        public GetLoggedInUserCooperationsForMonthTests()
+        public GetUserCalendarForMonthTests()
         {
-            this._userContextMock = Substitute.For<IUserContext>();
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
 
-            this._handler = new GetLoggedInUserCalendarForMonthQueryHandler(
-                this._userContextMock,
-                this._sqlConnectionFactoryMock
-            );
+            this._handler = new GetUserCalendarForMonthQueryHandler(this._sqlConnectionFactoryMock);
         }
 
         [Fact]
@@ -70,10 +55,7 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -95,10 +77,7 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -123,13 +102,8 @@ namespace Trendlink.Application.UnitTests.Calendar
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
-            this._userContextMock.UserId.Returns(UserId.New());
-
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();

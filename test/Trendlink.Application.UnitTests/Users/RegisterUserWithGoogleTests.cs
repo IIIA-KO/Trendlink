@@ -274,6 +274,50 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenAccountLinkingFails()
+        {
+            // Arrange
+            this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
+
+            var userInfo = new GoogleUserInfo()
+            {
+                Email = UserData.Email.Value,
+                Name = UserData.FirstName.Value,
+                GivenName = UserData.LastName.Value
+            };
+            this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
+                .Returns(userInfo);
+
+            this._stateRepositoryMock.ExistsByIdAsync(Command.StateId, default).Returns(true);
+
+            this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
+                .Returns(false);
+
+            this._keycloakServiceMock.CheckUserExistsInKeycloak(userInfo.Email, default)
+                .Returns(false);
+
+            this._authenticationServiceMock.RegisterAsync(Arg.Any<User>(), userInfo.Email, default)
+                .Returns(UserData.Token.AccessToken);
+
+            this._keycloakServiceMock.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                default
+            )
+                .Returns(Result.Failure(UserErrors.InvalidCredentials));
+
+            // Act
+            Result<AccessTokenResponse> result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(UserErrors.InvalidCredentials);
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnFailure_WhenAuthenticationThrows()
         {
             // Arrange
@@ -299,6 +343,15 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._authenticationServiceMock.RegisterAsync(Arg.Any<User>(), userInfo.Email, default)
                 .Returns(UserData.Token.AccessToken);
+
+            this._keycloakServiceMock.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                default
+            )
+                .Returns(Result.Success());
 
             this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Throws(new HttpRequestException("Google service exception"));
@@ -337,6 +390,15 @@ namespace Trendlink.Application.UnitTests.Users
 
             this._authenticationServiceMock.RegisterAsync(Arg.Any<User>(), userInfo.Email, default)
                 .Returns(UserData.Token.AccessToken);
+
+            this._keycloakServiceMock.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                default
+            )
+                .Returns(Result.Success());
 
             this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Returns(UserData.Token);

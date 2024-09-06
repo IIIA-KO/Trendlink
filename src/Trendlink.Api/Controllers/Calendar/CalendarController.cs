@@ -33,6 +33,7 @@ namespace Trendlink.Api.Controllers.Calendar
                 request.Month,
                 request.Year
             );
+
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 

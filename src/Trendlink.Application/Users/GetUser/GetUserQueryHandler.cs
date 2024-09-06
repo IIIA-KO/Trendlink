@@ -1,19 +1,18 @@
-﻿using System.Data;
-using Dapper;
-using Trendlink.Application.Abstractions.Data;
-using Trendlink.Application.Abstractions.Messaging;
+﻿using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Users.GetUser
 {
     internal sealed class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserResponse>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly IUserRepository _userRepository;
 
-        public GetUserQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public GetUserQueryHandler(IUserRepository userRepository)
         {
-            this._sqlConnectionFactory = sqlConnectionFactory;
+            this._userRepository = userRepository;
         }
 
         public async Task<Result<UserResponse>> Handle(
@@ -21,41 +20,28 @@ namespace Trendlink.Application.Users.GetUser
             CancellationToken cancellationToken
         )
         {
-            using IDbConnection connection = this._sqlConnectionFactory.CreateConnection();
-
-            const string sql = """
-                SELECT
-                    u.id AS Id,
-                    u.first_name AS FirstName,
-                    u.last_name AS LastName,
-                    u.email AS Email,
-                    u.phone_number AS PhoneNumber,
-                    u.bio AS Bio,
-                    u.birth_date AS BirthDate,
-                    s.name AS StateName,
-                    c.name AS CountryName,
-                    u.profile_picture AS ProfilePictureUrl
-                FROM users AS u
-                    INNER JOIN states AS s
-                        ON u.state_id = s.id
-                    INNER JOIN countries AS c
-                        ON s.country_id = c.id
-                WHERE u.id = @UserId
-                """;
-
-            try
+            User? user = await this._userRepository.GetByIdWithStateAsync(
+                request.UserId,
+                cancellationToken
+            );
+            if (user is null)
             {
-                UserResponse userResponse = await connection.QueryFirstOrDefaultAsync<UserResponse>(
-                    sql,
-                    new { UserId = request.UserId.Value }
-                );
+                return Result.Failure<UserResponse>(UserErrors.NotFound);
+            }
 
-                return userResponse ?? Result.Failure<UserResponse>(UserErrors.NotFound);
-            }
-            catch (Exception)
-            {
-                return Result.Failure<UserResponse>(Error.Unexpected);
-            }
+            return new UserResponse(
+                user.Id.Value,
+                user.Email.Value,
+                user.FirstName.Value,
+                user.LastName.Value,
+                user.BirthDate,
+                user.State.Country!.Name.Value,
+                user.State.Name.Value,
+                user.PhoneNumber.Value,
+                user.Bio.Value,
+                user.AccountCategory,
+                user.ProfilePicture?.Uri.ToString()
+            );
         }
     }
 }

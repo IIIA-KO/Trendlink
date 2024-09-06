@@ -6,12 +6,12 @@ using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Calendar.GetUserCalendar
 {
-    internal sealed class GetUserCooperationsQueryHandler
+    internal sealed class GetUserCalendarQueryHandler
         : IQueryHandler<GetUserCalendarQuery, IReadOnlyList<DateResponse>>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public GetUserCooperationsQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public GetUserCalendarQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
             this._sqlConnectionFactory = sqlConnectionFactory;
         }

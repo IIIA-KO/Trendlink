@@ -79,6 +79,7 @@ namespace Trendlink.Application.UnitTests.Notifications
 
             // Assert
             result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(NotificationErrors.Invalid);
         }
 
         [Fact]

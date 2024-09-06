@@ -132,7 +132,7 @@ namespace Trendlink.Application.Users.RegisterUserWithGoogle
                     );
                 if (linkGoogleResult.IsFailure)
                 {
-                    return Result.Failure<AccessTokenResponse>(result.Error);
+                    return Result.Failure<AccessTokenResponse>(linkGoogleResult.Error);
                 }
 
                 Result<AccessTokenResponse> tokenResult =

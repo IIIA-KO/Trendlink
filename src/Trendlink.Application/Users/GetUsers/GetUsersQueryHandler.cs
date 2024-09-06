@@ -49,11 +49,20 @@ namespace Trendlink.Application.Users.GetUsers
                 )
             );
 
-            return await PagedList<UserResponse>.CreateAsync(
-                userResponsesQuery,
-                request.PageNumber,
-                request.PageSize
-            );
+            try
+            {
+                return await PagedList<UserResponse>.CreateAsync(
+                    userResponsesQuery,
+                    request.PageNumber,
+                    request.PageSize
+                );
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message + "\n" + ex.InnerException?.Message;
+                Console.WriteLine(message);
+                return null;
+            }
         }
     }
 }

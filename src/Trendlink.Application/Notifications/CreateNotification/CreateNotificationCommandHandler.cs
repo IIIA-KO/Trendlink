@@ -44,25 +44,32 @@ namespace Trendlink.Application.Notifications.CreateNotification
                 return Result.Failure<NotificationId>(UserErrors.NotFound);
             }
 
-            Notification notification = NotificationBuilder
-                .ForUser(user.Id)
-                .WithType(request.NotificationType)
-                .WithTitle(request.Title.Value)
-                .WithMessage(request.Message.Value)
-                .CreatedOn(this._dateTimeProvider.UtcNow)
-                .Build();
+            try
+            {
+                Notification notification = NotificationBuilder
+                    .ForUser(user.Id)
+                    .WithType(request.NotificationType)
+                    .WithTitle(request.Title.Value)
+                    .WithMessage(request.Message.Value)
+                    .CreatedOn(this._dateTimeProvider.UtcNow)
+                    .Build();
 
-            this._notificationRepository.Add(notification);
+                this._notificationRepository.Add(notification);
 
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+                await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await this._notificationService.SendNotificationAsync(
-                user.Id.Value.ToString(),
-                notification.Title.Value,
-                notification.Message.Value
-            );
+                await this._notificationService.SendNotificationAsync(
+                    user.Id.Value.ToString(),
+                    notification.Title.Value,
+                    notification.Message.Value
+                );
 
-            return notification.Id;
+                return notification.Id;
+            }
+            catch (Exception)
+            {
+                return Result.Failure<NotificationId>(NotificationErrors.Invalid);
+            }
         }
     }
 }

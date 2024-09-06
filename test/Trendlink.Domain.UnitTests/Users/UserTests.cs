@@ -311,5 +311,63 @@ namespace Trendlink.Domain.UnitTests.Users
             // Assert
             isOfLegalAge.Should().BeFalse();
         }
+
+        [Fact]
+        public void SetProfilePicture_Should_SetProfilePicture()
+        {
+            // Arrange
+            User user = User.Create(
+                UserData.FirstName,
+                UserData.LastName,
+                UserData.BirthDate,
+                UserData.State.Id,
+                UserData.Email,
+                UserData.PhoneNumber
+            ).Value;
+            var profilePictureUri = new Uri("https://example.com/profile.jpg");
+
+            // Act
+            user.SetProfilePicture(profilePictureUri);
+
+            // Assert
+            user.ProfilePicture.Should().NotBeNull();
+            user.ProfilePicture!.Uri.Should().Be(profilePictureUri);
+        }
+
+        [Fact]
+        public void LinkInstagramAccount_Should_RaiseInstagramAccountLinkedDomainEvent()
+        {
+            // Arrange
+            User user = User.Create(
+                UserData.FirstName,
+                UserData.LastName,
+                UserData.BirthDate,
+                UserData.State.Id,
+                UserData.Email,
+                UserData.PhoneNumber
+            ).Value;
+
+            InstagramAccount instagramAccount = InstagramAccount
+                .Create(
+                    user.Id,
+                    new FacebookPageId("dummy_id"),
+                    new Metadata("123", 1, "username", 1, 1)
+                )
+                .Value;
+
+            const string facebookAccessToken = "dummy_token";
+            DateTimeOffset expiresAt = DateTimeOffset.UtcNow.AddDays(7);
+
+            // Act
+            user.LinkInstagramAccount(instagramAccount, facebookAccessToken, expiresAt);
+
+            // Assert
+            InstagramAccountLinkedDomainEvent domainEvent = AssertDomainEventWasPublished<
+                InstagramAccountLinkedDomainEvent,
+                UserId
+            >(user);
+            domainEvent.UserId.Should().Be(user.Id);
+            domainEvent.InstagramAccount.Should().Be(instagramAccount);
+        }
     }
 }

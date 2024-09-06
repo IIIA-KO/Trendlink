@@ -24,7 +24,6 @@ namespace Trendlink.Application.UnitTests.Cooperations
                 CooperationData.Name,
                 CooperationData.Description,
                 CooperationData.ScheduledOnUtc,
-                AdvertisementData.Price,
                 CooperationData.AdvertisementId
             );
 

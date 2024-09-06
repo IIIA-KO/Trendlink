@@ -20,6 +20,15 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<User?> GetByIdWithStateAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ApplySpecification(new UserByIdWithStateSpecification(id))
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public async Task<User?> GetByIdWithInstagramAccountAsync(
             UserId id,
             CancellationToken cancellationToken = default

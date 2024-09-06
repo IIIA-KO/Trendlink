@@ -2,57 +2,43 @@
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
-using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
-using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
+using Trendlink.Application.Calendar.GetUserCalendar;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Calendar
 {
-    public class GetLoggedInUserCooperationsTests
+    public class GetUserCalendarTests
     {
         private const string SqlCooperations = """
             SELECT
-                id AS Id,
-                name AS Name,
-                description AS Description,
-                scheduled_on_utc AS ScheduledOnUtc,
-                price_amount AS PriceAmount,
-                price_currency AS PriceCurrency,
-                advertisement_id AS AdvertisementId,
-                buyer_id AS BuyerId,
-                seller_id AS SellerId,
-                status AS Status
+                scheduled_on_utc AS ScheduledOnUtc
             FROM cooperations
-            WHERE buyer_id = @UserId 
+            WHERE buyer_id = @UserId
                 OR seller_id = @UserId
             """;
 
         private const string SqlBlockedDates = """
-            SELECT 
+            SELECT
                 date AS Date
             FROM blocked_dates
             WHERE user_id = @UserId
             """;
 
-        public static readonly GetLoggedInUserCalendarQuery Query = new();
+        private static readonly GetUserCalendarQuery Query = new(UserId.New());
 
-        private readonly IUserContext _userContextMock;
+        private readonly GetUserCalendarQueryHandler _handler;
+
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
 
-        private readonly GetLoggedInUserCalendarQueryHandler _handler;
-
-        public GetLoggedInUserCooperationsTests()
+        public GetUserCalendarTests()
         {
-            this._userContextMock = Substitute.For<IUserContext>();
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
 
-            this._handler = new GetLoggedInUserCalendarQueryHandler(
-                this._userContextMock,
-                this._sqlConnectionFactoryMock
-            );
+            this._handler = new GetUserCalendarQueryHandler(this._sqlConnectionFactoryMock);
         }
 
         [Fact]
@@ -66,10 +52,7 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -91,10 +74,7 @@ namespace Trendlink.Application.UnitTests.Calendar
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -115,13 +95,8 @@ namespace Trendlink.Application.UnitTests.Calendar
 
             this._sqlConnectionFactoryMock.CreateConnection().Returns(dbConnection);
 
-            this._userContextMock.UserId.Returns(UserData.Create().Id);
-
             // Act
-            Result<IReadOnlyList<LoggedInDateResponse>> result = await this._handler.Handle(
-                Query,
-                default
-            );
+            Result<IReadOnlyList<DateResponse>> result = await this._handler.Handle(Query, default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();

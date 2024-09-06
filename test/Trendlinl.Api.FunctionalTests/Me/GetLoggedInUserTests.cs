@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Trendlink.Api.FunctionalTests.Infrastructure;
 using Trendlink.Application.Users;
 
-namespace Trendlink.Api.FunctionalTests.Users
+namespace Trendlink.Api.FunctionalTests.Me
 {
     public class GetLoggedInUserTests : BaseFunctionalTest
     {

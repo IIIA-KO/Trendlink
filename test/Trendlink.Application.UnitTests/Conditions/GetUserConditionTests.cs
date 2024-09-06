@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
@@ -11,7 +12,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {
-    public class GetLoggedInUserConditionTests
+    public class GetUserConditionTests
     {
         private const string Sql = """
             SELECT 
@@ -35,14 +36,12 @@ namespace Trendlink.Application.UnitTests.Conditions
         private static readonly GetUserConditionQuery Query = new(UserData.Create().Id);
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
-        private readonly IUserContext _userContextMock;
 
         private readonly GetLUserConditionQueryHandler _handler;
 
-        public GetLoggedInUserConditionTests()
+        public GetUserConditionTests()
         {
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
-            this._userContextMock = Substitute.For<IUserContext>();
 
             this._handler = new GetLUserConditionQueryHandler(this._sqlConnectionFactoryMock);
         }
@@ -51,10 +50,6 @@ namespace Trendlink.Application.UnitTests.Conditions
         public async Task Handle_Should_ReturnFailure_WhenExceptionIsThrown()
         {
             // Arrange
-            UserId userId = ConditionData.UserId;
-
-            this._userContextMock.UserId.Returns(userId);
-
             using IDbConnection dbConnectionMock = Substitute.For<IDbConnection>().SetupCommands();
 
             dbConnectionMock.SetupQuery(Sql).Throws(new Exception("Databse exception"));
