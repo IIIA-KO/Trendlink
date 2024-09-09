@@ -246,7 +246,7 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
         {
             this._logger.LogInformation(
                 "Checking if user with email {Email} exists in Keycloak",
-                email
+                MaskEmail(email)
             );
 
             string requestUrl =
@@ -268,11 +268,31 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
 
             this._logger.LogInformation(
                 "User with email {Email} {Exists} in Keycloak",
-                email,
+                MaskEmail(email),
                 exists ? "exists" : "does not exist"
             );
 
             return exists;
+        }
+
+        private static string MaskEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return email;
+            }
+
+            int atIndex = email.IndexOf('@', StringComparison.InvariantCultureIgnoreCase);
+            if (atIndex <= 1)
+            {
+                return email;
+            }
+
+            return string.Concat(
+                email.AsSpan(0, 1),
+                new string('*', atIndex - 1),
+                email.AsSpan(atIndex)
+            );
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
