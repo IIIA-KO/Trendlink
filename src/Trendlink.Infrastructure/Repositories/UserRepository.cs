@@ -90,10 +90,8 @@ namespace Trendlink.Infrastructure.Repositories
         {
             IQueryable<User> query = this
                 .dbContext.Set<User>()
-                .Where(user => user.InstagramAccount != null)
                 .Include(user => user.Roles)
                 .Where(user => !user.Roles.Any(r => r.Name == Role.Administrator.Name))
-                .Include(user => user.InstagramAccount)
                 .Include(user => user.State)
                 .ThenInclude(state => state.Country);
 
@@ -127,14 +125,16 @@ namespace Trendlink.Infrastructure.Repositories
             if (parameters.MinFollowersCount > 0)
             {
                 query = query.Where(user =>
-                    user.InstagramAccount!.Metadata.FollowersCount >= parameters.MinFollowersCount
+                    user.InstagramAccount != null
+                    && user.InstagramAccount.Metadata.FollowersCount >= parameters.MinFollowersCount
                 );
             }
 
-            if (parameters.MinFollowersCount > 0)
+            if (parameters.MinMediaCount > 0)
             {
                 query = query.Where(user =>
-                    user.InstagramAccount!.Metadata.MediaCount >= parameters.MinMediaCount
+                    user.InstagramAccount != null
+                    && user.InstagramAccount.Metadata.MediaCount >= parameters.MinMediaCount
                 );
             }
 
