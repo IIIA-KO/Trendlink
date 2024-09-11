@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import LoginForm from '../components/Forms/LoginForm.tsx';
+import LoginForm from '../components/Forms/LoginForm';
 import googleIcon from "../assets/icon-google.svg";
 import imgOne from "../assets/img1AuthPage.svg";
-import RegisterForm from "../components/Forms/RegisterForm.tsx";
-import GoogleRegisterForm from "../components/Forms/GoogleRegisterForm.tsx";
-import GoogleLoginForm from "../components/Forms/GoogleLoginForm.tsx";
+import RegisterForm from "../components/Forms/RegisterForm";
+import GoogleRegisterForm from "../components/Forms/GoogleRegisterForm";
+import GoogleLoginForm from "../components/Forms/GoogleLoginForm";
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);

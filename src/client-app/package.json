@@ -16,7 +16,7 @@
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
     "yup": "^1.4.0",
-    "query-string": "^9.1.0"
+    "query-string": "^9.1.0",
     "react-dropzone": "^14.2.3",
     "react-infinite-scroller": "^1.2.6",
     "react-router-dom": "^6.4.3",
