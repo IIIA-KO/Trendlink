@@ -1,4 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Authentication
@@ -27,7 +28,7 @@ namespace Trendlink.Application.Abstractions.Authentication
             CancellationToken cancellationToken = default
         );
 
-        Task<string> GetUserPosts(
+        Task<UserPostsResponse> GetUserPostsWithInsights(
             string accessToken,
             string instagramAccountId,
             int limit,

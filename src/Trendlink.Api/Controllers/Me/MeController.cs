@@ -78,9 +78,13 @@ namespace Trendlink.Api.Controllers.Me
         }
 
         [HttpGet("posts")]
-        public async Task<IActionResult> GetLoggedInUserPosts(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetLoggedInUserPosts(
+            [FromQuery] string? cursorType,
+            [FromQuery] string? cursor,
+            CancellationToken cancellationToken
+        )
         {
-            var query = new GetUserPostsQuery(this._userContext.UserId);
+            var query = new GetUserPostsQuery(this._userContext.UserId, cursorType, cursor);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

@@ -244,7 +244,7 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
             CancellationToken cancellationToken = default
         )
         {
-            this._logger.LogInformation(
+            this._logger.LogDebug(
                 "Checking if user with email {Email} exists in Keycloak",
                 MaskEmail(email)
             );
@@ -266,7 +266,7 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
                 response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
 
-            this._logger.LogInformation(
+            this._logger.LogDebug(
                 "User with email {Email} {Exists} in Keycloak",
                 MaskEmail(email),
                 exists ? "exists" : "does not exist"

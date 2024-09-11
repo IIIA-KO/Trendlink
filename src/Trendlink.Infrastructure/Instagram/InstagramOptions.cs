@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Infrastructure.Authentication.Instagram
+﻿namespace Trendlink.Infrastructure.Instagram
 {
     public sealed class InstagramOptions
     {

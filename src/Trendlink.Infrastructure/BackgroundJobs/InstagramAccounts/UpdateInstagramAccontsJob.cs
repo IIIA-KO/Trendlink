@@ -10,8 +10,8 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
-using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.BackgroundJobs.Token;
+using Trendlink.Infrastructure.Instagram;
 
 namespace Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts
 {

@@ -34,10 +34,12 @@ namespace Trendlink.Api.Controllers.Instagram
         [HttpGet("{userId:guid}/posts")]
         public async Task<IActionResult> GetUserPosts(
             Guid userId,
+            [FromQuery] string cursorType,
+            [FromQuery] string cursor,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserPostsQuery(new UserId(userId));
+            var query = new GetUserPostsQuery(new UserId(userId), cursorType, cursor);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

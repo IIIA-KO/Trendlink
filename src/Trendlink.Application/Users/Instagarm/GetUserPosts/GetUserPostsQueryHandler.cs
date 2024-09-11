@@ -8,8 +8,9 @@ using Trendlink.Domain.Users.InstagramBusinessAccount;
 namespace Trendlink.Application.Users.Instagarm.GetUserPosts
 {
     internal sealed class GetUserPostsQueryHandler
-        : IQueryHandler<GetUserPostsQuery, IReadOnlyList<PostResponse>>
+        : IQueryHandler<GetUserPostsQuery, UserPostsResponse>
     {
+        private const int Limit = 6;
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
@@ -28,18 +29,18 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<IReadOnlyList<PostResponse>>> Handle(
+        public async Task<Result<UserPostsResponse>> Handle(
             GetUserPostsQuery request,
             CancellationToken cancellationToken
         )
         {
-            User? user = await this._userRepository.GetByIdWithInstagramAccountAsync(
+            User? user = await this._userRepository.GetByIdWithInstagramAccountAndTokenAsync(
                 this._userContext.UserId,
                 cancellationToken
             );
             if (user is null)
             {
-                return Result.Failure<IReadOnlyList<PostResponse>>(UserErrors.NotFound);
+                return Result.Failure<UserPostsResponse>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -50,23 +51,19 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<IReadOnlyList<PostResponse>>(
+                return Result.Failure<UserPostsResponse>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            string result = await this._instagramService.GetUserPosts(
+            return await this._instagramService.GetUserPostsWithInsights(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
-                6,
-                string.Empty,
-                string.Empty,
+                Limit,
+                request.CursorType ?? string.Empty,
+                request.Cursor ?? string.Empty,
                 cancellationToken
             );
-
-            Console.WriteLine(result.Length);
-
-            return Result.Success<IReadOnlyList<PostResponse>>([]);
         }
     }
 }

@@ -15,7 +15,6 @@ using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authentication.Google;
-using Trendlink.Infrastructure.Authentication.Instagram;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
 using Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts;
@@ -24,6 +23,7 @@ using Trendlink.Infrastructure.BackgroundJobs.Token;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
+using Trendlink.Infrastructure.Instagram;
 using Trendlink.Infrastructure.Repositories;
 using Trendlink.Infrastructure.SignalR;
 using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
@@ -45,6 +45,8 @@ namespace Trendlink.Infrastructure
             AddPersistence(services, configuration);
 
             AddAuthentication(services, configuration);
+
+            AddInstagramIntegration(services);
 
             AddAuthorization(services);
 
@@ -142,6 +144,29 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IUserContext, UserContext>();
 
             services.AddScoped<IGoogleService, GoogleService>();
+        }
+
+        private static void AddInstagramIntegration(IServiceCollection services)
+        {
+            services.AddHttpClient<IInstagramPostsService, InstagramPostsService>(
+                (serviceProvider, httpClient) =>
+                {
+                    InstagramOptions instagramOptions = serviceProvider
+                        .GetRequiredService<IOptions<InstagramOptions>>()
+                        .Value;
+                    httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
+                }
+            );
+
+            services.AddHttpClient<IInstagramAccountsService, InstagramAccountsService>(
+                (serviceProvider, httpClient) =>
+                {
+                    InstagramOptions instagramOptions = serviceProvider
+                        .GetRequiredService<IOptions<InstagramOptions>>()
+                        .Value;
+                    httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
+                }
+            );
 
             services.AddHttpClient<IInstagramService, InstagramService>(
                 (serviceProvider, httpClient) =>
