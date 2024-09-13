@@ -11,19 +11,16 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
         : IQueryHandler<GetUserPostsQuery, UserPostsResponse>
     {
         private const int Limit = 6;
-        private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
 
         public GetUserPostsQueryHandler(
-            IUserContext userContext,
             IUserRepository userRepository,
             IInstagramService instagramService,
             IKeycloakService keycloakService
         )
         {
-            this._userContext = userContext;
             this._userRepository = userRepository;
             this._instagramService = instagramService;
             this._keycloakService = keycloakService;
@@ -35,7 +32,7 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
         )
         {
             User? user = await this._userRepository.GetByIdWithInstagramAccountAndTokenAsync(
-                this._userContext.UserId,
+                request.UserId,
                 cancellationToken
             );
             if (user is null)

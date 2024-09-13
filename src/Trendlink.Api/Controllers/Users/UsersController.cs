@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
+using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.LoginUserWithGoogle;
 using Trendlink.Application.Users.RefreshToken;
@@ -146,6 +147,19 @@ namespace Trendlink.Api.Controllers.Users
             );
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpGet("{userId:guid}/posts")]
+        public async Task<IActionResult> GetUserPosts(
+            Guid userId,
+            [FromQuery] string? cursorType,
+            [FromQuery] string? cursor,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserPostsQuery(new UserId(userId), cursorType, cursor);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
     }
 }

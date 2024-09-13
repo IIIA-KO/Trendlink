@@ -81,7 +81,7 @@ namespace Trendlink.Infrastructure.Instagram
         {
             string baseUrl = $"{this._instagramOptions.BaseUrl}{instagramAccountId}/media";
             const string fields =
-                "?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp";
+                "?fields=id,media_type,media_url,permalink,thumbnail_url,timestamp";
             string query = $"&limit={limit}&access_token={accessToken}";
 
             if (!string.IsNullOrEmpty(cursor))
@@ -101,7 +101,7 @@ namespace Trendlink.Infrastructure.Instagram
             foreach (InstagramPostResponse post in posts)
             {
                 post.Insights = await this.FetchPostInsightsAsync(
-                    post.Id,
+                    post,
                     accessToken,
                     post.MediaType,
                     cancellationToken
@@ -110,13 +110,13 @@ namespace Trendlink.Infrastructure.Instagram
         }
 
         private async Task<InstagramInsightsResponse?> FetchPostInsightsAsync(
-            string postId,
+            InstagramPostResponse post,
             string accessToken,
             string mediaType,
             CancellationToken cancellationToken
         )
         {
-            string insightsUrl = this.BuildInsightsUrl(postId, accessToken);
+            string insightsUrl = BuildInsightsUrl(post.Id, accessToken, post.MediaType);
             HttpResponseMessage response = await this.SendGetRequestAsync(
                 insightsUrl,
                 cancellationToken
@@ -134,9 +134,13 @@ namespace Trendlink.Infrastructure.Instagram
             return insights;
         }
 
-        private string BuildInsightsUrl(string postId, string accessToken)
+        private static string BuildInsightsUrl(string postId, string accessToken, string mediaType)
         {
-            return $"{this._instagramOptions.BaseUrl}{postId}/insights?metric=impressions,reach,saved,video_views&access_token={accessToken}";
+            string metrics = mediaType.Equals("video", StringComparison.OrdinalIgnoreCase)
+                ? "likes,saved,video_views"
+                : "likes,saved";
+
+            return $"https://graph.facebook.com/v18.0/{postId}/insights?metric={metrics}&access_token={accessToken}";
         }
 
         private static void RemoveVideoViewsInsight(InstagramInsightsResponse insights)
@@ -161,7 +165,7 @@ namespace Trendlink.Infrastructure.Instagram
                     ThumbnailUrl = post.ThumbnailUrl,
                     Timestamp = DateTime.Parse(post.Timestamp, CultureInfo.InvariantCulture),
                     Insights =
-                        post.Insights?.Data.ConvertAll(insight => new InstagramInsight
+                        post.Insights?.Data?.ConvertAll(insight => new InstagramInsight
                         {
                             Name = insight.Name,
                             Value = insight.Values.FirstOrDefault()?.Value
