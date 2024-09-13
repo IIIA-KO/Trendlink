@@ -1,10 +1,10 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import * as Yup from 'yup';
-import { getCountries, getStates } from '../../api/countriesAndStatesApi.ts';
-import { CountryType } from "../../models/CountryType.ts";
-import { StateType } from "../../models/StateType.ts";
+import { getCountries, getStates } from '../../api/countriesAndStatesApi';
+import { CountryType } from "../../models/CountryType";
+import { StateType } from "../../models/StateType";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import {clientId, redirectUri, scope, responseType} from "../../variables/GoogleAuthVar.ts";
+import {clientId, redirectUri, scope, responseType} from "../../variables/GoogleAuthVar";
 
 const GoogleRegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);

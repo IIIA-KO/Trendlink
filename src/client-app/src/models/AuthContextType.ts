@@ -1,4 +1,4 @@
-import { AuthResponseType } from './AuthResponseType.ts';
+import { AuthResponseType } from './AuthResponseType';
 
 export interface AuthContextType {
     user: AuthResponseType | null;

@@ -42,9 +42,9 @@ namespace Trendlink.Api.Extensions
                     "CorsPolicy",
                     policy =>
                         policy
+                            .WithOrigins("https://localhost:3000", "http://localhost:3000")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:3000", "https://localhost:3000")
                             .AllowCredentials()
                 )
             );

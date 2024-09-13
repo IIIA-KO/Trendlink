@@ -12,7 +12,7 @@ const axiosInstance  = axios.create({
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Headers': 'content-type',
     },
-    timeout: 900,
+    timeout: 5000,
 });
 
 axiosInstance .interceptors.request.use(request => {

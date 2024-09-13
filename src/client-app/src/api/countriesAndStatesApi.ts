@@ -1,6 +1,6 @@
-import axiosInstance from './Api.ts';
-import { CountryType  } from '../models/CountryType.ts';
-import { StateType   } from '../models/StateType.ts';
+import axiosInstance from './Api';
+import { CountryType  } from '../models/CountryType';
+import { StateType   } from '../models/StateType';
 
 export const getCountries = async (): Promise<CountryType[]> => {
     const response = await axiosInstance.get('/countries');

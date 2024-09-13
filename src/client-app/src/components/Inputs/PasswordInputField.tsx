@@ -1,6 +1,6 @@
 import {Field, ErrorMessage, useFormikContext, FormikTouched, FormikErrors} from 'formik';
 import {useState} from "react";
-import {UserType} from "../../models/UserType.ts";
+import {UserType} from "../../models/UserType";
 
 const PasswordInputField = () => {
     const [showPassword, setShowPassword] = useState(false);
