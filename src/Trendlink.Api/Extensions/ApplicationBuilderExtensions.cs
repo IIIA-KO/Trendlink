@@ -44,7 +44,8 @@ namespace Trendlink.Api.Extensions
                         policy
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:3000", "https://localhost:3000")
+                            .WithOrigins("https://localhost:3000")
+                            .SetIsOriginAllowedToAllowWildcardSubdomains()
                             .AllowCredentials()
                 )
             );
