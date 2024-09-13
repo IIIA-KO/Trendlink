@@ -7,6 +7,7 @@ import Diagramleft from "../components/Diagram1";
 import DiagramRight from "../components/Diagram2";
 import Calendar from "../components/Calendar";
 import Footer from "../components/Footer";
+import logo from "../public/-11-1@2x.png"
 
 
 const Frame5: FunctionComponent = () => {
@@ -20,7 +21,7 @@ const Frame5: FunctionComponent = () => {
               className="absolute top-[2.125rem] left-[1.125rem] w-[5.188rem] h-[5.188rem] object-cover z-[1]"
               loading="lazy"
               alt=""
-              src="/-11-1@2x.png"
+              src={logo} // замість src="/-11-1@2x.png"
             />
           </div>
         </div>
