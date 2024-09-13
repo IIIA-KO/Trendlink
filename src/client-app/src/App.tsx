@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CallBackPage from "./pages/CallBackPage";
 import '@fontsource/kodchasan';
 import '@fontsource/inter'
+import ProfilePage from "./pages/ProfilePage";
 
 const App: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ const App: React.FC = () => {
                   <Route path="/login/callback" element={<CallBackPage />}/>
                   <Route path="/" element={
                       <ProtectedRoute>
-                          <HomePage />
+                          <ProfilePage />
                       </ProtectedRoute>
                   }
                   />
