@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/yup": "^0.32.0",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "antd": "^5.20.6",
     "axios": "^1.7.7",
     "formik": "^2.4.6",
     "query-string": "^9.1.0",
