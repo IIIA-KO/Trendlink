@@ -1,4 +1,4 @@
-import axiosInstance from './Api.ts';
+import axiosInstance from './Api';
 import { UserType } from '../models/UserType';
 import { AuthResponseType } from '../models/AuthResponseType'
 
