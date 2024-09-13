@@ -2,17 +2,25 @@
 export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
     extend: {
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'],
+        kodchasan: ['Kodchasan', 'sans-serif'],
+        "logo-font": "Kodchasan",
+      },
+      fontWeight: {
+        light: '300',
+        regular: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
       colors: {
+        primary: "#009EA0",
+        hover: "#21CBCD",
+        background: "#FFFFFF",
+        textPrimary: "#FFFFFF",
+        textSecondary: "#3C3C3C",
         aliceblue: {
           "100": "#eff7ff",
           "200": "#f0f4f9",
@@ -32,7 +40,6 @@ module.exports = {
           "300": "#eaeaea",
         },
         sandybrown: "#f3ae5f",
-        transparent: "#c0bebe",
         darkslategray: {
           "100": "#4b4b4b",
           "200": "rgba(60, 60, 60, 0)",
@@ -56,32 +63,9 @@ module.exports = {
         },
       },
       spacing: {},
-      fontFamily: {
-        inter: "Inter",
-        "logo-font": "Kodchasan",
-      },
-      borderRadius: {
-        "21xl": "40px",
-        xl: "20px",
-        "20xl": "39px",
-        "19xl": "38px",
-        "8xs": "5px",
-        "3xs": "10px",
-        mini: "15px",
-        "12xs": "1px",
-      },
+
     },
-    fontSize: {
-      xs: "12px",
-      sm: "14px",
-      base: "16px",
-      xl: "20px",
-      "3xs": "10px",
-      "2xs": "11px",
-      "5xl": "24px",
-      lgi: "19px",
-      inherit: "inherit",
-    },
+
     screens: {
       lg: {
         max: "1200px",
@@ -103,7 +87,5 @@ module.exports = {
       },
     },
   },
-  corePlugins: {
-    preflight: false,
-  },
-};
+  plugins: [],
+}
