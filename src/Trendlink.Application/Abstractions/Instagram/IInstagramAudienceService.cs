@@ -1,9 +1,8 @@
 ﻿using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
-using Trendlink.Infrastructure.Instagram.Models.Audience;
 
-namespace Trendlink.Infrastructure.Instagram
+namespace Trendlink.Application.Abstractions.Instagram
 {
-    internal interface IInstagramAudienceService
+    public interface IInstagramAudienceService
     {
         Task<List<AudienceGenderPercentageResponse>> GetUserAudienceGenderPercentage(
             string accessToken,

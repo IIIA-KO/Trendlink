@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Instagram.Models.Accounts;
@@ -24,7 +26,139 @@ namespace Trendlink.Infrastructure.Instagram
             this._logger = logger;
         }
 
-        public async Task<Result<string>> GetFacebookPageIdAsync(
+        public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+            string accessToken,
+            string facebookPageId,
+            string instagramUsername,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation("Attempting to get Instagram user info.");
+
+            InstagramBusinessAccountResponse instagramBusinessAccount =
+                await this.GetInstagramBusinessAccountAsync(
+                    accessToken,
+                    facebookPageId,
+                    cancellationToken
+                );
+
+            string instagramUserMetadataRequestUrl =
+                this._instagramOptions.BaseUrl
+                + (instagramBusinessAccount.InstagramAccount?.Id)
+                + $"?fields=business_discovery.username({instagramBusinessAccount.InstagramAccount?.UserName})"
+                + "{username,name,ig_id,id,profile_picture_url,biography,followers_count,media_count}"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage instagramUserMetadataResponse = await this._httpClient.GetAsync(
+                instagramUserMetadataRequestUrl,
+                cancellationToken
+            );
+            if (!instagramUserMetadataResponse.IsSuccessStatusCode)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Instagram user info. Status code: {StatusCode}",
+                    instagramUserMetadataResponse.StatusCode
+                );
+                return Result.Failure<InstagramUserInfo>(UserErrors.InvalidCredentials);
+            }
+
+            string content = await instagramUserMetadataResponse.Content.ReadAsStringAsync(
+                cancellationToken
+            );
+
+            InstagramUserInfo? instagramUserInfo = JsonSerializer.Deserialize<InstagramUserInfo>(
+                content
+            );
+
+            if (instagramUserInfo != null)
+            {
+                instagramUserInfo.FacebookPageId = facebookPageId;
+                this._logger.LogInformation(
+                    "Successfully retrieved Instagram user info for user {Username}",
+                    instagramUserInfo.BusinessDiscovery.Username
+                );
+            }
+            else
+            {
+                this._logger.LogWarning("Failed to deserialize Instagram user info.");
+            }
+
+            return instagramUserInfo;
+        }
+
+        public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+            string accessToken,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation("Attempting to get Instagram user info.");
+
+            Result<string> facebookPageIdResult = await this.GetFacebookPageIdAsync(
+                accessToken,
+                cancellationToken
+            );
+            if (facebookPageIdResult.IsFailure)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Facebook page ID. Error: {Error}",
+                    facebookPageIdResult.Error
+                );
+                return Result.Failure<InstagramUserInfo>(facebookPageIdResult.Error);
+            }
+            string facebookPageId = facebookPageIdResult.Value;
+
+            InstagramBusinessAccountResponse instagramBusinessAccount =
+                await this.GetInstagramBusinessAccountAsync(
+                    accessToken,
+                    facebookPageId,
+                    cancellationToken
+                );
+
+            string instagramUserMetadataRequestUrl =
+                this._instagramOptions.BaseUrl
+                + (instagramBusinessAccount.InstagramAccount?.Id)
+                + $"?fields=business_discovery.username({instagramBusinessAccount.InstagramAccount?.UserName})"
+                + "{username,name,ig_id,id,profile_picture_url,biography,followers_count,media_count}"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage instagramUserMetadataResponse = await this._httpClient.GetAsync(
+                instagramUserMetadataRequestUrl,
+                cancellationToken
+            );
+            if (!instagramUserMetadataResponse.IsSuccessStatusCode)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Instagram user info. Status code: {StatusCode}",
+                    instagramUserMetadataResponse.StatusCode
+                );
+                return Result.Failure<InstagramUserInfo>(UserErrors.InvalidCredentials);
+            }
+
+            string content = await instagramUserMetadataResponse.Content.ReadAsStringAsync(
+                cancellationToken
+            );
+
+            InstagramUserInfo? instagramUserInfo = JsonSerializer.Deserialize<InstagramUserInfo>(
+                content
+            );
+
+            if (instagramUserInfo != null)
+            {
+                instagramUserInfo.FacebookPageId = facebookPageId;
+                this._logger.LogInformation(
+                    "Successfully retrieved Instagram user info for user {Username}",
+                    instagramUserInfo.BusinessDiscovery.Username
+                );
+            }
+            else
+            {
+                this._logger.LogWarning("Failed to deserialize Instagram user info.");
+            }
+
+            return instagramUserInfo;
+        }
+
+        private async Task<Result<string>> GetFacebookPageIdAsync(
             string accessToken,
             CancellationToken cancellationToken = default
         )
@@ -66,7 +200,7 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
-        public async Task<FacebookUserInfo?> GetFacebookUserInfoAsync(
+        private async Task<FacebookUserInfo?> GetFacebookUserInfoAsync(
             string accessToken,
             CancellationToken cancellationToken = default
         )
@@ -96,7 +230,7 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
-        public async Task<InstagramBusinessAccountResponse> GetInstagramBusinessAccountAsync(
+        private async Task<InstagramBusinessAccountResponse> GetInstagramBusinessAccountAsync(
             string accessToken,
             string facebookPageId,
             CancellationToken cancellationToken = default
@@ -129,7 +263,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<HttpResponseMessage> SendGetRequestAsync(
+        private async Task<HttpResponseMessage> SendGetRequestAsync(
             string url,
             CancellationToken cancellationToken
         )

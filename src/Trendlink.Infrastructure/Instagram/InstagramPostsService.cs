@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Infrastructure.Instagram.Models.Posts;
 
@@ -20,7 +21,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<UserPostsResponse> GetPostsAsync(
+        public async Task<UserPostsResponse> GetUserPostsWithInsights(
             string accessToken,
             string instagramAccountId,
             int limit,

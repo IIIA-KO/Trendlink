@@ -1,10 +1,10 @@
 ﻿using Trendlink.Application.Users.Instagarm.GetUserPosts;
 
-namespace Trendlink.Infrastructure.Instagram
+namespace Trendlink.Application.Abstractions.Instagram
 {
-    internal interface IInstagramPostsService
+    public interface IInstagramPostsService
     {
-        Task<UserPostsResponse> GetPostsAsync(
+        Task<UserPostsResponse> GetUserPostsWithInsights(
             string accessToken,
             string instagramAccountId,
             int limit,

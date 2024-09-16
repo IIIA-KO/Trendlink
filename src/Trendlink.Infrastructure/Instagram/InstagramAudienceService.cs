@@ -1,8 +1,7 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
-using Trendlink.Infrastructure.Instagram.Models.Audience;
 using static System.Text.Json.JsonElement;
 
 namespace Trendlink.Infrastructure.Instagram
