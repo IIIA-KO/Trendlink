@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;

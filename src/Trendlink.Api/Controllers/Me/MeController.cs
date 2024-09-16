@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
