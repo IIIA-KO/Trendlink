@@ -20,7 +20,7 @@ namespace Trendlink.Application.Users.GetUser
             CancellationToken cancellationToken
         )
         {
-            User? user = await this._userRepository.GetByIdWithStateAsync(
+            User? user = await this._userRepository.GetByIdWithStateAndInstagramAccountAsync(
                 request.UserId,
                 cancellationToken
             );
@@ -40,7 +40,9 @@ namespace Trendlink.Application.Users.GetUser
                 user.PhoneNumber.Value,
                 user.Bio.Value,
                 user.AccountCategory,
-                user.ProfilePicture?.Uri.ToString()
+                user.ProfilePicture?.Uri.ToString(),
+                user.InstagramAccount?.Metadata.FollowersCount,
+                user.InstagramAccount?.Metadata.MediaCount
             );
         }
     }

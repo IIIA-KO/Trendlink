@@ -18,7 +18,9 @@ namespace Trendlink.Application.Users
             string phoneNumber,
             string bio,
             AccountCategory accountCategory,
-            string? profilePictureUrl
+            string? profilePictureUrl,
+            int? followersCount,
+            int? mediaCount
         )
         {
             this.Id = id;
@@ -32,6 +34,8 @@ namespace Trendlink.Application.Users
             this.Bio = bio;
             this.AccountCategory = accountCategory;
             this.ProfilePictureUrl = profilePictureUrl;
+            this.FollowersCount = followersCount;
+            this.MediaCount = mediaCount;
         }
 
         public Guid Id { get; init; }
@@ -55,5 +59,9 @@ namespace Trendlink.Application.Users
         public AccountCategory AccountCategory { get; init; }
 
         public string? ProfilePictureUrl { get; init; }
+
+        public int? FollowersCount { get; init; }
+
+        public int? MediaCount { get; init; }
     }
 }
