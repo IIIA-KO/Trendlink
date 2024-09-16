@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading;
+using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.GetUser;
+using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
 
 namespace Trendlink.Api.Controllers.Me
@@ -85,6 +87,16 @@ namespace Trendlink.Api.Controllers.Me
         )
         {
             var query = new GetUserPostsQuery(this._userContext.UserId, cursorType, cursor);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("audience-gender-percentage")]
+        public async Task<IActionResult> GetLoggedInUserAudienceGenderPercentage(
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserAudienceGenderPercentageQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

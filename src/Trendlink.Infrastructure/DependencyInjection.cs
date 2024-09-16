@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Net.Http;
+using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -148,16 +149,6 @@ namespace Trendlink.Infrastructure
 
         private static void AddInstagramIntegration(IServiceCollection services)
         {
-            services.AddHttpClient<IInstagramPostsService, InstagramPostsService>(
-                (serviceProvider, httpClient) =>
-                {
-                    InstagramOptions instagramOptions = serviceProvider
-                        .GetRequiredService<IOptions<InstagramOptions>>()
-                        .Value;
-                    httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
-                }
-            );
-
             services.AddHttpClient<IInstagramAccountsService, InstagramAccountsService>(
                 (serviceProvider, httpClient) =>
                 {
@@ -168,6 +159,26 @@ namespace Trendlink.Infrastructure
                 }
             );
 
+            services.AddHttpClient<IInstagramPostsService, InstagramPostsService>(
+                (serviceProvider, httpClient) =>
+                {
+                    InstagramOptions instagramOptions = serviceProvider
+                        .GetRequiredService<IOptions<InstagramOptions>>()
+                        .Value;
+                    httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
+                }
+            );
+
+            services.AddHttpClient<IInstagramAudienceService, InstagramAudienceService>(
+                (serviceProvider, httpClient) =>
+                {
+                    InstagramOptions instagramOptions = serviceProvider
+                        .GetRequiredService<IOptions<InstagramOptions>>()
+                        .Value;
+
+                    httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
+                }
+            );
             services.AddHttpClient<IInstagramService, InstagramService>(
                 (serviceProvider, httpClient) =>
                 {

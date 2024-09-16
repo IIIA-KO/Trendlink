@@ -1,4 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 
@@ -34,6 +35,12 @@ namespace Trendlink.Application.Abstractions.Authentication
             int limit,
             string cursorType,
             string cursor,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<List<AudienceGenderPercentageResponse>> GetUserAudienceGenderPercentage(
+            string accessToken,
+            string instagramAccountId,
             CancellationToken cancellationToken = default
         );
     }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
@@ -17,6 +18,7 @@ namespace Trendlink.Infrastructure.Instagram
         private readonly InstagramOptions _instagramOptions;
         private readonly IInstagramPostsService _instagramPostsService;
         private readonly IInstagramAccountsService _instagramAccountsService;
+        private readonly IInstagramAudienceService _instagramAudienceService;
         private readonly ILogger<InstagramService> _logger;
 
         public InstagramService(
@@ -24,6 +26,7 @@ namespace Trendlink.Infrastructure.Instagram
             IOptions<InstagramOptions> instagramOptions,
             IInstagramPostsService instagramPostsService,
             IInstagramAccountsService instagramAccountsService,
+            IInstagramAudienceService instagramAudienceService,
             ILogger<InstagramService> logger
         )
         {
@@ -31,6 +34,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
             this._instagramPostsService = instagramPostsService;
             this._instagramAccountsService = instagramAccountsService;
+            this._instagramAudienceService = instagramAudienceService;
             this._logger = logger;
         }
 
@@ -351,6 +355,19 @@ namespace Trendlink.Infrastructure.Instagram
                 limit,
                 cursorType,
                 cursor,
+                cancellationToken
+            );
+        }
+
+        public async Task<List<AudienceGenderPercentageResponse>> GetUserAudienceGenderPercentage(
+            string accessToken,
+            string instagramAccountId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this._instagramAudienceService.GetUserAudienceGenderPercentage(
+                accessToken,
+                instagramAccountId,
                 cancellationToken
             );
         }

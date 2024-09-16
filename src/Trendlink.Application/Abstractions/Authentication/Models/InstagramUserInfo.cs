@@ -15,9 +15,9 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
 
         public string FacebookPageId { get; set; }
 
-        public InstagramAccount CreateInstagramAccount(UserId userId)
+        public Result<InstagramAccount> CreateInstagramAccount(UserId userId)
         {
-            Result<InstagramAccount> result = InstagramAccount.Create(
+            return InstagramAccount.Create(
                 userId,
                 new FacebookPageId(this.FacebookPageId),
                 new Metadata(
@@ -28,8 +28,6 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
                     this.BusinessDiscovery.MediaCount
                 )
             );
-
-            return result.Value;
         }
     }
 

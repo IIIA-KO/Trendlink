@@ -154,7 +154,7 @@ namespace Trendlink.Infrastructure.Instagram
 
         private UserPostsResponse MapToUserPostsResponse(InstagramMedia posts)
         {
-            var response = new UserPostsResponse
+            return new UserPostsResponse
             {
                 Posts = posts.Data.ConvertAll(post => new InstagramPost
                 {
@@ -179,8 +179,6 @@ namespace Trendlink.Infrastructure.Instagram
                     PreviousCursor = posts.Paging.Previous
                 }
             };
-
-            return response;
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(

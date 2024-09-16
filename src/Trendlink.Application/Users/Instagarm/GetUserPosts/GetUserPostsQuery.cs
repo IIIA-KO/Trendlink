@@ -11,7 +11,7 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
 
         public TimeSpan? Expiration =>
             string.IsNullOrEmpty(this.Cursor) || string.IsNullOrEmpty(this.CursorType)
-                ? TimeSpan.FromMinutes(1)
-                : TimeSpan.FromMinutes(10);
+                ? TimeSpan.FromSeconds(30)
+                : TimeSpan.FromMinutes(5);
     }
 }
