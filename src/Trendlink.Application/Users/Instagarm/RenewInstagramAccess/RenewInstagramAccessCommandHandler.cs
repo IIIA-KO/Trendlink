@@ -77,8 +77,9 @@ namespace Trendlink.Application.Users.Instagarm.RenewInstagramAccess
                 return Result.Failure(instagramUserInfoResult.Error);
             }
 
-            InstagramAccount instagramAccount =
-                instagramUserInfoResult.Value.CreateInstagramAccount(user.Id);
+            InstagramAccount instagramAccount = instagramUserInfoResult
+                .Value.CreateInstagramAccount(user.Id)
+                .Value;
 
             if (user.InstagramAccount!.Metadata.Id != instagramAccount.Metadata.Id)
             {

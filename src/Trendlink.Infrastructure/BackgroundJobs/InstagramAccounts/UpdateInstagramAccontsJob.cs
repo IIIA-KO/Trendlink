@@ -153,9 +153,9 @@ namespace Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts
                 return;
             }
 
-            InstagramAccount updatedInstagramAccount = userInfo.Value.CreateInstagramAccount(
-                new UserId(userId)
-            );
+            InstagramAccount updatedInstagramAccount = userInfo
+                .Value.CreateInstagramAccount(new UserId(userId))
+                .Value;
 
             const string updateQuery =
                 @"

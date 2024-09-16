@@ -4,6 +4,8 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
 {
     public sealed class InstagramAccount : Entity<InstagramAccountId>
     {
+        public const int MinFollowersCount = 100;
+
         private InstagramAccount() { }
 
         private InstagramAccount(
@@ -45,6 +47,11 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
             if (string.IsNullOrEmpty(metadata.Id))
             {
                 return Result.Failure<InstagramAccount>(InstagramAccountErrors.InvalidId);
+            }
+
+            if (metadata.FollowersCount < MinFollowersCount)
+            {
+                return Result.Failure<InstagramAccount>(InstagramAccountErrors.NotEnoughFollowers);
             }
 
             return new InstagramAccount(InstagramAccountId.New(), userId, facebookPageId, metadata);

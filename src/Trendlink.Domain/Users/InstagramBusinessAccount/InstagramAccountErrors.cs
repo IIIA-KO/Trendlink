@@ -28,6 +28,12 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
                 "Provided instagram account has already been linked"
             );
 
+        public static readonly Error NotEnoughFollowers =
+            new(
+                "InstagramAccount.NotEnoughFollowers",
+                $"Provided instagram account has less than {InstagramAccount.MinFollowersCount} followers"
+            );
+
         public static readonly Error WrongInstagramAccount =
             new(
                 "InstagramAccount.WrongInstagramAccount",

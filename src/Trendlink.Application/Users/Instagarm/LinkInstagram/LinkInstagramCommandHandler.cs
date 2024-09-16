@@ -72,12 +72,19 @@ namespace Trendlink.Application.Users.Instagarm.LinkInstagram
             {
                 return Result.Failure(instagramUserInfoResult.Error);
             }
+
             InstagramUserInfo instagramUserInfo = instagramUserInfoResult.Value;
 
             user.Bio = new Bio(instagramUserInfo.BusinessDiscovery.Biography);
             user.SetProfilePicture(new Uri(instagramUserInfo.BusinessDiscovery.ProfilePictureUrl));
 
-            InstagramAccount instagramAccount = instagramUserInfo.CreateInstagramAccount(user.Id);
+            Result<InstagramAccount> instagramAccountResult =
+                instagramUserInfo.CreateInstagramAccount(user.Id);
+            if (instagramAccountResult.IsFailure)
+            {
+                return Result.Failure(instagramAccountResult.Error);
+            }
+            InstagramAccount instagramAccount = instagramAccountResult.Value;
 
             Result linkInstagramResult =
                 await this._keycloakService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
