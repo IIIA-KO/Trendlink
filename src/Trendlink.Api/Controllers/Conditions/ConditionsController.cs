@@ -2,12 +2,14 @@
 using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.Advertisements.DeleteAdvertisement;
 using Trendlink.Application.Advertisements.EditAdvertisement;
+using Trendlink.Application.Advertisements.GetUserAvarageAdvertisementPrices;
 using Trendlink.Application.Conditions.CreateCondition;
 using Trendlink.Application.Conditions.EditLoggedInUserCondition;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Trendlink.Api.Controllers.Conditions
 {
@@ -90,6 +92,17 @@ namespace Trendlink.Api.Controllers.Conditions
             var command = new DeleteAdvertisementCommand(new AdvertisementId(advertisementId));
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpGet("ad/{userId:guid}/avarage-prices")]
+        public async Task<IActionResult> GetUserAvarageAdvertisementPrices(
+            Guid userId,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserAvarageAdvertisementPrices(new UserId(userId));
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
     }
 }

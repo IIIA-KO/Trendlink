@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Advertisements.GetUserAvarageAdvertisementPrices;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Conditions.GetUserCondition;
@@ -7,6 +8,7 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Me
 {
@@ -96,6 +98,16 @@ namespace Trendlink.Api.Controllers.Me
         )
         {
             var query = new GetUserAudienceGenderPercentageQuery(this._userContext.UserId);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("ad/avarage-prices")]
+        public async Task<IActionResult> GetUserAvarageAdvertisementPrices(
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserAvarageAdvertisementPrices(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
