@@ -8,7 +8,6 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.GetUserPosts;
-using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Me
 {
@@ -107,7 +106,7 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAvarageAdvertisementPrices(this._userContext.UserId);
+            var query = new GetUserAvarageAdvertisementPricesQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

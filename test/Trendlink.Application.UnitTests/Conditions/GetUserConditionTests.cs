@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
@@ -6,6 +7,7 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Conditions;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {
@@ -34,13 +36,13 @@ namespace Trendlink.Application.UnitTests.Conditions
 
         private readonly ISqlConnectionFactory _sqlConnectionFactoryMock;
 
-        private readonly GetLUserConditionQueryHandler _handler;
+        private readonly GetUserConditionQueryHandler _handler;
 
         public GetUserConditionTests()
         {
             this._sqlConnectionFactoryMock = Substitute.For<ISqlConnectionFactory>();
 
-            this._handler = new GetLUserConditionQueryHandler(this._sqlConnectionFactoryMock);
+            this._handler = new GetUserConditionQueryHandler(this._sqlConnectionFactoryMock);
         }
 
         [Fact]

@@ -5,7 +5,7 @@ using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Application.UnitTests.Users
 {
-    internal static class UserData
+    public static class UserData
     {
         public const int MinimumAge = 18;
 

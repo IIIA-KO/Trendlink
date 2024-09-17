@@ -1,16 +1,13 @@
-﻿using Trendlink.Application.Abstractions.Data;
-using Trendlink.Application.Abstractions.Messaging;
+﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Advertisements.GetUserAvarageAdvertisementPrices
 {
     internal sealed class GetUserAvarageAdvertisementPricesQueryHandler
-        : IQueryHandler<GetUserAvarageAdvertisementPrices, List<AvaragePriceResponse>>
+        : IQueryHandler<GetUserAvarageAdvertisementPricesQuery, List<AvaragePriceResponse>>
     {
         private readonly IConditionRepository _conditionRepository;
 
@@ -22,7 +19,7 @@ namespace Trendlink.Application.Advertisements.GetUserAvarageAdvertisementPrices
         }
 
         public async Task<Result<List<AvaragePriceResponse>>> Handle(
-            GetUserAvarageAdvertisementPrices request,
+            GetUserAvarageAdvertisementPricesQuery request,
             CancellationToken cancellationToken
         )
         {

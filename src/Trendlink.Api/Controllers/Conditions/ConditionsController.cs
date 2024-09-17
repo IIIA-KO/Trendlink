@@ -9,7 +9,6 @@ using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Trendlink.Api.Controllers.Conditions
 {
@@ -100,7 +99,7 @@ namespace Trendlink.Api.Controllers.Conditions
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAvarageAdvertisementPrices(new UserId(userId));
+            var query = new GetUserAvarageAdvertisementPricesQuery(new UserId(userId));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

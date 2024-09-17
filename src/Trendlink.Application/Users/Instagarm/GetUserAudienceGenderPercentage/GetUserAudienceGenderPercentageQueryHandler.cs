@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Trendlink.Application.Abstractions.Authentication;
+﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;

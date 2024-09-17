@@ -1,10 +1,13 @@
 ﻿using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Domain.UnitTests.InstagramAccounts
+namespace Trendlink.Application.UnitTests.Instagram
 {
     public static class InstagramAccountData
     {
+        public static InstagramAccount Create() =>
+            InstagramAccount.Create(UserId, FacebookPageId, Metadata).Value;
+
         public static readonly UserId UserId = UserId.New();
 
         public static readonly FacebookPageId FacebookPageId = new("dummy_id");

@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using Dapper;
+﻿using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

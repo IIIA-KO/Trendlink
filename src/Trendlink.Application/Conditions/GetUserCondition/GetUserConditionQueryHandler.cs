@@ -7,12 +7,12 @@ using Trendlink.Domain.Conditions;
 
 namespace Trendlink.Application.Conditions.GetUserCondition
 {
-    internal sealed class GetLUserConditionQueryHandler
+    internal sealed class GetUserConditionQueryHandler
         : IQueryHandler<GetUserConditionQuery, ConditionResponse>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public GetLUserConditionQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public GetUserConditionQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
             this._sqlConnectionFactory = sqlConnectionFactory;
         }
