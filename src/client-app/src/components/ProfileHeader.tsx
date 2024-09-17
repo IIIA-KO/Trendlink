@@ -2,6 +2,12 @@ import { FunctionComponent, useMemo, type CSSProperties } from "react";
 import EditButton from "./EditButton";
 import MenuSwitcher from "../components/PageSwitcher";
 import "./styleMenu.css";
+import newLocal from "../public/mynauitelephone.svg";
+import newLocal_1 from "../public/mageemail.svg";
+import newLocal_2 from "../public/tiktok-icon.svg";
+import newLocal_3 from "../public/instagram-icon.svg";
+import newLocal_4 from "/facebook-icon.svg";
+import newLocal_5 from "/-3-2.svg";
 
 export type ProfileHeaderType = {
   className?: string;
@@ -49,6 +55,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
       textDecoration: divTextDecoration,
     };
   }, [divTextDecoration]);
+
 
   return (
     <div
@@ -130,7 +137,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-row items-start justify-start py-0 px-1 text-sm text-white">
+        <div className="flex flex-row items-start  py-0 px-2 text-sm text-white">
           <EditButton
             editButtonBorderRadius={editButtonBorderRadius}
             editButtonBackgroundColor={editButtonBackgroundColor}
@@ -138,7 +145,8 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
             editButtonDisplay={editButtonDisplay}
             editButtonPadding={editButtonPadding}
           />
-          <MenuSwitcher></MenuSwitcher>
+          <div className="pl-[2rem]"><MenuSwitcher></MenuSwitcher></div>
+          
         </div>
       </div>
       <div className="flex flex-col items-start justify-start pt-[75px] px-0 pb-0 text-xs">
@@ -149,7 +157,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                 <img
                   className="w-2.5 h-2.5 relative overflow-hidden shrink-0"
                   alt=""
-                  src="/mynauitelephone.svg"
+                  src={newLocal}
                 />
               </div>
               <div className="relative inline-block min-w-[116px]">
@@ -162,7 +170,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                   <img
                     className="w-[11px] h-[9px] relative overflow-hidden shrink-0"
                     alt=""
-                    src="/mageemail.svg"
+                    src={newLocal_1}
                   />
                 </div>
                 <div className="relative inline-block min-w-[122px] shrink-0 whitespace-nowrap">
@@ -177,24 +185,24 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                 className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px]"
                 loading="lazy"
                 alt=""
-                src="/tiktok-icon.svg"
+                src={newLocal_2}
               />
               <img
                 className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px]"
                 loading="lazy"
                 alt=""
-                src="/instagram-icon.svg"
+                src={newLocal_3}
               />
               <img
                 className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px]"
                 loading="lazy"
                 alt=""
-                src="/facebook-icon.svg"
+                src={newLocal_4}
               />
               <img
                 className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px]"
                 alt=""
-                src="/-3-2.svg"
+                src={newLocal_5}
               />
             </div>
           </div>

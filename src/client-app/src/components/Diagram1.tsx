@@ -1,4 +1,5 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
+import newLocal from "../public/skilliconsinstagram.svg";
 
 export type Component1Type = {
   className?: string;
@@ -75,7 +76,7 @@ const Component1: FunctionComponent<Component1Type> = ({
         <img
           className="absolute top-[55px] left-[0px] w-[30px] h-[30px] overflow-hidden z-[1]"
           alt=""
-          src="/skilliconsinstagram.svg"
+          src={newLocal}
         />
       </div>
       <b className="absolute top-[88.2px] left-[77px] text-xl inline-block text-left min-w-[38px] z-[2] mq450:text-base">

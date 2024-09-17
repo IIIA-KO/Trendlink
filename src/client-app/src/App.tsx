@@ -13,7 +13,7 @@ const App: React.FC = () => {
       <BrowserRouter>
           <AuthProvider>
               <Routes>
-                  <Route path="/login" element={<AuthPage />} />
+                  <Route path="/login" element={<AuthPage/>} />
                   <Route path="/login/callback" element={<CallBackPage />}/>
                   <Route path="/" element={
                       <ProtectedRoute>

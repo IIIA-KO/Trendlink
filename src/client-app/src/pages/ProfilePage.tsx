@@ -8,8 +8,22 @@ import DiagramRight from "../components/Diagram2";
 import Calendar from "../components/Calendar";
 import Footer from "../components/Footer";
 import logo from "../public/-11-1@2x.png"
-
-
+import profile from "../public/ellipse-1@2x.png"
+import stars from "../public/group-95.svg"
+import background from "../public/bg.svg"
+import photo1 from "../public/rectangle-58@2x.png"
+import photo2 from "../public/rectangle-59@2x.png"
+import photo3 from "../public/rectangle-60@2x.png"
+import play from "../public/play-button@2x.png"
+import photo4 from "../public/actions--controls--playoutline--26@2x.png"
+import photo5 from "../public/rectangle-62@2x.png"
+import slide from "../public/actions--navigation--chevronleft--33.svg"
+import photo0 from "../public/actions--toggle--favorite--241@2x.png"
+import bookmark from "../public/actions--operations--bookmark--24@2x.png"
+import rdiagram from "../public/group-107.svg"
+import image from "../public/actions--navigation--chevronleft--34@2x.png"
+import image1 from "../public/actions--navigation--chevronright--24@2x.png"
+import newLocal1 from "../public/actions--toggle--favorite--241@2x.png" 
 const Frame5: FunctionComponent = () => {
   return (
     <div className="w-full h-[89.188rem] relative bg-[#f0f4f9] overflow-hidden flex flex-col items-end justify-start pt-[2.187rem] pb-[3.125rem] pl-[6.25rem] pr-[6.312rem] box-border gap-[22.375rem] leading-[normal] tracking-[normal] mq750:gap-[11.188rem] mq750:pl-[3.125rem] mq750:pr-[3.125rem] mq750:box-border mq1050:h-auto mq450:gap-[5.563rem] mq450:pl-[1.25rem] mq450:pr-[1.25rem] mq450:box-border">
@@ -26,12 +40,12 @@ const Frame5: FunctionComponent = () => {
           </div>
         </div>
         <section className="flex-1 flex flex-row items-start justify-start relative max-w-[calc(100%_-_11.25rem)] text-left text-[1rem] text-[#444] font-[Inter] mq750:max-w-full">
-          <b className="absolute !m-[0] bottom-[27.563rem] left-[1.125rem] inline-block z-[1]">
+          <b className="absolute !m-[0] bottom-[28.563rem] left-[1.125rem] inline-block z-[1]">
             Мої співпраці 2024рік
           </b>
           <ProfileHeader
-            profilePicture="/ellipse-1@2x.png"
-            group95="/group-95.svg"
+            profilePicture={profile}
+            group95={stars}
           />
           
           <div className="flex-1 flex flex-col items-end justify-start gap-[5.875rem] max-w-full text-[1.25rem] text-[#000] mq750:gap-[1.438rem] mq1050:gap-[2.938rem]">
@@ -39,59 +53,59 @@ const Frame5: FunctionComponent = () => {
               className=" w-[23.938rem] h-[17.375rem] top-[-80rem] left-[30.875rem] z-[0]"
               style={{ width: '383px' }}
             />
-            //body
+            
             <div className="self-stretch flex flex-row items-start justify-end py-[0rem] pl-[0.875rem] pr-[1.937rem] box-border max-w-full">
               <div className="flex-1 flex flex-col items-end justify-start gap-[6.437rem] max-w-full mq750:gap-[1.625rem] mq1050:gap-[3.188rem]">
                 <div className="self-stretch flex flex-row items-start justify-end py-[0rem] pl-[0rem] pr-[0.812rem] box-border max-w-full">
                   <div className="flex-1 flex flex-row items-start justify-start gap-[2rem] max-w-full mq1050:flex-wrap mq450:gap-[1rem]">
-                    <div className="flex-1 flex flex-row items-start justify-start relative min-w-[18.188rem] max-w-full mq1050:flex-1">
+                    <div className="flex-1 flex flex-row items-start justify-start pt-[2rem]  relative min-w-[18.188rem] max-w-full mq1050:flex-1">
                       <div className="h-[85.5rem] w-[63.5rem] absolute !m-[0] right-[-32.687rem] bottom-[-49.687rem]">
                         <img
-                          className="absolute top-[0rem] left-[3.3rem] rounded-[2.5rem] w-full h-full"
+                          className="absolute top-[0rem] left-[-0.2rem] rounded-[2.5rem] w-full h-full"
                           alt=""
-                          src="/bg.svg"
+                          src={background}
                         />
                         <img
                           className="absolute top-[38.938rem] left-[17rem] rounded-[0.3125rem] w-[7.438rem] h-[8.75rem] object-cover z-[1]"
                           loading="lazy"
                           alt=""
-                          src="/rectangle-58@2x.png"
+                          src={photo1}
                         />
                         <img
                           className="absolute top-[38.938rem] left-[25.2rem] rounded-[0.3125rem] w-[7.5rem] h-[8.75rem] object-cover z-[1]"
                           loading="lazy"
                           alt=""
-                          src="/rectangle-59@2x.png"
+                          src={photo2}
                         />
                         <img
                           className="absolute top-[38.938rem] left-[33.4rem] rounded-[0.3125rem] w-[7.438rem] h-[8.75rem] object-cover z-[1]"
                           loading="lazy"
                           alt=""
-                          src="/rectangle-60@2x.png"
+                          src={photo3}
                         />
                         <div className="absolute top-[38.938rem] left-[41.5rem] w-[7.5rem] flex flex-row items-start justify-start">
                           <img
                             className="h-[8.75rem] flex-1 relative rounded-[0.3125rem] max-w-full overflow-hidden object-cover z-[1]"
                             alt=""
-                            src="/play-button@2x.png"
+                            src={play}
                           />
                           <img
                             className="h-[1.5rem] w-[1.5rem] absolute !m-[0] top-[calc(50%_-_0.75rem)] right-[2.938rem] object-cover z-[2]"
                             loading="lazy"
                             alt=""
-                            src="/actions--controls--playoutline--26@2x.png"
+                            src={photo4}
                           />
                         </div>
                         <img
                           className="absolute top-[38.938rem] left-[49.775rem] rounded-[0.3125rem] w-[7.438rem] h-[8.75rem] object-cover z-[1]"
                           loading="lazy"
                           alt=""
-                          src="/rectangle-62@2x.png"
+                          src={photo5}
                         />
                       </div>
                       <Diagramleft />
                     </div>
-                    <DiagramRight group107="/group-107.svg" />
+                    <DiagramRight group107={rdiagram} />
                   </div>
                 </div>
                 <div className="w-[47.563rem] flex flex-row items-start justify-start relative max-w-full">
@@ -102,7 +116,7 @@ const Frame5: FunctionComponent = () => {
                     <img
                       className="w-[2rem] h-[2rem] relative object-contain z-[1]"
                       alt=""
-                      src="/actions--navigation--chevronleft--33.svg"
+                      src={slide}
                     />
                     <div className="self-stretch flex flex-row items-start justify-start max-w-full">
                       <div className="w-[39.938rem] flex flex-row items-start justify-between py-[0rem] pl-[7rem] pr-[0.187rem] box-border gap-[1.25rem] max-w-full mq450:flex-wrap">
@@ -113,7 +127,7 @@ const Frame5: FunctionComponent = () => {
                                 className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                 loading="lazy"
                                 alt=""
-                                src="/actions--toggle--favorite--241@2x.png"
+                                src={bookmark}
                               />
                               <img
                                 className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
@@ -138,12 +152,12 @@ const Frame5: FunctionComponent = () => {
                               <img
                                 className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                 alt=""
-                                src="/actions--toggle--favorite--241@2x.png"
+                                src={photo0}
                               />
                               <img
                                 className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                 alt=""
-                                src="/actions--operations--bookmark--24@2x.png"
+                                src={photo3}
                               />
                             </div>
                           </div>
@@ -164,7 +178,7 @@ const Frame5: FunctionComponent = () => {
                                   <img
                                     className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                     alt=""
-                                    src="/actions--toggle--favorite--241@2x.png"
+                                    src={newLocal1}
                                   />
                                 </div>
                                 <div className="relative inline-block min-w-[1.5rem] z-[1]">
@@ -176,7 +190,7 @@ const Frame5: FunctionComponent = () => {
                                   <img
                                     className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                     alt=""
-                                    src="/actions--operations--bookmark--24@2x.png"
+                                    src={bookmark}
                                   />
                                 </div>
                                 <div className="relative inline-block min-w-[1.313rem] z-[1]">
@@ -189,7 +203,7 @@ const Frame5: FunctionComponent = () => {
                                 <img
                                   className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                   alt=""
-                                  src="/actions--toggle--view--24@2x.png"
+                                  src={bookmark}
                                 />
                               </div>
                               <div className="relative inline-block min-w-[1.625rem] z-[1]">
@@ -206,7 +220,7 @@ const Frame5: FunctionComponent = () => {
                                   <img
                                     className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                     alt=""
-                                    src="/actions--toggle--favorite--241@2x.png"
+                                    src={photo0}
                                   />
                                 </div>
                                 <div className="relative inline-block min-w-[1.5rem] z-[1]">
@@ -218,7 +232,7 @@ const Frame5: FunctionComponent = () => {
                                   <img
                                     className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                     alt=""
-                                    src="/actions--operations--bookmark--24@2x.png"
+                                    src={bookmark}
                                   />
                                 </div>
                                 <div className="relative inline-block min-w-[1.313rem] z-[1]">
@@ -231,7 +245,7 @@ const Frame5: FunctionComponent = () => {
                                 <img
                                   className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                   alt=""
-                                  src="/actions--toggle--view--24@2x.png"
+                                  src={bookmark}
                                 />
                               </div>
                               <div className="relative inline-block min-w-[1.625rem] z-[1]">
@@ -252,7 +266,7 @@ const Frame5: FunctionComponent = () => {
                                 <img
                                   className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                   alt=""
-                                  src="/actions--operations--bookmark--24@2x.png"
+                                  src={bookmark}
                                 />
                               </div>
                             </div>
@@ -1216,7 +1230,7 @@ const Frame5: FunctionComponent = () => {
                     className="h-[2rem] w-[2rem] relative object-contain z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/actions--navigation--chevronleft--34@2x.png"
+                    src={image}
                   />
                 </div>
               </div>
@@ -1229,7 +1243,7 @@ const Frame5: FunctionComponent = () => {
         <img
           className="h-[1.5rem] w-[1.5rem] relative object-contain shrink-0"
           alt=""
-          src="/actions--navigation--chevronright--24@2x.png"
+          src={image1}
         />
       </div>
     </div>

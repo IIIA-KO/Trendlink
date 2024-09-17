@@ -8,8 +8,9 @@ export type FooterType = {
 const Footer: FunctionComponent<FooterType> = ({ className = "" }) => {
   return (
     <div
-      className={`w-[344px] !m-[0] absolute top-[158px] left-[-180px] flex flex-row items-start justify-start max-w-full text-left text-xs text-text font-inter ${className}`}
+      className={`w-[344px] !m-[0] absolute top-[190px] left-[-180px] flex flex-row items-start justify-start max-w-full text-left text-xs text-text font-inter ${className}`}
     >
+      
       <img
         className="h-[140px] w-[120px] absolute !m-[0] right-[1px] bottom-[235px] rounded-8xs object-cover z-[1]"
         loading="lazy"
