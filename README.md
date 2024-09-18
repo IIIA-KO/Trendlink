@@ -1,4 +1,5 @@
-# Trendlink
+# Trendlink 
+## Find. Connect. Collaborate
 
 **Social blogger search platform for successful advertising integration.**
 
