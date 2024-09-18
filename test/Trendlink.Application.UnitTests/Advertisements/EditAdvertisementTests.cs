@@ -8,6 +8,7 @@ using Trendlink.Application.UnitTests.Conditions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Shared;
 
 namespace Trendlink.Application.UnitTests.Advertisements
 {
@@ -24,6 +25,7 @@ namespace Trendlink.Application.UnitTests.Advertisements
         private readonly IAdvertisementRepository _advertisementRepositoryMock;
         private readonly IUserContext _userContextMock;
         private readonly IConditionRepository _conditionRepositoryMock;
+        private readonly ICooperationRepository _cooperationRepositoryMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
         private readonly EditAdvertisementCommandHandler _handler;
@@ -33,12 +35,14 @@ namespace Trendlink.Application.UnitTests.Advertisements
             this._advertisementRepositoryMock = Substitute.For<IAdvertisementRepository>();
             this._userContextMock = Substitute.For<IUserContext>();
             this._conditionRepositoryMock = Substitute.For<IConditionRepository>();
+            this._cooperationRepositoryMock = Substitute.For<ICooperationRepository>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
             this._handler = new EditAdvertisementCommandHandler(
                 this._advertisementRepositoryMock,
                 this._userContextMock,
                 this._conditionRepositoryMock,
+                this._cooperationRepositoryMock,
                 this._unitOfWorkMock
             );
         }
@@ -112,6 +116,34 @@ namespace Trendlink.Application.UnitTests.Advertisements
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(AdvertisementErrors.Duplicate);
+        }
+
+        [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenAvertisementHasActiveCooperations()
+        {
+            // Arrange
+            Condition condition = ConditionData.Create();
+
+            this._userContextMock.UserId.Returns(ConditionData.UserId);
+
+            this._conditionRepositoryMock.GetByUserIdWithAdvertisementAsync(ConditionData.UserId)
+                .Returns(condition);
+
+            this._advertisementRepositoryMock.GetByIdAsync(Command.AdvertisementId, default)
+                .Returns(AdvertisementData.Create());
+
+            this._cooperationRepositoryMock.HasActiveCooperationsForAdvertisement(
+                Arg.Any<Advertisement>(),
+                default
+            )
+                .Returns(true);
+
+            // Act
+            Result result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(AdvertisementErrors.HasActiveCooperations);
         }
 
         [Fact]

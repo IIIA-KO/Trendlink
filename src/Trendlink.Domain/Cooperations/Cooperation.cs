@@ -8,6 +8,13 @@ namespace Trendlink.Domain.Cooperations
 {
     public sealed class Cooperation : Entity<CooperationId>
     {
+        public static readonly CooperationStatus[] ActiveCooperationStatuses =
+        [
+            CooperationStatus.Pending,
+            CooperationStatus.Confirmed,
+            CooperationStatus.Done,
+        ];
+
         private Cooperation() { }
 
         private Cooperation(
