@@ -152,12 +152,13 @@ namespace Trendlink.Api.Controllers.Users
         [HttpGet("{userId:guid}/posts")]
         public async Task<IActionResult> GetUserPosts(
             Guid userId,
+            [FromQuery] int limit,
             [FromQuery] string? cursorType,
             [FromQuery] string? cursor,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserPostsQuery(new UserId(userId), cursorType, cursor);
+            var query = new GetUserPostsQuery(new UserId(userId), limit, cursorType, cursor);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

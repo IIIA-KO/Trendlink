@@ -11,7 +11,6 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
     internal sealed class GetUserPostsQueryHandler
         : IQueryHandler<GetUserPostsQuery, UserPostsResponse>
     {
-        private const int Limit = 6;
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
@@ -57,7 +56,7 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
             return await this._instagramService.GetUserPostsWithInsights(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
-                Limit,
+                request.Limit,
                 request.CursorType ?? string.Empty,
                 request.Cursor ?? string.Empty,
                 cancellationToken

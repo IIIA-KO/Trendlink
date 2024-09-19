@@ -2,7 +2,7 @@
 
 namespace Trendlink.Application.Abstractions.Caching
 {
-    public interface ICachedQuery<TReposnse> : IQuery<TReposnse>, ICachedQuery;
+    public interface ICachedQuery<TReposnse> : Messaging.IQuery<TReposnse>, ICachedQuery;
 
     public interface ICachedQuery
     {
