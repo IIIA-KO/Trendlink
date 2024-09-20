@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
@@ -144,6 +145,14 @@ namespace Trendlink.Api.Controllers.Users
                 new Bio(request.Bio),
                 request.AccountCategory
             );
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpDelete("delete-my-account")]
+        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
+        {
+            var command = new DeleteUserAccountCommand();
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

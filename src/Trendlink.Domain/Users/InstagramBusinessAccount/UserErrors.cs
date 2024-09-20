@@ -10,6 +10,9 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
         public static readonly UnauthorizedError InvalidCredentials =
             new("User.InvalidCredentials", "The provided credentials were invalid");
 
+        public static readonly Error FailedDeleteAccount =
+            new("User.FailedDeleteAccount", "Failed to delete use account");
+
         public static readonly Error Underage =
             new("User.Underage", "The user must be at least 18 years old");
 

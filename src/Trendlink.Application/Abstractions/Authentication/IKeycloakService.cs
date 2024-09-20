@@ -41,5 +41,10 @@ namespace Trendlink.Application.Abstractions.Authentication
             string providerName,
             CancellationToken cancellationToken = default
         );
+
+        Task<Result> DeleteAccountAsync(
+            string userIdentityId,
+            CancellationToken cancellationToken = default
+        );
     }
 }
