@@ -3,8 +3,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.GetUserPosts;
+using Trendlink.Application.Users.Instagarm;
+using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -231,7 +233,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<UserPostsResponse> GetUserPostsWithInsights(
+        public async Task<UserPostsResponse> GetUserPosts(
             string accessToken,
             string instagramAccountId,
             int limit,
@@ -250,7 +252,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<List<AudienceGenderPercentageResponse>> GetUserAudienceGenderPercentage(
+        public async Task<AudienceGenderStatistics> GetUserAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -261,6 +263,46 @@ namespace Trendlink.Infrastructure.Instagram
                 instagramAccountId,
                 cancellationToken
             );
+        }
+
+        public async Task<AudienceReachStatistics> GetUserAudienceReachPercentage(
+            string accessToken,
+            string instagramAccountId,
+            StatisticsPeriod statisticsPeriod,
+            CancellationToken cancellationToken = default
+        )
+        {
+            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
+
+            return await this._instagramAudienceService.GetUserAudienceReachPercentage(
+                accessToken,
+                instagramAccountId,
+                dateRange.Item1,
+                dateRange.Item2,
+                cancellationToken
+            );
+        }
+
+        private static Tuple<DateOnly, DateOnly> ConvertPeriodToDateRange(StatisticsPeriod period)
+        {
+            return period switch
+            {
+                StatisticsPeriod.Week
+                    => new Tuple<DateOnly, DateOnly>(
+                        DateOnly.FromDateTime(DateTime.Today.AddDays(-7)),
+                        DateOnly.FromDateTime(DateTime.Today)
+                    ),
+                StatisticsPeriod.Month
+                    => new Tuple<DateOnly, DateOnly>(
+                        DateOnly.FromDateTime(DateTime.Today.AddDays(-30)),
+                        DateOnly.FromDateTime(DateTime.Today)
+                    ),
+                _
+                    => new Tuple<DateOnly, DateOnly>(
+                        DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
+                        DateOnly.FromDateTime(DateTime.Today)
+                    )
+            };
         }
 
         private async Task<HttpResponseMessage> SendPostRequestAsync(

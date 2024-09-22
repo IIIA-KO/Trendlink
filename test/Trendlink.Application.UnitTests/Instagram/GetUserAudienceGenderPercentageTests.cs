@@ -6,7 +6,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.UnitTests.Users;
-using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;

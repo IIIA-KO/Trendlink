@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.Instagarm.GetUserPosts
+namespace Trendlink.Application.Users.Instagarm.Posts.GetUserPosts
 {
     public sealed record GetUserPostsQuery(
         UserId UserId,

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Users.Instagarm.GetUserPosts
+namespace Trendlink.Application.Users.Instagarm.Posts.GetUserPosts
 {
     internal sealed class GetUserPostsQueryValidator : AbstractValidator<GetUserPostsQuery>
     {

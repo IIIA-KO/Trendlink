@@ -6,16 +6,16 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.Instagarm.GetUserPosts
+namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage
 {
-    internal sealed class GetUserPostsQueryHandler
-        : IQueryHandler<GetUserPostsQuery, UserPostsResponse>
+    internal sealed class GetUserAudienceReachPercentageQueryHandler
+        : IQueryHandler<GetUserAudienceReachPercentageQuery, AudienceReachStatistics>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
 
-        public GetUserPostsQueryHandler(
+        public GetUserAudienceReachPercentageQueryHandler(
             IUserRepository userRepository,
             IInstagramService instagramService,
             IKeycloakService keycloakService
@@ -26,8 +26,8 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<UserPostsResponse>> Handle(
-            GetUserPostsQuery request,
+        public async Task<Result<AudienceReachStatistics>> Handle(
+            GetUserAudienceReachPercentageQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
             );
             if (user is null)
             {
-                return Result.Failure<UserPostsResponse>(UserErrors.NotFound);
+                return Result.Failure<AudienceReachStatistics>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,17 +48,15 @@ namespace Trendlink.Application.Users.Instagarm.GetUserPosts
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<UserPostsResponse>(
+                return Result.Failure<AudienceReachStatistics>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            return await this._instagramService.GetUserPostsWithInsights(
+            return await this._instagramService.GetUserAudienceReachPercentage(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
-                request.Limit,
-                request.CursorType ?? string.Empty,
-                request.Cursor ?? string.Empty,
+                request.StatisticsPeriod,
                 cancellationToken
             );
         }

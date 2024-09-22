@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
-using Trendlink.Application.Users.Instagarm.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Application.Users.LogInUser;
 using Trendlink.Application.Users.LoginUserWithGoogle;
 using Trendlink.Application.Users.RefreshToken;

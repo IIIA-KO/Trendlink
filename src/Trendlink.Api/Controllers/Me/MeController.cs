@@ -6,8 +6,10 @@ using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.GetUser;
-using Trendlink.Application.Users.Instagarm.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.GetUserPosts;
+using Trendlink.Application.Users.Instagarm;
+using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 
 namespace Trendlink.Api.Controllers.Me
 {
@@ -98,6 +100,17 @@ namespace Trendlink.Api.Controllers.Me
         )
         {
             var query = new GetUserAudienceGenderPercentageQuery(this._userContext.UserId);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("audience-reach-percentage")]
+        public async Task<IActionResult> GetLoggedInUserAudienceReachPercentage(
+            [FromQuery] StatisticsPeriod period,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetUserAudienceReachPercentageQuery(this._userContext.UserId, period);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
