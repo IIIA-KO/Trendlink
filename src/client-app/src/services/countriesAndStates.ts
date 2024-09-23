@@ -1,8 +1,8 @@
-import axiosInstance from './Api';
-import { CountryType  } from '../models/CountryType';
-import { StateType   } from '../models/StateType';
+import axiosInstance from './api';
+import { CountryType  } from '../types/CountryType';
+import { StateType   } from '../types/StateType';
 import axios from "axios";
-import {handleError} from "../helpers/handleError";
+import {handleError} from "../utils/handleError";
 
 export const getCountries = async (): Promise<CountryType[]> => {
     try {
