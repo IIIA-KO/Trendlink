@@ -194,7 +194,7 @@ namespace Trendlink.Domain.Users
                 );
         }
 
-        public void SetProfilePicture(Photo photo)
+        public void SetProfilePhoto(Photo photo)
         {
             ArgumentNullException.ThrowIfNull(photo.Uri);
 

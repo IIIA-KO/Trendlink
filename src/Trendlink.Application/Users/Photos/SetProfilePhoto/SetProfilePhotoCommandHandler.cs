@@ -56,7 +56,7 @@ namespace Trendlink.Application.Users.Photos.SetProfilePhoto
                 }
             }
 
-            user.SetProfilePicture(photo);
+            user.SetProfilePhoto(photo);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
 

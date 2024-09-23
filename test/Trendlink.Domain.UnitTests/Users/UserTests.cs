@@ -326,7 +326,7 @@ namespace Trendlink.Domain.UnitTests.Users
             ).Value;
 
             // Act
-            user.SetProfilePicture(UserData.ProfilePicture);
+            user.SetProfilePhoto(UserData.ProfilePicture);
 
             // Assert
             user.ProfilePhoto.Should().NotBeNull();

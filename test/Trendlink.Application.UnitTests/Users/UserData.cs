@@ -25,10 +25,8 @@ namespace Trendlink.Application.UnitTests.Users
 
         public static readonly Email Email = new("test@test.com");
 
-        public static readonly Photo ProfilePicture = new Photo(
-            "picture-id",
-            new Uri("htttps://www.picture.com")
-        );
+        public static readonly Photo ProfilePhoto =
+            new("picture-id", new Uri("htttps://www.picture.com"));
 
         public static readonly DateOnly BirthDate = DateOnly.FromDateTime(
             DateTime.Now.AddYears(-18)
