@@ -1,12 +1,14 @@
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { AuthProvider } from './context/AuthContext';
-import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from './components/ProtectedRoute';
-import CallBackPage from "./pages/CallBackPage";
-import '@fontsource/kodchasan';
-import '@fontsource/inter'
-import ProfilePage from "./pages/ProfilePage";
+import { lazy } from "react";
+
+const  AuthPage = lazy(() =>import("./pages/AuthPage"));
+const  CallBackPage = lazy(() =>import("./pages/CallBackPage"));
+const  ProfilePage = lazy(() =>import("./pages/ProfilePage"));
+const  NotFoundPage = lazy(() =>import("./pages/NotFoundPage"));
+const ServerErrorPage = lazy(() =>import("./pages/ServerErrorPage"));
 
 const App: React.FC = () => {
   return (
@@ -19,8 +21,10 @@ const App: React.FC = () => {
                       <ProtectedRoute>
                           <ProfilePage />
                       </ProtectedRoute>
-                  }
-                  />
+                  }/>
+                  <Route path="/404" element={<NotFoundPage />} />
+                  <Route path="*" element={<Navigate to="/404" replace />} />
+                  <Route path="/500" element={<ServerErrorPage />} />
               </Routes>
           </AuthProvider>
       </BrowserRouter>
