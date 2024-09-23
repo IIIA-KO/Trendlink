@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Users.RegisterUserWithGoogle
+namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
 {
     internal sealed class RegisterUserWithGoogleCommandValidator
         : AbstractValidator<RegisterUserWithGoogleCommand>

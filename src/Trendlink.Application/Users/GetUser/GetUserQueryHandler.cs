@@ -2,7 +2,6 @@
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Users.GetUser
 {
@@ -34,13 +33,14 @@ namespace Trendlink.Application.Users.GetUser
                 user.Email.Value,
                 user.FirstName.Value,
                 user.LastName.Value,
+                user.ProfilePhoto?.Id,
+                user.ProfilePhoto?.Uri.ToString(),
                 user.BirthDate,
                 user.State.Country!.Name.Value,
                 user.State.Name.Value,
                 user.PhoneNumber.Value,
                 user.Bio.Value,
-                user.AccountCategory,
-                user.ProfilePicture?.Uri.ToString()
+                user.AccountCategory
             );
         }
     }

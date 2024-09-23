@@ -41,7 +41,7 @@ namespace Trendlink.Domain.Users
 
         public LastName LastName { get; private set; }
 
-        public ProfilePicture? ProfilePicture { get; private set; }
+        public Photo? ProfilePhoto { get; private set; }
 
         public DateOnly BirthDate { get; private set; }
 
@@ -194,11 +194,16 @@ namespace Trendlink.Domain.Users
                 );
         }
 
-        public void SetProfilePicture(Uri uri)
+        public void SetProfilePicture(Photo photo)
         {
-            ArgumentNullException.ThrowIfNull(uri);
+            ArgumentNullException.ThrowIfNull(photo.Uri);
 
-            this.ProfilePicture = new ProfilePicture(uri);
+            this.ProfilePhoto = photo;
+        }
+
+        public void RemoveProfilePhoto()
+        {
+            this.ProfilePhoto = null;
         }
 
         public void LinkInstagramAccount(

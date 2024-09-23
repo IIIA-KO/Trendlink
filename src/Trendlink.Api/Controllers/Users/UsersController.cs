@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Users.Authentication.LoginUserWithGoogle;
+using Trendlink.Application.Users.Authentication.RefreshToken;
+using Trendlink.Application.Users.Authentication.RegisterUser;
+using Trendlink.Application.Users.Authentication.RegisterUserWithGoogle;
 using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
-using Trendlink.Application.Users.LogInUser;
-using Trendlink.Application.Users.LoginUserWithGoogle;
-using Trendlink.Application.Users.RefreshToken;
-using Trendlink.Application.Users.RegisterUser;
-using Trendlink.Application.Users.RegisterUserWithGoogle;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 

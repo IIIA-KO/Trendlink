@@ -3,13 +3,12 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
-using Trendlink.Application.Users.LogInUser;
+using Trendlink.Application.Users.Authentication.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Users.RegisterUserWithGoogle
+namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
 {
     internal sealed class RegisterUserWithGoogleCommandHandler
         : ICommandHandler<RegisterUserWithGoogleCommand, AccessTokenResponse>

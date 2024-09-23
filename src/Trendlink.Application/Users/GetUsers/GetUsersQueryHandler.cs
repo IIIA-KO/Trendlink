@@ -39,13 +39,14 @@ namespace Trendlink.Application.Users.GetUsers
                     user.Email.Value,
                     user.FirstName.Value,
                     user.LastName.Value,
+                    user.ProfilePhoto == null ? null : user.ProfilePhoto.Id,
+                    user.ProfilePhoto == null ? null : user.ProfilePhoto.Uri.ToString(),
                     user.BirthDate,
                     user.State.Country!.Name.Value,
                     user.State.Name.Value,
                     user.PhoneNumber.Value,
                     user.Bio.Value,
-                    user.AccountCategory,
-                    user.ProfilePicture == null ? null : user.ProfilePicture.Uri.ToString()
+                    user.AccountCategory
                 )
             );
 

@@ -8,7 +8,7 @@ using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.DomainEvents;
 
-namespace Trendlink.Application.Users.RegisterUser
+namespace Trendlink.Application.Users.Authentication.RegisterUser
 {
     internal sealed class UserCreatedDomainEventHandler
         : INotificationHandler<UserCreatedDomainEvent>

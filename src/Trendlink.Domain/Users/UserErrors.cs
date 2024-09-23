@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Domain.Users.InstagramBusinessAccount
+namespace Trendlink.Domain.Users
 {
     public static class UserErrors
     {

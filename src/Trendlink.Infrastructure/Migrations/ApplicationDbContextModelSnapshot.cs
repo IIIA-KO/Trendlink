@@ -444,10 +444,6 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone_number");
 
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("text")
-                        .HasColumnName("profile_picture");
-
                     b.Property<Guid>("StateId")
                         .HasColumnType("uuid")
                         .HasColumnName("state_id");
@@ -606,7 +602,7 @@ namespace Trendlink.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_cooperations_users_seller_id");
 
-                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.ValueObjects.Money", "Price", b1 =>
+                    b.OwnsOne("Trendlink.Domain.Conditions.Advertisements.Money", "Price", b1 =>
                         {
                             b1.Property<Guid>("CooperationId")
                                 .HasColumnType("uuid")
@@ -733,6 +729,32 @@ namespace Trendlink.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_users_states_state_id");
+
+                    b.OwnsOne("Trendlink.Domain.Users.Photo", "ProfilePhoto", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Id")
+                                .HasColumnType("text")
+                                .HasColumnName("profile_photo_id");
+
+                            b1.Property<string>("Uri")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("profile_photo_uri");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId")
+                                .HasConstraintName("fk_users_users_id");
+                        });
+
+                    b.Navigation("ProfilePhoto");
 
                     b.Navigation("State");
                 });

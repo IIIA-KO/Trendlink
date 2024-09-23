@@ -1,4 +1,4 @@
-﻿using Trendlink.Application.Users.LogInUser;
+﻿using Trendlink.Application.Users.Authentication.LogInUser;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
@@ -25,7 +25,8 @@ namespace Trendlink.Application.UnitTests.Users
 
         public static readonly Email Email = new("test@test.com");
 
-        public static readonly ProfilePicture ProfilePicture = new ProfilePicture(
+        public static readonly Photo ProfilePicture = new Photo(
+            "picture-id",
             new Uri("htttps://www.picture.com")
         );
 

@@ -12,26 +12,28 @@ namespace Trendlink.Application.Users
             string Email,
             string firstName,
             string lastName,
+            string? profilePhotoId,
+            string? profilePhotoUri,
             DateOnly birthDate,
             string countryName,
             string stateName,
             string phoneNumber,
             string bio,
-            AccountCategory accountCategory,
-            string? profilePictureUrl
+            AccountCategory accountCategory
         )
         {
             this.Id = id;
             this.Email = Email;
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.ProfilePhotoId = profilePhotoId;
+            this.ProfilePhotoUri = profilePhotoUri;
             this.BirthDate = birthDate;
             this.CountryName = countryName;
             this.StateName = stateName;
             this.PhoneNumber = phoneNumber;
             this.Bio = bio;
             this.AccountCategory = accountCategory;
-            this.ProfilePictureUrl = profilePictureUrl;
         }
 
         public Guid Id { get; init; }
@@ -41,6 +43,10 @@ namespace Trendlink.Application.Users
         public string FirstName { get; init; }
 
         public string LastName { get; init; }
+
+        public string? ProfilePhotoId { get; init; }
+
+        public string? ProfilePhotoUri { get; init; }
 
         public DateOnly BirthDate { get; init; }
 
@@ -53,7 +59,5 @@ namespace Trendlink.Application.Users
         public string Bio { get; init; }
 
         public AccountCategory AccountCategory { get; init; }
-
-        public string? ProfilePictureUrl { get; init; }
     }
 }

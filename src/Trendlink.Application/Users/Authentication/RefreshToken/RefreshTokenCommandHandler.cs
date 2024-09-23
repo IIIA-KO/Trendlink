@@ -1,10 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Application.Users.LogInUser;
+using Trendlink.Application.Users.Authentication.LogInUser;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
+using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.RefreshToken
+namespace Trendlink.Application.Users.Authentication.RefreshToken
 {
     internal sealed class RefreshTokenCommandHandler
         : ICommandHandler<RefreshTokenCommand, AccessTokenResponse>

@@ -7,10 +7,9 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Authentication.Models;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
-using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
+using AccessTokenResponse = Trendlink.Application.Users.Authentication.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Authentication.Keycloak
