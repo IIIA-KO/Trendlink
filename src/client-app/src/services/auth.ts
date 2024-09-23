@@ -1,8 +1,8 @@
-import axiosInstance from './Api';
-import { UserType } from '../models/UserType';
-import { AuthResponseType } from '../models/AuthResponseType'
+import axiosInstance from './api';
+import { UserType } from '../types/UserType';
+import { AuthResponseType } from '../types/AuthResponseType'
 import axios from "axios";
-import {handleError} from "../helpers/handleError";
+import {handleError} from "../utils/handleError";
 
 export const register = async (data: {
     firstName: string;

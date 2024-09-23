@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import {useNavigate} from 'react-router-dom';
-import { refreshAccessToken } from '../api/authApi';
-import { AuthContextType} from '../models/AuthContextType';
-import {AuthResponseType } from "../models/AuthResponseType";
+import { refreshAccessToken } from '../services/auth';
+import { AuthContextType} from '../types/AuthContextType';
+import {AuthResponseType } from "../types/AuthResponseType";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
