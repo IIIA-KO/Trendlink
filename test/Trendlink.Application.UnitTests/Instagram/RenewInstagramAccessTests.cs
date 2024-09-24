@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
@@ -10,7 +9,6 @@ using Trendlink.Application.Users.Instagarm.RenewInstagramAccess;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
-using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Application.UnitTests.Instagram
 {

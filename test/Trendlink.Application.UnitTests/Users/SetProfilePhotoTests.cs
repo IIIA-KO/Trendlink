@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;

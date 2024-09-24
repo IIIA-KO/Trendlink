@@ -1,4 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
+using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage
@@ -8,8 +9,9 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPer
         StatisticsPeriod StatisticsPeriod
     ) : ICachedQuery<AudienceReachStatistics>
     {
-        public string CacheKey => $"audience-reach-{this.UserId.Value}-{this.StatisticsPeriod}";
+        public string CacheKey =>
+            $"audience-reach-{this.UserId.Value}-{(int)this.StatisticsPeriod}";
 
-        public TimeSpan? Expiration => TimeSpan.FromMinutes(5);
+        public TimeSpan? Expiration => TimeSpan.FromMinutes(3);
     }
 }

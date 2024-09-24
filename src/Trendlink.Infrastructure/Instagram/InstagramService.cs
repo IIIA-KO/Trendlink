@@ -6,6 +6,7 @@ using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -233,7 +234,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<UserPostsResponse> GetUserPosts(
+        public async Task<Result<UserPostsResponse>> GetUserPosts(
             string accessToken,
             string instagramAccountId,
             int limit,
@@ -252,7 +253,25 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<AudienceGenderStatistics> GetUserAudienceGenderPercentage(
+        public async Task<Result<PostsTableStatistics>> GetPostsTable(
+            string accessToken,
+            string instagramAccountId,
+            StatisticsPeriod statisticsPeriod,
+            CancellationToken cancellationToken = default
+        )
+        {
+            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
+
+            return await this._instagramPostsService.GetPostsTableStatistics(
+                accessToken,
+                instagramAccountId,
+                dateRange.Item1,
+                dateRange.Item2,
+                cancellationToken
+            );
+        }
+
+        public async Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -265,7 +284,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<AudienceReachStatistics> GetUserAudienceReachPercentage(
+        public async Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
             string accessToken,
             string instagramAccountId,
             StatisticsPeriod statisticsPeriod,

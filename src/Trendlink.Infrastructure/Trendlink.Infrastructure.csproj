@@ -37,8 +37,4 @@
 		<InternalsVisibleTo Include="Trendlink.Api.FunctionalTests" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Instagram\Models\Audience\" />
-	</ItemGroup>
-
 </Project>

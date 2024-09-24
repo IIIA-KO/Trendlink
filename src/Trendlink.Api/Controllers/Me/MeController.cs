@@ -9,6 +9,7 @@ using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Application.Users.Photos.DeleteProfilePhoto;
 using Trendlink.Application.Users.Photos.SetProfilePhoto;
@@ -96,6 +97,17 @@ namespace Trendlink.Api.Controllers.Me
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
+        [HttpGet("posts-table")]
+        public async Task<IActionResult> GetLoggedInUserPostsStatisticsTable(
+            [FromQuery] StatisticsPeriod period,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetPostsTableStatisticsQuery(this._userContext.UserId, period);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
         [HttpGet("audience-gender-percentage")]
         public async Task<IActionResult> GetLoggedInUserAudienceGenderPercentage(
             CancellationToken cancellationToken
@@ -117,7 +129,7 @@ namespace Trendlink.Api.Controllers.Me
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
-        [HttpGet("ad/avarage-prices")]
+        [HttpGet("avarage-prices")]
         public async Task<IActionResult> GetUserAvarageAdvertisementPrices(
             CancellationToken cancellationToken
         )

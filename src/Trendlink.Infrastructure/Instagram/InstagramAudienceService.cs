@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Domain.Abstraction;
 using static System.Text.Json.JsonElement;
 
 namespace Trendlink.Infrastructure.Instagram
@@ -21,7 +22,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<AudienceGenderStatistics> GetUserAudienceGenderPercentage(
+        public async Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -36,37 +37,57 @@ namespace Trendlink.Infrastructure.Instagram
 
             JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
 
-            ArrayEnumerator results = jsonObject
-                .GetProperty("data")[0]
-                .GetProperty("total_value")
-                .GetProperty("breakdowns")[0]
-                .GetProperty("results")
-                .EnumerateArray();
-
-            int totalFollowers = 0;
-            var genderCounts = new Dictionary<string, int>();
-
-            foreach (JsonElement result in results)
+            try
             {
-                string gender = result.GetProperty("dimension_values")[0].GetString();
-                int count = result.GetProperty("value").GetInt32();
+                ArrayEnumerator results = jsonObject
+                    .GetProperty("data")[0]
+                    .GetProperty("total_value")
+                    .GetProperty("breakdowns")[0]
+                    .GetProperty("results")
+                    .EnumerateArray();
 
-                totalFollowers += count;
+                int totalFollowers = 0;
+                var genderCounts = new Dictionary<string, int>();
 
-                if (genderCounts.ContainsKey(gender!))
+                foreach (JsonElement result in results)
                 {
-                    genderCounts[gender!] += count;
+                    string gender = result.GetProperty("dimension_values")[0].GetString();
+                    int count = result.GetProperty("value").GetInt32();
+
+                    totalFollowers += count;
+
+                    if (genderCounts.ContainsKey(gender!))
+                    {
+                        genderCounts[gender!] += count;
+                    }
+                    else
+                    {
+                        genderCounts[gender!] = count;
+                    }
                 }
-                else
-                {
-                    genderCounts[gender!] = count;
-                }
+
+                var genderPercentages = genderCounts
+                    .Select(g => new AudienceGenderPercentageResponse
+                    {
+                        Gender = g.Key switch
+                        {
+                            "F" => "Female",
+                            "M" => "Male",
+                            _ => "Unknown"
+                        },
+                        Percentage = (double)g.Value / totalFollowers * 100
+                    })
+                    .ToList();
+
+                return new AudienceGenderStatistics(genderPercentages);
             }
-
-            return new AudienceGenderStatistics(genderCounts, totalFollowers);
+            catch (Exception)
+            {
+                return Result.Failure<AudienceGenderStatistics>(Error.Unexpected);
+            }
         }
 
-        public async Task<AudienceReachStatistics> GetUserAudienceReachPercentage(
+        public async Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
             string accessToken,
             string instagramAccountId,
             DateOnly since,
@@ -86,34 +107,53 @@ namespace Trendlink.Infrastructure.Instagram
 
             JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
 
-            ArrayEnumerator results = jsonObject
-                .GetProperty("data")[0]
-                .GetProperty("total_value")
-                .GetProperty("breakdowns")[0]
-                .GetProperty("results")
-                .EnumerateArray();
-
-            int totalFollowers = 0;
-            var followsCounts = new Dictionary<string, int>();
-
-            foreach (JsonElement result in results)
+            try
             {
-                string followType = result.GetProperty("dimension_values")[0].GetString();
-                int count = result.GetProperty("value").GetInt32();
+                ArrayEnumerator results = jsonObject
+                    .GetProperty("data")[0]
+                    .GetProperty("total_value")
+                    .GetProperty("breakdowns")[0]
+                    .GetProperty("results")
+                    .EnumerateArray();
 
-                totalFollowers += count;
+                int totalFollowers = 0;
+                var followsCounts = new Dictionary<string, int>();
 
-                if (followsCounts.ContainsKey(followType!))
+                foreach (JsonElement result in results)
                 {
-                    followsCounts[followType!] += count;
+                    string followType = result.GetProperty("dimension_values")[0].GetString();
+                    int count = result.GetProperty("value").GetInt32();
+
+                    totalFollowers += count;
+
+                    if (followsCounts.ContainsKey(followType!))
+                    {
+                        followsCounts[followType!] += count;
+                    }
+                    else
+                    {
+                        followsCounts[followType!] = count;
+                    }
                 }
-                else
-                {
-                    followsCounts[followType!] = count;
-                }
+
+                var reachPercentages = followsCounts
+                    .Select(g => new AudienceReachPercentageResponse
+                    {
+                        FollowType = g.Key switch
+                        {
+                            "FOLLOWER" => "Follower",
+                            _ => "NonFollower"
+                        },
+                        Percentage = (double)g.Value / totalFollowers * 100
+                    })
+                    .ToList();
+
+                return new AudienceReachStatistics(reachPercentages);
             }
-
-            return new AudienceReachStatistics(followsCounts, totalFollowers);
+            catch (Exception)
+            {
+                return Result.Failure<AudienceReachStatistics>(Error.Unexpected);
+            }
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(

@@ -1,17 +1,18 @@
 ﻿using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Instagram
 {
     public interface IInstagramAudienceService
     {
-        Task<AudienceGenderStatistics> GetUserAudienceGenderPercentage(
+        Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         );
 
-        Task<AudienceReachStatistics> GetUserAudienceReachPercentage(
+        Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
             string accessToken,
             string instagramAccountId,
             DateOnly since,

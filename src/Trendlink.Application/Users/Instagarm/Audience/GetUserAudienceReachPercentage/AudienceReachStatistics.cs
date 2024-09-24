@@ -4,19 +4,9 @@
     {
         public List<AudienceReachPercentageResponse> ReachPercentages { get; }
 
-        public AudienceReachStatistics(Dictionary<string, int> followsCount, int totalFollowers)
+        public AudienceReachStatistics(List<AudienceReachPercentageResponse> reachPercentages)
         {
-            this.ReachPercentages = followsCount
-                .Select(g => new AudienceReachPercentageResponse
-                {
-                    FollowType = g.Key switch
-                    {
-                        "FOLLOWER" => "Follower",
-                        _ => "NonFollower"
-                    },
-                    Percentage = (double)g.Value / totalFollowers * 100
-                })
-                .ToList();
+            this.ReachPercentages = reachPercentages;
         }
     }
 }

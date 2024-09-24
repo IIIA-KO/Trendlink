@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using Dapper;
 using FluentAssertions;
 using NSubstitute;
 using NSubstitute.DbConnection;
@@ -7,7 +6,6 @@ using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Conditions;
 
 namespace Trendlink.Application.UnitTests.Conditions
 {

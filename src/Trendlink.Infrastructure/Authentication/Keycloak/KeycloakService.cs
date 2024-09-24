@@ -8,7 +8,6 @@ using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Authentication.Models;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using AccessTokenResponse = Trendlink.Application.Users.Authentication.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -291,11 +290,8 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
                 cancellationToken
             );
 
-            bool exists =
-                response.IsSuccessStatusCode
+            return response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
-
-            return exists;
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
