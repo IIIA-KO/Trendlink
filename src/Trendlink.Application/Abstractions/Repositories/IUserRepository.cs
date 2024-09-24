@@ -32,6 +32,8 @@ namespace Trendlink.Application.Abstractions.Repositories
 
         void Add(User user);
 
+        void Remove(User user);
+
         Task<bool> ExistsByIdAsync(UserId id, CancellationToken cancellationToken = default);
 
         Task<bool> ExistByEmailAsync(Email email, CancellationToken cancellationToken = default);

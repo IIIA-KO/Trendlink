@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Configuration;
+using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Instagram;
+using Trendlink.Application.Abstractions.Photos;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
@@ -25,6 +27,7 @@ using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Instagram;
+using Trendlink.Infrastructure.Photos;
 using Trendlink.Infrastructure.Repositories;
 using Trendlink.Infrastructure.SignalR;
 using AuthenticationOptions = Trendlink.Infrastructure.Authentication.AuthenticationOptions;
@@ -56,6 +59,8 @@ namespace Trendlink.Infrastructure
             AddBackgroundJobs(services, configuration);
 
             AddRealTimeServices(services);
+
+            AddCloudinary(services, configuration);
 
             return services;
         }
@@ -225,6 +230,13 @@ namespace Trendlink.Infrastructure
         private static void AddRealTimeServices(IServiceCollection services)
         {
             services.AddScoped<INotificationService, NotificationService>();
+        }
+
+        private static void AddCloudinary(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<CloudinaryOptions>(configuration.GetSection("Cloudinary"));
+
+            services.AddSingleton<IPhotoAccessor, PhotoAccessor>();
         }
     }
 }

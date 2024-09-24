@@ -324,14 +324,13 @@ namespace Trendlink.Domain.UnitTests.Users
                 UserData.Email,
                 UserData.PhoneNumber
             ).Value;
-            var profilePictureUri = new Uri("https://example.com/profile.jpg");
 
             // Act
-            user.SetProfilePicture(profilePictureUri);
+            user.SetProfilePhoto(UserData.ProfilePicture);
 
             // Assert
-            user.ProfilePicture.Should().NotBeNull();
-            user.ProfilePicture!.Uri.Should().Be(profilePictureUri);
+            user.ProfilePhoto.Should().NotBeNull();
+            user.ProfilePhoto!.Uri.Should().Be(UserData.ProfilePicture.Uri);
         }
 
         [Fact]

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Instagram.Models.Accounts;
 

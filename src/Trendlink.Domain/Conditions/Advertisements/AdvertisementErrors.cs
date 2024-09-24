@@ -18,5 +18,10 @@ namespace Trendlink.Domain.Conditions.Advertisements
 
         public static readonly Error Duplicate =
             new("Advertisement.Duplicate", "Advertisement with such name already exists");
+
+        public static readonly Error HasActiveCooperations = new Error(
+            "Advertisement.HasActiveCooperations",
+            "You are not allowed to perform this action while the advertisement has active cooperations"
+        );
     }
 }

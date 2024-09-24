@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using FluentAssertions;
-using Newtonsoft.Json.Linq;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Instagram;
@@ -8,8 +7,6 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.Token;
@@ -50,7 +47,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(Task.FromResult<User?>(null));
 
             // Act
-            Result<List<AudienceGenderPercentageResponse>> result = await this._handler.Handle(
+            Result<AudienceGenderStatistics> result = await this._handler.Handle(
                 Query,
                 CancellationToken.None
             );
@@ -80,7 +77,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(Task.FromResult(false));
 
             // Act
-            Result<List<AudienceGenderPercentageResponse>> result = await this._handler.Handle(
+            Result<AudienceGenderStatistics> result = await this._handler.Handle(
                 Query,
                 CancellationToken.None
             );
@@ -94,10 +91,13 @@ namespace Trendlink.Application.UnitTests.Instagram
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            var audienceData = new List<AudienceGenderPercentageResponse>
+            var audienceData = new AudienceGenderStatistics([], 100)
             {
-                new() { Gender = "male", Percentage = 60 },
-                new() { Gender = "female", Percentage = 40 }
+                GenderPercentages =
+                {
+                    new() { Gender = "male", Percentage = 60 },
+                    new() { Gender = "female", Percentage = 40 }
+                }
             };
 
             User user = UserData.Create();
@@ -131,7 +131,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(audienceData);
 
             // Act
-            Result<List<AudienceGenderPercentageResponse>> result = await this._handler.Handle(
+            Result<AudienceGenderStatistics> result = await this._handler.Handle(
                 Query,
                 CancellationToken.None
             );

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Trendlink.Application.IntegrationTests.Infrastructure;
-using Trendlink.Application.Users.RegisterUser;
+using Trendlink.Application.Users.Authentication.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;

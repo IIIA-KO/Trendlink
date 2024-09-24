@@ -76,9 +76,6 @@ namespace Trendlink.Application.Users.Instagarm.LinkInstagram
 
             InstagramUserInfo instagramUserInfo = instagramUserInfoResult.Value;
 
-            user.Bio = new Bio(instagramUserInfo.BusinessDiscovery.Biography);
-            user.SetProfilePicture(new Uri(instagramUserInfo.BusinessDiscovery.ProfilePictureUrl));
-
             Result<InstagramAccount> instagramAccountResult =
                 instagramUserInfo.CreateInstagramAccount(user.Id);
             if (instagramAccountResult.IsFailure)

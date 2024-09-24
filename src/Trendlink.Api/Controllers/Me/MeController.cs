@@ -10,6 +10,8 @@ using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Photos.DeleteProfilePhoto;
+using Trendlink.Application.Users.Photos.SetProfilePhoto;
 
 namespace Trendlink.Api.Controllers.Me
 {
@@ -123,6 +125,26 @@ namespace Trendlink.Api.Controllers.Me
             var query = new GetUserAvarageAdvertisementPricesQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpPost("profile-photo")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> SetProfilePhoto(
+            [FromForm] IFormFile photo,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new SetProfilePhotoCommand(photo);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpDelete("profile-photo")]
+        public async Task<IActionResult> DeleteProfilePhoto(CancellationToken cancellationToken)
+        {
+            var command = new DeleteProfilePhotoCommand();
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
     }
 }
