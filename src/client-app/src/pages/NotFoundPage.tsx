@@ -1,5 +1,4 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
 import NavButton from "../components/Buttons/NavButton";
 
 const NotFoundPage: React.FC = () => {
