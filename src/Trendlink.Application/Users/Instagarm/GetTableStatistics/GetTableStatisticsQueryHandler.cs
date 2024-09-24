@@ -6,16 +6,16 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics
+namespace Trendlink.Application.Users.Instagarm.GetTableStatistics
 {
-    internal sealed class GetPostsTableStatisticsQueryHandler
-        : IQueryHandler<GetPostsTableStatisticsQuery, PostsTableStatistics>
+    internal sealed class GetTableStatisticsQueryHandler
+        : IQueryHandler<GetTableStatisticsQuery, TableStatistics>
     {
         private readonly IUserRepository _userRepository;
         private readonly IKeycloakService _keycloakService;
         private readonly IInstagramService _instagramService;
 
-        public GetPostsTableStatisticsQueryHandler(
+        public GetTableStatisticsQueryHandler(
             IUserRepository userRepository,
             IInstagramService instagramService,
             IKeycloakService keycloakService
@@ -26,8 +26,8 @@ namespace Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<PostsTableStatistics>> Handle(
-            GetPostsTableStatisticsQuery request,
+        public async Task<Result<TableStatistics>> Handle(
+            GetTableStatisticsQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics
             );
             if (user is null)
             {
-                return Result.Failure<PostsTableStatistics>(UserErrors.NotFound);
+                return Result.Failure<TableStatistics>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,12 +48,12 @@ namespace Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<PostsTableStatistics>(
+                return Result.Failure<TableStatistics>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            return await this._instagramService.GetPostsTable(
+            return await this._instagramService.GetTableStatistics(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
                 request.StatisticsPeriod,

@@ -1,17 +1,15 @@
 ﻿using Trendlink.Application.Users.Instagarm.GetTableStatistics;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Instagram
 {
-    public interface IInstagramPostsService
+    public interface IInstagramStatisticsService
     {
-        Task<Result<UserPostsResponse>> GetUserPostsWithInsights(
+        Task<Result<TableStatistics>> GetTableStatistics(
             string accessToken,
             string instagramAccountId,
-            int limit,
-            string cursorType,
-            string cursor,
+            DateOnly since,
+            DateOnly until,
             CancellationToken cancellationToken = default
         );
     }

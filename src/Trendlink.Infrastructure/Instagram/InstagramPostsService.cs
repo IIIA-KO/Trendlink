@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
+using Trendlink.Application.Users.Instagarm.GetTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Models.Posts;
@@ -183,70 +183,6 @@ namespace Trendlink.Infrastructure.Instagram
                     PreviousCursor = posts.Paging.Previous
                 }
             };
-        }
-
-        public async Task<Result<PostsTableStatistics>> GetPostsTableStatistics(
-            string accessToken,
-            string instagramAccountId,
-            DateOnly since,
-            DateOnly until,
-            CancellationToken cancellationToken = default
-        )
-        {
-            string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=reach,follower_count,impressions,profile_views&period=day"
-                + $"&since={since}&until={until}"
-                + $"&access_token={accessToken}";
-
-            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
-
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
-
-            try
-            {
-                var postsTableStatistics = new PostsTableStatistics();
-
-                foreach (
-                    JsonElement metricElement in jsonObject.GetProperty("data").EnumerateArray()
-                )
-                {
-                    var metricData = new MetricData
-                    {
-                        Name = metricElement.GetProperty("name").GetString()!
-                    };
-
-                    foreach (
-                        JsonElement valueElement in metricElement
-                            .GetProperty("values")
-                            .EnumerateArray()
-                    )
-                    {
-                        int metricValue = valueElement.GetProperty("value").GetInt32();
-
-                        string endTimeString = valueElement.GetProperty("end_time").GetString()!;
-
-                        DateTime endTime = DateTimeOffset
-                            .ParseExact(
-                                endTimeString,
-                                "yyyy-MM-ddTHH:mm:sszzz",
-                                CultureInfo.InvariantCulture
-                            )
-                            .UtcDateTime;
-
-                        metricData.Values.Add(endTime, metricValue);
-                    }
-
-                    postsTableStatistics.Metrics.Add(metricData);
-                }
-
-                return postsTableStatistics;
-            }
-            catch (Exception)
-            {
-                return Result.Failure<PostsTableStatistics>(Error.Unexpected);
-            }
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(

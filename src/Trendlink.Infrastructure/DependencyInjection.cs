@@ -177,6 +177,10 @@ namespace Trendlink.Infrastructure
                 ConfigureHttpClient
             );
 
+            services.AddHttpClient<IInstagramStatisticsService, InstagramStatiscticsService>(
+                ConfigureHttpClient
+            );
+
             services.AddHttpClient<IInstagramService, InstagramService>(
                 (serviceProvider, httpClient) =>
                 {

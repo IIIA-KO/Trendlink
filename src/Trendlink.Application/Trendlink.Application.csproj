@@ -48,6 +48,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Users\Instagarm\Posts\GetPostsOverviewStatistics\" />
+	  <Folder Include="Users\Instagarm\GetOverviewStatistics\" />
 	</ItemGroup>
 </Project>

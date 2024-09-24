@@ -6,7 +6,7 @@ using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
+using Trendlink.Application.Users.Instagarm.GetTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -20,6 +20,7 @@ namespace Trendlink.Infrastructure.Instagram
         private readonly IInstagramPostsService _instagramPostsService;
         private readonly IInstagramAccountsService _instagramAccountsService;
         private readonly IInstagramAudienceService _instagramAudienceService;
+        private readonly IInstagramStatisticsService _instagramStatisticsService;
         private readonly ILogger<InstagramService> _logger;
 
         public InstagramService(
@@ -28,6 +29,7 @@ namespace Trendlink.Infrastructure.Instagram
             IInstagramPostsService instagramPostsService,
             IInstagramAccountsService instagramAccountsService,
             IInstagramAudienceService instagramAudienceService,
+            IInstagramStatisticsService instagramStatisticsService,
             ILogger<InstagramService> logger
         )
         {
@@ -36,6 +38,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramPostsService = instagramPostsService;
             this._instagramAccountsService = instagramAccountsService;
             this._instagramAudienceService = instagramAudienceService;
+            this._instagramStatisticsService = instagramStatisticsService;
             this._logger = logger;
         }
 
@@ -253,24 +256,6 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<Result<PostsTableStatistics>> GetPostsTable(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
-            CancellationToken cancellationToken = default
-        )
-        {
-            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
-
-            return await this._instagramPostsService.GetPostsTableStatistics(
-                accessToken,
-                instagramAccountId,
-                dateRange.Item1,
-                dateRange.Item2,
-                cancellationToken
-            );
-        }
-
         public async Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
@@ -294,6 +279,24 @@ namespace Trendlink.Infrastructure.Instagram
             Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
 
             return await this._instagramAudienceService.GetUserAudienceReachPercentage(
+                accessToken,
+                instagramAccountId,
+                dateRange.Item1,
+                dateRange.Item2,
+                cancellationToken
+            );
+        }
+
+        public async Task<Result<TableStatistics>> GetTableStatistics(
+            string accessToken,
+            string instagramAccountId,
+            StatisticsPeriod statisticsPeriod,
+            CancellationToken cancellationToken = default
+        )
+        {
+            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
+
+            return await this._instagramStatisticsService.GetTableStatistics(
                 accessToken,
                 instagramAccountId,
                 dateRange.Item1,

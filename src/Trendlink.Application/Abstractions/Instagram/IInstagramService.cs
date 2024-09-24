@@ -2,7 +2,7 @@
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
+using Trendlink.Application.Users.Instagarm.GetTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 
@@ -41,7 +41,7 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<PostsTableStatistics>> GetPostsTable(
+        Task<Result<TableStatistics>> GetTableStatistics(
             string accessToken,
             string instagramAccountId,
             StatisticsPeriod statisticsPeriod,

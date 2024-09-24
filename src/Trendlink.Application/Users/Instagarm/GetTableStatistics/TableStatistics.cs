@@ -1,6 +1,6 @@
-﻿namespace Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics
+﻿namespace Trendlink.Application.Users.Instagarm.GetTableStatistics
 {
-    public sealed class PostsTableStatistics
+    public sealed class TableStatistics
     {
         public List<MetricData> Metrics { get; set; } = [];
     }
