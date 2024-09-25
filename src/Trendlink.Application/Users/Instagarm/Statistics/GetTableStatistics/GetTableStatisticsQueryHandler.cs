@@ -6,7 +6,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.Instagarm.GetTableStatistics
+namespace Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics
 {
     internal sealed class GetTableStatisticsQueryHandler
         : IQueryHandler<GetTableStatisticsQuery, TableStatistics>

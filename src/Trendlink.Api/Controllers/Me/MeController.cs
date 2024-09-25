@@ -5,12 +5,14 @@ using Trendlink.Application.Calendar.GetLoggedInUserCalendar;
 using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Conditions.GetUserCondition;
 using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
+using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetPostsTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Application.Users.Photos.DeleteProfilePhoto;
 using Trendlink.Application.Users.Photos.SetProfilePhoto;
 
@@ -32,6 +34,14 @@ namespace Trendlink.Api.Controllers.Me
             var query = new GetUserQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
+        {
+            var command = new DeleteUserAccountCommand();
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
         [HttpGet("calendar")]
@@ -97,13 +107,24 @@ namespace Trendlink.Api.Controllers.Me
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
-        [HttpGet("posts-table")]
-        public async Task<IActionResult> GetLoggedInUserPostsStatisticsTable(
+        [HttpGet("table")]
+        public async Task<IActionResult> GetLoggedInUserTableStatistics(
             [FromQuery] StatisticsPeriod period,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetPostsTableStatisticsQuery(this._userContext.UserId, period);
+            var query = new GetTableStatisticsQuery(this._userContext.UserId, period);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("overview")]
+        public async Task<IActionResult> GetLoggedInUserOverviewStatistics(
+            [FromQuery] StatisticsPeriod period,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetOverviewStatisticsQuery(this._userContext.UserId, period);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

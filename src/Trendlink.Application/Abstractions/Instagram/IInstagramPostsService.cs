@@ -1,5 +1,4 @@
-﻿using Trendlink.Application.Users.Instagarm.GetTableStatistics;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+﻿using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Instagram

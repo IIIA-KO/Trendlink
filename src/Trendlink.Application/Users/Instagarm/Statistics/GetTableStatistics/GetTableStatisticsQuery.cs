@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.Instagarm.GetTableStatistics
+namespace Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics
 {
     public sealed record GetTableStatisticsQuery(UserId UserId, StatisticsPeriod StatisticsPeriod)
         : ICachedQuery<TableStatistics>

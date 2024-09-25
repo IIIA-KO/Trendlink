@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
-using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.GetTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Models.Posts;

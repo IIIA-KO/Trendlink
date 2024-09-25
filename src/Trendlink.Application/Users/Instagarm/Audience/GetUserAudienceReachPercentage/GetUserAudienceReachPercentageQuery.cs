@@ -1,5 +1,4 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
-using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage

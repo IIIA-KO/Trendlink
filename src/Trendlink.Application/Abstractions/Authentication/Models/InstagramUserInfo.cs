@@ -39,17 +39,11 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("biography")]
-        public string Biography { get; set; } = string.Empty;
-
         [JsonPropertyName("ig_id")]
         public long IgId { get; set; }
 
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
-
-        [JsonPropertyName("profile_picture_url")]
-        public string ProfilePictureUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("followers_count")]
         public int FollowersCount { get; set; }

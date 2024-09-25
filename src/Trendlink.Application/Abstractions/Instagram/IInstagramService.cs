@@ -2,8 +2,9 @@
 using Trendlink.Application.Users.Instagarm;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.GetTableStatistics;
 using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Instagram
@@ -42,6 +43,13 @@ namespace Trendlink.Application.Abstractions.Instagram
         );
 
         Task<Result<TableStatistics>> GetTableStatistics(
+            string accessToken,
+            string instagramAccountId,
+            StatisticsPeriod statisticsPeriod,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<OverviewStatistics>> GetOverviewStatistics(
             string accessToken,
             string instagramAccountId,
             StatisticsPeriod statisticsPeriod,

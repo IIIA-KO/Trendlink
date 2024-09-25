@@ -154,14 +154,6 @@ namespace Trendlink.Api.Controllers.Users
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
 
-        [HttpDelete("delete-my-account")]
-        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
-        {
-            var command = new DeleteUserAccountCommand();
-
-            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
-        }
-
         [HttpGet("{userId:guid}/posts")]
         public async Task<IActionResult> GetUserPosts(
             Guid userId,
