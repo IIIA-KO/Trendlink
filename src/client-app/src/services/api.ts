@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import {AuthContext} from "../context/AuthContext";
-import {useContext} from "react";
 import useAuth from "../hooks/useAuth";
 
 const apiURL = import.meta.env.VITE_API_URL;

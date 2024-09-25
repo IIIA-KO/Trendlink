@@ -1,5 +1,4 @@
-import axios, { AxiosError } from 'axios';
-
+import axios from 'axios';
 
 export const handleError = (error: unknown): void => {
     if (axios.isAxiosError(error)) {

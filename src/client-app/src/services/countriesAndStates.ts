@@ -1,7 +1,6 @@
 import axiosInstance from './api';
 import { CountryType  } from '../types/CountryType';
 import { StateType   } from '../types/StateType';
-import axios from "axios";
 import {handleError} from "../utils/handleError";
 
 export const getCountries = async (): Promise<CountryType[]> => {

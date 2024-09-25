@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavButtonType from "../../types/NavButtonType";
 
 const NavButton: React.FC<NavButtonType> = ({ buttonText, redirectTo, width = 'w-full', height = 'h-[47px]' }) => {
     const navigate = useNavigate();
