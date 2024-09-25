@@ -6,16 +6,16 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage
+namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage
 {
-    internal sealed class GetUserAudienceGenderPercentageQueryHandler
-        : IQueryHandler<GetUserAudienceGenderPercentageQuery, AudienceGenderStatistics>
+    internal sealed class GetAudienceLocationPercentageQueryHandler
+        : IQueryHandler<GetAudienceLocationPercentageQuery, AudienceLocationStatistics>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
 
-        public GetUserAudienceGenderPercentageQueryHandler(
+        public GetAudienceLocationPercentageQueryHandler(
             IUserRepository userRepository,
             IInstagramService instagramService,
             IKeycloakService keycloakService
@@ -26,8 +26,8 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPe
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<AudienceGenderStatistics>> Handle(
-            GetUserAudienceGenderPercentageQuery request,
+        public async Task<Result<AudienceLocationStatistics>> Handle(
+            GetAudienceLocationPercentageQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPe
             );
             if (user is null)
             {
-                return Result.Failure<AudienceGenderStatistics>(UserErrors.NotFound);
+                return Result.Failure<AudienceLocationStatistics>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,14 +48,15 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPe
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<AudienceGenderStatistics>(
+                return Result.Failure<AudienceLocationStatistics>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            return await this._instagramService.GetUserAudienceGenderPercentage(
+            return await this._instagramService.GetAudienceLocationPercentage(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
+                request.LocationType,
                 cancellationToken
             );
         }

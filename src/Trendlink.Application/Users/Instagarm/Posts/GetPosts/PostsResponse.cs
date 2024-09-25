@@ -1,6 +1,6 @@
-﻿namespace Trendlink.Application.Users.Instagarm.Posts.GetUserPosts
+﻿namespace Trendlink.Application.Users.Instagarm.Posts.GetPosts
 {
-    public sealed class UserPostsResponse
+    public sealed class PostsResponse
     {
         public List<InstagramPost> Posts { get; init; }
 

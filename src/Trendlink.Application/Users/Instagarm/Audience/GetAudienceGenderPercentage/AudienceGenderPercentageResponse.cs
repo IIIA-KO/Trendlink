@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage
+﻿namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage
 {
     public sealed class AudienceGenderPercentageResponse
     {

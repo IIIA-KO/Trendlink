@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-namespace Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics
+﻿namespace Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics
 {
     public sealed class TableStatistics
     {

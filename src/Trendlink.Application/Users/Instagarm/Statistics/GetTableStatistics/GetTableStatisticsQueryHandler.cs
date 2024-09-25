@@ -54,9 +54,11 @@ namespace Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics
             }
 
             return await this._instagramService.GetTableStatistics(
-                user.Token!.AccessToken,
-                user.InstagramAccount!.Metadata.Id,
-                request.StatisticsPeriod,
+                new InstagramPeriodRequest(
+                    user.Token!.AccessToken,
+                    user.InstagramAccount!.Metadata.Id,
+                    request.StatisticsPeriod
+                ),
                 cancellationToken
             );
         }

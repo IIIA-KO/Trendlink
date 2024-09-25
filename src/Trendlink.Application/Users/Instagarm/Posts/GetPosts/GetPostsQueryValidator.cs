@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Users.Instagarm.Posts.GetUserPosts
+namespace Trendlink.Application.Users.Instagarm.Posts.GetPosts
 {
-    internal sealed class GetUserPostsQueryValidator : AbstractValidator<GetUserPostsQuery>
+    internal sealed class GetPostsQueryValidator : AbstractValidator<GetPostsQuery>
     {
-        public GetUserPostsQueryValidator()
+        public GetPostsQueryValidator()
         {
             this.RuleFor(c => c.Limit)
                 .GreaterThanOrEqualTo(1)

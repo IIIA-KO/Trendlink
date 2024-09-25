@@ -8,9 +8,10 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Application.Users.Photos.DeleteProfilePhoto;
@@ -102,7 +103,7 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserPostsQuery(this._userContext.UserId, limit, cursorType, cursor);
+            var query = new GetPostsQuery(this._userContext.UserId, limit, cursorType, cursor);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -134,7 +135,7 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAudienceGenderPercentageQuery(this._userContext.UserId);
+            var query = new GetAudienceGenderPercentageQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -145,7 +146,21 @@ namespace Trendlink.Api.Controllers.Me
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAudienceReachPercentageQuery(this._userContext.UserId, period);
+            var query = new GetAudienceReachPercentageQuery(this._userContext.UserId, period);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("audience-location-percentage")]
+        public async Task<IActionResult> GetLoggedInUserAudienceLocationPercentage(
+            [FromQuery] LocationType locationType,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetAudienceLocationPercentageQuery(
+                this._userContext.UserId,
+                locationType
+            );
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
@@ -238,7 +238,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<Result<UserPostsResponse>> GetUserPosts(
+        public async Task<Result<PostsResponse>> GetUserPosts(
             string accessToken,
             string instagramAccountId,
             int limit,
@@ -257,93 +257,65 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
+        public async Task<Result<AudienceGenderStatistics>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         )
         {
-            return await this._instagramAudienceService.GetUserAudienceGenderPercentage(
+            return await this._instagramAudienceService.GetAudienceGenderPercentage(
                 accessToken,
                 instagramAccountId,
                 cancellationToken
             );
         }
 
-        public async Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+        public async Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
-            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
+            return await this._instagramAudienceService.GetAudienceReachPercentage(
+                request,
+                cancellationToken
+            );
+        }
 
-            return await this._instagramAudienceService.GetUserAudienceReachPercentage(
+        public async Task<Result<AudienceLocationStatistics>> GetAudienceLocationPercentage(
+            string accessToken,
+            string instagramAccountId,
+            LocationType locationType,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this._instagramAudienceService.GetAudienceTopLocations(
                 accessToken,
                 instagramAccountId,
-                dateRange.Item1,
-                dateRange.Item2,
+                locationType,
                 cancellationToken
             );
         }
 
         public async Task<Result<TableStatistics>> GetTableStatistics(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
-            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
-
             return await this._instagramStatisticsService.GetTableStatistics(
-                accessToken,
-                instagramAccountId,
-                dateRange.Item1,
-                dateRange.Item2,
+                request,
                 cancellationToken
             );
         }
 
         public async Task<Result<OverviewStatistics>> GetOverviewStatistics(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
-            Tuple<DateOnly, DateOnly> dateRange = ConvertPeriodToDateRange(statisticsPeriod);
-
             return await this._instagramStatisticsService.GetOverviewStatistics(
-                accessToken,
-                instagramAccountId,
-                dateRange.Item1,
-                dateRange.Item2,
+                request,
                 cancellationToken
             );
-        }
-
-        private static Tuple<DateOnly, DateOnly> ConvertPeriodToDateRange(StatisticsPeriod period)
-        {
-            return period switch
-            {
-                StatisticsPeriod.Week
-                    => new Tuple<DateOnly, DateOnly>(
-                        DateOnly.FromDateTime(DateTime.Today.AddDays(-7)),
-                        DateOnly.FromDateTime(DateTime.Today)
-                    ),
-                StatisticsPeriod.Month
-                    => new Tuple<DateOnly, DateOnly>(
-                        DateOnly.FromDateTime(DateTime.Today.AddDays(-30)),
-                        DateOnly.FromDateTime(DateTime.Today)
-                    ),
-                _
-                    => new Tuple<DateOnly, DateOnly>(
-                        DateOnly.FromDateTime(DateTime.Today.AddDays(-1)),
-                        DateOnly.FromDateTime(DateTime.Today)
-                    )
-            };
         }
 
         private async Task<HttpResponseMessage> SendPostRequestAsync(

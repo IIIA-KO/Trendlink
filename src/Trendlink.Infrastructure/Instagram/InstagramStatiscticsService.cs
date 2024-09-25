@@ -23,18 +23,15 @@ namespace Trendlink.Infrastructure.Instagram
         }
 
         public async Task<Result<TableStatistics>> GetTableStatistics(
-            string accessToken,
-            string instagramAccountId,
-            DateOnly since,
-            DateOnly until,
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
             string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=reach,follower_count,impressions,profile_views"
+                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=reach,follower_count,impressions,profile_views"
                 + "&period=day"
-                + $"&since={since}&until={until}"
-                + $"&access_token={accessToken}";
+                + $"&since={request.Since}&until={request.Until}"
+                + $"&access_token={request.AccessToken}";
 
             HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
 
@@ -88,18 +85,15 @@ namespace Trendlink.Infrastructure.Instagram
         }
 
         public async Task<Result<OverviewStatistics>> GetOverviewStatistics(
-            string accessToken,
-            string instagramAccountId,
-            DateOnly since,
-            DateOnly until,
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
             string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=reach,impressions,total_interactions,comments,profile_views,website_clicks"
+                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=reach,impressions,total_interactions,comments,profile_views,website_clicks"
                 + "&metric_type=total_value&period=day"
-                + $"&since={since}&until={until}"
-                + $"&access_token={accessToken}";
+                + $"&since={request.Since}&until={request.Until}"
+                + $"&access_token={request.AccessToken}";
 
             HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
 

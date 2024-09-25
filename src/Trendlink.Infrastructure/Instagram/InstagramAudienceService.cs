@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Domain.Abstraction;
 using static System.Text.Json.JsonElement;
 
@@ -22,7 +23,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
+        public async Task<Result<AudienceGenderStatistics>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -87,19 +88,106 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
-        public async Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
+        public async Task<Result<AudienceLocationStatistics>> GetAudienceTopLocations(
             string accessToken,
             string instagramAccountId,
-            DateOnly since,
-            DateOnly until,
+            LocationType locationType,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string breakdownValue = locationType switch
+            {
+                LocationType.City => "city",
+                LocationType.Country => "country",
+                _ => throw new ArgumentOutOfRangeException(nameof(locationType), locationType, null)
+            };
+
+            string url =
+                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=follower_demographics&period=lifetime"
+                + "&metric_type=total_value"
+                + $"&breakdown={breakdownValue}"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+
+            try
+            {
+                if (
+                    !jsonObject.TryGetProperty("data", out JsonElement dataElement)
+                    || dataElement.GetArrayLength() == 0
+                )
+                {
+                    return Result.Failure<AudienceLocationStatistics>(Error.NoData);
+                }
+
+                var locationPercentages = new List<AudienceLocationPercentageResponse>();
+
+                JsonElement results = dataElement[0]
+                    .GetProperty("total_value")
+                    .GetProperty("breakdowns")[0]
+                    .GetProperty("results");
+
+                double totalValue = results
+                    .EnumerateArray()
+                    .Sum(result => result.GetProperty("value").GetDouble());
+
+                foreach (JsonElement result in results.EnumerateArray())
+                {
+                    string name = result.GetProperty("dimension_values")[0].GetString();
+                    double value = result.GetProperty("value").GetDouble();
+
+                    double percentage = value / totalValue * 100;
+
+                    locationPercentages.Add(
+                        new AudienceLocationPercentageResponse
+                        {
+                            Name = name!,
+                            Percentage = percentage
+                        }
+                    );
+                }
+
+                var sortedLocations = locationPercentages
+                    .OrderByDescending(l => l.Percentage)
+                    .ToList();
+
+                var topLocations = sortedLocations.Take(4).ToList();
+
+                double otherPercentage = sortedLocations.Skip(4).Sum(l => l.Percentage);
+
+                if (otherPercentage > 0)
+                {
+                    topLocations.Add(
+                        new AudienceLocationPercentageResponse
+                        {
+                            Name = "Other",
+                            Percentage = otherPercentage
+                        }
+                    );
+                }
+
+                return new AudienceLocationStatistics(topLocations);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<AudienceLocationStatistics>(Error.Unexpected);
+            }
+        }
+
+        public async Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
             string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=reach&period=day"
-                + $"&since={since}&until={until}"
+                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=reach&period=day"
+                + $"&since={request.Since}&until={request.Until}"
                 + "&breakdown=follow_type&metric_type=total_value"
-                + $"&access_token={accessToken}";
+                + $"&access_token={request.AccessToken}";
 
             HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
 
@@ -154,6 +242,14 @@ namespace Trendlink.Infrastructure.Instagram
             {
                 return Result.Failure<AudienceReachStatistics>(Error.Unexpected);
             }
+        }
+
+        public Task<Result<string>> GetAudienceAgesPercentage(
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        )
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(

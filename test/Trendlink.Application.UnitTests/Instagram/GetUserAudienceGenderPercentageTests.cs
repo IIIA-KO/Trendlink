@@ -5,7 +5,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.UnitTests.Users;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
@@ -15,13 +15,13 @@ namespace Trendlink.Application.UnitTests.Instagram
 {
     public class GetUserAudienceGenderPercentageTests
     {
-        private static readonly GetUserAudienceGenderPercentageQuery Query = new(UserId.New());
+        private static readonly GetAudienceGenderPercentageQuery Query = new(UserId.New());
 
         private readonly IUserRepository _userRepositoryMock;
         private readonly IInstagramService _instagramServiceMock;
         private readonly IKeycloakService _keycloakServiceMock;
 
-        private readonly GetUserAudienceGenderPercentageQueryHandler _handler;
+        private readonly GetAudienceGenderPercentageQueryHandler _handler;
 
         public GetUserAudienceGenderPercentageTests()
         {
@@ -29,7 +29,7 @@ namespace Trendlink.Application.UnitTests.Instagram
             this._instagramServiceMock = Substitute.For<IInstagramService>();
             this._keycloakServiceMock = Substitute.For<IKeycloakService>();
 
-            this._handler = new GetUserAudienceGenderPercentageQueryHandler(
+            this._handler = new GetAudienceGenderPercentageQueryHandler(
                 this._userRepositoryMock,
                 this._instagramServiceMock,
                 this._keycloakServiceMock
@@ -123,7 +123,7 @@ namespace Trendlink.Application.UnitTests.Instagram
             )
                 .Returns(Task.FromResult(true));
 
-            this._instagramServiceMock.GetUserAudienceGenderPercentage(
+            this._instagramServiceMock.GetAudienceGenderPercentage(
                 user.Token!.AccessToken,
                 user.InstagramAccount!.Metadata.Id,
                 default

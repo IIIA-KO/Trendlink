@@ -1,14 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.Instagarm.Posts.GetUserPosts
+namespace Trendlink.Application.Users.Instagarm.Posts.GetPosts
 {
-    public sealed record GetUserPostsQuery(
-        UserId UserId,
-        int Limit,
-        string? CursorType,
-        string? Cursor
-    ) : ICachedQuery<UserPostsResponse>
+    public sealed record GetPostsQuery(UserId UserId, int Limit, string? CursorType, string? Cursor)
+        : ICachedQuery<PostsResponse>
     {
         public string CacheKey =>
             $"posts-{this.UserId.Value}-limit-{this.Limit}-cursorType-{this.CursorType ?? "after"}-cursor-{this.Cursor ?? "null"}";

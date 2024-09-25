@@ -1,8 +1,8 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
-using Trendlink.Application.Users.Instagarm;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
@@ -33,7 +33,7 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<UserPostsResponse>> GetUserPosts(
+        Task<Result<PostsResponse>> GetUserPosts(
             string accessToken,
             string instagramAccountId,
             int limit,
@@ -42,30 +42,31 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<TableStatistics>> GetTableStatistics(
+        Task<Result<AudienceGenderStatistics>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<AudienceLocationStatistics>> GetAudienceLocationPercentage(
+            string accessToken,
+            string instagramAccountId,
+            LocationType locationType,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<TableStatistics>> GetTableStatistics(
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );
 
         Task<Result<OverviewStatistics>> GetOverviewStatistics(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<AudienceGenderStatistics>> GetUserAudienceGenderPercentage(
-            string accessToken,
-            string instagramAccountId,
-            CancellationToken cancellationToken = default
-        );
-
-        Task<Result<AudienceReachStatistics>> GetUserAudienceReachPercentage(
-            string accessToken,
-            string instagramAccountId,
-            StatisticsPeriod statisticsPeriod,
+        Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+            InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );
     }

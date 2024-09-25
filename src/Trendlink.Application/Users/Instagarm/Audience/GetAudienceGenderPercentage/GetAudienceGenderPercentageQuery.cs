@@ -1,9 +1,9 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage
+namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage
 {
-    public sealed record GetUserAudienceGenderPercentageQuery(UserId UserId)
+    public sealed record GetAudienceGenderPercentageQuery(UserId UserId)
         : ICachedQuery<AudienceGenderStatistics>
     {
         public string CacheKey => $"audience-gender-{this.UserId.Value}";

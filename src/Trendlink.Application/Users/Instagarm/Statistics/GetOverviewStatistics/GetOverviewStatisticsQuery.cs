@@ -1,5 +1,4 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
-using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics

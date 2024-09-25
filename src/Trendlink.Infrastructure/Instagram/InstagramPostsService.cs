@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Models.Posts;
 
@@ -22,7 +22,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<Result<UserPostsResponse>> GetUserPostsWithInsights(
+        public async Task<Result<PostsResponse>> GetUserPostsWithInsights(
             string accessToken,
             string instagramAccountId,
             int limit,
@@ -41,7 +41,7 @@ namespace Trendlink.Infrastructure.Instagram
             );
             if (posts is null || posts.Data is null)
             {
-                return new UserPostsResponse { Posts = [] };
+                return new PostsResponse { Posts = [] };
             }
 
             await this.FetchInsightsForPostsAsync(posts.Data, accessToken, cancellationToken);
@@ -154,9 +154,9 @@ namespace Trendlink.Infrastructure.Instagram
             videoViewsInsight?.Values.ForEach(v => v.Value = null);
         }
 
-        private UserPostsResponse MapToUserPostsResponse(InstagramMedia posts)
+        private PostsResponse MapToUserPostsResponse(InstagramMedia posts)
         {
-            return new UserPostsResponse
+            return new PostsResponse
             {
                 Posts = posts.Data.ConvertAll(post => new InstagramPost
                 {

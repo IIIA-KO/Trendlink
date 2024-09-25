@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage
+﻿namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage
 {
     public class AudienceReachStatistics
     {

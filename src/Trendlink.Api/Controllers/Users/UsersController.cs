@@ -6,14 +6,13 @@ using Trendlink.Application.Users.Authentication.LoginUserWithGoogle;
 using Trendlink.Application.Users.Authentication.RefreshToken;
 using Trendlink.Application.Users.Authentication.RegisterUser;
 using Trendlink.Application.Users.Authentication.RegisterUserWithGoogle;
-using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.EditUser;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.GetUsers;
 using Trendlink.Application.Users.Instagarm;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetUserAudienceReachPercentage;
-using Trendlink.Application.Users.Instagarm.Posts.GetUserPosts;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
@@ -163,7 +162,7 @@ namespace Trendlink.Api.Controllers.Users
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserPostsQuery(new UserId(userId), limit, cursorType, cursor);
+            var query = new GetPostsQuery(new UserId(userId), limit, cursorType, cursor);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -174,7 +173,7 @@ namespace Trendlink.Api.Controllers.Users
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAudienceGenderPercentageQuery(new UserId(userId));
+            var query = new GetAudienceGenderPercentageQuery(new UserId(userId));
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -186,7 +185,7 @@ namespace Trendlink.Api.Controllers.Users
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserAudienceReachPercentageQuery(new UserId(userId), period);
+            var query = new GetAudienceReachPercentageQuery(new UserId(userId), period);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
