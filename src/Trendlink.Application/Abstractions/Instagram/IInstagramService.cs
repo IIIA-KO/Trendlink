@@ -1,4 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
@@ -55,17 +56,23 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
+        Task<Result<AudienceAgeStatistics>> GetAudienceAgePercentage(
+            string accessToken,
+            string instagramAccountId,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        );
+
         Task<Result<TableStatistics>> GetTableStatistics(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );
 
         Task<Result<OverviewStatistics>> GetOverviewStatistics(
-            InstagramPeriodRequest request,
-            CancellationToken cancellationToken = default
-        );
-
-        Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );

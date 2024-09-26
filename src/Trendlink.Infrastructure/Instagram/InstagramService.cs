@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Instagram;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
@@ -298,6 +299,19 @@ namespace Trendlink.Infrastructure.Instagram
                 accessToken,
                 instagramAccountId,
                 locationType,
+                cancellationToken
+            );
+        }
+
+        public async Task<Result<AudienceAgeStatistics>> GetAudienceAgePercentage(
+            string accessToken,
+            string instagramAccountId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this._instagramAudienceService.GetAudienceAgesPercentage(
+                accessToken,
+                instagramAccountId,
                 cancellationToken
             );
         }

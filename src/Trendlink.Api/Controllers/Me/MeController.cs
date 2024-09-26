@@ -8,6 +8,7 @@ using Trendlink.Application.Notifications.GetLoggedInUserNotifications;
 using Trendlink.Application.Users.DeleteUserAccount;
 using Trendlink.Application.Users.GetUser;
 using Trendlink.Application.Users.Instagarm;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
@@ -161,6 +162,16 @@ namespace Trendlink.Api.Controllers.Me
                 this._userContext.UserId,
                 locationType
             );
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("audience-age-percentage")]
+        public async Task<IActionResult> GetLoggedInUserAudienceAgePercentage(
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetAudienceAgePercentageQuery(this._userContext.UserId);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
+using Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
@@ -178,6 +179,68 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
+        public async Task<Result<AudienceAgeStatistics>> GetAudienceAgesPercentage(
+            string accessToken,
+            string instagramAccountId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string url =
+                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?"
+                + "metric=follower_demographics&period=lifetime&metric_type=total_value&breakdown=age"
+                + $"&access_token={accessToken}";
+
+            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+
+            try
+            {
+                if (
+                    !jsonObject.TryGetProperty("data", out JsonElement dataElement)
+                    || dataElement.GetArrayLength() == 0
+                )
+                {
+                    return Result.Failure<AudienceAgeStatistics>(Error.NoData);
+                }
+
+                var agePercentages = new List<AudienceAgePercentageResponse>();
+
+                JsonElement results = dataElement[0]
+                    .GetProperty("total_value")
+                    .GetProperty("breakdowns")[0]
+                    .GetProperty("results");
+
+                double totalValue = results
+                    .EnumerateArray()
+                    .Sum(result => result.GetProperty("value").GetDouble());
+
+                foreach (JsonElement result in results.EnumerateArray())
+                {
+                    string name = result.GetProperty("dimension_values")[0].GetString();
+                    double value = result.GetProperty("value").GetDouble();
+
+                    double percentage = value / totalValue * 100;
+
+                    agePercentages.Add(
+                        new AudienceAgePercentageResponse
+                        {
+                            AgeGroup = name!,
+                            Percentage = percentage
+                        }
+                    );
+                }
+
+                return new AudienceAgeStatistics(agePercentages);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<AudienceAgeStatistics>(Error.Unexpected);
+            }
+        }
+
         public async Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
@@ -242,14 +305,6 @@ namespace Trendlink.Infrastructure.Instagram
             {
                 return Result.Failure<AudienceReachStatistics>(Error.Unexpected);
             }
-        }
-
-        public Task<Result<string>> GetAudienceAgesPercentage(
-            InstagramPeriodRequest request,
-            CancellationToken cancellationToken = default
-        )
-        {
-            throw new NotImplementedException();
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(
