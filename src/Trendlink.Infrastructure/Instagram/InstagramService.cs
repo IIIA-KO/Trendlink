@@ -10,6 +10,8 @@ using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Instagram
@@ -43,7 +45,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._logger = logger;
         }
 
-        public async Task<FacebookTokenResponse?> GetAccessTokenAsync(
+        public async Task<Result<FacebookTokenResponse>> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         )
@@ -67,42 +69,37 @@ namespace Trendlink.Infrastructure.Instagram
                 cancellationToken
             );
 
-            if (response.IsSuccessStatusCode)
-            {
-                this._logger.LogInformation("Successfully retrieved access token.");
-
-                FacebookTokenResponse? result = JsonSerializer.Deserialize<FacebookTokenResponse>(
-                    await response.Content.ReadAsStringAsync(cancellationToken)
-                );
-
-                DateTimeOffset? expiresAt = await this.GetDataExpirationTime(
-                    result!.AccessToken,
-                    cancellationToken
-                );
-                if (!expiresAt.HasValue)
-                {
-                    return null;
-                }
-
-                result.ExpiresAtUtc = expiresAt.Value;
-
-                return result;
-            }
-            else
+            if (!response.IsSuccessStatusCode)
             {
                 this._logger.LogWarning(
                     "Failed to retrieve access token. Status code: {StatusCode}",
                     response.StatusCode
                 );
 
-                string errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                Console.WriteLine(errorContent);
-
-                return null;
+                return Result.Failure<FacebookTokenResponse>(UserErrors.InvalidCredentials);
             }
+
+            this._logger.LogInformation("Successfully retrieved access token.");
+
+            FacebookTokenResponse? result = JsonSerializer.Deserialize<FacebookTokenResponse>(
+                await response.Content.ReadAsStringAsync(cancellationToken)
+            );
+
+            Result<DateTimeOffset> expiresAtResult = await this.GetDataExpirationTime(
+                result!.AccessToken,
+                cancellationToken
+            );
+            if (!expiresAtResult.IsFailure)
+            {
+                return Result.Failure<FacebookTokenResponse>(expiresAtResult.Error);
+            }
+
+            result.ExpiresAtUtc = expiresAtResult.Value;
+
+            return result;
         }
 
-        public async Task<FacebookTokenResponse?> RenewAccessTokenAsync(
+        public async Task<Result<FacebookTokenResponse>> RenewAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         )
@@ -128,42 +125,37 @@ namespace Trendlink.Infrastructure.Instagram
                 cancellationToken
             );
 
-            if (response.IsSuccessStatusCode)
-            {
-                this._logger.LogInformation("Successfully retrieved access token.");
-
-                FacebookTokenResponse? result = JsonSerializer.Deserialize<FacebookTokenResponse>(
-                    await response.Content.ReadAsStringAsync(cancellationToken)
-                );
-
-                DateTimeOffset? expiresAt = await this.GetDataExpirationTime(
-                    result!.AccessToken,
-                    cancellationToken
-                );
-                if (!expiresAt.HasValue)
-                {
-                    return null;
-                }
-
-                result.ExpiresAtUtc = expiresAt.Value;
-
-                return result;
-            }
-            else
+            if (!response.IsSuccessStatusCode)
             {
                 this._logger.LogWarning(
                     "Failed to renew access token. Status code: {StatusCode}",
                     response.StatusCode
                 );
 
-                string errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                Console.WriteLine(errorContent);
-
-                return null;
+                return Result.Failure<FacebookTokenResponse>(UserErrors.InvalidCredentials);
             }
+
+            this._logger.LogInformation("Successfully retrieved access token.");
+
+            FacebookTokenResponse? result = JsonSerializer.Deserialize<FacebookTokenResponse>(
+                await response.Content.ReadAsStringAsync(cancellationToken)
+            );
+
+            Result<DateTimeOffset> expiresAtResult = await this.GetDataExpirationTime(
+                result!.AccessToken,
+                cancellationToken
+            );
+            if (!expiresAtResult.IsFailure)
+            {
+                return Result.Failure<FacebookTokenResponse>(expiresAtResult.Error);
+            }
+
+            result.ExpiresAtUtc = expiresAtResult.Value;
+
+            return result;
         }
 
-        private async Task<DateTimeOffset?> GetDataExpirationTime(
+        private async Task<Result<DateTimeOffset>> GetDataExpirationTime(
             string accessToken,
             CancellationToken cancellationToken = default
         )
@@ -190,6 +182,27 @@ namespace Trendlink.Infrastructure.Instagram
 
             using var jsonDocument = JsonDocument.Parse(content);
             JsonElement root = jsonDocument.RootElement;
+
+            if (!TryGetExpirationTime(root, out long expiresAt))
+            {
+                this._logger.LogWarning("Failed to find data_access_expires_at in the response");
+
+                return Result.Failure<DateTimeOffset>(
+                    InstagramAccountErrors.FailedToGetExpirationForAccessToken
+                );
+            }
+
+            this._logger.LogInformation(
+                "Data access expiration time retrieved successfully: {ExpiresAt}",
+                expiresAt
+            );
+            return DateTimeOffset.FromUnixTimeSeconds(expiresAt);
+        }
+
+        private static bool TryGetExpirationTime(JsonElement root, out long expiresAt)
+        {
+            expiresAt = 0;
+
             if (
                 root.TryGetProperty("data", out JsonElement dataElement)
                 && dataElement.TryGetProperty(
@@ -198,18 +211,11 @@ namespace Trendlink.Infrastructure.Instagram
                 )
             )
             {
-                long expiresAt = expiresAtElement.GetInt64();
-                this._logger.LogInformation(
-                    "Data access expiration time retrieved successfully: {ExpiresAt}",
-                    expiresAt
-                );
-                return DateTimeOffset.FromUnixTimeSeconds(expiresAt);
+                expiresAt = expiresAtElement.GetInt64();
+                return true;
             }
-            else
-            {
-                this._logger.LogWarning("Failed to find data_access_expires_at in the response");
-                return null;
-            }
+
+            return false;
         }
 
         public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(

@@ -61,16 +61,16 @@ namespace Trendlink.Application.Users.Instagarm.RenewInstagramAccess
                 return Result.Failure(InstagramAccountErrors.InstagramAccountNotLinked);
             }
 
-            FacebookTokenResponse? facebookToken =
+            Result<FacebookTokenResponse>? facebookTokenResult =
                 await this._instagramService.RenewAccessTokenAsync(request.Code, cancellationToken);
-            if (facebookToken is null)
+            if (facebookTokenResult.IsFailure)
             {
-                return Result.Failure(UserErrors.InvalidCredentials);
+                return Result.Failure(facebookTokenResult.Error);
             }
 
             Result<InstagramUserInfo> instagramUserInfoResult =
                 await this._instagramService.GetUserInfoAsync(
-                    facebookToken.AccessToken,
+                    facebookTokenResult.Value.AccessToken,
                     cancellationToken
                 );
             if (instagramUserInfoResult.IsFailure)
@@ -96,8 +96,8 @@ namespace Trendlink.Application.Users.Instagarm.RenewInstagramAccess
             this._instagramAccountRepository.Remove(user.InstagramAccount);
             user.LinkInstagramAccount(
                 instagramAccount,
-                facebookToken.AccessToken,
-                facebookToken.ExpiresAtUtc
+                facebookTokenResult.Value.AccessToken,
+                facebookTokenResult.Value.ExpiresAtUtc
             );
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);

@@ -11,12 +11,12 @@ namespace Trendlink.Application.Abstractions.Instagram
 {
     public interface IInstagramService
     {
-        Task<FacebookTokenResponse?> GetAccessTokenAsync(
+        Task<Result<FacebookTokenResponse>> GetAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         );
 
-        Task<FacebookTokenResponse?> RenewAccessTokenAsync(
+        Task<Result<FacebookTokenResponse>> RenewAccessTokenAsync(
             string code,
             CancellationToken cancellationToken = default
         );

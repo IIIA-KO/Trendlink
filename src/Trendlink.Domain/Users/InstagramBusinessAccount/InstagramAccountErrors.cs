@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Abstraction;
+﻿using Microsoft.VisualBasic;
+using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Domain.Users.InstagramBusinessAccount
 {
@@ -40,16 +41,22 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
                 "User has tried to renew access to different Instagram account"
             );
 
+        public static readonly Error IncorrectFacebookPagesCount =
+            new(
+                "InstagramAccount.IncorrectFacebookPagesCount",
+                "User has selected incorrect quantity of Facebook Pages. Required count is exactly one"
+            );
+
         public static readonly Error FailedToGetFacebookPage =
             new(
                 "InstagramAccount.FailedToGetFacebookPage",
                 "Failed to get access to user's Facebook Business Page"
             );
 
-        public static readonly Error IncorrectFacebookPagesCount =
+        public static readonly Error FailedToGetExpirationForAccessToken =
             new(
-                "InstagramAccount.IncorrectFacebookPagesCount",
-                "User has selected incorrect quantity of Facebook Pages. Required count is exactly one"
+                "InstagramAccount.FailedToGetExpirationForAccessToken",
+                "Failed to get expires_at property while retrieving access token"
             );
     }
 }
