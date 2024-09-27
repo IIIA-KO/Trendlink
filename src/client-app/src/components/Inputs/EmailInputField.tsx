@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Field, ErrorMessage, useFormikContext, FormikTouched, FormikErrors } from 'formik';
-import {UserType} from "../../models/UserType";
+import {UserType} from "../../types/UserType";
 
 const EmailInputFiled: React.FC = () => {
     const { touched, errors, setFieldValue } = useFormikContext<UserType>();
