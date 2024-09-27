@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Users.Instagarm;
-using Trendlink.Application.Users.Instagarm.Statistics.GetEngagementStatistics;
-using Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics;
-using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
-using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
+using Trendlink.Application.Instagarm;
+using Trendlink.Application.Instagarm.Statistics.GetEngagementStatistics;
+using Trendlink.Application.Instagarm.Statistics.GetInteractionStatistics;
+using Trendlink.Application.Instagarm.Statistics.GetOverviewStatistics;
+using Trendlink.Application.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram

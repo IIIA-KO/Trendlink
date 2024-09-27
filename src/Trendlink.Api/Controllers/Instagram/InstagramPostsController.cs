@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram

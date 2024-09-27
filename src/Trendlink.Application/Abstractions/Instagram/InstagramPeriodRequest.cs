@@ -1,4 +1,4 @@
-﻿using Trendlink.Application.Users.Instagarm;
+﻿using Trendlink.Application.Instagarm;
 
 namespace Trendlink.Application.Abstractions.Instagram
 {

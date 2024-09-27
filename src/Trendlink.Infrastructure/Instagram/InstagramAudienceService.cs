@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
-using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceAgePercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Domain.Abstraction;
 using static System.Text.Json.JsonElement;
 

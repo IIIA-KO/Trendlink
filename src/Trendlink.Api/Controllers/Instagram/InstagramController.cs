@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Trendlink.Application.Users.Instagarm.LinkInstagram;
-using Trendlink.Application.Users.Instagarm.RenewInstagramAccess;
+using Trendlink.Application.Instagarm.LinkInstagram;
+using Trendlink.Application.Instagarm.RenewInstagramAccess;
 
 namespace Trendlink.Api.Controllers.Instagram
 {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Models.Posts;
 

@@ -1,4 +1,4 @@
-﻿using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+﻿using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Application.Abstractions.Instagram
