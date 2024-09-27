@@ -40,39 +40,53 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const login = (userData: AuthResponseType) => {
         const { accessToken, refreshToken, expiresIn } = userData;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('expiresIn', String(expiresIn));
-        localStorage.setItem('storedTime', String(Date.now()));
-        setUser(userData);
-        navigate('/');
-        scheduleTokenRefresh(expiresIn);
+        try {
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('expiresIn', String(expiresIn));
+            localStorage.setItem('storedTime', String(Date.now()));
+            setUser(userData);
+            navigate('/');
+            scheduleTokenRefresh(expiresIn);
+        } catch (error) {
+            console.error('Error saving to localStorage', error);
+        }
     };
 
     const logout = () => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('expiresIn');
-        localStorage.removeItem('storedTime');
+        try {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('expiresIn');
+            localStorage.removeItem('storedTime');
+        } catch (error) {
+            console.error('Error removing items from localStorage', error);
+        }
         setUser(null);
         navigate('/login');
     };
 
-    const refreshTokens = async () => {
+    const refreshTokens = async (): Promise<AuthResponseType | null> => {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
             try {
-                const { accessToken, expiresIn } = await refreshAccessToken(refreshToken);
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('expiresIn', String(expiresIn));
-                localStorage.setItem('storedTime', String(Date.now()));
-                setUser((prevUser) => prevUser ? { ...prevUser, accessToken } : null);
-                scheduleTokenRefresh(expiresIn);
+                const newTokens = await refreshAccessToken(refreshToken);
+                if (newTokens) {
+                    const { accessToken, expiresIn } = newTokens;
+                    localStorage.setItem('accessToken', accessToken);
+                    localStorage.setItem('expiresIn', String(expiresIn));
+                    localStorage.setItem('storedTime', String(Date.now()));
+                    setUser((prevUser) => prevUser ? { ...prevUser, accessToken } : null);
+                    scheduleTokenRefresh(expiresIn);
+                    return { accessToken, refreshToken, expiresIn };
+                }
             } catch (error) {
                 console.error('Failed to refresh token', error);
                 logout();
+                return null;
             }
         }
+        return null;
     };
 
     return (
