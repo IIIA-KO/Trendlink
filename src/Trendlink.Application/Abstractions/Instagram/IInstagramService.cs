@@ -4,9 +4,13 @@ using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+using Trendlink.Application.Users.Instagarm.Statistics.GetEngagementStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Abstractions.Instagram
 {
@@ -22,14 +26,16 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+        Task<Result<InstagramAccount>> GetInstagramAccountAsync(
+            UserId userId,
             string accessToken,
             string facebookPageId,
             string instagramUsername,
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+        Task<Result<InstagramAccount>> GetInstagramAccountAsync(
+            UserId userId,
             string accessToken,
             CancellationToken cancellationToken = default
         );
@@ -73,6 +79,18 @@ namespace Trendlink.Application.Abstractions.Instagram
         );
 
         Task<Result<OverviewStatistics>> GetOverviewStatistics(
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<InteractionStatistics>> GetInteractionStatistics(
+            string instagramAdAccountId,
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result<EngagementStatistics>> GetEngagementStatistics(
+            int followersCount,
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );

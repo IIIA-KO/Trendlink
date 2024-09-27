@@ -19,7 +19,7 @@ namespace Trendlink.Api.Extensions
             }
             catch (Npgsql.PostgresException)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
                 dbContext.Database.Migrate();
             }
         }

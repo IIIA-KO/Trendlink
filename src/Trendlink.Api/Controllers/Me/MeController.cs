@@ -13,6 +13,8 @@ using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+using Trendlink.Application.Users.Instagarm.Statistics.GetEngagementStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Application.Users.Photos.DeleteProfilePhoto;
@@ -127,6 +129,28 @@ namespace Trendlink.Api.Controllers.Me
         )
         {
             var query = new GetOverviewStatisticsQuery(this._userContext.UserId, period);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("interaction")]
+        public async Task<IActionResult> GetLoggedInUserInteractionStatistics(
+            [FromQuery] StatisticsPeriod period,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetInteractionStatisticsQuery(this._userContext.UserId, period);
+
+            return this.HandleResult(await this.Sender.Send(query, cancellationToken));
+        }
+
+        [HttpGet("engagement")]
+        public async Task<IActionResult> GetLoggedInUserEngagementStatistics(
+            [FromQuery] StatisticsPeriod period,
+            CancellationToken cancellationToken
+        )
+        {
+            var query = new GetEngagementStatisticsQuery(this._userContext.UserId, period);
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }

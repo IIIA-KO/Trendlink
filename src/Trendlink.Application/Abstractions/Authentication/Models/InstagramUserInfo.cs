@@ -15,11 +15,14 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
 
         public string FacebookPageId { get; set; }
 
+        public string AdAccountId { get; set; }
+
         public Result<InstagramAccount> CreateInstagramAccount(UserId userId)
         {
             return InstagramAccount.Create(
                 userId,
                 new FacebookPageId(this.FacebookPageId),
+                new AdvertisementAccountId(this.AdAccountId),
                 new Metadata(
                     this.Id,
                     this.BusinessDiscovery.IgId,

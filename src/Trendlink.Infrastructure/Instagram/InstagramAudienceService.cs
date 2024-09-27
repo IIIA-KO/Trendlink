@@ -299,7 +299,7 @@ namespace Trendlink.Infrastructure.Instagram
                     })
                     .ToList();
 
-                return new AudienceReachStatistics(reachPercentages);
+                return new AudienceReachStatistics(totalFollowers, reachPercentages);
             }
             catch (Exception)
             {

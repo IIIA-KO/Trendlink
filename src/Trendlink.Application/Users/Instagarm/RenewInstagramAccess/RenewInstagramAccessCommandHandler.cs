@@ -68,19 +68,17 @@ namespace Trendlink.Application.Users.Instagarm.RenewInstagramAccess
                 return Result.Failure(facebookTokenResult.Error);
             }
 
-            Result<InstagramUserInfo> instagramUserInfoResult =
-                await this._instagramService.GetUserInfoAsync(
+            Result<InstagramAccount> instagramAccountResult =
+                await this._instagramService.GetInstagramAccountAsync(
+                    user.Id,
                     facebookTokenResult.Value.AccessToken,
                     cancellationToken
                 );
-            if (instagramUserInfoResult.IsFailure)
+            if (instagramAccountResult.IsFailure)
             {
-                return Result.Failure(instagramUserInfoResult.Error);
+                return Result.Failure(instagramAccountResult.Error);
             }
-
-            InstagramAccount instagramAccount = instagramUserInfoResult
-                .Value.CreateInstagramAccount(user.Id)
-                .Value;
+            InstagramAccount instagramAccount = instagramAccountResult.Value;
 
             if (user.InstagramAccount!.Metadata.Id != instagramAccount.Metadata.Id)
             {

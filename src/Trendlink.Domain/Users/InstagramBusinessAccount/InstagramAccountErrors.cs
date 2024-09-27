@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Trendlink.Domain.Abstraction;
+﻿using Trendlink.Domain.Abstraction;
 
 namespace Trendlink.Domain.Users.InstagramBusinessAccount
 {
@@ -7,6 +6,12 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
     {
         public static readonly Error InvalidFacebookPageId =
             new("InstagramAccount.InvalidFacebookPageId", "Provided Facebook page id is invalid");
+
+        public static readonly Error InvalidAdvertisementAccountId =
+            new(
+                "InstagarmAccount.InvalidAdvertisementAccountId",
+                "Provided Advertisement account id is invalid"
+            );
 
         public static readonly Error InvalidId =
             new("InstagramAccount.InvalidId", "The provided id is invalid");
@@ -52,6 +57,11 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
                 "InstagramAccount.FailedToGetFacebookPage",
                 "Failed to get access to user's Facebook Business Page"
             );
+
+        public static readonly Error FailedToGetAdvertisementAccountId = new Error(
+            "InstagramAccount.FailedToGetAdvertisementAccountId",
+            "Failed to get advertisement account id"
+        );
 
         public static readonly Error FailedToGetExpirationForAccessToken =
             new(

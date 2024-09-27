@@ -62,20 +62,12 @@ namespace Trendlink.Application.Users.Instagarm.LinkInstagram
                 return Result.Failure(facebookTokenResult.Error);
             }
 
-            Result<InstagramUserInfo> instagramUserInfoResult =
-                await this._instagramService.GetUserInfoAsync(
+            Result<InstagramAccount> instagramAccountResult =
+                await this._instagramService.GetInstagramAccountAsync(
+                    user.Id,
                     facebookTokenResult.Value.AccessToken,
                     cancellationToken
                 );
-            if (instagramUserInfoResult.IsFailure)
-            {
-                return Result.Failure(instagramUserInfoResult.Error);
-            }
-
-            InstagramUserInfo instagramUserInfo = instagramUserInfoResult.Value;
-
-            Result<InstagramAccount> instagramAccountResult =
-                instagramUserInfo.CreateInstagramAccount(user.Id);
             if (instagramAccountResult.IsFailure)
             {
                 return Result.Failure(instagramAccountResult.Error);

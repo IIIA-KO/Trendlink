@@ -91,14 +91,12 @@ namespace Trendlink.Application.UnitTests.Instagram
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            var audienceData = new AudienceGenderStatistics([], 100)
-            {
-                GenderPercentages =
-                {
+            var audienceData = new AudienceGenderStatistics(
+                [
                     new() { Gender = "male", Percentage = 60 },
                     new() { Gender = "female", Percentage = 40 }
-                }
-            };
+                ]
+            );
 
             User user = UserData.Create();
             InstagramAccount instagramAccount = InstagramAccountData.Create();

@@ -6,28 +6,28 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentage
+namespace Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics
 {
-    internal sealed class GetAudienceAgePercentageQueryHandler
-        : IQueryHandler<GetAudienceAgePercentageQuery, AudienceAgeStatistics>
+    internal sealed class GetInteractionStatisticsQueryHandler
+        : IQueryHandler<GetInteractionStatisticsQuery, InteractionStatistics>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
+        private readonly IInstagramService _instagramService;
 
-        public GetAudienceAgePercentageQueryHandler(
+        public GetInteractionStatisticsQueryHandler(
             IUserRepository userRepository,
-            IInstagramService instagramService,
-            IKeycloakService keycloakService
+            IKeycloakService keycloakService,
+            IInstagramService instagramService
         )
         {
             this._userRepository = userRepository;
-            this._instagramService = instagramService;
             this._keycloakService = keycloakService;
+            this._instagramService = instagramService;
         }
 
-        public async Task<Result<AudienceAgeStatistics>> Handle(
-            GetAudienceAgePercentageQuery request,
+        public async Task<Result<InteractionStatistics>> Handle(
+            GetInteractionStatisticsQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentag
             );
             if (user is null)
             {
-                return Result.Failure<AudienceAgeStatistics>(UserErrors.NotFound);
+                return Result.Failure<InteractionStatistics>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,14 +48,18 @@ namespace Trendlink.Application.Users.Instagarm.Audience.GetAudienceAgePercentag
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<AudienceAgeStatistics>(
+                return Result.Failure<InteractionStatistics>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            return await this._instagramService.GetAudienceAgePercentage(
-                user.Token!.AccessToken,
-                user.InstagramAccount!.Metadata.Id,
+            return await this._instagramService.GetInteractionStatistics(
+                user.InstagramAccount!.AdvertisementAccountId.Value,
+                new InstagramPeriodRequest(
+                    user.Token!.AccessToken,
+                    user.InstagramAccount!.Metadata.Id,
+                    request.StatisticsPeriod
+                ),
                 cancellationToken
             );
         }

@@ -9,6 +9,8 @@ namespace Trendlink.Domain.UnitTests.InstagramAccounts
 
         public static readonly FacebookPageId FacebookPageId = new("dummy_id");
 
+        public static readonly AdvertisementAccountId AdvertisementAccountId = new("dummy_id");
+
         public static readonly Metadata Metadata = new("dummy_id", 1, "username", 100, 1);
     }
 }

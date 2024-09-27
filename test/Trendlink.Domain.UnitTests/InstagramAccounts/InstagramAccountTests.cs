@@ -17,6 +17,7 @@ namespace Trendlink.Domain.UnitTests.InstagramAccounts
                 {
                     Value = string.Empty
                 },
+                InstagramAccountData.AdvertisementAccountId,
                 InstagramAccountData.Metadata
             );
 
@@ -32,6 +33,7 @@ namespace Trendlink.Domain.UnitTests.InstagramAccounts
             Result<InstagramAccount> result = InstagramAccount.Create(
                 InstagramAccountData.UserId,
                 InstagramAccountData.FacebookPageId,
+                InstagramAccountData.AdvertisementAccountId,
                 InstagramAccountData.Metadata with
                 {
                     Id = string.Empty
@@ -50,6 +52,7 @@ namespace Trendlink.Domain.UnitTests.InstagramAccounts
             Result<InstagramAccount> result = InstagramAccount.Create(
                 InstagramAccountData.UserId,
                 InstagramAccountData.FacebookPageId,
+                InstagramAccountData.AdvertisementAccountId,
                 InstagramAccountData.Metadata
             );
 
@@ -66,14 +69,15 @@ namespace Trendlink.Domain.UnitTests.InstagramAccounts
             // Arrange
             var userId = new UserId(Guid.NewGuid());
             var facebookPageId = new FacebookPageId("1234567890");
+            var adAccountId = new AdvertisementAccountId("1234567890");
             var oldMetadata = new Metadata("1", 1234567890, "old_user", 1000, 10);
             var newMetadata = new Metadata("2", 1234567890, "new_user", 2000, 20);
 
             InstagramAccount instagramAccount = InstagramAccount
-                .Create(userId, facebookPageId, oldMetadata)
+                .Create(userId, facebookPageId, adAccountId, oldMetadata)
                 .Value;
             InstagramAccount updatedInstagramAccount = InstagramAccount
-                .Create(userId, facebookPageId, newMetadata)
+                .Create(userId, facebookPageId, adAccountId, newMetadata)
                 .Value;
 
             // Act

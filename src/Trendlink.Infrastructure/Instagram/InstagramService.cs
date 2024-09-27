@@ -8,6 +8,8 @@ using Trendlink.Application.Users.Instagarm.Audience.GetAudienceGenderPercentage
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Users.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Application.Users.Instagarm.Posts.GetPosts;
+using Trendlink.Application.Users.Instagarm.Statistics.GetEngagementStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
@@ -90,7 +92,7 @@ namespace Trendlink.Infrastructure.Instagram
                 result!.AccessToken,
                 cancellationToken
             );
-            if (!expiresAtResult.IsFailure)
+            if (expiresAtResult.IsFailure)
             {
                 return Result.Failure<FacebookTokenResponse>(expiresAtResult.Error);
             }
@@ -219,30 +221,46 @@ namespace Trendlink.Infrastructure.Instagram
             return false;
         }
 
-        public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+        public async Task<Result<InstagramAccount>> GetInstagramAccountAsync(
+            UserId userId,
             string accessToken,
             string facebookPageId,
             string instagramUsername,
             CancellationToken cancellationToken = default
         )
         {
-            return await this._instagramAccountsService.GetUserInfoAsync(
-                accessToken,
-                facebookPageId,
-                instagramUsername,
-                cancellationToken
-            );
+            Result<InstagramUserInfo> userInfoResult =
+                await this._instagramAccountsService.GetUserInfoAsync(
+                    accessToken,
+                    facebookPageId,
+                    instagramUsername,
+                    cancellationToken
+                );
+            if (userInfoResult.IsFailure)
+            {
+                return Result.Failure<InstagramAccount>(userInfoResult.Error);
+            }
+
+            return userInfoResult.Value.CreateInstagramAccount(userId);
         }
 
-        public async Task<Result<InstagramUserInfo>> GetUserInfoAsync(
+        public async Task<Result<InstagramAccount>> GetInstagramAccountAsync(
+            UserId userId,
             string accessToken,
             CancellationToken cancellationToken = default
         )
         {
-            return await this._instagramAccountsService.GetUserInfoAsync(
-                accessToken,
-                cancellationToken
-            );
+            Result<InstagramUserInfo> userInfoResult =
+                await this._instagramAccountsService.GetUserInfoAsync(
+                    accessToken,
+                    cancellationToken
+                );
+            if (userInfoResult.IsFailure)
+            {
+                return Result.Failure<InstagramAccount>(userInfoResult.Error);
+            }
+
+            return userInfoResult.Value.CreateInstagramAccount(userId);
         }
 
         public async Task<Result<PostsResponse>> GetUserPosts(
@@ -353,6 +371,32 @@ namespace Trendlink.Infrastructure.Instagram
         )
         {
             return await this._httpClient.GetAsync(url, cancellationToken);
+        }
+
+        public async Task<Result<InteractionStatistics>> GetInteractionStatistics(
+            string instagramAdAccountId,
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this._instagramStatisticsService.GetInteractionsStatistics(
+                instagramAdAccountId,
+                request,
+                cancellationToken
+            );
+        }
+
+        public async Task<Result<EngagementStatistics>> GetEngagementStatistics(
+            int followersCount,
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this._instagramStatisticsService.GetEngagementStatistics(
+                followersCount,
+                request,
+                cancellationToken
+            );
         }
     }
 }

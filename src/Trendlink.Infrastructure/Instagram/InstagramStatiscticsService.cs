@@ -2,6 +2,8 @@
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
+using Trendlink.Application.Users.Instagarm.Statistics.GetEngagementStatistics;
+using Trendlink.Application.Users.Instagarm.Statistics.GetInteractionStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetOverviewStatistics;
 using Trendlink.Application.Users.Instagarm.Statistics.GetTableStatistics;
 using Trendlink.Domain.Abstraction;
@@ -127,6 +129,173 @@ namespace Trendlink.Infrastructure.Instagram
             {
                 return Result.Failure<OverviewStatistics>(Error.Unexpected);
             }
+        }
+
+        public async Task<Result<InteractionStatistics>> GetInteractionsStatistics(
+            string instagramAdAccountId,
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string url =
+                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=total_interactions,reach,likes,comments&period=day"
+                + $"&since={request.Since}&until={request.Until}"
+                + "&metric_type=total_value"
+                + $"&access_token={request.AccessToken}";
+
+            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+
+            try
+            {
+                int interactions = jsonObject
+                    .GetProperty("data")
+                    .EnumerateArray()
+                    .First(e => e.GetProperty("name").GetString() == "total_interactions")
+                    .GetProperty("total_value")
+                    .GetProperty("value")
+                    .GetInt32();
+
+                int reach = jsonObject
+                    .GetProperty("data")
+                    .EnumerateArray()
+                    .First(e => e.GetProperty("name").GetString() == "reach")
+                    .GetProperty("total_value")
+                    .GetProperty("value")
+                    .GetInt32();
+
+                int totalLikes = jsonObject
+                    .GetProperty("data")
+                    .EnumerateArray()
+                    .First(e => e.GetProperty("name").GetString() == "likes")
+                    .GetProperty("total_value")
+                    .GetProperty("value")
+                    .GetInt32();
+
+                int totalComments = jsonObject
+                    .GetProperty("data")
+                    .EnumerateArray()
+                    .First(e => e.GetProperty("name").GetString() == "comments")
+                    .GetProperty("total_value")
+                    .GetProperty("value")
+                    .GetInt32();
+
+                double engagementRate = (double)interactions / reach * 100;
+
+                int daysCount = request.Until.DayNumber - request.Since.DayNumber + 1;
+                double averageLikes = (double)totalLikes / daysCount;
+                double averageComments = (double)totalComments / daysCount;
+
+                string adSpendUrl =
+                    $"{this._instagramOptions.BaseUrl}{instagramAdAccountId}/insights?fields=spend"
+                    + $"&since={request.Since}&until={request.Until}"
+                    + $"&access_token={request.AccessToken}";
+
+                HttpResponseMessage adSpendResponse = await this.SendGetRequestAsync(
+                    adSpendUrl,
+                    cancellationToken
+                );
+                string adSpendContent = await adSpendResponse.Content.ReadAsStringAsync(
+                    cancellationToken
+                );
+                JsonElement adSpendJson = JsonDocument.Parse(adSpendContent).RootElement;
+
+                double totalAdSpend = 0;
+                if (adSpendJson.GetProperty("data").EnumerateArray().Any())
+                {
+                    totalAdSpend = double.Parse(
+                        adSpendJson.GetProperty("data")[0].GetProperty("spend").GetString()!,
+                        CultureInfo.InvariantCulture
+                    );
+                }
+                double cpe = 0;
+                if (interactions > 0)
+                {
+                    cpe = totalAdSpend / interactions;
+                }
+
+                return new InteractionStatistics(
+                    engagementRate,
+                    averageLikes,
+                    averageComments,
+                    cpe
+                );
+            }
+            catch (Exception)
+            {
+                return Result.Failure<InteractionStatistics>(Error.Unexpected);
+            }
+        }
+
+        public async Task<Result<EngagementStatistics>> GetEngagementStatistics(
+            int followersCount,
+            InstagramPeriodRequest request,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string insightsUrl =
+                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=reach,impressions,profile_views,likes,comments,saves"
+                + $"&period=day"
+                + $"&metric_type=total_value"
+                + $"&since={request.Since}&until={request.Until}"
+                + $"&access_token={request.AccessToken}";
+
+            HttpResponseMessage insightsResponse = await this.SendGetRequestAsync(
+                insightsUrl,
+                cancellationToken
+            );
+
+            string insightsContent = await insightsResponse.Content.ReadAsStringAsync(
+                cancellationToken
+            );
+            JsonElement insightsJson = JsonDocument.Parse(insightsContent).RootElement;
+
+            if (!insightsJson.GetProperty("data").EnumerateArray().Any())
+            {
+                return Result.Failure<EngagementStatistics>(Error.NoData);
+            }
+
+            double reach = insightsJson
+                .GetProperty("data")
+                .EnumerateArray()
+                .First(e => e.GetProperty("name").GetString() == "reach")
+                .GetProperty("total_value")
+                .GetProperty("value")
+                .GetInt32();
+
+            double likes = insightsJson
+                .GetProperty("data")
+                .EnumerateArray()
+                .First(e => e.GetProperty("name").GetString() == "likes")
+                .GetProperty("total_value")
+                .GetProperty("value")
+                .GetInt32();
+
+            double comments = insightsJson
+                .GetProperty("data")
+                .EnumerateArray()
+                .First(e => e.GetProperty("name").GetString() == "comments")
+                .GetProperty("total_value")
+                .GetProperty("value")
+                .GetInt32();
+
+            double saves = insightsJson
+                .GetProperty("data")
+                .EnumerateArray()
+                .First(e => e.GetProperty("name").GetString() == "saves")
+                .GetProperty("total_value")
+                .GetProperty("value")
+                .GetInt32();
+
+            double totalEngagements = likes + comments + saves;
+            double reachRate = reach / followersCount * 100;
+            double engagementRate = totalEngagements / followersCount * 100;
+            double erReach = totalEngagements / reach * 100;
+
+            return new EngagementStatistics(reachRate, engagementRate, erReach);
         }
 
         private async Task<HttpResponseMessage> SendGetRequestAsync(

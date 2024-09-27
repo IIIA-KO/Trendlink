@@ -350,6 +350,7 @@ namespace Trendlink.Domain.UnitTests.Users
                 .Create(
                     user.Id,
                     new FacebookPageId("dummy_id"),
+                    new AdvertisementAccountId("dummy_id"),
                     new Metadata("123", 1, "username", 100, 1)
                 )
                 .Value;

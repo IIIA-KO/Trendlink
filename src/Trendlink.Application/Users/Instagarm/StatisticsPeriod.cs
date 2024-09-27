@@ -4,6 +4,6 @@
     {
         Day = 1,
         Week = 7,
-        Month = 30
+        Day21 = 21
     }
 }

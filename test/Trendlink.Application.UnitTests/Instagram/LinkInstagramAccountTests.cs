@@ -118,8 +118,12 @@ namespace Trendlink.Application.UnitTests.Instagram
 
             var userInfoResult = Result.Failure<InstagramUserInfo>(UserErrors.InvalidCredentials);
 
-            this._instagramServiceMock.GetUserInfoAsync(facebookToken.AccessToken, default)
-                .Returns(userInfoResult);
+            this._instagramServiceMock.GetInstagramAccountAsync(
+                user.Id,
+                facebookToken.AccessToken,
+                default
+            )
+                .Returns(InstagramAccountData.Create());
 
             // Act
             Result result = await this._handler.Handle(Command, CancellationToken.None);

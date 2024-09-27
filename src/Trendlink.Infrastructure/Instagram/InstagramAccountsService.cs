@@ -36,6 +36,20 @@ namespace Trendlink.Infrastructure.Instagram
         {
             this._logger.LogInformation("Attempting to get Instagram user info.");
 
+            Result<string> adAccountIdResult = await this.GetAdAccountIdAsync(
+                accessToken,
+                cancellationToken
+            );
+            if (adAccountIdResult.IsFailure)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Advertisement Account ID. Error: {Error}",
+                    adAccountIdResult.Error
+                );
+                return Result.Failure<InstagramUserInfo>(adAccountIdResult.Error);
+            }
+            string adAccountId = adAccountIdResult.Value;
+
             InstagramBusinessAccountResponse instagramBusinessAccount =
                 await this.GetInstagramBusinessAccountAsync(
                     accessToken,
@@ -67,13 +81,14 @@ namespace Trendlink.Infrastructure.Instagram
                 cancellationToken
             );
 
-            InstagramUserInfo? instagramUserInfo = JsonSerializer.Deserialize<InstagramUserInfo>(
+            InstagramUserInfo instagramUserInfo = JsonSerializer.Deserialize<InstagramUserInfo>(
                 content
             );
 
             if (instagramUserInfo != null)
             {
                 instagramUserInfo.FacebookPageId = facebookPageId;
+                instagramUserInfo.AdAccountId = adAccountId;
                 this._logger.LogInformation(
                     "Successfully retrieved Instagram user info for user {Username}",
                     instagramUserInfo.BusinessDiscovery.Username
@@ -108,6 +123,20 @@ namespace Trendlink.Infrastructure.Instagram
             }
             string facebookPageId = facebookPageIdResult.Value;
 
+            Result<string> adAccountIdResult = await this.GetAdAccountIdAsync(
+                accessToken,
+                cancellationToken
+            );
+            if (adAccountIdResult.IsFailure)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Advertisement Account ID. Error: {Error}",
+                    adAccountIdResult.Error
+                );
+                return Result.Failure<InstagramUserInfo>(adAccountIdResult.Error);
+            }
+            string adAccountId = adAccountIdResult.Value;
+
             InstagramBusinessAccountResponse instagramBusinessAccount =
                 await this.GetInstagramBusinessAccountAsync(
                     accessToken,
@@ -146,6 +175,7 @@ namespace Trendlink.Infrastructure.Instagram
             if (instagramUserInfo != null)
             {
                 instagramUserInfo.FacebookPageId = facebookPageId;
+                instagramUserInfo.AdAccountId = adAccountId;
                 this._logger.LogInformation(
                     "Successfully retrieved Instagram user info for user {Username}",
                     instagramUserInfo.BusinessDiscovery.Username
@@ -201,6 +231,57 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
+        private async Task<Result<string>> GetAdAccountIdAsync(
+            string accessToken,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation("Attempting to get Advertisement Account ID.");
+
+            FacebookUserInfo? userInfo = await this.GetFacebookUserInfoAsync(
+                accessToken,
+                cancellationToken
+            );
+            if (userInfo == null)
+            {
+                this._logger.LogWarning("Failed to retrieve Facebook user info.");
+                return Result.Failure<string>(InstagramAccountErrors.FailedToGetFacebookPage);
+            }
+
+            string adAccountIdUrl =
+                $"{this._instagramOptions.BaseUrl}{userInfo.Id}/adaccounts?access_token={accessToken}";
+
+            HttpResponseMessage response = await this.SendGetRequestAsync(
+                adAccountIdUrl,
+                cancellationToken
+            );
+
+            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                this._logger.LogWarning(
+                    "Failed to retrieve Advertisement Account ID. Status code: {StatusCode}",
+                    response.StatusCode
+                );
+
+                return Result.Failure<string>(
+                    InstagramAccountErrors.FailedToGetAdvertisementAccountId
+                );
+            }
+
+            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+
+            this._logger.LogInformation("Successfully retrieved Advertisement Account ID.");
+
+            return jsonObject
+                .GetProperty("data")
+                .EnumerateArray()
+                .LastOrDefault()
+                .GetProperty("id")
+                .GetString();
+        }
+
         private async Task<FacebookUserInfo?> GetFacebookUserInfoAsync(
             string accessToken,
             CancellationToken cancellationToken = default
@@ -214,14 +295,7 @@ namespace Trendlink.Infrastructure.Instagram
                 cancellationToken
             );
 
-            if (response.IsSuccessStatusCode)
-            {
-                this._logger.LogInformation("Successfully retrieved Facebook user info.");
-                return JsonSerializer.Deserialize<FacebookUserInfo>(
-                    await response.Content.ReadAsStringAsync(cancellationToken)
-                );
-            }
-            else
+            if (!response.IsSuccessStatusCode)
             {
                 this._logger.LogWarning(
                     "Failed to retrieve Facebook user info. Status code: {StatusCode}",
@@ -229,6 +303,11 @@ namespace Trendlink.Infrastructure.Instagram
                 );
                 return null;
             }
+
+            this._logger.LogInformation("Successfully retrieved Facebook user info.");
+            return JsonSerializer.Deserialize<FacebookUserInfo>(
+                await response.Content.ReadAsStringAsync(cancellationToken)
+            );
         }
 
         private async Task<InstagramBusinessAccountResponse> GetInstagramBusinessAccountAsync(

@@ -3,7 +3,6 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Quartz;
-using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Abstractions.Instagram;
@@ -141,21 +140,19 @@ namespace Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts
                 return;
             }
 
-            Result<InstagramUserInfo> userInfo = await this._instagramService.GetUserInfoAsync(
-                userToken.AccessToken,
-                currentInstagramAccount.FacebookPageId,
-                currentInstagramAccount.MetadataUserName
-            );
-
-            if (userInfo is null)
+            Result<InstagramAccount> instagramAccountResult =
+                await this._instagramService.GetInstagramAccountAsync(
+                    new UserId(userId),
+                    userToken.AccessToken,
+                    currentInstagramAccount.FacebookPageId,
+                    currentInstagramAccount.MetadataUserName
+                );
+            if (instagramAccountResult.IsFailure)
             {
                 this._logger.LogWarning("Unable to get Instagram account metadata");
                 return;
             }
-
-            InstagramAccount updatedInstagramAccount = userInfo
-                .Value.CreateInstagramAccount(new UserId(userId))
-                .Value;
+            InstagramAccount updatedInstagramAccount = instagramAccountResult.Value;
 
             const string updateQuery =
                 @"

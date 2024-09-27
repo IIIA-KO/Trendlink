@@ -29,9 +29,9 @@ namespace Trendlink.Application.Abstractions.Instagram
         {
             return period switch
             {
-                StatisticsPeriod.Month
+                StatisticsPeriod.Day21
                     => (
-                        DateOnly.FromDateTime(DateTime.Today.AddDays(-30)),
+                        DateOnly.FromDateTime(DateTime.Today.AddDays(-21)),
                         DateOnly.FromDateTime(DateTime.Today)
                     ),
                 StatisticsPeriod.Week
