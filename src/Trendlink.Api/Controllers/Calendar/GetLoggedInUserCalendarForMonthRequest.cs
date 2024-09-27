@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Trendlink.Api.Controllers.Me
+namespace Trendlink.Api.Controllers.Calendar
 {
     public sealed class GetLoggedInUserCalendarForMonthRequest
     {
