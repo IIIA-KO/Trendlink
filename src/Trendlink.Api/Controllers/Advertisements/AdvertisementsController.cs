@@ -10,7 +10,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Advertisements
 {
-    [Route("advertisements")]
+    [Route("/api/advertisements")]
     public class AdvertisementsController : BaseApiController
     {
         [HttpGet("avarage-prices")]

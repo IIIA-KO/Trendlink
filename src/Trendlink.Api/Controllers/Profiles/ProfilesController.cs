@@ -9,7 +9,7 @@ using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Api.Controllers.Profiles
 {
-    [Route("profile")]
+    [Route("/api/profile")]
     public class ProfilesController : BaseApiController
     {
         private readonly IUserContext _userContext;

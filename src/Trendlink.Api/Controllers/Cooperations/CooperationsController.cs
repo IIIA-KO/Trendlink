@@ -11,7 +11,7 @@ using Trendlink.Domain.Shared;
 
 namespace Trendlink.Api.Controllers.Cooperations
 {
-    [Route("api/cooperations")]
+    [Route("/api/cooperations")]
     public class CooperationsController : BaseApiController
     {
         [HttpPost("request-cooperation")]

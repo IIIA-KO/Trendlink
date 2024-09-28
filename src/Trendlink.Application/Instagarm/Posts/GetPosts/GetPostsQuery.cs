@@ -9,9 +9,6 @@ namespace Trendlink.Application.Instagarm.Posts.GetPosts
         public string CacheKey =>
             $"posts-{this.UserId.Value}-limit-{this.Limit}-cursorType-{this.CursorType ?? "after"}-cursor-{this.Cursor ?? "null"}";
 
-        public TimeSpan? Expiration =>
-            string.IsNullOrEmpty(this.Cursor) || string.IsNullOrEmpty(this.CursorType)
-                ? TimeSpan.FromSeconds(30)
-                : TimeSpan.FromMinutes(3);
+        public TimeSpan? Expiration => TimeSpan.FromMinutes(1);
     }
 }

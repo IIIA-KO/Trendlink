@@ -9,7 +9,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram
 {
-    [Route("audience")]
+    [Route("/api/audience")]
     public class InstagramAudienceController : BaseApiController
     {
         private readonly IUserContext _userContext;

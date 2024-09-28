@@ -12,17 +12,9 @@ using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Api.Controllers.Accounts
 {
-    [Route("accounts")]
+    [Route("/api/accounts")]
     public class AccountsController : BaseApiController
     {
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
-        {
-            var command = new DeleteUserAccountCommand();
-
-            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
-        }
-
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(
@@ -91,6 +83,14 @@ namespace Trendlink.Api.Controllers.Accounts
         )
         {
             var command = new RefreshTokenCommand(request.Code);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
+        {
+            var command = new DeleteUserAccountCommand();
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

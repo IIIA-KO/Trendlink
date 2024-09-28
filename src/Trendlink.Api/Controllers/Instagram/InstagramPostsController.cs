@@ -5,7 +5,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram
 {
-    [Route("posts")]
+    [Route("/api/posts")]
     public class InstagramPostsController : BaseApiController
     {
         private readonly IUserContext _userContext;
@@ -15,7 +15,7 @@ namespace Trendlink.Api.Controllers.Instagram
             this._userContext = userContext;
         }
 
-        [HttpGet("posts")]
+        [HttpGet]
         public async Task<IActionResult> GetLoggedInUserPosts(
             [FromQuery] int limit,
             [FromQuery] string? cursorType,
@@ -28,7 +28,7 @@ namespace Trendlink.Api.Controllers.Instagram
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
 
-        [HttpGet("posts/{userId:guid}")]
+        [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetLoggedInUserPosts(
             Guid userId,
             [FromQuery] int limit,

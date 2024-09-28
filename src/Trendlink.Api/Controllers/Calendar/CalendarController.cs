@@ -9,7 +9,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Calendar
 {
-    [Route("api/calendar")]
+    [Route("/api/calendar")]
     public class CalendarController : BaseApiController
     {
         [HttpGet]
