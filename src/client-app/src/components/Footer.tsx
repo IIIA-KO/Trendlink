@@ -12,25 +12,25 @@ const Footer: FunctionComponent<FooterType> = ({ className = "" }) => {
     >
       
       <img
-        className="h-[140px] w-[120px] absolute !m-[0] right-[1px] bottom-[235px] rounded-8xs object-cover z-[1]"
+        className="h-[140px] w-[120px] absolute !m-[0] left-[300px] right-[1px] bottom-[235px] rounded-8xs object-cover z-[1]"
         loading="lazy"
         alt=""
         src="/rectangle-57@2x.png"
       />
-      <div className="absolute !m-[0] right-[80px] bottom-[205px] inline-block min-w-[26px] z-[1]">
+      <div className="absolute !m-[0] left-[320px] right-[80px] bottom-[205px] inline-block min-w-[26px] z-[1]">
         6.3К
       </div>
       <img
-        className="h-2.5 w-2.5 absolute !m-[0] right-[111px] bottom-[208px] object-cover z-[1]"
+        className="h-2.5 w-2.5 absolute !m-[0] left-[300px] right-[111px] bottom-[208px] object-cover z-[1]"
         loading="lazy"
         alt=""
         src="/actions--toggle--favorite--241@2x.png"
       />
-      <div className="absolute !m-[0] right-[85px] bottom-[186px] inline-block min-w-[21px] z-[1]">
+      <div className="absolute !m-[0] left-[320px] right-[85px] bottom-[186px] inline-block min-w-[21px] z-[1]">
         150
       </div>
       <img
-        className="h-2.5 w-2.5 absolute !m-[0] right-[111px] bottom-[188px] object-cover z-[1]"
+        className="h-2.5 w-2.5 absolute left-[300px] !m-[0] right-[111px] bottom-[188px] object-cover z-[1]"
         loading="lazy"
         alt=""
         src="/actions--operations--bookmark--24@2x.png"

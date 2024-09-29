@@ -5,8 +5,7 @@ export default {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
-        kodchasan: ['Kodchasan', 'sans-serif'],
-        "logo-font": "Kodchasan",
+        kodchasan: ['Kodchasan', 'sans-serif']
       },
       fontWeight: {
         light: '300',

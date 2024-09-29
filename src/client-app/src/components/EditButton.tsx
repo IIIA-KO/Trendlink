@@ -41,7 +41,7 @@ const EditButton: FunctionComponent<EditButtonType> = ({
 
   return (
     <div
-      className={`rounded-21xl bg-main-green overflow-hidden flex flex-row items-start justify-start py-2.5 px-14 whitespace-nowrap text-left text-sm text-white font-inter ${className}`}
+      className={`rounded-21xl bg-main-green overflow-hidden  flex flex-row items-start justify-start py-2.5 px-14 whitespace-nowrap text-left text-sm text-white font-inter ${className}`}
       style={editButtonStyle}
     >
       <div className="relative">Редагувати профіль</div>

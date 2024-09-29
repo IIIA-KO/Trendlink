@@ -7,17 +7,18 @@ import CallBackPage from "./pages/CallBackPage";
 import '@fontsource/kodchasan';
 import '@fontsource/inter'
 import ProfilePage from "./pages/ProfilePage";
-
+import Frame from "./pages/Statiscs";
 const App: React.FC = () => {
   return (
       <BrowserRouter>
           <AuthProvider>
               <Routes>
-                  <Route path="/login" element={<AuthPage/>} />
+                  <Route path="/login" element={<Frame/>} />
                   <Route path="/login/callback" element={<CallBackPage />}/>
                   <Route path="/" element={
                       <ProtectedRoute>
                           <ProfilePage />
+
                       </ProtectedRoute>
                   }
                   />

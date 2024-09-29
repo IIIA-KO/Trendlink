@@ -4,8 +4,8 @@ const Menu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const menuItems = [
-    { name: 'Сторінка', link: '/page' },
-    { name: 'Відео', link: '/video' },
+    { name: 'Огляд', link: '/profilepage' },
+    { name: 'Статистика', link: '/statiscs' },
     { name: 'Сервіси', link: '/services' },
     { name: 'Навчання', link: '/training' },
     { name: 'Усі сервіси', link: '/all-services' }
