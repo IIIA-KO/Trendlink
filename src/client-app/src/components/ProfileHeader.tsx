@@ -1,31 +1,14 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
-import EditButton from "./EditButton";
+import EditButton from "./Buttons/EditButton";
 import MenuSwitcher from "../components/PageSwitcher";
 import "./styleMenu.css";
-import newLocal from "../public/mynauitelephone.svg";
-import newLocal_1 from "../public/mageemail.svg";
-import newLocal_2 from "../public/tiktok-icon.svg";
-import newLocal_3 from "../public/instagram-icon.svg";
-import newLocal_4 from "/facebook-icon.svg";
-import newLocal_5 from "/-3-2.svg";
-
-export type ProfileHeaderType = {
-  className?: string;
-  profilePicture?: string;
-  group95?: string;
-  editButtonBorderRadius?: string;
-  editButtonBackgroundColor?: string;
-  editButtonOverflow?: string;
-  editButtonDisplay?: string;
-  editButtonFlexDirection?: string;
-  editButtonPadding?: string;
-
-  /** Style props */
-  groupDivLeft?: CSSProperties["left"];
-  groupDivTop?: CSSProperties["top"];
-  groupDivRight?: CSSProperties["right"];
-  divTextDecoration?: CSSProperties["textDecoration"];
-};
+import newLocal from "../assets/mynauitelephone.svg";
+import newLocal_1 from "../assets/mageemail.svg";
+import newLocal_2 from "../assets/tiktok-icon.svg";
+import newLocal_3 from "../assets/instagram-icon.svg";
+import newLocal_4 from "../assets/facebook-icon.svg";
+import newLocal_5 from "../assets/-3-2.svg";
+import {ProfileHeaderType} from "../types/ProfileHeaderType";
 
 const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
   className = "",
@@ -84,7 +67,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                         <img
                           className="absolute h-[41.67%] w-[33.33%] top-[25%] right-[33.33%] bottom-[33.33%] left-[33.33%] max-w-full overflow-hidden max-h-full object-contain z-[1]"
                           alt=""
-                          src="/badge-shape.svg"
+                          src="/src/assets/badge-shape.svg"
                         />
                       </div>
                     </div>
@@ -115,7 +98,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                       <img
                         className="w-[15px] h-[15px] relative object-cover shrink-0"
                         alt=""
-                        src="/planning--travel--location--24@2x.png"
+                        src="/src/assets/planning--travel--location--24@2x.png"
                       />
                     </div>
                     <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[54px] shrink-0">

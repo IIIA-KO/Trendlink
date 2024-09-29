@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import ProfileNavigation1 from "../components/ProfileNavigation1";
+import ProfileNavigation1 from "../components/ProfileNavigation";
 import FrameComponent3 from "../components/FrameComponent3";
 
 const Frame3: FunctionComponent = () => {
@@ -11,7 +11,7 @@ const Frame3: FunctionComponent = () => {
             className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
             loading="lazy"
             alt=""
-            src="/materialsymbolslightsearch.svg"
+            src="/src/assets/materialsymbolslightsearch.svg"
           />
         </div>
         <ProfileNavigation1 />
@@ -19,7 +19,7 @@ const Frame3: FunctionComponent = () => {
       <img
         className="w-[7.5rem] h-[68.75rem] absolute !m-[0] top-[2.25rem] left-[6.25rem]"
         alt=""
-        src="/component-39.svg"
+        src="/src/assets/component-39.svg"
       />
       <FrameComponent3
         profilePicture="/ellipse-11@2x.png"
@@ -42,7 +42,7 @@ const Frame3: FunctionComponent = () => {
         <img
           className="h-[1.5rem] w-[1.5rem] relative object-contain shrink-0"
           alt=""
-          src="/actions--navigation--chevronright--24@2x.png"
+          src="/src/assets/actions--navigation--chevronright--24@2x.png"
         />
       </div>
     </div>

@@ -7,23 +7,23 @@ import Diagramleft from "../components/Diagram1";
 import DiagramRight from "../components/Diagram2";
 import Calendar from "../components/Calendar";
 import Footer from "../components/Footer";
-import logo from "../public/-11-1@2x.png"
-import profile from "../public/ellipse-1@2x.png"
-import stars from "../public/group-95.svg"
-import background from "../public/bg.svg"
-import photo1 from "../public/rectangle-58@2x.png"
-import photo2 from "../public/rectangle-59@2x.png"
-import photo3 from "../public/rectangle-60@2x.png"
-import play from "../public/play-button@2x.png"
-import photo4 from "../public/actions--controls--playoutline--26@2x.png"
-import photo5 from "../public/rectangle-62@2x.png"
-import slide from "../public/actions--navigation--chevronleft--33.svg"
-import photo0 from "../public/actions--toggle--favorite--241@2x.png"
-import bookmark from "../public/actions--operations--bookmark--24@2x.png"
-import rdiagram from "../public/group-107.svg"
-import image from "../public/actions--navigation--chevronleft--34@2x.png"
-import image1 from "../public/actions--navigation--chevronright--24@2x.png"
-import newLocal1 from "../public/actions--toggle--favorite--241@2x.png" 
+import logo from "../assets/-11-1@2x.png"
+import profile from "../assets/ellipse-1@2x.png"
+import stars from "../assets/group-95.svg"
+import background from "../assets/bg.svg"
+import photo1 from "../assets/rectangle-58@2x.png"
+import photo2 from "../assets/rectangle-59@2x.png"
+import photo3 from "../assets/rectangle-60@2x.png"
+import play from "../assets/play-button@2x.png"
+import photo4 from "../assets/actions--controls--playoutline--26@2x.png"
+import photo5 from "../assets/rectangle-62@2x.png"
+import slide from "../assets/actions--navigation--chevronleft--33.svg"
+import photo0 from "../assets/actions--toggle--favorite--241@2x.png"
+import bookmark from "../assets/actions--operations--bookmark--24@2x.png"
+import rdiagram from "../assets/group-107.svg"
+import image from "../assets/actions--navigation--chevronleft--34@2x.png"
+import image1 from "../assets/actions--navigation--chevronright--24@2x.png"
+import newLocal1 from "../assets/actions--toggle--favorite--241@2x.png"
 const Frame5: FunctionComponent = () => {
   return (
     <div className="w-full h-[89.188rem] relative bg-[#f0f4f9] overflow-hidden flex flex-col items-end justify-start pt-[2.187rem] pb-[3.125rem] pl-[6.25rem] pr-[6.312rem] box-border gap-[22.375rem] leading-[normal] tracking-[normal] mq750:gap-[11.188rem] mq750:pl-[3.125rem] mq750:pr-[3.125rem] mq750:box-border mq1050:h-auto mq450:gap-[5.563rem] mq450:pl-[1.25rem] mq450:pr-[1.25rem] mq450:box-border">
@@ -133,7 +133,7 @@ const Frame5: FunctionComponent = () => {
                                 className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                 loading="lazy"
                                 alt=""
-                                src="/actions--operations--bookmark--24@2x.png"
+                                src="/src/assets/actions--operations--bookmark--24@2x.png"
                               />
                             </div>
                           </div>
@@ -261,7 +261,7 @@ const Frame5: FunctionComponent = () => {
                                 <img
                                   className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"
                                   alt=""
-                                  src="/actions--toggle--favorite--241@2x.png"
+                                  src="/src/assets/actions--toggle--favorite--241@2x.png"
                                 />
                                 <img
                                   className="w-[0.625rem] h-[0.625rem] relative object-cover z-[1]"

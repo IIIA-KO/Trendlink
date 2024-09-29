@@ -1,13 +1,10 @@
 import { FunctionComponent, memo } from "react";
 import Component5 from "./Component5 (2)";
-import Component7 from "./Component7 (2)";
+import Component7 from "./Component7";
 import ProfileStatisticsContainer from "./ProfileStatisticsContainer";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type FrameComponent4Type = {
-  className?: string;
-};
-
-const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
+const FrameComponent4: FunctionComponent<ClassNameType> = memo(
   ({ className = "" }) => {
     return (
       <div
@@ -95,7 +92,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/.svg"
+                      src="/src/assets/.svg"
                     />
                     <div className="relative uppercase hidden">Профіль</div>
                   </div>
@@ -104,7 +101,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-1.svg"
+                      src="/src/assets/-1.svg"
                     />
                     <div className="relative uppercase hidden">Пошук</div>
                   </div>
@@ -113,7 +110,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.181rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-2.svg"
+                      src="/src/assets/-2.svg"
                     />
                     <div className="relative uppercase hidden">Чат</div>
                   </div>
@@ -122,7 +119,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.031rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-3.svg"
+                      src="/src/assets/-3.svg"
                     />
                     <div className="relative uppercase hidden">статистика</div>
                   </div>
@@ -131,7 +128,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.038rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-4.svg"
+                      src="/src/assets/-4.svg"
                     />
                     <div className="relative uppercase hidden">календар</div>
                   </div>
@@ -140,7 +137,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.15rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-31.svg"
+                      src="/src/assets/-31.svg"
                     />
                     <div className="relative uppercase hidden">відгуки</div>
                   </div>
@@ -149,7 +146,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[1.788rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-5.svg"
+                      src="/src/assets/-5.svg"
                     />
                     <div className="relative uppercase hidden">новини</div>
                   </div>
@@ -158,7 +155,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[1.838rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-6.svg"
+                      src="/src/assets/-6.svg"
                     />
                     <div className="relative uppercase hidden">Сповіщення</div>
                   </div>
@@ -167,7 +164,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.575rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-7.svg"
+                      src="/src/assets/-7.svg"
                     />
                     <div className="relative uppercase hidden">Збережені</div>
                   </div>
@@ -176,7 +173,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-8.svg"
+                      src="/src/assets/-8.svg"
                     />
                     <div className="relative uppercase hidden">
                       Умови співпраці
@@ -187,7 +184,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[1.981rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/-9.svg"
+                      src="/src/assets/-9.svg"
                     />
                     <div className="relative uppercase hidden">
                       Налаштування
@@ -198,7 +195,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                       className="h-[2.144rem] w-[2.188rem] relative overflow-hidden shrink-0"
                       loading="lazy"
                       alt=""
-                      src="/--3.svg"
+                      src="/src/assets/--3.svg"
                     />
                     <div className="relative uppercase hidden">
                       служба підтримки
@@ -209,7 +206,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                   className="h-[0.938rem] w-[0.938rem] absolute !m-[0] top-[22.75rem] right-[8.438rem] overflow-hidden shrink-0 z-[3]"
                   loading="lazy"
                   alt=""
-                  src="/fluentemojiflatspiralcalendar.svg"
+                  src="/src/assets/fluentemojiflatspiralcalendar.svg"
                 />
                 <Component7 />
               </div>
@@ -220,7 +217,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                     className="w-[1.25rem] h-[1.25rem] relative object-contain z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/actions--navigation--chevronright--25.svg"
+                    src="/src/assets/actions--navigation--chevronright--25.svg"
                   />
                 </div>
                 <div className="flex-1 rounded-[10px] border-[#d9d9d9] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-[1.187rem] px-[0rem] pb-[1.062rem] gap-[0.937rem] min-w-[9.125rem] z-[2]">
@@ -231,7 +228,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                           className="w-[0.938rem] h-[0.938rem] relative overflow-hidden shrink-0 z-[1]"
                           loading="lazy"
                           alt=""
-                          src="/skilliconsinstagram2.svg"
+                          src="/src/assets/skilliconsinstagram2.svg"
                         />
                       </div>
                       <div className="relative inline-block min-w-[6.688rem] z-[1]">
@@ -243,13 +240,13 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                     <img
                       className="absolute top-[0rem] left-[0rem] w-full h-full object-cover z-[1]"
                       alt=""
-                      src="/group-1172@2x.png"
+                      src="/src/assets/group-1172@2x.png"
                     />
                     <img
                       className="absolute top-[4.188rem] left-[6.188rem] rounded-[100px] w-[1.5rem] h-[1.5rem] z-[3]"
                       loading="lazy"
                       alt=""
-                      src="/actions--navigation--caretright--24.svg"
+                      src="/src/assets/actions--navigation--caretright--24.svg"
                     />
                   </div>
                   <div className="self-stretch h-[16.875rem] relative rounded-[10px] border-[#d9d9d9] border-[1px] border-solid box-border hidden" />
@@ -261,22 +258,22 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                             className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                             loading="lazy"
                             alt=""
-                            src="/actions--toggle--favorite--241@2x.png"
+                            src="/src/assets/actions--toggle--favorite--241@2x.png"
                           />
                           <img
                             className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                             alt=""
-                            src="/actions--operations--chat--241@2x.png"
+                            src="/src/assets/actions--operations--chat--241@2x.png"
                           />
                           <img
                             className="h-[0.625rem] w-[0.625rem] relative z-[1]"
                             alt=""
-                            src="/actions--operations--sendaltfilled--24.svg"
+                            src="/src/assets/actions--operations--sendaltfilled--24.svg"
                           />
                           <img
                             className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                             alt=""
-                            src="/actions--operations--bookmark--24@2x.png"
+                            src="/src/assets/actions--operations--bookmark--24@2x.png"
                           />
                         </div>
                       </div>
@@ -302,7 +299,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                     className="w-[1.25rem] h-[1.25rem] relative z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/actions--navigation--chevronright--20.svg"
+                    src="/src/assets/actions--navigation--chevronright--20.svg"
                   />
                 </div>
               </div>
@@ -348,7 +345,7 @@ const FrameComponent4: FunctionComponent<FrameComponent4Type> = memo(
                   className="w-[11.125rem] h-[11.125rem] relative z-[1] mq750:self-stretch mq750:w-auto"
                   loading="lazy"
                   alt=""
-                  src="/group-1071.svg"
+                  src="/src/assets/group-1071.svg"
                 />
               </div>
             </div>

@@ -1,15 +1,5 @@
 import { FunctionComponent, memo, useMemo, type CSSProperties } from "react";
-
-export type ProfileStatisticsContainerType = {
-  className?: string;
-  bG?: string;
-
-  /** Style props */
-  propFlex?: CSSProperties["flex"];
-  propAlignSelf?: CSSProperties["alignSelf"];
-  propHeight?: CSSProperties["height"];
-  propLeft?: CSSProperties["left"];
-};
+import {ProfileStatisticsContainerType} from "../types/ProfileStatisticsContainerType";
 
 const ProfileStatisticsContainer: FunctionComponent<ProfileStatisticsContainerType> =
   memo(
@@ -45,7 +35,7 @@ const ProfileStatisticsContainer: FunctionComponent<ProfileStatisticsContainerTy
             <img
               className="absolute top-[32.563rem] left-[53.938rem] w-[0.938rem] h-[0.938rem] overflow-hidden z-[1]"
               alt=""
-              src="/-2-2.svg"
+              src="/src/assets/-2-2.svg"
             />
           </div>
           <div className="flex-1 rounded-[20px] bg-[#f0f4f9] flex flex-row items-start justify-start pt-[2.75rem] px-[4.625rem] pb-[2.812rem] box-border gap-[7.437rem] max-w-full z-[3] mq450:gap-[1.875rem] mq1050:gap-[3.688rem] mq1050:flex-wrap mq1050:pl-[2.313rem] mq1050:pr-[2.313rem] mq1050:box-border">

@@ -1,11 +1,8 @@
 import { FunctionComponent } from "react";
 import Component3 from "./MenuWidjets";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type FrameComponent1Type = {
-  className?: string;
-};
-
-const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
+const FrameComponent1: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
@@ -19,13 +16,13 @@ const FrameComponent1: FunctionComponent<FrameComponent1Type> = ({
         className="h-[15px] w-[15px] absolute !m-[0] right-[13px] bottom-[275px] z-[1]"
         loading="lazy"
         alt=""
-        src="/actions--navigation--chevrondown--20.svg"
+        src="/src/assets/actions--navigation--chevrondown--20.svg"
       />
       <img
         className="h-[15px] w-[15px] absolute !m-[0] right-[135px] bottom-[275px] overflow-hidden shrink-0 z-[1]"
         loading="lazy"
         alt=""
-        src="/fluentemojiflatspiralcalendar.svg"
+        src="/src/assets/fluentemojiflatspiralcalendar.svg"
       />
       <Component3
         propFlex="1"

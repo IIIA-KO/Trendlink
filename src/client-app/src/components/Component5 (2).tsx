@@ -1,23 +1,7 @@
 import { FunctionComponent, memo, useMemo, type CSSProperties } from "react";
+import {Component5ExtendType} from "../types/Component5ExtendType";
 
-export type Component5Type = {
-  className?: string;
-  prop?: string;
-
-  /** Style props */
-  propLeft?: CSSProperties["left"];
-  propBorder?: CSSProperties["border"];
-  propBackgroundColor?: CSSProperties["backgroundColor"];
-  propColor?: CSSProperties["color"];
-  propMinWidth?: CSSProperties["minWidth"];
-  component7Top?: CSSProperties["top"];
-  component7Padding?: CSSProperties["padding"];
-  component7Height?: CSSProperties["height"];
-  component7Position?: CSSProperties["position"];
-  divDisplay?: CSSProperties["display"];
-};
-
-const Component5: FunctionComponent<Component5Type> = memo(
+const Component5: FunctionComponent<Component5ExtendType> = memo(
   ({
     className = "",
     propLeft,

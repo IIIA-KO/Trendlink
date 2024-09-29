@@ -1,11 +1,8 @@
 import { FunctionComponent } from "react";
 import RectangleComponent from "./RectangleComponent";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type Navigation1Type = {
-  className?: string;
-};
-
-const Navigation1: FunctionComponent<Navigation1Type> = ({
+const Navigation1: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (

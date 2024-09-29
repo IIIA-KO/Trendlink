@@ -12,7 +12,7 @@ const Frame: FunctionComponent = () => {
             className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
             loading="lazy"
             alt=""
-            src="/materialsymbolslightsearch.svg"
+            src="/src/assets/materialsymbolslightsearch.svg"
           />
         </div>
         <section className="self-stretch flex flex-row items-start justify-start max-w-full ">
@@ -22,7 +22,7 @@ const Frame: FunctionComponent = () => {
       <img
         className="w-[7.5rem] h-[68.75rem] absolute !m-[0] top-[2.25rem] left-[6.25rem]"
         alt=""
-        src="/component-39.svg"
+        src="/src/assets/component-39.svg"
       />
       <FrameComponent3
         profilePicture="/ellipse-11@2x.png"
@@ -138,7 +138,7 @@ const Frame: FunctionComponent = () => {
         <img
           className="h-[1.5rem] w-[1.5rem] relative object-contain shrink-0"
           alt=""
-          src="/actions--navigation--chevronright--24@2x.png"
+          src="/src/assets/actions--navigation--chevronright--24@2x.png"
         />
       </div>
     </div>

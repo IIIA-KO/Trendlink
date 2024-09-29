@@ -1,64 +1,6 @@
 import { FunctionComponent, memo } from "react";
-import Component5 from "./Component5";
-
-export type ProfileNavigationType = {
-  className?: string;
-  prop?: string;
-  prop1?: string;
-  prop2?: string;
-  prop3?: string;
-  prop4?: string;
-  propLeft?: string;
-  propLeft1?: string;
-  propLeft2?: string;
-  propLeft3?: string;
-  propLeft4?: string;
-  propBorder?: string;
-  propBorder1?: string;
-  propBorder2?: string;
-  propBorder3?: string;
-  propBorder4?: string;
-  propBackgroundColor?: string;
-  propBackgroundColor1?: string;
-  propBackgroundColor2?: string;
-  propBackgroundColor3?: string;
-  propBackgroundColor4?: string;
-  propColor?: string;
-  propColor1?: string;
-  propColor2?: string;
-  propColor3?: string;
-  propColor4?: string;
-  propMinWidth?: string;
-  propMinWidth1?: string;
-  propMinWidth2?: string;
-  propMinWidth3?: string;
-  propMinWidth4?: string;
-  component7Top?: string;
-  component7Top1?: string;
-  component7Top2?: string;
-  component7Top3?: string;
-  component7Top4?: string;
-  component7Padding?: string;
-  component7Padding1?: string;
-  component7Padding2?: string;
-  component7Padding3?: string;
-  component7Padding4?: string;
-  component7Height?: string;
-  component7Height1?: string;
-  component7Height2?: string;
-  component7Height3?: string;
-  component7Height4?: string;
-  component7Position?: string;
-  component7Position1?: string;
-  component7Position2?: string;
-  component7Position3?: string;
-  component7Position4?: string;
-  divDisplay?: string;
-  divDisplay1?: string;
-  divDisplay2?: string;
-  divDisplay3?: string;
-  divDisplay4?: string;
-};
+import Component5 from "./Component5 (2)";
+import {ProfileNavigationType} from "../types/ProfileNavigationType";
 
 const ProfileNavigation: FunctionComponent<ProfileNavigationType> = memo(
   ({

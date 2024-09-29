@@ -1,11 +1,8 @@
 import { FunctionComponent } from "react";
-
-export type ExistingEmailConfirmationType = {
-  className?: string;
-};
+import {ClassNameType} from "../types/ClassNameType";
 
 const ExistingEmailConfirmation: FunctionComponent<
-  ExistingEmailConfirmationType
+  ClassNameType
 > = ({ className = "" }) => {
   return (
     <div

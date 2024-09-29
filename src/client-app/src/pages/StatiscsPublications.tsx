@@ -11,7 +11,7 @@ const Frame1: FunctionComponent = () => {
           className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
           loading="lazy"
           alt=""
-          src="/materialsymbolslightsearch.svg"
+          src="/src/assets/materialsymbolslightsearch.svg"
         />
       </div>
       <main className="w-[63.313rem] flex flex-row items-start justify-end pt-[0rem] px-[2.625rem] pb-[9.875rem] box-border max-w-full lg:pb-[6.438rem] lg:box-border mq750:pb-[4.188rem] mq750:box-border mq1050:pl-[1.313rem] mq1050:pr-[1.313rem] mq1050:box-border">
@@ -89,7 +89,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/.svg"
+                          src="/src/assets/.svg"
                         />
                         <div className="relative uppercase hidden">Профіль</div>
                       </div>
@@ -98,7 +98,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-1.svg"
+                          src="/src/assets/-1.svg"
                         />
                         <div className="relative uppercase hidden">Пошук</div>
                       </div>
@@ -107,7 +107,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.181rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-2.svg"
+                          src="/src/assets/-2.svg"
                         />
                         <div className="relative uppercase hidden">Чат</div>
                       </div>
@@ -116,7 +116,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.031rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-3.svg"
+                          src="/src/assets/-3.svg"
                         />
                         <div className="relative uppercase hidden">
                           статистика
@@ -127,7 +127,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.038rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-4.svg"
+                          src="/src/assets/-4.svg"
                         />
                         <div className="relative uppercase hidden">
                           календар
@@ -138,7 +138,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.15rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-31.svg"
+                          src="/src/assets/-31.svg"
                         />
                         <div className="relative uppercase hidden">відгуки</div>
                       </div>
@@ -147,7 +147,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[1.788rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-5.svg"
+                          src="/src/assets/-5.svg"
                         />
                         <div className="relative uppercase hidden">новини</div>
                       </div>
@@ -156,7 +156,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[1.838rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-6.svg"
+                          src="/src/assets/-6.svg"
                         />
                         <div className="relative uppercase hidden">
                           Сповіщення
@@ -167,7 +167,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.575rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-7.svg"
+                          src="/src/assets/-7.svg"
                         />
                         <div className="relative uppercase hidden">
                           Збережені
@@ -178,7 +178,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-8.svg"
+                          src="/src/assets/-8.svg"
                         />
                         <div className="relative uppercase hidden">
                           Умови співпраці
@@ -189,7 +189,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[1.981rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/-9.svg"
+                          src="/src/assets/-9.svg"
                         />
                         <div className="relative uppercase hidden">
                           Налаштування
@@ -200,7 +200,7 @@ const Frame1: FunctionComponent = () => {
                           className="h-[2.144rem] w-[2.188rem] relative overflow-hidden shrink-0"
                           loading="lazy"
                           alt=""
-                          src="/--3.svg"
+                          src="/src/assets/--3.svg"
                         />
                         <div className="relative uppercase hidden">
                           служба підтримки
@@ -210,7 +210,7 @@ const Frame1: FunctionComponent = () => {
                     <img
                       className="h-[0.938rem] w-[0.938rem] absolute !m-[0] top-[22.75rem] right-[8.438rem] overflow-hidden shrink-0 z-[3]"
                       alt=""
-                      src="/fluentemojiflatspiralcalendar.svg"
+                      src="/src/assets/fluentemojiflatspiralcalendar.svg"
                     />
                     <Component7 />
                   </div>
@@ -221,7 +221,7 @@ const Frame1: FunctionComponent = () => {
                         className="w-[1.25rem] h-[1.25rem] relative object-contain z-[1]"
                         loading="lazy"
                         alt=""
-                        src="/actions--navigation--chevronright--25.svg"
+                        src="/src/assets/actions--navigation--chevronright--25.svg"
                       />
                     </div>
                     <div className="flex-1 rounded-[10px] border-[#d9d9d9] border-[1px] border-solid box-border flex flex-col items-start justify-start pt-[1.187rem] px-[0rem] pb-[1.062rem] gap-[0.937rem] min-w-[9.125rem] z-[2]">
@@ -231,7 +231,7 @@ const Frame1: FunctionComponent = () => {
                             <img
                               className="w-[0.938rem] h-[0.938rem] relative overflow-hidden shrink-0 z-[1]"
                               alt=""
-                              src="/skilliconsinstagram2.svg"
+                              src="/src/assets/skilliconsinstagram2.svg"
                             />
                           </div>
                           <div className="relative inline-block min-w-[6.875rem] z-[1]">
@@ -243,7 +243,7 @@ const Frame1: FunctionComponent = () => {
                         className="self-stretch h-[9.813rem] relative max-w-full overflow-hidden shrink-0 object-cover z-[1]"
                         loading="lazy"
                         alt=""
-                        src="/group-1171@2x.png"
+                        src="/src/assets/group-1171@2x.png"
                       />
                       <div className="self-stretch flex flex-row items-start justify-start py-[0rem] pl-[0.687rem] pr-[0.875rem] text-[0.75rem]">
                         <div className="flex-1 flex flex-col items-end justify-start gap-[0.062rem]">
@@ -252,22 +252,22 @@ const Frame1: FunctionComponent = () => {
                               <img
                                 className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                                 alt=""
-                                src="/actions--toggle--favorite--241@2x.png"
+                                src="/src/assets/actions--toggle--favorite--241@2x.png"
                               />
                               <img
                                 className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                                 alt=""
-                                src="/actions--operations--chat--241@2x.png"
+                                src="/src/assets/actions--operations--chat--241@2x.png"
                               />
                               <img
                                 className="h-[0.625rem] w-[0.625rem] relative z-[1]"
                                 alt=""
-                                src="/actions--operations--sendaltfilled--24.svg"
+                                src="/src/assets/actions--operations--sendaltfilled--24.svg"
                               />
                               <img
                                 className="h-[0.625rem] w-[0.625rem] relative object-cover z-[1]"
                                 alt=""
-                                src="/actions--operations--bookmark--24@2x.png"
+                                src="/src/assets/actions--operations--bookmark--24@2x.png"
                               />
                             </div>
                           </div>
@@ -294,7 +294,7 @@ const Frame1: FunctionComponent = () => {
                         className="w-[1.25rem] h-[1.25rem] relative z-[1]"
                         loading="lazy"
                         alt=""
-                        src="/actions--navigation--chevronright--20.svg"
+                        src="/src/assets/actions--navigation--chevronright--20.svg"
                       />
                     </div>
                   </div>
@@ -329,7 +329,7 @@ const Frame1: FunctionComponent = () => {
                         className="h-[11.125rem] w-[11.125rem] relative z-[1] mq450:flex-1"
                         loading="lazy"
                         alt=""
-                        src="/group-1071.svg"
+                        src="/src/assets/group-1071.svg"
                       />
                     </div>
                   </div>
@@ -422,18 +422,18 @@ const Frame1: FunctionComponent = () => {
                 <img
                   className="absolute top-[0rem] left-[0rem] rounded-[40px] w-full h-full"
                   alt=""
-                  src="/bg1.svg"
+                  src="/src/assets/bg1.svg"
                 />
                 <img
                   className="absolute top-[32.563rem] left-[53.938rem] w-[0.938rem] h-[0.938rem] overflow-hidden z-[1]"
                   alt=""
-                  src="/-2-2.svg"
+                  src="/src/assets/-2-2.svg"
                 />
                 <img
                   className="absolute top-[100.188rem] left-[4.688rem] rounded-[100px] w-[1.5rem] h-[1.5rem] object-contain z-[1]"
                   loading="lazy"
                   alt=""
-                  src="/actions--navigation--chevronright--25-1@2x.png"
+                  src="/src/assets/actions--navigation--chevronright--25-1@2x.png"
                 />
               </div>
             </div>
@@ -688,7 +688,7 @@ const Frame1: FunctionComponent = () => {
       <img
         className="w-[7.5rem] h-[68.75rem] absolute !m-[0] top-[2.25rem] left-[6.25rem]"
         alt=""
-        src="/component-39.svg"
+        src="/src/assets/component-39.svg"
       />
       <FrameComponent3
         profilePicture="/ellipse-11@2x.png"
@@ -711,7 +711,7 @@ const Frame1: FunctionComponent = () => {
         <img
           className="h-[1.5rem] w-[1.5rem] relative object-contain"
           alt=""
-          src="/actions--navigation--chevronright--24@2x.png"
+          src="/src/assets/actions--navigation--chevronright--24@2x.png"
         />
       </div>
     </div>

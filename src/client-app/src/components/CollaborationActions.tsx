@@ -1,12 +1,9 @@
 import { FunctionComponent } from "react";
 import "antd/dist/reset.css";
 import { Button } from "antd";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type CollaborationActionsType = {
-  className?: string;
-};
-
-const CollaborationActions: FunctionComponent<CollaborationActionsType> = ({
+const CollaborationActions: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (

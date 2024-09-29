@@ -1,10 +1,7 @@
 import { FunctionComponent } from "react";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type Component4Type = {
-  className?: string;
-};
-
-const Component4: FunctionComponent<Component4Type> = ({ className = "" }) => {
+const Component4: FunctionComponent<ClassNameType> = ({ className = "" }) => {
   return (
     <div
       className={`absolute top-[0px] left-[2px] w-full h-full flex flex-row items-start justify-start ${className}`}

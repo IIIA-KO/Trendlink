@@ -1,11 +1,8 @@
 import { FunctionComponent } from "react";
 import Link from "./Link";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type GroupComponent2Type = {
-  className?: string;
-};
-
-const GroupComponent2: FunctionComponent<GroupComponent2Type> = ({
+const GroupComponent2: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
