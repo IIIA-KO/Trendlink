@@ -1,24 +1,23 @@
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { AuthProvider } from './context/AuthContext';
-import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from './components/ProtectedRoute';
 import CallBackPage from "./pages/CallBackPage";
 import '@fontsource/kodchasan';
 import '@fontsource/inter'
 import ProfilePage from "./pages/ProfilePage";
-import Frame from "./pages/Statiscs";
+import AuthPage from './pages/AuthPage';
+
 const App: React.FC = () => {
   return (
       <BrowserRouter>
           <AuthProvider>
               <Routes>
-                  <Route path="/login" element={<Frame/>} />
+                  <Route path="/login" element={<AuthPage/>} />
                   <Route path="/login/callback" element={<CallBackPage />}/>
                   <Route path="/" element={
                       <ProtectedRoute>
                           <ProfilePage />
-
                       </ProtectedRoute>
                   }
                   />

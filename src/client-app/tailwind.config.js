@@ -62,7 +62,6 @@ export default {
         },
       },
       spacing: {},
-
     },
 
     screens: {

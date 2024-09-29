@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {clientId, redirectUri, scope, responseType} from "../../variables/GoogleAuthVar";
+import {clientId, redirectUri, scope, responseType} from "../../utils/constants";
 
 const GoogleLoginForm: React.FC = () => {
 

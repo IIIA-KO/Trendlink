@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../api/authApi';
+import { login } from '../../services/auth';
 import useAuth from '../../hooks/useAuth';
 import axios from "axios";
 import { Formik, Form } from 'formik';

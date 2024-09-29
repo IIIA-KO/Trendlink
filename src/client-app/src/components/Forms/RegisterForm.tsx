@@ -1,11 +1,11 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../../api/authApi';
-import { getCountries, getStates } from '../../api/countriesAndStatesApi';
+import { register } from '../../services/auth';
+import { getCountries, getStates } from '../../services/countriesAndStates';
 import useAuth from '../../hooks/useAuth';
-import { CountryType } from "../../models/CountryType";
-import { StateType } from "../../models/StateType";
+import { CountryType } from "../../types/CountryType";
+import { StateType } from "../../types/StateType";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import PasswordInputField from "../Inputs/PasswordInputField";
