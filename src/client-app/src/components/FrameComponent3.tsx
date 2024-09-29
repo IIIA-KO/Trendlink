@@ -139,19 +139,19 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/src/assets/tiktok-icon.svg"
+                    src="/src/assets/icons/tiktok-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/src/assets/instagram-icon.svg"
+                    src="/src/assets/icons/instagram-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/src/assets/facebook-icon.svg"
+                    src="/src/assets/icons/facebook-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"

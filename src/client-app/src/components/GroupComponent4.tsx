@@ -64,7 +64,7 @@ const GroupComponent4: FunctionComponent<ClassNameType> = ({
                             <img
                               className="h-4 w-4 relative overflow-hidden shrink-0"
                               alt=""
-                              src="/src/assets/icons-7.svg"
+                              src="/src/assets/icons/icons-7.svg"
                             />
                             <div className="relative tracking-[0.01em] uppercase inline-block min-w-[73px]">
                               Березень
@@ -72,7 +72,7 @@ const GroupComponent4: FunctionComponent<ClassNameType> = ({
                             <img
                               className="h-4 w-4 relative overflow-hidden shrink-0 object-contain"
                               alt=""
-                              src="/src/assets/icons-8@2x.png"
+                              src="/src/assets/icons/icons-8@2x.png"
                             />
                           </div>
                           <div className="self-stretch h-[0.8px] relative border-neutral-blue-black-40 border-t-[0.8px] border-solid box-border" />

@@ -4,9 +4,9 @@ import MenuSwitcher from "../components/PageSwitcher";
 import "./styleMenu.css";
 import newLocal from "../assets/mynauitelephone.svg";
 import newLocal_1 from "../assets/mageemail.svg";
-import newLocal_2 from "../assets/tiktok-icon.svg";
-import newLocal_3 from "../assets/instagram-icon.svg";
-import newLocal_4 from "../assets/facebook-icon.svg";
+import newLocal_2 from "../assets/icons/tiktok-icon.svg";
+import newLocal_3 from "../assets/icons/instagram-icon.svg";
+import newLocal_4 from "../assets/icons/facebook-icon.svg";
 import newLocal_5 from "../assets/-3-2.svg";
 import {ProfileHeaderType} from "../types/ProfileHeaderType";
 

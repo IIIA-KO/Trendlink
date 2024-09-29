@@ -1,5 +1,5 @@
 import React from "react";
-import logo from '../assets/logo-trendlink.svg'
+import logo from '../assets/icons/logo-trendlink.svg'
 
 const LoadingPage: React.FC = () => {
     return (
