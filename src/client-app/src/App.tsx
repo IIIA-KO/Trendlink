@@ -1,7 +1,7 @@
 import './App.css'
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/Routes/ProtectedRoute';
 import {lazy, Suspense} from "react";
 
 const  AuthPage = lazy(() =>import("./pages/AuthPage"));

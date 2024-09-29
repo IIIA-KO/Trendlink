@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
-import FrameComponent4 from "../components/FrameComponent4";
-import FrameComponent3 from "../components/FrameComponent3";
+import FrameComponent4 from "./FrameComponent4";
+import FrameComponent3 from "./FrameComponent3";
 
 const Reels: FunctionComponent = () => {
   return (

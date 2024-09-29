@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
-import MenuTabs from "../components/MenuTabs";
-import FrameComponent3 from "../components/FrameComponent3";
-import Link from "../components/Link";
+import MenuTabs from "../MenuTabs";
+import FrameComponent3 from "../FrameComponent3";
+import Link from "../Link";
 
 const Frame: FunctionComponent = () => {
   return (

@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
-import SearchInputContainer from "../components/SearchInputContainer";
-import FrameComponent3 from "../components/FrameComponent3";
+import SearchInputContainer from "../SearchInputContainer";
+import FrameComponent3 from "../FrameComponent3";
 
 const Frame2: FunctionComponent = () => {
   return (
