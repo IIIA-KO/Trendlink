@@ -1,30 +1,24 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Abstraction;
-using Trendlink.Infrastructure.Instagram.Models.Audience;
 using static System.Text.Json.JsonElement;
 
 namespace Trendlink.Infrastructure.Instagram
 {
-    internal sealed class InstagramAudienceService : IInstagramAudienceService
+    internal sealed class InstagramAudienceService : InstagramBaseService, IInstagramAudienceService
     {
-        private readonly HttpClient _httpClient;
-        private readonly InstagramOptions _instagramOptions;
-
         public InstagramAudienceService(
             HttpClient httpClient,
             IOptions<InstagramOptions> instagramOptions
         )
-        {
-            this._httpClient = httpClient;
-            this._instagramOptions = instagramOptions.Value;
-        }
+            : base(httpClient, instagramOptions) { }
 
         public async Task<Result<GenderRatio>> GetAudienceGenderPercentage(
             string accessToken,
@@ -32,50 +26,22 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=follower_demographics&period=lifetime&metric_type=total_value&breakdown=gender&access_token={accessToken}";
-
-            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
-
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
-
-            try
+            var parameters = new Dictionary<string, string>
             {
-                ArrayEnumerator results = jsonObject
-                    .GetProperty("data")[0]
-                    .GetProperty("total_value")
-                    .GetProperty("breakdowns")[0]
-                    .GetProperty("results")
-                    .EnumerateArray();
+                { "metric", "follower_demographics" },
+                { "period", "lifetime" },
+                { "metric_type", "total_value" },
+                { "breakdown", "gender" },
+                { "access_token", accessToken }
+            };
 
-                int totalFollowers = 0;
-                var genderCounts = new Dictionary<string, int>();
+            string url = this.BuildUrl($"{instagramAccountId}/insights", parameters);
 
-                foreach (JsonElement result in results)
-                {
-                    string gender = result.GetProperty("dimension_values")[0].GetString();
-                    int count = result.GetProperty("value").GetInt32();
+            JsonElement response = await this.GetAsync(url, cancellationToken);
 
-                    totalFollowers += count;
-
-                    if (genderCounts.ContainsKey(gender!))
-                    {
-                        genderCounts[gender!] += count;
-                    }
-                    else
-                    {
-                        genderCounts[gender!] = count;
-                    }
-                }
-
-                return new GenderRatio(genderCounts, totalFollowers);
-            }
-            catch (Exception)
-            {
-                return Result.Failure<GenderRatio>(Error.Unexpected);
-            }
+            return response.ValueKind != JsonValueKind.Undefined
+                ? ParseGenderRatio(response)
+                : Result.Failure<GenderRatio>(Error.Unexpected);
         }
 
         public async Task<Result<LocationRatio>> GetAudienceTopLocations(
@@ -85,64 +51,22 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string breakdownValue = locationType switch
+            var parameters = new Dictionary<string, string>
             {
-                LocationType.City => "city",
-                LocationType.Country => "country",
-                _ => throw new ArgumentOutOfRangeException(nameof(locationType), locationType, null)
+                { "metric", "follower_demographics" },
+                { "period", "lifetime" },
+                { "metric_type", "total_value" },
+                { "breakdown", locationType == LocationType.City ? "city" : "country" },
+                { "access_token", accessToken }
             };
 
-            string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?metric=follower_demographics&period=lifetime"
-                + "&metric_type=total_value"
-                + $"&breakdown={breakdownValue}"
-                + $"&access_token={accessToken}";
+            string url = this.BuildUrl($"{instagramAccountId}/insights", parameters);
 
-            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+            JsonElement response = await this.GetAsync(url, cancellationToken);
 
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
-
-            try
-            {
-                if (
-                    !jsonObject.TryGetProperty("data", out JsonElement dataElement)
-                    || dataElement.GetArrayLength() == 0
-                )
-                {
-                    return Result.Failure<LocationRatio>(Error.NoData);
-                }
-
-                var locationPercentages = new List<LocationPercentage>();
-
-                JsonElement results = dataElement[0]
-                    .GetProperty("total_value")
-                    .GetProperty("breakdowns")[0]
-                    .GetProperty("results");
-
-                double totalValue = results
-                    .EnumerateArray()
-                    .Sum(result => result.GetProperty("value").GetDouble());
-
-                foreach (JsonElement result in results.EnumerateArray())
-                {
-                    string name = result.GetProperty("dimension_values")[0].GetString();
-                    double value = result.GetProperty("value").GetDouble();
-
-                    double percentage = value / totalValue * 100;
-
-                    locationPercentages.Add(
-                        new LocationPercentage { Location = name!, Percentage = percentage }
-                    );
-                }
-
-                return new LocationRatio(locationPercentages);
-            }
-            catch (Exception)
-            {
-                return Result.Failure<LocationRatio>(Error.Unexpected);
-            }
+            return response.ValueKind != JsonValueKind.Undefined
+                ? ParseLocationRatio(response)
+                : Result.Failure<LocationRatio>(Error.Unexpected);
         }
 
         public async Task<Result<AgeRatio>> GetAudienceAgesPercentage(
@@ -151,50 +75,46 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string url =
-                $"{this._instagramOptions.BaseUrl}{instagramAccountId}/insights?"
-                + "metric=follower_demographics&period=lifetime&metric_type=total_value&breakdown=age"
-                + $"&access_token={accessToken}";
+            var parameters = new Dictionary<string, string>
+            {
+                { "metric", "follower_demographics" },
+                { "period", "lifetime" },
+                { "metric_type", "total_value" },
+                { "breakdown", "age" },
+                { "access_token", accessToken }
+            };
 
-            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+            string url = this.BuildUrl($"{instagramAccountId}/insights", parameters);
 
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+            JsonElement response = await this.GetAsync(url, cancellationToken);
 
-            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+            return response.ValueKind != JsonValueKind.Undefined
+                ? ParseAgeRatio(response)
+                : Result.Failure<AgeRatio>(Error.Unexpected);
+        }
 
+        private static Result<GenderRatio> ParseGenderRatio(JsonElement jsonObject)
+        {
             try
             {
-                if (
-                    !jsonObject.TryGetProperty("data", out JsonElement dataElement)
-                    || dataElement.GetArrayLength() == 0
-                )
-                {
-                    return Result.Failure<AgeRatio>(Error.NoData);
-                }
+                List<GenderPercentage> genderPercentages =
+                    ParseGenderDemographicBreakdownWithPercentage(jsonObject);
 
-                var agePercentages = new List<AgePercentage>();
+                return new GenderRatio(genderPercentages);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<GenderRatio>(Error.Unexpected);
+            }
+        }
 
-                JsonElement results = dataElement[0]
-                    .GetProperty("total_value")
-                    .GetProperty("breakdowns")[0]
-                    .GetProperty("results");
-
-                double totalValue = results
-                    .EnumerateArray()
-                    .Sum(result => result.GetProperty("value").GetDouble());
-
-                foreach (JsonElement result in results.EnumerateArray())
-                {
-                    string name = result.GetProperty("dimension_values")[0].GetString();
-                    double value = result.GetProperty("value").GetDouble();
-
-                    double percentage = value / totalValue * 100;
-
-                    agePercentages.Add(
-                        new AgePercentage { AgeGroup = name!, Percentage = percentage }
-                    );
-                }
-
+        private static Result<AgeRatio> ParseAgeRatio(JsonElement jsonObject)
+        {
+            try
+            {
+                List<AgePercentage> agePercentages = ParseAgeDemographicBreakdownWithPercentage(
+                    jsonObject
+                );
                 return new AgeRatio(agePercentages);
             }
             catch (Exception)
@@ -208,48 +128,71 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken = default
         )
         {
-            string url =
-                $"{this._instagramOptions.BaseUrl}{request.InstagramAccountId}/insights?metric=reach&period=day"
-                + $"&since={request.Since}&until={request.Until}"
-                + "&breakdown=follow_type&metric_type=total_value"
-                + $"&access_token={request.AccessToken}";
+            var parameters = new Dictionary<string, string>
+            {
+                { "metric", "reach" },
+                { "period", "day" },
+                { "since", request.Since.ToString(CultureInfo.InvariantCulture) },
+                { "until", request.Until.ToString(CultureInfo.InvariantCulture) },
+                { "breakdown", "follow_type" },
+                { "metric_type", "total_value" },
+                { "access_token", request.AccessToken }
+            };
 
-            HttpResponseMessage response = await this.SendGetRequestAsync(url, cancellationToken);
+            string url = this.BuildUrl($"{request.InstagramAccountId}/insights", parameters);
 
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
+            JsonElement response = await this.GetAsync(url, cancellationToken);
 
-            JsonElement jsonObject = JsonDocument.Parse(content).RootElement;
+            return response.ValueKind != JsonValueKind.Undefined
+                ? ParseReachRatio(response)
+                : Result.Failure<ReachRatio>(Error.Unexpected);
+        }
 
+        private static Result<LocationRatio> ParseLocationRatio(JsonElement jsonObject)
+        {
             try
             {
-                ArrayEnumerator results = jsonObject
+                List<LocationPercentage> locationPercentages =
+                    ParseLocationDemographicBreakdownWithPercentage(jsonObject);
+
+                var sortedLocations = locationPercentages
+                    .OrderByDescending(l => l.Percentage)
+                    .ToList();
+
+                var topLocations = sortedLocations.Take(4).ToList();
+
+                double otherPercentage = sortedLocations.Skip(4).Sum(l => l.Percentage);
+
+                if (otherPercentage > 0)
+                {
+                    topLocations.Add(
+                        new LocationPercentage { Location = "Other", Percentage = otherPercentage }
+                    );
+                }
+
+                return new LocationRatio(topLocations);
+            }
+            catch (Exception)
+            {
+                return Result.Failure<LocationRatio>(Error.Unexpected);
+            }
+        }
+
+        private static Result<ReachRatio> ParseReachRatio(JsonElement jsonObject)
+        {
+            try
+            {
+                List<ReachPercentage> reachPercentages =
+                    ParseReachDemographicBreakdownWithPercentage(jsonObject);
+                int totalReach = jsonObject
                     .GetProperty("data")[0]
                     .GetProperty("total_value")
                     .GetProperty("breakdowns")[0]
                     .GetProperty("results")
-                    .EnumerateArray();
+                    .EnumerateArray()
+                    .Sum(x => x.GetProperty("value").GetInt32());
 
-                int totalFollowers = 0;
-                var followsCounts = new Dictionary<string, int>();
-
-                foreach (JsonElement result in results)
-                {
-                    string followType = result.GetProperty("dimension_values")[0].GetString();
-                    int count = result.GetProperty("value").GetInt32();
-
-                    totalFollowers += count;
-
-                    if (followsCounts.ContainsKey(followType!))
-                    {
-                        followsCounts[followType!] += count;
-                    }
-                    else
-                    {
-                        followsCounts[followType!] = count;
-                    }
-                }
-
-                return new ReachRatio(followsCounts, totalFollowers);
+                return new ReachRatio(totalReach, reachPercentages);
             }
             catch (Exception)
             {
@@ -257,12 +200,76 @@ namespace Trendlink.Infrastructure.Instagram
             }
         }
 
-        private async Task<HttpResponseMessage> SendGetRequestAsync(
-            string url,
-            CancellationToken cancellationToken
+        private static List<T> ParseDemographicBreakdownWithPercentage<T>(
+            JsonElement jsonObject,
+            Func<string, double, T> createInstance
         )
         {
-            return await this._httpClient.GetAsync(url, cancellationToken);
+            ArrayEnumerator results = jsonObject
+                .GetProperty("data")[0]
+                .GetProperty("total_value")
+                .GetProperty("breakdowns")[0]
+                .GetProperty("results")
+                .EnumerateArray();
+
+            double totalValue = results.Sum(result => result.GetProperty("value").GetDouble());
+
+            var percentages = new List<T>();
+
+            foreach (JsonElement result in results)
+            {
+                string dimensionValue = result.GetProperty("dimension_values")[0].GetString();
+                double value = result.GetProperty("value").GetDouble();
+                double percentage = value / totalValue * 100;
+
+                percentages.Add(createInstance(dimensionValue!, percentage));
+            }
+
+            return percentages;
+        }
+
+        private static List<LocationPercentage> ParseLocationDemographicBreakdownWithPercentage(
+            JsonElement jsonObject
+        )
+        {
+            return ParseDemographicBreakdownWithPercentage(
+                jsonObject,
+                (location, percentage) =>
+                    new LocationPercentage { Location = location, Percentage = percentage }
+            );
+        }
+
+        private static List<AgePercentage> ParseAgeDemographicBreakdownWithPercentage(
+            JsonElement jsonObject
+        )
+        {
+            return ParseDemographicBreakdownWithPercentage(
+                jsonObject,
+                (ageGroup, percentage) =>
+                    new AgePercentage { AgeGroup = ageGroup, Percentage = percentage }
+            );
+        }
+
+        private static List<GenderPercentage> ParseGenderDemographicBreakdownWithPercentage(
+            JsonElement jsonObject
+        )
+        {
+            return ParseDemographicBreakdownWithPercentage(
+                jsonObject,
+                (gender, percentage) =>
+                    new GenderPercentage { Gender = gender, Percentage = percentage }
+            );
+        }
+
+        private static List<ReachPercentage> ParseReachDemographicBreakdownWithPercentage(
+            JsonElement jsonObject
+        )
+        {
+            return ParseDemographicBreakdownWithPercentage(
+                jsonObject,
+                (followType, percentage) =>
+                    new ReachPercentage { FollowType = followType, Percentage = percentage }
+            );
         }
     }
 }

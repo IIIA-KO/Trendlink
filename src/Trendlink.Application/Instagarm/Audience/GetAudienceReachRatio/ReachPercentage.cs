@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
+﻿namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio
 {
     public class ReachPercentage
     {

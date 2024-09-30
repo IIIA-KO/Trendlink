@@ -3,8 +3,7 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
 {
-    public sealed record GetAudienceAgeRatioQuery(UserId UserId)
-        : ICachedQuery<AudienceAgeRatioResponse>
+    public sealed record GetAudienceAgeRatioQuery(UserId UserId) : ICachedQuery<AgeRatio>
     {
         public string CacheKey => $"audience-age-{this.UserId.Value}";
 

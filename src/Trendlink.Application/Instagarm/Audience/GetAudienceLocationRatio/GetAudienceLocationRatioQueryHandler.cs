@@ -9,7 +9,7 @@ using Trendlink.Domain.Users.InstagramBusinessAccount;
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio
 {
     internal sealed class GetAudienceLocationRatioQueryHandler
-        : IQueryHandler<GetAudienceLocationRatioQuery, LocationRatioResponse>
+        : IQueryHandler<GetAudienceLocationRatioQuery, LocationRatio>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
@@ -26,7 +26,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<LocationRatioResponse>> Handle(
+        public async Task<Result<LocationRatio>> Handle(
             GetAudienceLocationRatioQuery request,
             CancellationToken cancellationToken
         )
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio
             );
             if (user is null)
             {
-                return Result.Failure<LocationRatioResponse>(UserErrors.NotFound);
+                return Result.Failure<LocationRatio>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,7 +48,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<LocationRatioResponse>(
+                return Result.Failure<LocationRatio>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }

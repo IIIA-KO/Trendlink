@@ -5,9 +5,8 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
 using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Instagarm.Statistics.GetEngagementStatistics;
 using Trendlink.Application.Instagarm.Statistics.GetInteractionStatistics;
@@ -17,7 +16,6 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Instagram.Abstraction;
-using Trendlink.Infrastructure.Instagram.Models.Audience;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Instagram
@@ -285,85 +283,56 @@ namespace Trendlink.Infrastructure.Instagram
             );
         }
 
-        public async Task<Result<GenderRatioResponse>> GetAudienceGenderPercentage(
+        public async Task<Result<GenderRatio>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         )
         {
-            Result<GenderRatio> result =
-                await this._instagramAudienceService.GetAudienceGenderPercentage(
-                    accessToken,
-                    instagramAccountId,
-                    cancellationToken
-                );
-            if (result.IsFailure)
-            {
-                return Result.Failure<GenderRatioResponse>(result.Error);
-            }
-
-            return new GenderRatioResponse(result.Value.GenderPercentages);
+            return await this._instagramAudienceService.GetAudienceGenderPercentage(
+                accessToken,
+                instagramAccountId,
+                cancellationToken
+            );
         }
 
-        public async Task<Result<ReachRatioResponse>> GetAudienceReachPercentage(
+        public async Task<Result<ReachRatio>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
         {
-            Result<ReachRatio> result =
-                await this._instagramAudienceService.GetAudienceReachPercentage(
-                    request,
-                    cancellationToken
-                );
-            if (result.IsFailure)
-            {
-                return Result.Failure<ReachRatioResponse>(result.Error);
-            }
-            ReachRatio reachRatio = result.Value;
-
-            return new ReachRatioResponse(reachRatio.TotalReach, reachRatio.ReachPercentages);
+            return await this._instagramAudienceService.GetAudienceReachPercentage(
+                request,
+                cancellationToken
+            );
         }
 
-        public async Task<Result<LocationRatioResponse>> GetAudienceLocationPercentage(
+        public async Task<Result<LocationRatio>> GetAudienceLocationPercentage(
             string accessToken,
             string instagramAccountId,
             LocationType locationType,
             CancellationToken cancellationToken = default
         )
         {
-            Result<LocationRatio> result =
-                await this._instagramAudienceService.GetAudienceTopLocations(
-                    accessToken,
-                    instagramAccountId,
-                    locationType,
-                    cancellationToken
-                );
-            if (result.IsFailure)
-            {
-                return Result.Failure<LocationRatioResponse>(result.Error);
-            }
-
-            return new LocationRatioResponse(result.Value.TopLocationPercentages);
+            return await this._instagramAudienceService.GetAudienceTopLocations(
+                accessToken,
+                instagramAccountId,
+                locationType,
+                cancellationToken
+            );
         }
 
-        public async Task<Result<AudienceAgeRatioResponse>> GetAudienceAgePercentage(
+        public async Task<Result<AgeRatio>> GetAudienceAgePercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         )
         {
-            Result<AgeRatio> result =
-                await this._instagramAudienceService.GetAudienceAgesPercentage(
-                    accessToken,
-                    instagramAccountId,
-                    cancellationToken
-                );
-            if (result.IsFailure)
-            {
-                return Result.Failure<AudienceAgeRatioResponse>(result.Error);
-            }
-
-            return new AudienceAgeRatioResponse(result.Value.AgePercentages);
+            return await this._instagramAudienceService.GetAudienceAgesPercentage(
+                accessToken,
+                instagramAccountId,
+                cancellationToken
+            );
         }
 
         public async Task<Result<TableStatistics>> GetTableStatistics(

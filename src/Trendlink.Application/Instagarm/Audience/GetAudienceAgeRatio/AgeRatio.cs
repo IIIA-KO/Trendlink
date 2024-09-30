@@ -1,8 +1,6 @@
-﻿using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
-
-namespace Trendlink.Infrastructure.Instagram.Models.Audience
+﻿namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
 {
-    internal sealed class AgeRatio
+    public sealed class AgeRatio
     {
         public List<AgePercentage> AgePercentages { get; }
 

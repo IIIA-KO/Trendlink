@@ -4,7 +4,7 @@ using Trendlink.Application.Instagarm;
 using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Instagram

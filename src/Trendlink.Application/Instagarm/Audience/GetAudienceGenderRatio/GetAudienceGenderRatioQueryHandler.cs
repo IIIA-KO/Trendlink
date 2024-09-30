@@ -9,7 +9,7 @@ using Trendlink.Domain.Users.InstagramBusinessAccount;
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio
 {
     internal sealed class GetAudienceGenderRatioQueryHandler
-        : IQueryHandler<GetAudienceGenderRatioQuery, GenderRatioResponse>
+        : IQueryHandler<GetAudienceGenderRatioQuery, GenderRatio>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
@@ -26,7 +26,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<GenderRatioResponse>> Handle(
+        public async Task<Result<GenderRatio>> Handle(
             GetAudienceGenderRatioQuery request,
             CancellationToken cancellationToken
         )
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio
             );
             if (user is null)
             {
-                return Result.Failure<GenderRatioResponse>(UserErrors.NotFound);
+                return Result.Failure<GenderRatio>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,7 +48,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<GenderRatioResponse>(
+                return Result.Failure<GenderRatio>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }

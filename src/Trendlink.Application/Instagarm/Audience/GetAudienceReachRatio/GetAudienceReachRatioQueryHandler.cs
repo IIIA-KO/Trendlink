@@ -6,10 +6,10 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
+namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio
 {
     internal sealed class GetAudienceReachRatioQueryHandler
-        : IQueryHandler<GetAudienceReachRatioQuery, ReachRatioResponse>
+        : IQueryHandler<GetAudienceReachRatioQuery, ReachRatio>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
@@ -26,7 +26,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<ReachRatioResponse>> Handle(
+        public async Task<Result<ReachRatio>> Handle(
             GetAudienceReachRatioQuery request,
             CancellationToken cancellationToken
         )
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
             );
             if (user is null)
             {
-                return Result.Failure<ReachRatioResponse>(UserErrors.NotFound);
+                return Result.Failure<ReachRatio>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,9 +48,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<ReachRatioResponse>(
-                    InstagramAccountErrors.InstagramAccountNotLinked
-                );
+                return Result.Failure<ReachRatio>(InstagramAccountErrors.InstagramAccountNotLinked);
             }
 
             return await this._instagramService.GetAudienceReachPercentage(

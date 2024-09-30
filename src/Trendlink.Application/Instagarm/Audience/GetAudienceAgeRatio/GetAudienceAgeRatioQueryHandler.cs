@@ -9,7 +9,7 @@ using Trendlink.Domain.Users.InstagramBusinessAccount;
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
 {
     internal sealed class GetAudienceAgeRatioQueryHandler
-        : IQueryHandler<GetAudienceAgeRatioQuery, AudienceAgeRatioResponse>
+        : IQueryHandler<GetAudienceAgeRatioQuery, AgeRatio>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
@@ -26,7 +26,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<AudienceAgeRatioResponse>> Handle(
+        public async Task<Result<AgeRatio>> Handle(
             GetAudienceAgeRatioQuery request,
             CancellationToken cancellationToken
         )
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
             );
             if (user is null)
             {
-                return Result.Failure<AudienceAgeRatioResponse>(UserErrors.NotFound);
+                return Result.Failure<AgeRatio>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,9 +48,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<AudienceAgeRatioResponse>(
-                    InstagramAccountErrors.InstagramAccountNotLinked
-                );
+                return Result.Failure<AgeRatio>(InstagramAccountErrors.InstagramAccountNotLinked);
             }
 
             return await this._instagramService.GetAudienceAgePercentage(

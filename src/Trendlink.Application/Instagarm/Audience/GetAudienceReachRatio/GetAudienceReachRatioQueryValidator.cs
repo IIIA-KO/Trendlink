@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
+namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio
 {
     internal sealed class GetAudienceReachRatioQueryValidator
         : AbstractValidator<GetAudienceReachRatioQuery>

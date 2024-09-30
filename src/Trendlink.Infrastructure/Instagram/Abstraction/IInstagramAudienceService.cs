@@ -1,9 +1,9 @@
 ﻿using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
+using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
-using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Infrastructure.Instagram.Models.Audience;
 
 namespace Trendlink.Infrastructure.Instagram.Abstraction
 {
