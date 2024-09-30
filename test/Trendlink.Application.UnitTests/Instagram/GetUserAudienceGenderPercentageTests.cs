@@ -4,7 +4,7 @@ using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
@@ -15,13 +15,13 @@ namespace Trendlink.Application.UnitTests.Instagram
 {
     public class GetUserAudienceGenderPercentageTests
     {
-        private static readonly GetAudienceGenderPercentageQuery Query = new(UserId.New());
+        private static readonly GetAudienceGenderRatioQuery Query = new(UserId.New());
 
         private readonly IUserRepository _userRepositoryMock;
         private readonly IInstagramService _instagramServiceMock;
         private readonly IKeycloakService _keycloakServiceMock;
 
-        private readonly GetAudienceGenderPercentageQueryHandler _handler;
+        private readonly GetAudienceGenderRatioQueryHandler _handler;
 
         public GetUserAudienceGenderPercentageTests()
         {
@@ -29,7 +29,7 @@ namespace Trendlink.Application.UnitTests.Instagram
             this._instagramServiceMock = Substitute.For<IInstagramService>();
             this._keycloakServiceMock = Substitute.For<IKeycloakService>();
 
-            this._handler = new GetAudienceGenderPercentageQueryHandler(
+            this._handler = new GetAudienceGenderRatioQueryHandler(
                 this._userRepositoryMock,
                 this._instagramServiceMock,
                 this._keycloakServiceMock

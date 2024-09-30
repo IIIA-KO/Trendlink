@@ -1,10 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgePercentage
+namespace Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio
 {
-    public sealed record GetAudienceAgePercentageQuery(UserId UserId)
-        : ICachedQuery<AudienceAgeStatistics>
+    public sealed record GetAudienceAgeRatioQuery(UserId UserId)
+        : ICachedQuery<AudienceAgeRatioResponse>
     {
         public string CacheKey => $"audience-age-{this.UserId.Value}";
 

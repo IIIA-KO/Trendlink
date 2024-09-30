@@ -26,6 +26,7 @@ using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
 using Trendlink.Infrastructure.Instagram;
+using Trendlink.Infrastructure.Instagram.Abstraction;
 using Trendlink.Infrastructure.Photos;
 using Trendlink.Infrastructure.Repositories;
 using Trendlink.Infrastructure.SignalR;

@@ -6,16 +6,16 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 
-namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage
+namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
 {
-    internal sealed class GetAudienceLocationPercentageQueryHandler
-        : IQueryHandler<GetAudienceLocationPercentageQuery, AudienceLocationStatistics>
+    internal sealed class GetAudienceReachRatioQueryHandler
+        : IQueryHandler<GetAudienceReachRatioQuery, ReachRatioResponse>
     {
         private readonly IUserRepository _userRepository;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
 
-        public GetAudienceLocationPercentageQueryHandler(
+        public GetAudienceReachRatioQueryHandler(
             IUserRepository userRepository,
             IInstagramService instagramService,
             IKeycloakService keycloakService
@@ -26,8 +26,8 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage
             this._keycloakService = keycloakService;
         }
 
-        public async Task<Result<AudienceLocationStatistics>> Handle(
-            GetAudienceLocationPercentageQuery request,
+        public async Task<Result<ReachRatioResponse>> Handle(
+            GetAudienceReachRatioQuery request,
             CancellationToken cancellationToken
         )
         {
@@ -37,7 +37,7 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage
             );
             if (user is null)
             {
-                return Result.Failure<AudienceLocationStatistics>(UserErrors.NotFound);
+                return Result.Failure<ReachRatioResponse>(UserErrors.NotFound);
             }
 
             bool isInstagramLinked =
@@ -48,15 +48,17 @@ namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage
                 );
             if (!isInstagramLinked)
             {
-                return Result.Failure<AudienceLocationStatistics>(
+                return Result.Failure<ReachRatioResponse>(
                     InstagramAccountErrors.InstagramAccountNotLinked
                 );
             }
 
-            return await this._instagramService.GetAudienceLocationPercentage(
-                user.Token!.AccessToken,
-                user.InstagramAccount!.Metadata.Id,
-                request.LocationType,
+            return await this._instagramService.GetAudienceReachPercentage(
+                new InstagramPeriodRequest(
+                    user.Token!.AccessToken,
+                    user.InstagramAccount!.Metadata.Id,
+                    request.StatisticsPeriod
+                ),
                 cancellationToken
             );
         }

@@ -2,10 +2,10 @@
 
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
 {
-    internal sealed class GetAudienceReachPercentageQueryValidator
-        : AbstractValidator<GetAudienceReachPercentageQuery>
+    internal sealed class GetAudienceReachRatioQueryValidator
+        : AbstractValidator<GetAudienceReachRatioQuery>
     {
-        public GetAudienceReachPercentageQueryValidator()
+        public GetAudienceReachRatioQueryValidator()
         {
             this.RuleFor(c => c.StatisticsPeriod).IsInEnum();
         }

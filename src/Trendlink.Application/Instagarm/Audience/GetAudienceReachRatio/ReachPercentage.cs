@@ -1,6 +1,6 @@
 ﻿namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
 {
-    public class AudienceReachPercentageResponse
+    public class ReachPercentage
     {
         public string FollowType { get; init; }
 

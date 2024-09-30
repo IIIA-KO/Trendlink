@@ -1,12 +1,10 @@
 ﻿using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage
+namespace Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio
 {
-    public sealed record GetAudienceLocationPercentageQuery(
-        UserId UserId,
-        LocationType LocationType
-    ) : ICachedQuery<AudienceLocationStatistics>
+    public sealed record GetAudienceLocationRatioQuery(UserId UserId, LocationType LocationType)
+        : ICachedQuery<LocationRatioResponse>
     {
         public string CacheKey => $"audience-location-{this.UserId.Value}-{(int)this.LocationType}";
 

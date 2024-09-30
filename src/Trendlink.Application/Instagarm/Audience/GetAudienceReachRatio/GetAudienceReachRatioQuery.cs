@@ -3,10 +3,10 @@ using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage
 {
-    public sealed record GetAudienceReachPercentageQuery(
+    public sealed record GetAudienceReachRatioQuery(
         UserId UserId,
         StatisticsPeriod StatisticsPeriod
-    ) : ICachedQuery<AudienceReachStatistics>
+    ) : ICachedQuery<ReachRatioResponse>
     {
         public string CacheKey =>
             $"audience-reach-{this.UserId.Value}-{(int)this.StatisticsPeriod}";

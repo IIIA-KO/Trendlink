@@ -1,11 +1,13 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Trendlink.Application.Abstractions.Instagram;
-using Trendlink.Application.Instagarm.Audience.GetAudienceAgePercentage;
-using Trendlink.Application.Instagarm.Audience.GetAudienceGenderPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Infrastructure.Instagram.Abstraction;
+using Trendlink.Infrastructure.Instagram.Models.Audience;
 using static System.Text.Json.JsonElement;
 
 namespace Trendlink.Infrastructure.Instagram
@@ -24,7 +26,7 @@ namespace Trendlink.Infrastructure.Instagram
             this._instagramOptions = instagramOptions.Value;
         }
 
-        public async Task<Result<AudienceGenderStatistics>> GetAudienceGenderPercentage(
+        public async Task<Result<GenderRatio>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -68,28 +70,15 @@ namespace Trendlink.Infrastructure.Instagram
                     }
                 }
 
-                var genderPercentages = genderCounts
-                    .Select(g => new AudienceGenderPercentageResponse
-                    {
-                        Gender = g.Key switch
-                        {
-                            "F" => "Female",
-                            "M" => "Male",
-                            _ => "Unknown"
-                        },
-                        Percentage = (double)g.Value / totalFollowers * 100
-                    })
-                    .ToList();
-
-                return new AudienceGenderStatistics(genderPercentages);
+                return new GenderRatio(genderCounts, totalFollowers);
             }
             catch (Exception)
             {
-                return Result.Failure<AudienceGenderStatistics>(Error.Unexpected);
+                return Result.Failure<GenderRatio>(Error.Unexpected);
             }
         }
 
-        public async Task<Result<AudienceLocationStatistics>> GetAudienceTopLocations(
+        public async Task<Result<LocationRatio>> GetAudienceTopLocations(
             string accessToken,
             string instagramAccountId,
             LocationType locationType,
@@ -122,10 +111,10 @@ namespace Trendlink.Infrastructure.Instagram
                     || dataElement.GetArrayLength() == 0
                 )
                 {
-                    return Result.Failure<AudienceLocationStatistics>(Error.NoData);
+                    return Result.Failure<LocationRatio>(Error.NoData);
                 }
 
-                var locationPercentages = new List<AudienceLocationPercentageResponse>();
+                var locationPercentages = new List<LocationPercentage>();
 
                 JsonElement results = dataElement[0]
                     .GetProperty("total_value")
@@ -144,42 +133,19 @@ namespace Trendlink.Infrastructure.Instagram
                     double percentage = value / totalValue * 100;
 
                     locationPercentages.Add(
-                        new AudienceLocationPercentageResponse
-                        {
-                            Name = name!,
-                            Percentage = percentage
-                        }
+                        new LocationPercentage { Location = name!, Percentage = percentage }
                     );
                 }
 
-                var sortedLocations = locationPercentages
-                    .OrderByDescending(l => l.Percentage)
-                    .ToList();
-
-                var topLocations = sortedLocations.Take(4).ToList();
-
-                double otherPercentage = sortedLocations.Skip(4).Sum(l => l.Percentage);
-
-                if (otherPercentage > 0)
-                {
-                    topLocations.Add(
-                        new AudienceLocationPercentageResponse
-                        {
-                            Name = "Other",
-                            Percentage = otherPercentage
-                        }
-                    );
-                }
-
-                return new AudienceLocationStatistics(topLocations);
+                return new LocationRatio(locationPercentages);
             }
             catch (Exception)
             {
-                return Result.Failure<AudienceLocationStatistics>(Error.Unexpected);
+                return Result.Failure<LocationRatio>(Error.Unexpected);
             }
         }
 
-        public async Task<Result<AudienceAgeStatistics>> GetAudienceAgesPercentage(
+        public async Task<Result<AgeRatio>> GetAudienceAgesPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
@@ -203,10 +169,10 @@ namespace Trendlink.Infrastructure.Instagram
                     || dataElement.GetArrayLength() == 0
                 )
                 {
-                    return Result.Failure<AudienceAgeStatistics>(Error.NoData);
+                    return Result.Failure<AgeRatio>(Error.NoData);
                 }
 
-                var agePercentages = new List<AudienceAgePercentageResponse>();
+                var agePercentages = new List<AgePercentage>();
 
                 JsonElement results = dataElement[0]
                     .GetProperty("total_value")
@@ -225,23 +191,19 @@ namespace Trendlink.Infrastructure.Instagram
                     double percentage = value / totalValue * 100;
 
                     agePercentages.Add(
-                        new AudienceAgePercentageResponse
-                        {
-                            AgeGroup = name!,
-                            Percentage = percentage
-                        }
+                        new AgePercentage { AgeGroup = name!, Percentage = percentage }
                     );
                 }
 
-                return new AudienceAgeStatistics(agePercentages);
+                return new AgeRatio(agePercentages);
             }
             catch (Exception)
             {
-                return Result.Failure<AudienceAgeStatistics>(Error.Unexpected);
+                return Result.Failure<AgeRatio>(Error.Unexpected);
             }
         }
 
-        public async Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+        public async Task<Result<ReachRatio>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         )
@@ -287,23 +249,11 @@ namespace Trendlink.Infrastructure.Instagram
                     }
                 }
 
-                var reachPercentages = followsCounts
-                    .Select(g => new AudienceReachPercentageResponse
-                    {
-                        FollowType = g.Key switch
-                        {
-                            "FOLLOWER" => "Follower",
-                            _ => "NonFollower"
-                        },
-                        Percentage = (double)g.Value / totalFollowers * 100
-                    })
-                    .ToList();
-
-                return new AudienceReachStatistics(totalFollowers, reachPercentages);
+                return new ReachRatio(followsCounts, totalFollowers);
             }
             catch (Exception)
             {
-                return Result.Failure<AudienceReachStatistics>(Error.Unexpected);
+                return Result.Failure<ReachRatio>(Error.Unexpected);
             }
         }
 

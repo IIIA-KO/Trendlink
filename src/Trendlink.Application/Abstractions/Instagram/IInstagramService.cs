@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
-using Trendlink.Application.Instagarm.Audience.GetAudienceAgePercentage;
-using Trendlink.Application.Instagarm.Audience.GetAudienceGenderPercentage;
-using Trendlink.Application.Instagarm.Audience.GetAudienceLocationPercentage;
+using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
+using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
+using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceReachPercentage;
 using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Application.Instagarm.Statistics.GetEngagementStatistics;
@@ -49,26 +49,26 @@ namespace Trendlink.Application.Abstractions.Instagram
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<AudienceGenderStatistics>> GetAudienceGenderPercentage(
+        Task<Result<GenderRatioResponse>> GetAudienceGenderPercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<AudienceLocationStatistics>> GetAudienceLocationPercentage(
+        Task<Result<LocationRatioResponse>> GetAudienceLocationPercentage(
             string accessToken,
             string instagramAccountId,
             LocationType locationType,
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<AudienceAgeStatistics>> GetAudienceAgePercentage(
+        Task<Result<AudienceAgeRatioResponse>> GetAudienceAgePercentage(
             string accessToken,
             string instagramAccountId,
             CancellationToken cancellationToken = default
         );
 
-        Task<Result<AudienceReachStatistics>> GetAudienceReachPercentage(
+        Task<Result<ReachRatioResponse>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
         );
