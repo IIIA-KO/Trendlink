@@ -6,6 +6,7 @@ using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
+using Trendlink.Application.Instagarm.Statistics.GetEngagementStatistics;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Abstraction;
 using static System.Text.Json.JsonElement;
@@ -93,36 +94,6 @@ namespace Trendlink.Infrastructure.Instagram
                 : Result.Failure<AgeRatio>(Error.Unexpected);
         }
 
-        private static Result<GenderRatio> ParseGenderRatio(JsonElement jsonObject)
-        {
-            try
-            {
-                List<GenderPercentage> genderPercentages =
-                    ParseGenderDemographicBreakdownWithPercentage(jsonObject);
-
-                return new GenderRatio(genderPercentages);
-            }
-            catch (Exception)
-            {
-                return Result.Failure<GenderRatio>(Error.Unexpected);
-            }
-        }
-
-        private static Result<AgeRatio> ParseAgeRatio(JsonElement jsonObject)
-        {
-            try
-            {
-                List<AgePercentage> agePercentages = ParseAgeDemographicBreakdownWithPercentage(
-                    jsonObject
-                );
-                return new AgeRatio(agePercentages);
-            }
-            catch (Exception)
-            {
-                return Result.Failure<AgeRatio>(Error.Unexpected);
-            }
-        }
-
         public async Task<Result<ReachRatio>> GetAudienceReachPercentage(
             InstagramPeriodRequest request,
             CancellationToken cancellationToken = default
@@ -148,64 +119,85 @@ namespace Trendlink.Infrastructure.Instagram
                 : Result.Failure<ReachRatio>(Error.Unexpected);
         }
 
-        private static Result<LocationRatio> ParseLocationRatio(JsonElement jsonObject)
+        private static Result<GenderRatio> ParseGenderRatio(JsonElement response)
         {
-            try
+            if (!response.GetProperty("data").EnumerateArray().Any())
             {
-                List<LocationPercentage> locationPercentages =
-                    ParseLocationDemographicBreakdownWithPercentage(jsonObject);
-
-                var sortedLocations = locationPercentages
-                    .OrderByDescending(l => l.Percentage)
-                    .ToList();
-
-                var topLocations = sortedLocations.Take(4).ToList();
-
-                double otherPercentage = sortedLocations.Skip(4).Sum(l => l.Percentage);
-
-                if (otherPercentage > 0)
-                {
-                    topLocations.Add(
-                        new LocationPercentage { Location = "Other", Percentage = otherPercentage }
-                    );
-                }
-
-                return new LocationRatio(topLocations);
+                return Result.Failure<GenderRatio>(Error.NoData);
             }
-            catch (Exception)
-            {
-                return Result.Failure<LocationRatio>(Error.Unexpected);
-            }
+
+            List<GenderPercentage> genderPercentages =
+                ParseGenderDemographicBreakdownWithPercentage(response);
+
+            return new GenderRatio(genderPercentages);
         }
 
-        private static Result<ReachRatio> ParseReachRatio(JsonElement jsonObject)
+        private static Result<AgeRatio> ParseAgeRatio(JsonElement response)
         {
-            try
+            if (!response.GetProperty("data").EnumerateArray().Any())
             {
-                List<ReachPercentage> reachPercentages =
-                    ParseReachDemographicBreakdownWithPercentage(jsonObject);
-                int totalReach = jsonObject
-                    .GetProperty("data")[0]
-                    .GetProperty("total_value")
-                    .GetProperty("breakdowns")[0]
-                    .GetProperty("results")
-                    .EnumerateArray()
-                    .Sum(x => x.GetProperty("value").GetInt32());
+                return Result.Failure<AgeRatio>(Error.NoData);
+            }
 
-                return new ReachRatio(totalReach, reachPercentages);
-            }
-            catch (Exception)
+            List<AgePercentage> agePercentages = ParseAgeDemographicBreakdownWithPercentage(
+                response
+            );
+            return new AgeRatio(agePercentages);
+        }
+
+        private static Result<LocationRatio> ParseLocationRatio(JsonElement response)
+        {
+            if (!response.GetProperty("data").EnumerateArray().Any())
             {
-                return Result.Failure<ReachRatio>(Error.Unexpected);
+                return Result.Failure<LocationRatio>(Error.NoData);
             }
+
+            List<LocationPercentage> locationPercentages =
+                ParseLocationDemographicBreakdownWithPercentage(response);
+
+            var sortedLocations = locationPercentages.OrderByDescending(l => l.Percentage).ToList();
+
+            var topLocations = sortedLocations.Take(4).ToList();
+
+            double otherPercentage = sortedLocations.Skip(4).Sum(l => l.Percentage);
+
+            if (otherPercentage > 0)
+            {
+                topLocations.Add(
+                    new LocationPercentage { Location = "Other", Percentage = otherPercentage }
+                );
+            }
+
+            return new LocationRatio(topLocations);
+        }
+
+        private static Result<ReachRatio> ParseReachRatio(JsonElement response)
+        {
+            if (!response.GetProperty("data").EnumerateArray().Any())
+            {
+                return Result.Failure<ReachRatio>(Error.NoData);
+            }
+
+            List<ReachPercentage> reachPercentages = ParseReachDemographicBreakdownWithPercentage(
+                response
+            );
+            int totalReach = response
+                .GetProperty("data")[0]
+                .GetProperty("total_value")
+                .GetProperty("breakdowns")[0]
+                .GetProperty("results")
+                .EnumerateArray()
+                .Sum(x => x.GetProperty("value").GetInt32());
+
+            return new ReachRatio(totalReach, reachPercentages);
         }
 
         private static List<T> ParseDemographicBreakdownWithPercentage<T>(
-            JsonElement jsonObject,
+            JsonElement response,
             Func<string, double, T> createInstance
         )
         {
-            ArrayEnumerator results = jsonObject
+            ArrayEnumerator results = response
                 .GetProperty("data")[0]
                 .GetProperty("total_value")
                 .GetProperty("breakdowns")[0]
@@ -229,44 +221,44 @@ namespace Trendlink.Infrastructure.Instagram
         }
 
         private static List<LocationPercentage> ParseLocationDemographicBreakdownWithPercentage(
-            JsonElement jsonObject
+            JsonElement response
         )
         {
             return ParseDemographicBreakdownWithPercentage(
-                jsonObject,
+                response,
                 (location, percentage) =>
                     new LocationPercentage { Location = location, Percentage = percentage }
             );
         }
 
         private static List<AgePercentage> ParseAgeDemographicBreakdownWithPercentage(
-            JsonElement jsonObject
+            JsonElement response
         )
         {
             return ParseDemographicBreakdownWithPercentage(
-                jsonObject,
+                response,
                 (ageGroup, percentage) =>
                     new AgePercentage { AgeGroup = ageGroup, Percentage = percentage }
             );
         }
 
         private static List<GenderPercentage> ParseGenderDemographicBreakdownWithPercentage(
-            JsonElement jsonObject
+            JsonElement response
         )
         {
             return ParseDemographicBreakdownWithPercentage(
-                jsonObject,
+                response,
                 (gender, percentage) =>
                     new GenderPercentage { Gender = gender, Percentage = percentage }
             );
         }
 
         private static List<ReachPercentage> ParseReachDemographicBreakdownWithPercentage(
-            JsonElement jsonObject
+            JsonElement response
         )
         {
             return ParseDemographicBreakdownWithPercentage(
-                jsonObject,
+                response,
                 (followType, percentage) =>
                     new ReachPercentage { FollowType = followType, Percentage = percentage }
             );
