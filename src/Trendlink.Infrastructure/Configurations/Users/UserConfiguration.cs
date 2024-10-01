@@ -30,14 +30,17 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .HasMaxLength(200)
                 .HasConversion(firstName => firstName.Value, value => new LastName(value));
 
-            builder
-                .Property(user => user.ProfilePicture)
-                .HasConversion(
-                    profilePicture =>
-                        profilePicture == null ? string.Empty : profilePicture.Uri.ToString(),
-                    value => new ProfilePicture(new Uri(value ?? string.Empty))
-                )
-                .IsRequired(false);
+            builder.OwnsOne(
+                user => user.ProfilePhoto,
+                profilePictureBuilder =>
+                {
+                    profilePictureBuilder.Property(profilePicture => profilePicture.Id);
+
+                    profilePictureBuilder
+                        .Property(profilePicture => profilePicture.Uri)
+                        .HasConversion(uri => uri.ToString(), value => new Uri(value));
+                }
+            );
 
             builder
                 .Property(user => user.Email)

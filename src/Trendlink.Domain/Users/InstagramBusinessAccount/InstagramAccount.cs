@@ -4,18 +4,22 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
 {
     public sealed class InstagramAccount : Entity<InstagramAccountId>
     {
+        public const int MinFollowersCount = 100;
+
         private InstagramAccount() { }
 
         private InstagramAccount(
             InstagramAccountId id,
             UserId userId,
             FacebookPageId facebookPageId,
+            AdvertisementAccountId advertisementAccountId,
             Metadata metadata
         )
             : base(id)
         {
             this.UserId = userId;
             this.FacebookPageId = facebookPageId;
+            this.AdvertisementAccountId = advertisementAccountId;
             this.Metadata = metadata;
         }
 
@@ -25,6 +29,8 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
 
         public FacebookPageId FacebookPageId { get; private set; }
 
+        public AdvertisementAccountId AdvertisementAccountId { get; private set; }
+
         public Metadata Metadata { get; private set; }
 
         public DateTime? LastUpdatedAtUtc { get; set; }
@@ -32,6 +38,7 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
         public static Result<InstagramAccount> Create(
             UserId userId,
             FacebookPageId facebookPageId,
+            AdvertisementAccountId advertisementAccountId,
             Metadata metadata
         )
         {
@@ -42,12 +49,30 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
                 );
             }
 
+            if (string.IsNullOrEmpty(advertisementAccountId.Value))
+            {
+                return Result.Failure<InstagramAccount>(
+                    InstagramAccountErrors.InvalidAdvertisementAccountId
+                );
+            }
+
             if (string.IsNullOrEmpty(metadata.Id))
             {
                 return Result.Failure<InstagramAccount>(InstagramAccountErrors.InvalidId);
             }
 
-            return new InstagramAccount(InstagramAccountId.New(), userId, facebookPageId, metadata);
+            if (metadata.FollowersCount < MinFollowersCount)
+            {
+                return Result.Failure<InstagramAccount>(InstagramAccountErrors.NotEnoughFollowers);
+            }
+
+            return new InstagramAccount(
+                InstagramAccountId.New(),
+                userId,
+                facebookPageId,
+                advertisementAccountId,
+                metadata
+            );
         }
 
         public void Update(InstagramAccount updatedInstagramAccount)

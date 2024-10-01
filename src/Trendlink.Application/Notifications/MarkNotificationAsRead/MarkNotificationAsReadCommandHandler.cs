@@ -3,7 +3,7 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Notifications.MarkNotificationAsRead
 {

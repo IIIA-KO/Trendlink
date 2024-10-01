@@ -13,18 +13,21 @@ namespace Trendlink.Application.Advertisements.EditAdvertisement
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IUserContext _userContext;
         private readonly IConditionRepository _conditionRepository;
+        private readonly ICooperationRepository _cooperationRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EditAdvertisementCommandHandler(
             IAdvertisementRepository advertisementRepository,
             IUserContext userContext,
             IConditionRepository conditionRepository,
+            ICooperationRepository cooperationRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._advertisementRepository = advertisementRepository;
             this._userContext = userContext;
             this._conditionRepository = conditionRepository;
+            this._cooperationRepository = cooperationRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -55,6 +58,16 @@ namespace Trendlink.Application.Advertisements.EditAdvertisement
             if (condition.HasAdvertisement(request.Name))
             {
                 return Result.Failure<AdvertisementId>(AdvertisementErrors.Duplicate);
+            }
+
+            if (
+                await this._cooperationRepository.HasActiveCooperationsForAdvertisement(
+                    advertisement,
+                    cancellationToken
+                )
+            )
+            {
+                return Result.Failure(AdvertisementErrors.HasActiveCooperations);
             }
 
             Result result = advertisement.Update(request.Name, request.Price, request.Description);

@@ -39,30 +39,24 @@ namespace Trendlink.Application.Users.GetUsers
                     user.Email.Value,
                     user.FirstName.Value,
                     user.LastName.Value,
+                    user.ProfilePhoto == null ? null : user.ProfilePhoto.Id,
+                    user.ProfilePhoto == null ? null : user.ProfilePhoto.Uri.ToString(),
                     user.BirthDate,
                     user.State.Country!.Name.Value,
                     user.State.Name.Value,
                     user.PhoneNumber.Value,
                     user.Bio.Value,
                     user.AccountCategory,
-                    user.ProfilePicture == null ? null : user.ProfilePicture.Uri.ToString()
+                    user.InstagramAccount!.Metadata.FollowersCount,
+                    user.InstagramAccount.Metadata.MediaCount
                 )
             );
 
-            try
-            {
-                return await PagedList<UserResponse>.CreateAsync(
-                    userResponsesQuery,
-                    request.PageNumber,
-                    request.PageSize
-                );
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message + "\n" + ex.InnerException?.Message;
-                Console.WriteLine(message);
-                return null;
-            }
+            return await PagedList<UserResponse>.CreateAsync(
+                userResponsesQuery,
+                request.PageNumber,
+                request.PageSize
+            );
         }
     }
 }

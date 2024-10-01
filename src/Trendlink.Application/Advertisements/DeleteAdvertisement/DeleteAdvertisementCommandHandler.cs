@@ -12,18 +12,21 @@ namespace Trendlink.Application.Advertisements.DeleteAdvertisement
     {
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IConditionRepository _conditionRepository;
+        private readonly ICooperationRepository _cooperationRepository;
         private readonly IUserContext _userContext;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteAdvertisementCommandHandler(
             IAdvertisementRepository advertisementRepository,
             IConditionRepository conditionRepository,
+            ICooperationRepository cooperationRepository,
             IUserContext userContext,
             IUnitOfWork unitOfWork
         )
         {
             this._advertisementRepository = advertisementRepository;
             this._conditionRepository = conditionRepository;
+            this._cooperationRepository = cooperationRepository;
             this._userContext = userContext;
             this._unitOfWork = unitOfWork;
         }
@@ -50,6 +53,16 @@ namespace Trendlink.Application.Advertisements.DeleteAdvertisement
             if (advertisement is null)
             {
                 return Result.Failure(AdvertisementErrors.NotFound);
+            }
+
+            if (
+                await this._cooperationRepository.HasActiveCooperationsForAdvertisement(
+                    advertisement,
+                    cancellationToken
+                )
+            )
+            {
+                return Result.Failure(AdvertisementErrors.HasActiveCooperations);
             }
 
             this._advertisementRepository.Remove(advertisement);

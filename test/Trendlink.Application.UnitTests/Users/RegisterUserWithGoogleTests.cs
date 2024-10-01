@@ -5,11 +5,10 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Exceptions;
-using Trendlink.Application.Users.LogInUser;
-using Trendlink.Application.Users.RegisterUserWithGoogle;
+using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Users.Authentication.RegisterUserWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Application.UnitTests.Users
