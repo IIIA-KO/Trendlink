@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Trendlink.Infrastructure.Instagram.Models.Posts
 {
     internal sealed class InstagramMedia
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<InstagramPostResponse> Data { get; init; }
 
-        [JsonProperty("paging")]
+        [JsonPropertyName("paging")]
         public InstagramPaging Paging { get; init; }
     }
 }

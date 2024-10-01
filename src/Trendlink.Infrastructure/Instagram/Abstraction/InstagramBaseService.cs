@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 namespace Trendlink.Infrastructure.Instagram.Abstraction
 {
@@ -24,7 +23,7 @@ namespace Trendlink.Infrastructure.Instagram.Abstraction
             HttpResponseMessage response = await this._httpClient.GetAsync(url, cancellationToken);
             string content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            return JsonConvert.DeserializeObject<T>(content);
+            return JsonSerializer.Deserialize<T>(content);
         }
 
         protected async Task<JsonElement> GetAsync(string url, CancellationToken cancellationToken)

@@ -1,26 +1,20 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Infrastructure.Instagram.Abstraction;
 using Trendlink.Infrastructure.Instagram.Models.Posts;
 
 namespace Trendlink.Infrastructure.Instagram
 {
-    internal sealed class InstagramPostsService : IInstagramPostsService
+    internal sealed class InstagramPostsService : InstagramBaseService, IInstagramPostsService
     {
-        private readonly HttpClient _httpClient;
-        private readonly InstagramOptions _instagramOptions;
-
         public InstagramPostsService(
             HttpClient httpClient,
             IOptions<InstagramOptions> instagramOptions
         )
-        {
-            this._httpClient = httpClient;
-            this._instagramOptions = instagramOptions.Value;
-        }
+            : base(httpClient, instagramOptions) { }
 
         public async Task<Result<PostsResponse>> GetUserPostsWithInsights(
             string accessToken,
@@ -39,6 +33,7 @@ namespace Trendlink.Infrastructure.Instagram
                 cursor,
                 cancellationToken
             );
+
             if (posts is null || posts.Data is null)
             {
                 return new PostsResponse { Posts = [] };
@@ -58,40 +53,21 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken
         )
         {
-            string postsUrl = this.BuildPostsUrl(
-                instagramAccountId,
-                accessToken,
-                limit,
-                cursorType,
-                cursor
-            );
-            HttpResponseMessage response = await this.SendGetRequestAsync(
-                postsUrl,
-                cancellationToken
-            );
-            string postsContent = await response.Content.ReadAsStringAsync(cancellationToken);
-            return JsonConvert.DeserializeObject<InstagramMedia>(postsContent);
-        }
-
-        private string BuildPostsUrl(
-            string instagramAccountId,
-            string accessToken,
-            int limit,
-            string cursorType,
-            string cursor
-        )
-        {
-            string baseUrl = $"{this._instagramOptions.BaseUrl}{instagramAccountId}/media";
-            const string fields =
-                "?fields=id,media_type,media_url,permalink,thumbnail_url,timestamp";
-            string query = $"&limit={limit}&access_token={accessToken}";
+            var parameters = new Dictionary<string, string>
+            {
+                { "fields", "id,media_type,media_url,permalink,thumbnail_url,timestamp" },
+                { "limit", limit.ToString(CultureInfo.InvariantCulture) },
+                { "access_token", accessToken }
+            };
 
             if (!string.IsNullOrEmpty(cursor))
             {
-                query += $"&{cursorType}={cursor}";
+                parameters[cursorType] = cursor;
             }
 
-            return baseUrl + fields + query;
+            string url = this.BuildUrl($"{instagramAccountId}/media", parameters);
+
+            return await this.GetAsync<InstagramMedia>(url, cancellationToken);
         }
 
         private async Task FetchInsightsForPostsAsync(
@@ -100,15 +76,19 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken
         )
         {
-            foreach (InstagramPostResponse post in posts)
-            {
-                post.Insights = await this.FetchPostInsightsAsync(
-                    post,
-                    accessToken,
-                    post.MediaType,
-                    cancellationToken
-                );
-            }
+            IEnumerable<Task> fetchInsightsTasks = posts.Select(post =>
+                Task.Run(
+                    async () =>
+                        post.Insights = await this.FetchPostInsightsAsync(
+                            post,
+                            accessToken,
+                            post.MediaType,
+                            cancellationToken
+                        )
+                )
+            );
+
+            await Task.WhenAll(fetchInsightsTasks);
         }
 
         private async Task<InstagramInsightsResponse?> FetchPostInsightsAsync(
@@ -118,15 +98,23 @@ namespace Trendlink.Infrastructure.Instagram
             CancellationToken cancellationToken
         )
         {
-            string insightsUrl = BuildInsightsUrl(post.Id, accessToken, post.MediaType);
-            HttpResponseMessage response = await this.SendGetRequestAsync(
-                insightsUrl,
+            string metrics = mediaType.Equals("video", StringComparison.OrdinalIgnoreCase)
+                ? "likes,saved,video_views"
+                : "likes,saved";
+
+            var parameters = new Dictionary<string, string>
+            {
+                { "metric", metrics },
+                { "access_token", accessToken }
+            };
+
+            string url = this.BuildUrl($"{post.Id}/insights", parameters);
+
+            InstagramInsightsResponse? insights = await this.GetAsync<InstagramInsightsResponse>(
+                url,
                 cancellationToken
             );
-            string content = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            InstagramInsightsResponse? insights =
-                JsonConvert.DeserializeObject<InstagramInsightsResponse>(content);
             if (mediaType.Equals("video", StringComparison.OrdinalIgnoreCase) || insights is null)
             {
                 return insights;
@@ -134,15 +122,6 @@ namespace Trendlink.Infrastructure.Instagram
 
             RemoveVideoViewsInsight(insights);
             return insights;
-        }
-
-        private static string BuildInsightsUrl(string postId, string accessToken, string mediaType)
-        {
-            string metrics = mediaType.Equals("video", StringComparison.OrdinalIgnoreCase)
-                ? "likes,saved,video_views"
-                : "likes,saved";
-
-            return $"https://graph.facebook.com/v18.0/{postId}/insights?metric={metrics}&access_token={accessToken}";
         }
 
         private static void RemoveVideoViewsInsight(InstagramInsightsResponse insights)
@@ -181,14 +160,6 @@ namespace Trendlink.Infrastructure.Instagram
                     PreviousCursor = posts.Paging.Previous
                 }
             };
-        }
-
-        private async Task<HttpResponseMessage> SendGetRequestAsync(
-            string url,
-            CancellationToken cancellationToken
-        )
-        {
-            return await this._httpClient.GetAsync(url, cancellationToken);
         }
     }
 }

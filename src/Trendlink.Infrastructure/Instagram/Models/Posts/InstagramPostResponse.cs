@@ -1,51 +1,51 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Trendlink.Infrastructure.Instagram.Models.Posts
 {
-    public sealed class InstagramPostResponse
+    internal sealed class InstagramPostResponse
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; init; }
 
-        [JsonProperty("media_type")]
+        [JsonPropertyName("media_type")]
         public string MediaType { get; init; }
 
-        [JsonProperty("media_url")]
+        [JsonPropertyName("media_url")]
         public string MediaUrl { get; init; }
 
-        [JsonProperty("permalink")]
+        [JsonPropertyName("permalink")]
         public string Permalink { get; init; }
 
-        [JsonProperty("thumbnail_url")]
+        [JsonPropertyName("thumbnail_url")]
         public string ThumbnailUrl { get; init; }
 
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         public string Timestamp { get; init; }
 
         public InstagramInsightsResponse? Insights { get; internal set; }
     }
 
-    public sealed class InstagramInsightsResponse
+    internal sealed class InstagramInsightsResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public List<InstagramInsightResponse> Data { get; init; }
     }
 
-    public sealed class InstagramInsightResponse
+    internal sealed class InstagramInsightResponse
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public string Period { get; set; }
 
-        [JsonProperty("values")]
+        [JsonPropertyName("values")]
         public List<InsightValueResponse> Values { get; set; }
     }
 
-    public class InsightValueResponse
+    internal class InsightValueResponse
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public int? Value { get; set; }
     }
 }
