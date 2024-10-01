@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Options;
-using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Abstraction;

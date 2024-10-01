@@ -1,9 +1,9 @@
 ﻿using Trendlink.Application.Instagarm.Posts.GetPosts;
 using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Application.Abstractions.Instagram
+namespace Trendlink.Infrastructure.Instagram.Abstraction
 {
-    public interface IInstagramPostsService
+    internal interface IInstagramPostsService
     {
         Task<Result<PostsResponse>> GetUserPostsWithInsights(
             string accessToken,

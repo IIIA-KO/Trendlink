@@ -166,6 +166,8 @@ namespace Trendlink.Infrastructure
                 httpClient.BaseAddress = new Uri(instagramOptions.BaseUrl);
             }
 
+            services.AddHttpClient<IFacebookService, FacebookService>(ConfigureHttpClient);
+
             services.AddHttpClient<IInstagramAccountsService, InstagramAccountsService>(
                 ConfigureHttpClient
             );
