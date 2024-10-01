@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
-import FrameComponent4 from "./FrameComponent4";
-import FrameComponent3 from "./FrameComponent3";
+import FrameComponent4 from "../components/FrameComponent4";
+import FrameComponent3 from "../components/FrameComponent3";
 
-const Reels: FunctionComponent = () => {
+const ReelsPage: FunctionComponent = () => {
   return (
     <div className="w-full h-[84.375rem] relative bg-[#f0f4f9] overflow-hidden flex flex-col items-end justify-start pt-[2.187rem] px-[6.312rem] pb-[9.937rem] box-border gap-[18.937rem] leading-[normal] tracking-[normal] lg:gap-[9.438rem] lg:pl-[3.125rem] lg:pr-[3.125rem] lg:box-border mq450:gap-[2.375rem] mq750:gap-[4.75rem] mq750:pl-[1.563rem] mq750:pr-[1.563rem] mq750:box-border mq1050:h-auto">
       <div className="w-[23.938rem] h-[2.188rem] rounded-[40px] bg-[#fff] flex flex-row items-center justify-start py-[0.437rem] px-[0.937rem] box-border max-w-full z-[1]">
@@ -77,4 +77,4 @@ const Reels: FunctionComponent = () => {
   );
 };
 
-export default Reels;
+export default ReelsPage;
