@@ -11,7 +11,7 @@ export const register = async (data: {
     phoneNumber: string;
     password: string;
     stateId: string;
-}): Promise<AuthResponseType> => {
+}): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/users/register', data);
         return {
@@ -19,17 +19,13 @@ export const register = async (data: {
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
 
-export const login = async (credentials: UserType): Promise<AuthResponseType> => {
+export const login = async (credentials: UserType): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/users/login', credentials);
         return {
@@ -37,13 +33,9 @@ export const login = async (credentials: UserType): Promise<AuthResponseType> =>
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
 
@@ -55,7 +47,7 @@ export const logout = async (): Promise<void> => {
     }
 };
 
-export const refreshAccessToken = async (refreshToken: string): Promise<AuthResponseType> => {
+export const refreshAccessToken = async (refreshToken: string): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/users/refresh', { refreshToken });
         return {
@@ -63,12 +55,8 @@ export const refreshAccessToken = async (refreshToken: string): Promise<AuthResp
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
