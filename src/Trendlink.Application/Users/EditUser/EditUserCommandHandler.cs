@@ -3,7 +3,6 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Application.Users.EditUser

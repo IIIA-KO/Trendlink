@@ -9,13 +9,6 @@ namespace Trendlink.Infrastructure.Repositories
         : Repository<Cooperation, CooperationId>,
             ICooperationRepository
     {
-        private static readonly CooperationStatus[] ActiveCooperationStatuses =
-        [
-            CooperationStatus.Pending,
-            CooperationStatus.Confirmed,
-            CooperationStatus.Completed
-        ];
-
         public CooperationRepository(ApplicationDbContext dbContext)
             : base(dbContext) { }
 
@@ -31,7 +24,22 @@ namespace Trendlink.Infrastructure.Repositories
                     cooperation =>
                         cooperation.AdvertisementId == advertisement.Id
                         && cooperation.ScheduledOnUtc == scheduledOnUtc
-                        && ActiveCooperationStatuses.Contains(cooperation.Status),
+                        && Cooperation.ActiveCooperationStatuses.Contains(cooperation.Status),
+                    cancellationToken
+                );
+        }
+
+        public async Task<bool> HasActiveCooperationsForAdvertisement(
+            Advertisement advertisement,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                .dbContext.Set<Cooperation>()
+                .AnyAsync(
+                    cooperation =>
+                        cooperation.AdvertisementId == advertisement.Id
+                        && Cooperation.ActiveCooperationStatuses.Contains(cooperation.Status),
                     cancellationToken
                 );
         }

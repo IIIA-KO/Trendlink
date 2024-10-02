@@ -8,6 +8,9 @@
 
         public static readonly Error Unexpected =
             new("Error.Unexpected", "Unexpected error occured");
+
+        public static readonly NotFoundError NoData =
+            new("Error.NotFoundError", "No data was found");
     }
 
     public record NotFoundError : Error

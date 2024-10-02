@@ -1,8 +1,6 @@
-﻿using Trendlink.Application.Abstractions.Messaging;
-
-namespace Trendlink.Application.Abstractions.Caching
+﻿namespace Trendlink.Application.Abstractions.Caching
 {
-    public interface ICachedQuery<TReposnse> : IQuery<TReposnse>, ICachedQuery;
+    public interface ICachedQuery<TReposnse> : Messaging.IQuery<TReposnse>, ICachedQuery;
 
     public interface ICachedQuery
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
-using Trendlink.Infrastructure.Authentication.Instagram;
+using Trendlink.Infrastructure.Instagram;
 
 namespace Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts
 {

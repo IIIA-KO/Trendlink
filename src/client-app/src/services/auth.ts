@@ -13,7 +13,7 @@ export const register = async (data: {
     stateId: string;
 }): Promise<AuthResponseType | null> => {
     try {
-        const response = await axiosInstance.post('/users/register', data);
+        const response = await axiosInstance.post('/accounts/register', data);
         return {
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,
@@ -27,7 +27,7 @@ export const register = async (data: {
 
 export const login = async (credentials: UserType): Promise<AuthResponseType | null> => {
     try {
-        const response = await axiosInstance.post('/users/login', credentials);
+        const response = await axiosInstance.post('/accounts/login', credentials);
         return {
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,
@@ -41,7 +41,7 @@ export const login = async (credentials: UserType): Promise<AuthResponseType | n
 
 export const logout = async (): Promise<void> => {
     try {
-        await axiosInstance.post('/users/logout');
+        await axiosInstance.post('/accounts/logout');
     } catch (error) {
         handleError(error);
     }
@@ -49,7 +49,7 @@ export const logout = async (): Promise<void> => {
 
 export const refreshAccessToken = async (refreshToken: string): Promise<AuthResponseType | null> => {
     try {
-        const response = await axiosInstance.post('/users/refresh', { refreshToken });
+        const response = await axiosInstance.post('/accounts/refresh', { refreshToken });
         return {
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,

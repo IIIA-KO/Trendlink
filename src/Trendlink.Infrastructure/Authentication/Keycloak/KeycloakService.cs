@@ -7,9 +7,8 @@ using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Infrastructure.Authentication.Models;
-using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
+using AccessTokenResponse = Trendlink.Application.Users.Authentication.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Authentication.Keycloak
@@ -239,16 +238,45 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
             return isLinked;
         }
 
+        public async Task<Result> DeleteAccountAsync(
+            string userIdentityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
+
+            string url =
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Delete, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                this._logger.LogError(
+                    "Failed to delete account for user {UserIdentityId}.",
+                    userIdentityId
+                );
+                return Result.Failure(UserErrors.FailedDeleteAccount);
+            }
+
+            this._logger.LogInformation(
+                "User with ID {UserId} successfully deleted.",
+                userIdentityId
+            );
+            return Result.Success();
+        }
+
         public async Task<bool> CheckUserExistsInKeycloak(
             string email,
             CancellationToken cancellationToken = default
         )
         {
-            this._logger.LogInformation(
-                "Checking if user with email {Email} exists in Keycloak",
-                MaskEmail(email)
-            );
-
             string requestUrl =
                 $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users?email={email}";
 
@@ -262,37 +290,8 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
                 cancellationToken
             );
 
-            bool exists =
-                response.IsSuccessStatusCode
+            return response.IsSuccessStatusCode
                 && (await response.Content.ReadAsStringAsync(cancellationToken)).Contains(email);
-
-            this._logger.LogInformation(
-                "User with email {Email} {Exists} in Keycloak",
-                MaskEmail(email),
-                exists ? "exists" : "does not exist"
-            );
-
-            return exists;
-        }
-
-        private static string MaskEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return email;
-            }
-
-            int atIndex = email.IndexOf('@', StringComparison.InvariantCultureIgnoreCase);
-            if (atIndex <= 1)
-            {
-                return email;
-            }
-
-            return string.Concat(
-                email.AsSpan(0, 1),
-                new string('*', atIndex - 1),
-                email.AsSpan(atIndex)
-            );
         }
 
         private async Task<string> GetAdminAccessTokenAsync(CancellationToken cancellationToken)
