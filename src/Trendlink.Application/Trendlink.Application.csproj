@@ -46,4 +46,8 @@
 	    <LastGenOutput>NotificationMessages.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Reviews\GetAdvertisementReviews\" />
+	</ItemGroup>
 </Project>

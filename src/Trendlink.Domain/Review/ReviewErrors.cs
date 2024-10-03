@@ -9,5 +9,13 @@ namespace Trendlink.Domain.Review
                 "Review.NotEligible",
                 "The review is not eligible because the cooperation is not yet completed"
             );
+
+        public static readonly Error InvalidComment =
+            new("Review.InvalidComment", "The provided comment is invalid");
+
+        public static readonly NotFoundError NotFound = new NotFoundError(
+            "Review.NotFound",
+            "The review with the specified identifier was not found"
+        );
     }
 }

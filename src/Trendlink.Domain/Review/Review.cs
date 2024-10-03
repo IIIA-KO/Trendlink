@@ -68,5 +68,18 @@ namespace Trendlink.Domain.Review
 
             return review;
         }
+
+        public Result Update(Rating rating, Comment comment)
+        {
+            if (string.IsNullOrEmpty(comment.Value))
+            {
+                return Result.Failure(ReviewErrors.InvalidComment);
+            }
+
+            this.Rating = rating;
+            this.Comment = comment;
+
+            return Result.Success();
+        }
     }
 }
