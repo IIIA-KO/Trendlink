@@ -3,18 +3,17 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Review;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Reviews.EditReview
+namespace Trendlink.Application.Reviews.DeleteReview
 {
-    internal sealed class EditReviewCommandHandler : ICommandHandler<EditReviewCommand>
+    internal sealed class DeleteReviewCommandHandler : ICommandHandler<DeleteReviewCommand>
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IUserContext _userContext;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EditReviewCommandHandler(
+        public DeleteReviewCommandHandler(
             IReviewRepository reviewRepository,
             IUserContext userContext,
             IUnitOfWork unitOfWork
@@ -26,7 +25,7 @@ namespace Trendlink.Application.Reviews.EditReview
         }
 
         public async Task<Result> Handle(
-            EditReviewCommand request,
+            DeleteReviewCommand request,
             CancellationToken cancellationToken
         )
         {
@@ -39,22 +38,12 @@ namespace Trendlink.Application.Reviews.EditReview
                 return Result.Failure(ReviewErrors.NotFound);
             }
 
-            if (this._userContext.UserId != review.BuyerId)
+            if (this._userContext.UserId != review!.BuyerId)
             {
                 return Result.Failure(UserErrors.NotAuthorized);
             }
 
-            Result<Rating> ratingResult = Rating.Create(request.Rating);
-            if (ratingResult.IsFailure)
-            {
-                return ratingResult;
-            }
-
-            Result result = review.Update(ratingResult.Value, request.Comment);
-            if (result.IsFailure)
-            {
-                return result;
-            }
+            this._reviewRepository.Remove(review);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
 

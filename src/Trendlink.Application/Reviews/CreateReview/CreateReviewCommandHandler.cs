@@ -52,6 +52,16 @@ namespace Trendlink.Application.Reviews.CreateReview
                 return Result.Failure(UserErrors.NotAuthorized);
             }
 
+            Review? review = await this._reviewRepository.GetByCooperationIdAndBuyerIdAsync(
+                request.CooperationId,
+                cooperation.BuyerId,
+                cancellationToken
+            );
+            if (review is not null)
+            {
+                return Result.Failure(ReviewErrors.AlreadyReviewed);
+            }
+
             Result<Rating> ratingResult = Rating.Create(request.Rating);
             if (ratingResult.IsFailure)
             {

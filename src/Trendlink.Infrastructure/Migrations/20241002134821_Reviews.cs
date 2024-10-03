@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,7 +20,10 @@ namespace Trendlink.Infrastructure.Migrations
                     cooperation_id = table.Column<Guid>(type: "uuid", nullable: false),
                     comment = table.Column<string>(type: "text", nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
-                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_on_utc = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    )
                 },
                 constraints: table =>
                 {
@@ -31,47 +33,50 @@ namespace Trendlink.Infrastructure.Migrations
                         column: x => x.advertisement_id,
                         principalTable: "advertisements",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "fk_reviews_cooperations_cooperation_id",
                         column: x => x.cooperation_id,
                         principalTable: "cooperations",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade
+                    );
                     table.ForeignKey(
                         name: "fk_reviews_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_reviews_advertisement_id",
                 table: "reviews",
-                column: "advertisement_id");
+                column: "advertisement_id"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "ix_reviews_cooperation_id",
                 table: "reviews",
-                column: "cooperation_id");
+                column: "cooperation_id"
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "ix_reviews_id",
-                table: "reviews",
-                column: "id");
+            migrationBuilder.CreateIndex(name: "ix_reviews_id", table: "reviews", column: "id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_reviews_user_id",
                 table: "reviews",
-                column: "user_id");
+                column: "user_id"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "reviews");
+            migrationBuilder.DropTable(name: "reviews");
         }
     }
 }

@@ -17,5 +17,11 @@ namespace Trendlink.Domain.Review
             "Review.NotFound",
             "The review with the specified identifier was not found"
         );
+
+        public static readonly Error AlreadyReviewed =
+            new(
+                "Review.AlreadyReviewed",
+                "The user has already left a review for this cooperation"
+            );
     }
 }

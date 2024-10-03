@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using Trendlink.Domain.Abstraction;
+﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Review.DomainEvents;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
@@ -69,8 +67,6 @@ namespace Trendlink.Domain.Review
                 comment,
                 createdOnUtc
             );
-
-            review.RaiseDomainEvent(new ReviewCreatedDomainEvent(review.Id));
 
             return review;
         }

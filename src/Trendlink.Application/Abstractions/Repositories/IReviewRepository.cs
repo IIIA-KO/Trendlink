@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Review;
+﻿using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Review;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Repositories
@@ -7,10 +8,18 @@ namespace Trendlink.Application.Abstractions.Repositories
     {
         Task<Review?> GetByIdAsync(ReviewId id, CancellationToken cancellationToken = default);
 
+        Task<Review?> GetByCooperationIdAndBuyerIdAsync(
+            CooperationId cooperationId,
+            UserId buyerId,
+            CancellationToken cancellationToken = default
+        );
+
         void Add(Review review);
 
-        void Remove(Review user);
+        void Remove(Review review);
 
-        Task<int> CountUserReviews(UserId sellerId, CancellationToken cancellationToken = default);
+        IQueryable<Review> SearchReviews(ReviewSearchParameters parameters, UserId sellerId);
     }
+
+    public sealed record ReviewSearchParameters(string? SearchTerm, int? Rating);
 }
