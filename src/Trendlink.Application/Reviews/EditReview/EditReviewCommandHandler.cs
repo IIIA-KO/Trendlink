@@ -38,7 +38,7 @@ namespace Trendlink.Application.Reviews.EditReview
                 return Result.Failure(ReviewErrors.NotFound);
             }
 
-            if (this._userContext.UserId != review.UserId)
+            if (this._userContext.UserId != review.BuyerId)
             {
                 return Result.Failure(UserErrors.NotAuthorized);
             }

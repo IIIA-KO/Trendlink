@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Review;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Configurations
@@ -32,9 +33,23 @@ namespace Trendlink.Infrastructure.Configurations
                 .WithMany()
                 .HasForeignKey(review => review.AdvertisementId);
 
-            builder.HasOne<User>().WithMany().HasForeignKey(review => review.UserId);
+            builder
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(review => review.BuyerId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne<Cooperation>().WithMany().HasForeignKey(review => review.CooperationId);
+            builder
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(review => review.SellerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasOne<Cooperation>()
+                .WithMany()
+                .HasForeignKey(review => review.CooperationId)
+                .IsRequired();
         }
     }
 }

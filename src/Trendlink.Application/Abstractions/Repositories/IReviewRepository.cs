@@ -1,4 +1,5 @@
 ﻿using Trendlink.Domain.Review;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {
@@ -9,5 +10,7 @@ namespace Trendlink.Application.Abstractions.Repositories
         void Add(Review review);
 
         void Remove(Review user);
+
+        Task<int> CountUserReviews(UserId sellerId, CancellationToken cancellationToken = default);
     }
 }

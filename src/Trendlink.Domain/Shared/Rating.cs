@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 
-namespace Trendlink.Domain.Review
+namespace Trendlink.Domain.Shared
 {
     public sealed record Rating
     {

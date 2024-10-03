@@ -3,6 +3,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Review.DomainEvents;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Review
@@ -11,7 +12,8 @@ namespace Trendlink.Domain.Review
     {
         public Review(
             ReviewId id,
-            UserId userId,
+            UserId buyerId,
+            UserId sellerId,
             AdvertisementId advertisementId,
             CooperationId cooperationId,
             Rating rating,
@@ -20,7 +22,8 @@ namespace Trendlink.Domain.Review
         )
             : base(id)
         {
-            this.UserId = userId;
+            this.BuyerId = buyerId;
+            this.SellerId = sellerId;
             this.AdvertisementId = advertisementId;
             this.CooperationId = cooperationId;
             this.Rating = rating;
@@ -30,7 +33,9 @@ namespace Trendlink.Domain.Review
 
         private Review() { }
 
-        public UserId UserId { get; private set; }
+        public UserId BuyerId { get; private set; }
+
+        public UserId SellerId { get; private set; }
 
         public AdvertisementId AdvertisementId { get; private set; }
 
@@ -57,6 +62,7 @@ namespace Trendlink.Domain.Review
             var review = new Review(
                 ReviewId.New(),
                 cooperation.BuyerId,
+                cooperation.SellerId,
                 cooperation.AdvertisementId,
                 cooperation.Id,
                 rating,

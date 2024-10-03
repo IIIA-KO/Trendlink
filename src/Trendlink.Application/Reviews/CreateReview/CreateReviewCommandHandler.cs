@@ -5,6 +5,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Review;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Reviews.CreateReview

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Trendlink.Domain.Conditions;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
@@ -77,6 +78,10 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .HasForeignKey<InstagramAccount>(instagramAccount => instagramAccount.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired(false);
+
+            builder
+                .Property(user => user.Rating)
+                .HasConversion(rating => rating.Value, value => Rating.Create(value).Value);
 
             builder
                 .Property(user => user.PhoneNumber)
