@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Specifications.Reviews;
 

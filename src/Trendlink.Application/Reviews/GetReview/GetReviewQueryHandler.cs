@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 
 namespace Trendlink.Application.Reviews.GetReview
 {

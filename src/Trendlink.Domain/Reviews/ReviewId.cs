@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Domain.Review
+﻿namespace Trendlink.Domain.Reviews
 {
     public sealed record ReviewId(Guid Value)
     {

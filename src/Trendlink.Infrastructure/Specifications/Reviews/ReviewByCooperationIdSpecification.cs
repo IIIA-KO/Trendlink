@@ -1,5 +1,5 @@
 ﻿using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 
 namespace Trendlink.Infrastructure.Specifications.Reviews
 {

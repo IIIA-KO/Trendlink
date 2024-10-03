@@ -1,6 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 
 namespace Trendlink.Application.Reviews.CreateReview
 {

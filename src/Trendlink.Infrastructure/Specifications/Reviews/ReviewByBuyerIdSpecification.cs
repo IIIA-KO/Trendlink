@@ -1,4 +1,4 @@
-﻿using Trendlink.Domain.Review;
+﻿using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Specifications.Reviews

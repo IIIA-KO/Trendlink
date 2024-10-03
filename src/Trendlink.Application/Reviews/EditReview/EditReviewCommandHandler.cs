@@ -2,7 +2,7 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 

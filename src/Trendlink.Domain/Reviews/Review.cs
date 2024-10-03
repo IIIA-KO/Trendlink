@@ -4,7 +4,7 @@ using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Domain.Review
+namespace Trendlink.Domain.Reviews
 {
     public sealed class Review : Entity<ReviewId>
     {
