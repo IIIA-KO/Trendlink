@@ -12,7 +12,8 @@ namespace Trendlink.Application.UnitTests.Cooperations
 {
     public class RejectCooperationTests : CooperationBaseTest
     {
-        public static readonly RejectCooperationCommand Command = new(CooperationData.Create().Id);
+        public static readonly RejectCooperationCommand Command =
+            new(CooperationData.CreatePendingCooperation().Id);
 
         private readonly ICooperationRepository _cooperationRepositoryMock;
         private readonly IUserContext _userContextMock;

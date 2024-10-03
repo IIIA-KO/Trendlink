@@ -47,10 +47,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(Task.FromResult<User?>(null));
 
             // Act
-            Result<AudienceGenderStatistics> result = await this._handler.Handle(
-                Query,
-                CancellationToken.None
-            );
+            Result<GenderRatio> result = await this._handler.Handle(Query, CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -77,10 +74,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(Task.FromResult(false));
 
             // Act
-            Result<AudienceGenderStatistics> result = await this._handler.Handle(
-                Query,
-                CancellationToken.None
-            );
+            Result<GenderRatio> result = await this._handler.Handle(Query, CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();
@@ -91,7 +85,7 @@ namespace Trendlink.Application.UnitTests.Instagram
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
-            var audienceData = new AudienceGenderStatistics(
+            var audienceData = new GenderRatio(
                 [
                     new() { Gender = "male", Percentage = 60 },
                     new() { Gender = "female", Percentage = 40 }
@@ -129,10 +123,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 .Returns(audienceData);
 
             // Act
-            Result<AudienceGenderStatistics> result = await this._handler.Handle(
-                Query,
-                CancellationToken.None
-            );
+            Result<GenderRatio> result = await this._handler.Handle(Query, CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();

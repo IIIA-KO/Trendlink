@@ -96,7 +96,7 @@ namespace Trendlink.Application.UnitTests.Instagram
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(UserErrors.InvalidCredentials);
+            result.Error.Should().Be(Error.NullValue);
         }
     }
 }

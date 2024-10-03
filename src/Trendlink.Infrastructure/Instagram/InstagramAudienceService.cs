@@ -6,7 +6,6 @@ using Trendlink.Application.Instagarm.Audience.GetAudienceAgeRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceGenderRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceLocationRatio;
 using Trendlink.Application.Instagarm.Audience.GetAudienceReachRatio;
-using Trendlink.Application.Instagarm.Statistics.GetEngagementStatistics;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Infrastructure.Instagram.Abstraction;
 using static System.Text.Json.JsonElement;
