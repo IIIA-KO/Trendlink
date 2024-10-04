@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
     const handleSubmit = async (values: { email: string; password: string }) => {
         try {
             const userData = await login(values);
-            authLogin(userData);
+            authLogin(userData!);
             navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
