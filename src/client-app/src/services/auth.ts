@@ -1,5 +1,5 @@
 import axiosInstance from './api';
-import { UserType } from '../types/UserType';
+import { UserLoginType } from '../types/UserLoginType';
 import { AuthResponseType } from '../types/AuthResponseType'
 import {handleError} from "../utils/handleError";
 
@@ -25,7 +25,7 @@ export const register = async (data: {
     }
 };
 
-export const login = async (credentials: UserType): Promise<AuthResponseType | null> => {
+export const login = async (credentials: UserLoginType): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/accounts/login', credentials);
         return {
