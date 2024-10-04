@@ -9,6 +9,7 @@ import newLocal_3 from "../assets/icons/instagram-icon.svg";
 import newLocal_4 from "../assets/icons/facebook-icon.svg";
 import newLocal_5 from "../assets/-3-2.svg";
 import {ProfileHeaderType} from "../types/ProfileHeaderType";
+import {useProfile} from "../hooks/useProfile";
 
 const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
   className = "",
@@ -39,8 +40,18 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
     };
   }, [divTextDecoration]);
 
+  const { user, loading, error } = useProfile();
+
+  if (loading) {
+    return <p>Завантаження...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
+
     <div
       className={`w-[926px] !m-[0] absolute top-[35px] left-[-10px] flex flex-row items-start justify-between max-w-full gap-5 z-[2] text-left text-base text-main-black font-inter mq1050:flex-wrap ${className}`}
       style={profileHeaderStyle}
@@ -58,7 +69,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
               <div className="flex-1 flex flex-col items-start justify-start gap-2.5 min-w-[131px]">
                 <div className="self-stretch flex flex-col items-start justify-start gap-[9px]">
                   <a className="[text-decoration:none] relative font-bold text-[inherit]">
-                    Давиденко Наталія
+                    {user?.firstName} {user?.lastName}
                   </a>
                   <div className="self-stretch h-[19px] flex flex-row items-start justify-start pt-0 px-0 pb-1 box-border gap-2 text-gray-200">
                     <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">

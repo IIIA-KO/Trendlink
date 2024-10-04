@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/Routes/ProtectedRoute';
 import {lazy, Suspense} from "react";
 import LoadingPage from "./pages/LoadingPage";
+import {ProfileProvider} from "./context/ProfileContext";
 
 const AuthPage = lazy(() =>import("./pages/AuthPage"));
 const CallBackPage = lazy(() =>import("./pages/CallBackPage"));
@@ -28,11 +29,7 @@ const App: React.FC = () => {
                         <Route path="/statisticengagment" element={<StaticsEngagementPage />}/>
                         <Route path="/statisticPublicationsPage" element={<StaticsPublicationsPage />}/>
                         <Route path="/statisticHistoryPage" element={<StaticsHistoryPage />}/>
-                        <Route path="/" element={
-                            <ProtectedRoute>
-                                <ProfilePage />
-                            </ProtectedRoute>
-                        }/>
+                        <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage /></ProfileProvider></ProtectedRoute>}/>
                         <Route path="/404" element={<NotFoundPage />} />
                         <Route path="/500" element={<ServerErrorPage />} />
                         <Route path="*" element={<Navigate to="/404" replace />} />
