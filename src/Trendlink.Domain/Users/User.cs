@@ -66,8 +66,6 @@ namespace Trendlink.Domain.Users
 
         public InstagramAccount? InstagramAccount { get; set; }
 
-        public Rating Rating { get; private set; }
-
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 
         public IReadOnlyCollection<Notification> Notifications => this._notifications.AsReadOnly();
@@ -224,13 +222,6 @@ namespace Trendlink.Domain.Users
                     expiresAt
                 )
             );
-        }
-
-        public void SetRating(Rating rating)
-        {
-            ArgumentNullException.ThrowIfNull(rating);
-
-            this.Rating = rating;
         }
     }
 }
