@@ -5,16 +5,16 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Users.Authentication.RegisterUser
+namespace Trendlink.Application.Accounts.RegisterUser
 {
-    internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, UserId>
+    internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, UserId>
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
         private readonly IStateRepository _stateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RegisterUserCommandHandler(
+        public RegisterCommandHandler(
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
             IStateRepository stateRepository,
@@ -28,7 +28,7 @@ namespace Trendlink.Application.Users.Authentication.RegisterUser
         }
 
         public async Task<Result<UserId>> Handle(
-            RegisterUserCommand request,
+            RegisterCommand request,
             CancellationToken cancellationToken
         )
         {

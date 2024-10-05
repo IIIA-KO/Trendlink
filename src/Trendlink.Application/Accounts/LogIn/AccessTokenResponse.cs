@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Users.Authentication.LogInUser
+﻿namespace Trendlink.Application.Accounts.LogInUser
 {
     public sealed record AccessTokenResponse(
         string AccessToken,

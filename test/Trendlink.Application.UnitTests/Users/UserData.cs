@@ -1,4 +1,4 @@
-﻿using Trendlink.Application.Users.Authentication.LogInUser;
+﻿using Trendlink.Application.Accounts.LogInUser;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;

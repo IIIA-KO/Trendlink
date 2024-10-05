@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trendlink.Api.Controllers.Users;
-using Trendlink.Application.Users.Authentication.LogInUser;
-using Trendlink.Application.Users.Authentication.LoginUserWithGoogle;
-using Trendlink.Application.Users.Authentication.RefreshToken;
-using Trendlink.Application.Users.Authentication.RegisterUser;
-using Trendlink.Application.Users.Authentication.RegisterUserWithGoogle;
-using Trendlink.Application.Users.DeleteUserAccount;
+using Trendlink.Application.Accounts.DeleteUserAccount;
+using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LoginUserWithGoogle;
+using Trendlink.Application.Accounts.RefreshToken;
+using Trendlink.Application.Accounts.RegisterUser;
+using Trendlink.Application.Accounts.RegisterUserWithGoogle;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
@@ -22,7 +22,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new RegisterUserCommand(
+            var command = new RegisterCommand(
                 new FirstName(request.FirstName),
                 new LastName(request.LastName),
                 request.BirthDate,
@@ -42,7 +42,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new LogInUserCommand(new Email(request.Email), request.Password);
+            var command = new LogInCommand(new Email(request.Email), request.Password);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
@@ -54,7 +54,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new RegisterUserWithGoogleCommand(
+            var command = new RegisterWithGoogleCommand(
                 request.Code,
                 request.BirthDate,
                 new PhoneNumber(request.PhoneNumber),
@@ -71,7 +71,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new LogInUserWithGoogleCommand(request.Code);
+            var command = new LoginWithGoogleCommand(request.Code);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
@@ -90,7 +90,7 @@ namespace Trendlink.Api.Controllers.Accounts
         [HttpDelete]
         public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
         {
-            var command = new DeleteUserAccountCommand();
+            var command = new DeleteAccountCommand();
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

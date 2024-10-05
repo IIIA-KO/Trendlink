@@ -8,7 +8,7 @@ using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Authentication.Models;
-using AccessTokenResponse = Trendlink.Application.Users.Authentication.LogInUser.AccessTokenResponse;
+using AccessTokenResponse = Trendlink.Application.Accounts.LogInUser.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Authentication.Keycloak

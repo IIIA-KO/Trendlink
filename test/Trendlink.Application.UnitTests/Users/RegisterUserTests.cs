@@ -3,7 +3,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Users.Authentication.RegisterUser;
+using Trendlink.Application.Accounts.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
@@ -12,7 +12,7 @@ namespace Trendlink.Application.UnitTests.Users
 {
     public class RegisterUserTests
     {
-        private static readonly RegisterUserCommand Command =
+        private static readonly RegisterCommand Command =
             new(
                 UserData.FirstName,
                 UserData.LastName,
@@ -23,7 +23,7 @@ namespace Trendlink.Application.UnitTests.Users
                 UserData.State.Id
             );
 
-        private readonly RegisterUserCommandHandler _handler;
+        private readonly RegisterCommandHandler _handler;
 
         private readonly IAuthenticationService _authenticationServiceMock;
         private readonly IUserRepository _userRepositoryMock;
@@ -37,7 +37,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._stateRepositoryMock = Substitute.For<IStateRepository>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
-            this._handler = new RegisterUserCommandHandler(
+            this._handler = new RegisterCommandHandler(
                 this._authenticationServiceMock,
                 this._userRepositoryMock,
                 this._stateRepositoryMock,
@@ -86,7 +86,7 @@ namespace Trendlink.Application.UnitTests.Users
                 .Returns(true);
 
             // Act
-            var invalidCommand = new RegisterUserCommand(
+            var invalidCommand = new RegisterCommand(
                 new FirstName(string.Empty),
                 UserData.LastName,
                 UserData.BirthDate,

@@ -4,9 +4,9 @@ using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Repositories;
+using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.RegisterUserWithGoogle;
 using Trendlink.Application.Exceptions;
-using Trendlink.Application.Users.Authentication.LogInUser;
-using Trendlink.Application.Users.Authentication.RegisterUserWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
@@ -15,13 +15,12 @@ namespace Trendlink.Application.UnitTests.Users
 {
     public class RegisterUserWithGoogleTests
     {
-        private static readonly RegisterUserWithGoogleCommand Command =
-            new RegisterUserWithGoogleCommand(
-                UserData.Code,
-                UserData.BirthDate,
-                UserData.PhoneNumber,
-                UserData.State.Id
-            );
+        private static readonly RegisterWithGoogleCommand Command = new RegisterWithGoogleCommand(
+            UserData.Code,
+            UserData.BirthDate,
+            UserData.PhoneNumber,
+            UserData.State.Id
+        );
 
         private readonly IGoogleService _googleServiceMock;
         private readonly IKeycloakService _keycloakServiceMock;
@@ -31,7 +30,7 @@ namespace Trendlink.Application.UnitTests.Users
         private readonly IStateRepository _stateRepositoryMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
-        private readonly RegisterUserWithGoogleCommandHandler _handler;
+        private readonly RegisterWithGoogleCommandHandler _handler;
 
         public RegisterUserWithGoogleTests()
         {
@@ -43,7 +42,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._stateRepositoryMock = Substitute.For<IStateRepository>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
-            this._handler = new RegisterUserWithGoogleCommandHandler(
+            this._handler = new RegisterWithGoogleCommandHandler(
                 this._googleServiceMock,
                 this._keycloakServiceMock,
                 this._authenticationServiceMock,
@@ -181,7 +180,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._keycloakServiceMock.CheckUserExistsInKeycloak(userInfo.Email, default)
                 .Returns(false);
 
-            var invalidCommand = new RegisterUserWithGoogleCommand(
+            var invalidCommand = new RegisterWithGoogleCommand(
                 UserData.Code,
                 DateOnly.FromDateTime(DateTime.Now),
                 UserData.PhoneNumber,

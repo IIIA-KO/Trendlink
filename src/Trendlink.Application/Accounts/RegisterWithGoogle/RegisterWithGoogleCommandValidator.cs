@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
+namespace Trendlink.Application.Accounts.RegisterUserWithGoogle
 {
-    internal sealed class RegisterUserWithGoogleCommandValidator
-        : AbstractValidator<RegisterUserWithGoogleCommand>
+    internal sealed class RegisterWithGoogleCommandValidator
+        : AbstractValidator<RegisterWithGoogleCommand>
     {
-        public RegisterUserWithGoogleCommandValidator()
+        public RegisterWithGoogleCommandValidator()
         {
             this.RuleFor(c => c.BirthDate)
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow.Date.AddYears(-18)))
