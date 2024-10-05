@@ -1,16 +1,6 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
-import newLocal from "../public/skilliconsinstagram.svg";
-
-export type Component1Type = {
-  className?: string;
-
-  /** Style props */
-  propFlex?: CSSProperties["flex"];
-  propPosition?: CSSProperties["position"];
-  propTop?: CSSProperties["top"];
-  propLeft?: CSSProperties["left"];
-  propWidth?: CSSProperties["width"];
-};
+import newLocal from "../assets/skilliconsinstagram.svg";
+import {Component1Type} from "../types/Component1Type";
 
 const Component1: FunctionComponent<Component1Type> = ({
   className = "",

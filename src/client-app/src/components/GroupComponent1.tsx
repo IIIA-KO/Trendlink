@@ -1,12 +1,9 @@
 import { FunctionComponent } from "react";
 import "antd/dist/reset.css";
 import { Input } from "antd";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type GroupComponent1Type = {
-  className?: string;
-};
-
-const GroupComponent1: FunctionComponent<GroupComponent1Type> = ({
+const GroupComponent1: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (

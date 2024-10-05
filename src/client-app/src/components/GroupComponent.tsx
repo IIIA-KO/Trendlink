@@ -1,10 +1,7 @@
 import { FunctionComponent } from "react";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type GroupComponentType = {
-  className?: string;
-};
-
-const GroupComponent: FunctionComponent<GroupComponentType> = ({
+const GroupComponent: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
@@ -17,7 +14,7 @@ const GroupComponent: FunctionComponent<GroupComponentType> = ({
           className="w-4 h-4 relative object-cover z-[1]"
           loading="lazy"
           alt=""
-          src="/actions--formatting--edit--25@2x.png"
+          src="/src/assets/actions--formatting--edit--25@2x.png"
         />
         <div className="self-stretch flex flex-row items-start justify-start max-w-full">
           <div className="flex flex-row items-end justify-start gap-[19px] max-w-full mq750:flex-wrap">
@@ -43,7 +40,7 @@ const GroupComponent: FunctionComponent<GroupComponentType> = ({
                       className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px] z-[1]"
                       loading="lazy"
                       alt=""
-                      src="/fluentemojiflatspiralcalendar1.svg"
+                      src="/src/assets/fluentemojiflatspiralcalendar1.svg"
                     />
                     <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
                       <b className="relative inline-block min-w-[110px] z-[1]">
@@ -56,7 +53,7 @@ const GroupComponent: FunctionComponent<GroupComponentType> = ({
                       className="h-5 w-5 relative overflow-hidden shrink-0 min-h-[20px] z-[1]"
                       loading="lazy"
                       alt=""
-                      src="/fluentemojiflatalarmclock.svg"
+                      src="/src/assets/fluentemojiflatalarmclock.svg"
                     />
                     <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
                       <b className="relative inline-block min-w-[39px] z-[1]">

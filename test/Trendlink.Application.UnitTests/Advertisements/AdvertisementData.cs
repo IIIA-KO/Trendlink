@@ -9,6 +9,16 @@ namespace Trendlink.Application.UnitTests.Advertisements
         public static Advertisement Create() =>
             Advertisement.Create(ConditionId, Name, Price, Description).Value;
 
+        public static Advertisement Create(decimal price, string currencyCode) =>
+            Advertisement
+                .Create(
+                    ConditionId,
+                    Name,
+                    new Money(price, Currency.FromCode(currencyCode)),
+                    Description
+                )
+                .Value;
+
         public static readonly AdvertisementId AdvertisementId = AdvertisementId.New();
 
         public static readonly ConditionId ConditionId = ConditionId.New();

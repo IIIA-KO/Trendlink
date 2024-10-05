@@ -1,21 +1,5 @@
 import { FunctionComponent, memo, useMemo, type CSSProperties } from "react";
-
-export type FrameComponent2Type = {
-  className?: string;
-  bG?: string;
-
-  /** Style props */
-  propTop?: CSSProperties["top"];
-  propHeight?: CSSProperties["height"];
-  propTop1?: CSSProperties["top"];
-  propTop2?: CSSProperties["top"];
-  propWidth?: CSSProperties["width"];
-  propDisplay?: CSSProperties["display"];
-  propMinWidth?: CSSProperties["minWidth"];
-  propDisplay1?: CSSProperties["display"];
-  propMinWidth1?: CSSProperties["minWidth"];
-  propMinWidth2?: CSSProperties["minWidth"];
-};
+import {FrameComponent2Type} from "../types/FrameComponent2Type";
 
 const FrameComponent2: FunctionComponent<FrameComponent2Type> = memo(
   ({
@@ -95,7 +79,7 @@ const FrameComponent2: FunctionComponent<FrameComponent2Type> = memo(
             className="absolute top-[32.563rem] left-[53.938rem] w-[0.938rem] h-[0.938rem] overflow-hidden z-[1]"
             loading="lazy"
             alt=""
-            src="/-2-2.svg"
+            src="/src/assets/-2-2.svg"
             style={icon10Style}
           />
         </div>
@@ -126,7 +110,7 @@ const FrameComponent2: FunctionComponent<FrameComponent2Type> = memo(
                   className="h-[0.938rem] w-[0.938rem] relative object-cover"
                   loading="lazy"
                   alt=""
-                  src="/actions--toggle--favorite--24@2x.png"
+                  src="/src/assets/actions--toggle--favorite--24@2x.png"
                 />
               </div>
               <div className="relative text-[0.875rem]">
@@ -145,7 +129,7 @@ const FrameComponent2: FunctionComponent<FrameComponent2Type> = memo(
                   className="h-[0.938rem] w-[0.938rem] relative object-cover"
                   loading="lazy"
                   alt=""
-                  src="/actions--operations--chat--24@2x.png"
+                  src="/src/assets/actions--operations--chat--24@2x.png"
                 />
               </div>
               <div className="relative text-[0.875rem] tracking-[-0.01px]">

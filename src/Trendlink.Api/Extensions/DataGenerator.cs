@@ -19,7 +19,13 @@ namespace Trendlink.Api.Extensions
 
         private sealed record CountryDto(string Name, string Iso2, List<StateDto> States);
 
-        private static readonly string[] UnsupportedCountries = ["Russia", "Belarus"];
+        private static readonly string[] UnsupportedCountries =
+        [
+            "Russia",
+            "Belarus",
+            "Iran",
+            "North Korea"
+        ];
 
         public static async Task<List<Country>> GenerateCountriesWithStatesAsync(
             Uri countriesApiUrl
@@ -41,11 +47,19 @@ namespace Trendlink.Api.Extensions
                 {
                     Country country = Country.Create(new CountryName(countryDto.Name)).Value;
 
-                    foreach (StateDto stateDto in countryDto.States)
+                    if (countryDto.States?.Any() != true)
                     {
-                        State state = State.Create(new StateName(stateDto.Name), country).Value;
-
+                        State state = State.Create(new StateName(countryDto.Name), country).Value;
                         country.States.Add(state);
+                    }
+                    else
+                    {
+                        foreach (StateDto stateDto in countryDto.States)
+                        {
+                            State state = State.Create(new StateName(stateDto.Name), country).Value;
+
+                            country.States.Add(state);
+                        }
                     }
 
                     countries.Add(country);

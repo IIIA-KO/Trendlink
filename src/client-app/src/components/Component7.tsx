@@ -1,10 +1,7 @@
 import { FunctionComponent, memo } from "react";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type Component7Type = {
-  className?: string;
-};
-
-const Component7: FunctionComponent<Component7Type> = memo(
+const Component7: FunctionComponent<ClassNameType> = memo(
   ({ className = "" }) => {
     return (
       <div
@@ -28,7 +25,7 @@ const Component7: FunctionComponent<Component7Type> = memo(
           <img
             className="h-[0.938rem] w-[0.938rem] relative shrink-0"
             alt=""
-            src="/actions--navigation--chevrondown--201.svg"
+            src="/src/assets/actions--navigation--chevrondown--201.svg"
           />
         </div>
       </div>

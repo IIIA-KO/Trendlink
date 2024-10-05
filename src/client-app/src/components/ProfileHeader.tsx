@@ -1,31 +1,15 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
-import EditButton from "./EditButton";
+import EditButton from "./Buttons/EditButton";
 import MenuSwitcher from "../components/PageSwitcher";
 import "./styleMenu.css";
-import newLocal from "../public/mynauitelephone.svg";
-import newLocal_1 from "../public/mageemail.svg";
-import newLocal_2 from "../public/tiktok-icon.svg";
-import newLocal_3 from "../public/instagram-icon.svg";
-import newLocal_4 from "/facebook-icon.svg";
-import newLocal_5 from "/-3-2.svg";
-
-export type ProfileHeaderType = {
-  className?: string;
-  profilePicture?: string;
-  group95?: string;
-  editButtonBorderRadius?: string;
-  editButtonBackgroundColor?: string;
-  editButtonOverflow?: string;
-  editButtonDisplay?: string;
-  editButtonFlexDirection?: string;
-  editButtonPadding?: string;
-
-  /** Style props */
-  groupDivLeft?: CSSProperties["left"];
-  groupDivTop?: CSSProperties["top"];
-  groupDivRight?: CSSProperties["right"];
-  divTextDecoration?: CSSProperties["textDecoration"];
-};
+import newLocal from "../assets/mynauitelephone.svg";
+import newLocal_1 from "../assets/mageemail.svg";
+import newLocal_2 from "../assets/icons/tiktok-icon.svg";
+import newLocal_3 from "../assets/icons/instagram-icon.svg";
+import newLocal_4 from "../assets/icons/facebook-icon.svg";
+import newLocal_5 from "../assets/-3-2.svg";
+import {ProfileHeaderType} from "../types/ProfileHeaderType";
+import {useProfile} from "../hooks/useProfile";
 
 const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
   className = "",
@@ -56,8 +40,18 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
     };
   }, [divTextDecoration]);
 
+  const { user, loading, error } = useProfile();
+
+  if (loading) {
+    return <p>Завантаження...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
+
     <div
       className={`w-[926px] !m-[0] absolute top-[35px] left-[-10px] flex flex-row items-start justify-between max-w-full gap-5 z-[2] text-left text-base text-main-black font-inter mq1050:flex-wrap ${className}`}
       style={profileHeaderStyle}
@@ -75,7 +69,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
               <div className="flex-1 flex flex-col items-start justify-start gap-2.5 min-w-[131px]">
                 <div className="self-stretch flex flex-col items-start justify-start gap-[9px]">
                   <a className="[text-decoration:none] relative font-bold text-[inherit]">
-                    Давиденко Наталія
+                    {user?.firstName} {user?.lastName}
                   </a>
                   <div className="self-stretch h-[19px] flex flex-row items-start justify-start pt-0 px-0 pb-1 box-border gap-2 text-gray-200">
                     <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">
@@ -84,7 +78,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                         <img
                           className="absolute h-[41.67%] w-[33.33%] top-[25%] right-[33.33%] bottom-[33.33%] left-[33.33%] max-w-full overflow-hidden max-h-full object-contain z-[1]"
                           alt=""
-                          src="/badge-shape.svg"
+                          src="/src/assets/badge-shape.svg"
                         />
                       </div>
                     </div>
@@ -115,7 +109,7 @@ const ProfileHeader: FunctionComponent<ProfileHeaderType> = ({
                       <img
                         className="w-[15px] h-[15px] relative object-cover shrink-0"
                         alt=""
-                        src="/planning--travel--location--24@2x.png"
+                        src="/src/assets/planning--travel--location--24@2x.png"
                       />
                     </div>
                     <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[54px] shrink-0">

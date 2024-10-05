@@ -1,26 +1,6 @@
 import { FunctionComponent, memo, useMemo, type CSSProperties } from "react";
-import EditButton from "./EditButton";
-
-export type FrameComponent3Type = {
-  className?: string;
-  profilePicture?: string;
-  group95?: string;
-  prop?: string;
-  editButtonBorderRadius?: string;
-  editButtonBackgroundColor?: string;
-  editButtonOverflow?: string;
-  editButtonDisplay?: string;
-  editButtonFlexDirection?: string;
-  editButtonPadding?: string;
-  editButtonPosition?: string;
-  editButtonTop?: string;
-  editButtonLeft?: string;
-  divDisplay?: string;
-  divMinWidth?: string;
-
-  /** Style props */
-  propTextDecoration?: CSSProperties["textDecoration"];
-};
+import EditButton from "./Buttons/EditButton";
+import {FrameComponent3Type} from "../types/FrameComponent3Type";
 
 const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
   ({
@@ -72,7 +52,7 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                         <img
                           className="absolute h-[41.67%] w-[33.33%] top-[25%] right-[33.33%] bottom-[33.33%] left-[33.33%] max-w-full overflow-hidden max-h-full object-contain z-[1]"
                           alt=""
-                          src="/badge-shape.svg"
+                          src="/src/assets/badge-shape.svg"
                         />
                       </div>
                     </div>
@@ -102,7 +82,7 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                         className="w-[0.938rem] h-[0.938rem] relative object-cover"
                         loading="lazy"
                         alt=""
-                        src="/planning--travel--location--24@2x.png"
+                        src="/src/assets/planning--travel--location--24@2x.png"
                       />
                     </div>
                     <a className="[text-decoration:none] relative text-[inherit] inline-block min-w-[3.938rem]">
@@ -131,7 +111,7 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                     <img
                       className="w-[0.625rem] h-[0.625rem] relative overflow-hidden shrink-0"
                       alt=""
-                      src="/mynauitelephone.svg"
+                      src="/src/assets/mynauitelephone.svg"
                     />
                   </div>
                   <div className="relative inline-block min-w-[7.313rem]">
@@ -144,7 +124,7 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                       <img
                         className="w-[0.688rem] h-[0.563rem] relative overflow-hidden shrink-0"
                         alt=""
-                        src="/mageemail.svg"
+                        src="/src/assets/mageemail.svg"
                       />
                     </div>
                     <div className="flex-1 relative inline-block min-w-[7.688rem] shrink-0">
@@ -159,25 +139,25 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/tiktok-icon.svg"
+                    src="/src/assets/icons/tiktok-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/instagram-icon.svg"
+                    src="/src/assets/icons/instagram-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/facebook-icon.svg"
+                    src="/src/assets/icons/facebook-icon.svg"
                   />
                   <img
                     className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
                     loading="lazy"
                     alt=""
-                    src="/-3-2.svg"
+                    src="/src/assets/-3-2.svg"
                   />
                 </div>
               </div>

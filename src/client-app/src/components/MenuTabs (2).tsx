@@ -1,13 +1,10 @@
 import { FunctionComponent, memo } from "react";
 import Component5 from "./Component5 (2)";
 import FrameComponent2 from "./FrameComponent2";
-import Component7 from "./Component7 (2)";
+import Component7 from "./Component7";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type MenuTabsType = {
-  className?: string;
-};
-
-const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
+const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => {
   return (
     <div
       className={`h-[56.688rem] w-[70.063rem] relative max-w-full text-left text-[0.875rem] text-[#3c3c3c] font-[Inter] mq750:h-auto mq750:min-h-[907] ${className}`}
@@ -167,7 +164,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/.svg"
+              src="/src/assets/.svg"
             />
             <div className="relative uppercase hidden">Профіль</div>
           </div>
@@ -176,7 +173,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-1.svg"
+              src="/src/assets/-1.svg"
             />
             <div className="relative uppercase hidden">Пошук</div>
           </div>
@@ -185,7 +182,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.181rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-2.svg"
+              src="/src/assets/-2.svg"
             />
             <div className="relative uppercase hidden">Чат</div>
           </div>
@@ -194,7 +191,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.031rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-3.svg"
+              src="/src/assets/-3.svg"
             />
             <div className="relative uppercase hidden">статистика</div>
           </div>
@@ -203,7 +200,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.038rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-4.svg"
+              src="/src/assets/-4.svg"
             />
             <div className="relative uppercase hidden">календар</div>
           </div>
@@ -212,7 +209,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.15rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-31.svg"
+              src="/src/assets/-31.svg"
             />
             <div className="relative uppercase hidden">відгуки</div>
           </div>
@@ -221,7 +218,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[1.788rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-5.svg"
+              src="/src/assets/-5.svg"
             />
             <div className="relative uppercase hidden">новини</div>
           </div>
@@ -230,7 +227,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[1.838rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-6.svg"
+              src="/src/assets/-6.svg"
             />
             <div className="relative uppercase hidden">Сповіщення</div>
           </div>
@@ -239,7 +236,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.575rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-7.svg"
+              src="/src/assets/-7.svg"
             />
             <div className="relative uppercase hidden">Збережені</div>
           </div>
@@ -248,7 +245,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-8.svg"
+              src="/src/assets/-8.svg"
             />
             <div className="relative uppercase hidden">Умови співпраці</div>
           </div>
@@ -257,7 +254,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[1.981rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/-9.svg"
+              src="/src/assets/-9.svg"
             />
             <div className="relative uppercase hidden">Налаштування</div>
           </div>
@@ -266,7 +263,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
               className="h-[2.144rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/--3.svg"
+              src="/src/assets/--3.svg"
             />
             <div className="relative uppercase hidden">служба підтримки</div>
           </div>
@@ -275,7 +272,7 @@ const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
           className="h-[0.938rem] w-[0.938rem] absolute !m-[0] top-[22.75rem] right-[8.438rem] overflow-hidden shrink-0 z-[3]"
           loading="lazy"
           alt=""
-          src="/fluentemojiflatspiralcalendar.svg"
+          src="/src/assets/fluentemojiflatspiralcalendar.svg"
         />
         <Component7 />
       </div>

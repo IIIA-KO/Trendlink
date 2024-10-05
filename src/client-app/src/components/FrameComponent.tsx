@@ -1,12 +1,9 @@
 import { FunctionComponent } from "react";
 import "antd/dist/reset.css";
 import { Input } from "antd";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type FrameComponentType = {
-  className?: string;
-};
-
-const FrameComponent: FunctionComponent<FrameComponentType> = ({
+const FrameComponent: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
@@ -32,7 +29,7 @@ const FrameComponent: FunctionComponent<FrameComponentType> = ({
             className="w-6 h-6 relative object-cover z-[6]"
             loading="lazy"
             alt=""
-            src="/actions-2@2x.png"
+            src="/src/assets/actions-2@2x.png"
           />
         </div>
       </div>

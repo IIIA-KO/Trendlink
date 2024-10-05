@@ -20,12 +20,19 @@ namespace Trendlink.Application.Abstractions.Repositories
             CancellationToken cancellationToken = default
         );
 
+        Task<User?> GetByIdWithStateAndInstagramAccountAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        );
+
         Task<User?> GetByIdentityIdAsync(
             string identityId,
             CancellationToken cancellationToken = default
         );
 
         void Add(User user);
+
+        void Remove(User user);
 
         Task<bool> ExistsByIdAsync(UserId id, CancellationToken cancellationToken = default);
 

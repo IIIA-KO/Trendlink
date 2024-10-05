@@ -29,6 +29,14 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .IsRequired();
 
             builder
+                .Property(instagramAccount => instagramAccount.AdvertisementAccountId)
+                .HasConversion(
+                    adAccountId => adAccountId.Value,
+                    value => new AdvertisementAccountId(value)
+                )
+                .IsRequired();
+
+            builder
                 .Property(instagramAccount => instagramAccount.UserId)
                 .HasConversion(
                     instagramAccount => instagramAccount.Value,

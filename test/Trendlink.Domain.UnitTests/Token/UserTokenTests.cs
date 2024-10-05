@@ -1,19 +1,9 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Domain.UnitTests.Token
 {
-    public static class UserTokenData
-    {
-        public static readonly UserId UserId = UserId.New();
-
-        public static string AccessToken = "access_token";
-
-        public static DateTimeOffset ExpiresIn = DateTimeOffset.UtcNow.AddMonths(3);
-    }
-
     public class UserTokenTests
     {
         [Fact]

@@ -4,12 +4,9 @@ import { Input, DatePicker, Select } from "antd";
 import FrameComponent from "./FrameComponent";
 import Days from "./Days";
 import CollaborationActions from "./CollaborationActions";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type GroupComponent4Type = {
-  className?: string;
-};
-
-const GroupComponent4: FunctionComponent<GroupComponent4Type> = ({
+const GroupComponent4: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
@@ -26,7 +23,7 @@ const GroupComponent4: FunctionComponent<GroupComponent4Type> = ({
             className="w-[25px] h-[25px] relative object-cover z-[1]"
             loading="lazy"
             alt=""
-            src="/actions@2x.png"
+            src="/src/assets/actions@2x.png"
           />
           <div className="self-stretch flex flex-row items-start justify-end py-0 pl-0 pr-[27px] box-border max-w-full">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-5 mq1050:flex-wrap">
@@ -67,7 +64,7 @@ const GroupComponent4: FunctionComponent<GroupComponent4Type> = ({
                             <img
                               className="h-4 w-4 relative overflow-hidden shrink-0"
                               alt=""
-                              src="/icons-7.svg"
+                              src="/src/assets/icons/icons-7.svg"
                             />
                             <div className="relative tracking-[0.01em] uppercase inline-block min-w-[73px]">
                               Березень
@@ -75,7 +72,7 @@ const GroupComponent4: FunctionComponent<GroupComponent4Type> = ({
                             <img
                               className="h-4 w-4 relative overflow-hidden shrink-0 object-contain"
                               alt=""
-                              src="/icons-8@2x.png"
+                              src="/src/assets/icons/icons-8@2x.png"
                             />
                           </div>
                           <div className="self-stretch h-[0.8px] relative border-neutral-blue-black-40 border-t-[0.8px] border-solid box-border" />
@@ -500,7 +497,7 @@ const GroupComponent4: FunctionComponent<GroupComponent4Type> = ({
                         className="h-3.5 w-[19px] absolute !m-[0] top-[-9px] left-[85px] rounded-12xs z-[7]"
                         loading="lazy"
                         alt=""
-                        src="/polygon-2.svg"
+                        src="/src/assets/polygon-2.svg"
                       />
                     </div>
                   </div>

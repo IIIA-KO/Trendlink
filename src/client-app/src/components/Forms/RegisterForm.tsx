@@ -70,7 +70,7 @@ const RegisterForm: React.FC = () => {
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
             const userData = await register(values);
-            authLogin(userData);
+            authLogin(userData!);
             navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {

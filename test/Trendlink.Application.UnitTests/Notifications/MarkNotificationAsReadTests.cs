@@ -6,7 +6,6 @@ using Trendlink.Application.Notifications.MarkNotificationAsRead;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Notifications
 {

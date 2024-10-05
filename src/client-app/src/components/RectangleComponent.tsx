@@ -1,10 +1,7 @@
 import { FunctionComponent } from "react";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type RectangleComponentType = {
-  className?: string;
-};
-
-const RectangleComponent: FunctionComponent<RectangleComponentType> = ({
+const RectangleComponent: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (

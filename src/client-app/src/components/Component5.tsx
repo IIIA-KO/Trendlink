@@ -1,18 +1,7 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
+import {Component5BaseType} from "../types/Component5BaseType";
 
-export type Component5Type = {
-  className?: string;
-  prop?: string;
-
-  /** Style props */
-  propLeft?: CSSProperties["left"];
-  propBorder?: CSSProperties["border"];
-  propBackgroundColor?: CSSProperties["backgroundColor"];
-  propColor?: CSSProperties["color"];
-  propMinWidth?: CSSProperties["minWidth"];
-};
-
-const Component5: FunctionComponent<Component5Type> = ({
+const Component5: FunctionComponent<Component5BaseType> = ({
   className = "",
   propLeft,
   propBorder,

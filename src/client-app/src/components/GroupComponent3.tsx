@@ -3,14 +3,21 @@ import "antd/dist/reset.css";
 import { Input, DatePicker, Dropdown, Menu, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import FrameComponent from "./FrameComponent";
-import Button1 from "./Button";
+import Button1 from "./Buttons/Button";
 import CollaborationActions from "./CollaborationActions";
+import {ClassNameType} from "../types/ClassNameType";
 
-export type GroupComponent3Type = {
-  className?: string;
-};
+interface MenuOption {
+  value: string;
+}
 
-const GroupComponent3: FunctionComponent<GroupComponent3Type> = ({
+const menuOptions: MenuOption[] = [
+  { value: 'Option 1' },
+  { value: 'Option 2' },
+  { value: 'Option 3' },
+];
+
+const GroupComponent3: FunctionComponent<ClassNameType> = ({
   className = "",
 }) => {
   return (
@@ -20,7 +27,7 @@ const GroupComponent3: FunctionComponent<GroupComponent3Type> = ({
       <img
         className="w-[15px] h-[15px] relative object-cover hidden"
         alt=""
-        src="/organization--status--information--24@2x.png"
+        src="/src/assets/organization--status--information--24@2x.png"
       />
       <div className="relative hidden">найближча інтеграція 1.03.24</div>
       <div className="self-stretch h-[550px] relative shadow-[3px_3px_10px_2px_rgba(108,_108,_108,_0.2)] rounded-xl bg-whitesmoke-100 hidden" />
@@ -30,7 +37,7 @@ const GroupComponent3: FunctionComponent<GroupComponent3Type> = ({
             className="w-[25px] h-[25px] relative object-cover z-[1]"
             loading="lazy"
             alt=""
-            src="/actions@2x.png"
+            src="/src/assets/actions@2x.png"
           />
           <div className="self-stretch flex flex-row items-start justify-end py-0 pl-0 pr-6 box-border max-w-full">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-5 mq1050:flex-wrap">
@@ -124,7 +131,7 @@ const GroupComponent3: FunctionComponent<GroupComponent3Type> = ({
                         className="self-stretch gap-5 z-[1]"
                         overlay={
                           <Menu>
-                            {([] as any).map((option: any, index: number) => (
+                            {menuOptions.map((option: MenuOption, index: number) => (
                               <Menu.Item key={index}>
                                 <a onClick={(e) => e.preventDefault()}>
                                   {option.value || ""}
@@ -151,7 +158,7 @@ const GroupComponent3: FunctionComponent<GroupComponent3Type> = ({
                         className="self-stretch gap-5 z-[1]"
                         overlay={
                           <Menu>
-                            {([] as any).map((option: any, index: number) => (
+                            {menuOptions.map((option: MenuOption, index: number) => (
                               <Menu.Item key={index}>
                                 <a onClick={(e) => e.preventDefault()}>
                                   {option.value || ""}

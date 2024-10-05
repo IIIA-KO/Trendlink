@@ -1,14 +1,7 @@
 import { FunctionComponent, useMemo, type CSSProperties } from "react";
 import "antd/dist/reset.css";
 import { Button } from "antd";
-
-export type ConfirmationOptionsType = {
-  className?: string;
-  prop?: string;
-
-  /** Style props */
-  propMinWidth?: CSSProperties["minWidth"];
-};
+import {ConfirmationOptionsType} from "../types/ConfirmationOptionsType";
 
 const ConfirmationOptions: FunctionComponent<ConfirmationOptionsType> = ({
   className = "",

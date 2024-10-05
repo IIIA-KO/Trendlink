@@ -15,11 +15,14 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
 
         public string FacebookPageId { get; set; }
 
-        public InstagramAccount CreateInstagramAccount(UserId userId)
+        public string AdAccountId { get; set; }
+
+        public Result<InstagramAccount> CreateInstagramAccount(UserId userId)
         {
-            Result<InstagramAccount> result = InstagramAccount.Create(
+            return InstagramAccount.Create(
                 userId,
                 new FacebookPageId(this.FacebookPageId),
+                new AdvertisementAccountId(this.AdAccountId),
                 new Metadata(
                     this.Id,
                     this.BusinessDiscovery.IgId,
@@ -28,8 +31,6 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
                     this.BusinessDiscovery.MediaCount
                 )
             );
-
-            return result.Value;
         }
     }
 
@@ -41,17 +42,11 @@ namespace Trendlink.Application.Abstractions.Authentication.Models
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("biography")]
-        public string Biography { get; set; } = string.Empty;
-
         [JsonPropertyName("ig_id")]
         public long IgId { get; set; }
 
         [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
-
-        [JsonPropertyName("profile_picture_url")]
-        public string ProfilePictureUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("followers_count")]
         public int FollowersCount { get; set; }
