@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Users.Authentication.LogInUser
+namespace Trendlink.Application.Accounts.LogIn
 {
-    internal sealed class LogInUserCommandValidator : AbstractValidator<LogInUserCommand>
+    internal sealed class LogInCommandValidator : AbstractValidator<LogInCommand>
     {
-        public LogInUserCommandValidator()
+        public LogInCommandValidator()
         {
             this.RuleFor(c => c.Email.Value)
                 .EmailAddress()

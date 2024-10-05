@@ -2,7 +2,7 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
@@ -10,22 +10,19 @@ namespace Trendlink.Application.UnitTests.Users
 {
     public class LogInUserTests
     {
-        public static readonly LogInUserCommand Command = new(UserData.Email, UserData.Password);
+        public static readonly LogInCommand Command = new(UserData.Email, UserData.Password);
 
         private readonly IUserRepository _userRepositoryMock;
         private readonly IKeycloakService _jwtServicMock;
 
-        private readonly LogInUserCommandHandler _handler;
+        private readonly LogInCommandHandler _handler;
 
         public LogInUserTests()
         {
             this._userRepositoryMock = Substitute.For<IUserRepository>();
             this._jwtServicMock = Substitute.For<IKeycloakService>();
 
-            this._handler = new LogInUserCommandHandler(
-                this._userRepositoryMock,
-                this._jwtServicMock
-            );
+            this._handler = new LogInCommandHandler(this._userRepositoryMock, this._jwtServicMock);
         }
 
         [Fact]

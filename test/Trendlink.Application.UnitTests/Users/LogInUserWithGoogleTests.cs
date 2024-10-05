@@ -4,8 +4,8 @@ using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Users.Authentication.LogInUser;
-using Trendlink.Application.Users.Authentication.LoginUserWithGoogle;
+using Trendlink.Application.Accounts.LogIn;
+using Trendlink.Application.Accounts.LoginWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
@@ -13,13 +13,13 @@ namespace Trendlink.Application.UnitTests.Users
 {
     public class LogInUserWithGoogleTests
     {
-        private static readonly LogInUserWithGoogleCommand Command = new(UserData.Code);
+        private static readonly LoginWithGoogleCommand Command = new(UserData.Code);
 
         private readonly IGoogleService _googleServiceMock;
         private readonly IUserRepository _userRepositoryMock;
         private readonly IKeycloakService _keycloakServiceMock;
 
-        private readonly LogInUserWithGoogleCommandHandler _handler;
+        private readonly LoginWithGoogleCommandHandler _handler;
 
         public LogInUserWithGoogleTests()
         {
@@ -27,7 +27,7 @@ namespace Trendlink.Application.UnitTests.Users
             this._userRepositoryMock = Substitute.For<IUserRepository>();
             this._keycloakServiceMock = Substitute.For<IKeycloakService>();
 
-            this._handler = new LogInUserWithGoogleCommandHandler(
+            this._handler = new LoginWithGoogleCommandHandler(
                 this._googleServiceMock,
                 this._userRepositoryMock,
                 this._keycloakServiceMock

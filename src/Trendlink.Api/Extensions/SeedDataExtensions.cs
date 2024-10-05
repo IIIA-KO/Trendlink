@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Trendlink.Application.Users.Authentication.RegisterUser;
+using Trendlink.Application.Accounts.Register;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Users;
@@ -48,7 +48,7 @@ namespace Trendlink.Api.Extensions
 
                 StateId stateId = (await dbContext.Set<State>().FirstAsync()).Id;
 
-                RegisterUserCommand adminCommand =
+                RegisterCommand adminCommand =
                     new(
                         admin.FirstName,
                         admin.LastName,
@@ -74,7 +74,7 @@ namespace Trendlink.Api.Extensions
 
                 foreach (User user in users)
                 {
-                    var userRegisterCommand = new RegisterUserCommand(
+                    var userRegisterCommand = new RegisterCommand(
                         user.FirstName,
                         user.LastName,
                         user.BirthDate,

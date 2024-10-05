@@ -80,10 +80,6 @@ namespace Trendlink.Infrastructure.Configurations.Users
                 .IsRequired(false);
 
             builder
-                .Property(user => user.Rating)
-                .HasConversion(rating => rating.Value, value => Rating.Create(value).Value);
-
-            builder
                 .Property(user => user.PhoneNumber)
                 .HasMaxLength(20)
                 .HasConversion(phoneNumber => phoneNumber.Value, value => new PhoneNumber(value));

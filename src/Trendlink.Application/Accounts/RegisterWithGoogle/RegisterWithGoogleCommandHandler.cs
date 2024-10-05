@@ -2,16 +2,16 @@
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Application.Exceptions;
-using Trendlink.Application.Users.Authentication.LogInUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
+namespace Trendlink.Application.Accounts.RegisterWithGoogle
 {
-    internal sealed class RegisterUserWithGoogleCommandHandler
-        : ICommandHandler<RegisterUserWithGoogleCommand, AccessTokenResponse>
+    internal sealed class RegisterWithGoogleCommandHandler
+        : ICommandHandler<RegisterWithGoogleCommand, AccessTokenResponse>
     {
         private const string ProviderName = "google";
 
@@ -23,7 +23,7 @@ namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
         private readonly IStateRepository _stateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RegisterUserWithGoogleCommandHandler(
+        public RegisterWithGoogleCommandHandler(
             IGoogleService googleService,
             IKeycloakService keycloakService,
             IAuthenticationService authenticationService,
@@ -41,7 +41,7 @@ namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
         }
 
         public async Task<Result<AccessTokenResponse>> Handle(
-            RegisterUserWithGoogleCommand request,
+            RegisterWithGoogleCommand request,
             CancellationToken cancellationToken
         )
         {

@@ -2,20 +2,20 @@
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.Authentication.LoginUserWithGoogle
+namespace Trendlink.Application.Accounts.LoginWithGoogle
 {
-    internal sealed class LogInUserWithGoogleCommandHandler
-        : ICommandHandler<LogInUserWithGoogleCommand, AccessTokenResponse>
+    internal sealed class LoginWithGoogleCommandHandler
+        : ICommandHandler<LoginWithGoogleCommand, AccessTokenResponse>
     {
         private readonly IGoogleService _googleService;
         private readonly IUserRepository _userRepository;
         private readonly IKeycloakService _keycloakService;
 
-        public LogInUserWithGoogleCommandHandler(
+        public LoginWithGoogleCommandHandler(
             IGoogleService googleService,
             IUserRepository userRepository,
             IKeycloakService keycloakService
@@ -27,7 +27,7 @@ namespace Trendlink.Application.Users.Authentication.LoginUserWithGoogle
         }
 
         public async Task<Result<AccessTokenResponse>> Handle(
-            LogInUserWithGoogleCommand request,
+            LoginWithGoogleCommand request,
             CancellationToken cancellationToken
         )
         {

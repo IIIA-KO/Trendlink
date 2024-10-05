@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Trendlink.Application.Extensions;
 
-namespace Trendlink.Application.Users.Authentication.RegisterUser
+namespace Trendlink.Application.Accounts.Register
 {
-    internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+    internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
-        public RegisterUserCommandValidator()
+        public RegisterCommandValidator()
         {
             this.RuleFor(c => c.FirstName).NotNullOrEmpty();
 

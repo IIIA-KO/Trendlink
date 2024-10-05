@@ -1,11 +1,11 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Users.Authentication.RegisterUserWithGoogle
+namespace Trendlink.Application.Accounts.RegisterWithGoogle
 {
-    public sealed record RegisterUserWithGoogleCommand(
+    public sealed record RegisterWithGoogleCommand(
         string Code,
         DateOnly BirthDate,
         PhoneNumber PhoneNumber,

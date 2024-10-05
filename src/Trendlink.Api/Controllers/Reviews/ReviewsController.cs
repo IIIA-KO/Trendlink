@@ -5,7 +5,7 @@ using Trendlink.Application.Reviews.EditReview;
 using Trendlink.Application.Reviews.GetReview;
 using Trendlink.Application.Reviews.GetUserReviews;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Review;
+using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Reviews

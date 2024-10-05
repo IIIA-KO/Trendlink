@@ -4,17 +4,16 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Users.DeleteUserAccount
+namespace Trendlink.Application.Accounts.DeleteAccount
 {
-    internal sealed class DeleteUserAccountCommandHandler
-        : ICommandHandler<DeleteUserAccountCommand>
+    internal sealed class DeleteAccountCommandHandler : ICommandHandler<DeleteAccountCommand>
     {
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
         private readonly IKeycloakService _keycloakService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteUserAccountCommandHandler(
+        public DeleteAccountCommandHandler(
             IUserContext userContext,
             IUserRepository userRepository,
             IKeycloakService keycloakService,
@@ -28,7 +27,7 @@ namespace Trendlink.Application.Users.DeleteUserAccount
         }
 
         public async Task<Result> Handle(
-            DeleteUserAccountCommand request,
+            DeleteAccountCommand request,
             CancellationToken cancellationToken
         )
         {
