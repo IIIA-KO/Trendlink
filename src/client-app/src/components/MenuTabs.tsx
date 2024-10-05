@@ -175,7 +175,7 @@ const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => 
               className="h-[2.188rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/src/assets/-1.svg"
+              src="/src/assets/icons/search-icon.svg"
             />
             <div className="relative uppercase hidden">Пошук</div>
           </div>
@@ -184,7 +184,7 @@ const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => 
               className="h-[2.181rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/src/assets/-2.svg"
+              src="/src/assets/icons/chat-icon.svg"
             />
             <div className="relative uppercase hidden">Чат</div>
           </div>
@@ -193,7 +193,7 @@ const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => 
               className="h-[2.031rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/src/assets/-3.svg"
+              src="/src/assets/icons/statistics-icon.svg"
             />
             <div className="relative uppercase hidden">статистика</div>
           </div>
@@ -202,7 +202,7 @@ const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => 
               className="h-[2.038rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/src/assets/-4.svg"
+              src="/src/assets/icons/calendar-icon.svg"
             />
             <div className="relative uppercase hidden">календар</div>
           </div>
@@ -220,7 +220,7 @@ const MenuTabs: FunctionComponent<ClassNameType> = memo(({ className = "" }) => 
               className="h-[1.788rem] w-[2.188rem] relative overflow-hidden shrink-0"
               loading="lazy"
               alt=""
-              src="/src/assets/-5.svg"
+              src="/src/assets/icons/news-icon.svg"
             />
             <div className="relative uppercase hidden">новини</div>
           </div>

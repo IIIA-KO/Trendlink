@@ -1119,7 +1119,7 @@ const Component3: FunctionComponent<Component3Type> = ({
           className="h-[2.1875rem] w-[2.1875rem] relative overflow-hidden shrink-0"
           loading="lazy"
           alt=""
-          src="/src/assets/-1.svg"
+          src="/src/assets/icons/search-icon.svg"
         />
         <div className="w-[3.75rem] relative uppercase hidden">Пошук</div>
       </div>
@@ -1142,7 +1142,7 @@ const Component3: FunctionComponent<Component3Type> = ({
             className="h-[2.03125rem] w-[2.1875rem] relative overflow-hidden shrink-0"
             loading="lazy"
             alt=""
-            src="/src/assets/-3.svg"
+            src="/src/assets/icons/statistics-icon.svg"
             style={icon1Style}
           />
         )}
@@ -1161,7 +1161,7 @@ const Component3: FunctionComponent<Component3Type> = ({
             className="h-[2.0375rem] w-[2.1875rem] relative overflow-hidden shrink-0"
             loading="lazy"
             alt=""
-            src="/src/assets/-4.svg"
+            src="/src/assets/icons/calendar-icon.svg"
             style={icon2Style}
           />
         )}
@@ -1198,7 +1198,7 @@ const Component3: FunctionComponent<Component3Type> = ({
           <img
             className="h-[1.7875rem] w-[2.1875rem] relative overflow-hidden shrink-0"
             alt=""
-            src="/src/assets/-5.svg"
+            src="/src/assets/icons/news-icon.svg"
             style={icon4Style}
           />
         )}

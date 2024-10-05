@@ -10,7 +10,7 @@ const ReelsPage: FunctionComponent = () => {
           className="h-[1.25rem] w-[1.25rem] relative overflow-hidden shrink-0"
           loading="lazy"
           alt=""
-          src="/src/assets/materialsymbolslightsearch.svg"
+          src="/materialsymbolslightsearch.svg"
         />
       </div>
       <main className="flex flex-row items-start justify-end pt-[0rem] px-[2.75rem] pb-[10.25rem] box-border max-w-full mq750:pb-[4.375rem] mq750:box-border mq1050:pl-[1.375rem] mq1050:pr-[1.375rem] mq1050:pb-[6.688rem] mq1050:box-border">
@@ -47,7 +47,7 @@ const ReelsPage: FunctionComponent = () => {
       <img
         className="w-[7.5rem] h-[68.75rem] absolute !m-[0] top-[2.25rem] left-[6.25rem]"
         alt=""
-        src="/src/assets/component-39.svg"
+        src="/component-39.svg"
       />
       <FrameComponent3
         profilePicture="/ellipse-11@2x.png"
@@ -70,7 +70,7 @@ const ReelsPage: FunctionComponent = () => {
         <img
           className="h-[1.5rem] w-[1.5rem] relative object-contain"
           alt=""
-          src="/src/assets/actions--navigation--chevronright--24@2x.png"
+          src="/actions--navigation--chevronright--24@2x.png"
         />
       </div>
     </div>

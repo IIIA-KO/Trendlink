@@ -5,7 +5,7 @@ import imgOne from "../assets/img1AuthPage.svg";
 import RegisterForm from "../components/Forms/RegisterForm";
 import GoogleRegisterForm from "../components/Forms/GoogleRegisterForm";
 import GoogleLoginForm from "../components/Forms/GoogleLoginForm";
-import logo from "../assets/icons/logo-trendlink.svg";
+import logo from "../assets/icons/logo-trendlink-green.svg";
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
