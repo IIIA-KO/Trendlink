@@ -2,13 +2,13 @@
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Application.Exceptions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Accounts.RegisterUserWithGoogle
+namespace Trendlink.Application.Accounts.RegisterWithGoogle
 {
     internal sealed class RegisterWithGoogleCommandHandler
         : ICommandHandler<RegisterWithGoogleCommand, AccessTokenResponse>

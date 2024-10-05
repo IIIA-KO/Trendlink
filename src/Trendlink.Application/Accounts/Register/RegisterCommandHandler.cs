@@ -5,7 +5,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Accounts.RegisterUser
+namespace Trendlink.Application.Accounts.Register
 {
     internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, UserId>
     {

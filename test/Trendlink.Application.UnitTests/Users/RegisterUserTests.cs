@@ -3,7 +3,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Accounts.RegisterUser;
+using Trendlink.Application.Accounts.Register;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Application.Accounts.RefreshToken;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;

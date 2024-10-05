@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Trendlink.Api.FunctionalTests.Infrastructure;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 
 namespace Trendlink.Api.FunctionalTests.Users
 {

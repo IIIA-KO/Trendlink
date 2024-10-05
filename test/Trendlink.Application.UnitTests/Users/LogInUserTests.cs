@@ -2,7 +2,7 @@
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 

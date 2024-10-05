@@ -8,7 +8,7 @@ using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Authentication.Models;
-using AccessTokenResponse = Trendlink.Application.Accounts.LogInUser.AccessTokenResponse;
+using AccessTokenResponse = Trendlink.Application.Accounts.LogIn.AccessTokenResponse;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Trendlink.Infrastructure.Authentication.Keycloak
@@ -99,6 +99,77 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
             this._logger.LogInformation("Access token refresh completed");
 
             return result;
+        }
+
+        public async Task<Result> TerminateUserSession(
+            string userIdentityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            this._logger.LogInformation(
+                "Attempting to log out user with ID: {UserId}",
+                userIdentityId
+            );
+
+            string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
+
+            string requestUrl =
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}/logout";
+
+            HttpResponseMessage response = await this.SendAuthorizedRequestAsync(
+                HttpMethod.Post,
+                requestUrl,
+                accessToken,
+                content: null,
+                cancellationToken
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                this._logger.LogWarning(
+                    "Failed to log out user {UserId}. Status code: {StatusCode}",
+                    userIdentityId,
+                    response.StatusCode
+                );
+                return Result.Failure(UserErrors.FailedTerminateSession);
+            }
+
+            this._logger.LogInformation("User {UserId} successfully logged out", userIdentityId);
+            return Result.Success();
+        }
+
+        public async Task<Result> DeleteAccountAsync(
+            string userIdentityId,
+            CancellationToken cancellationToken = default
+        )
+        {
+            string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
+
+            string url =
+                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}";
+
+            using var request = new HttpRequestMessage(HttpMethod.Delete, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            HttpResponseMessage response = await this._httpClient.SendAsync(
+                request,
+                cancellationToken
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                this._logger.LogError(
+                    "Failed to delete account for user {UserIdentityId}.",
+                    userIdentityId
+                );
+                return Result.Failure(UserErrors.FailedDeleteAccount);
+            }
+
+            this._logger.LogInformation(
+                "User with ID {UserId} successfully deleted.",
+                userIdentityId
+            );
+            return Result.Success();
         }
 
         public async Task<Result<AccessTokenResponse>> AuthenticateWithGoogleAsync(
@@ -236,40 +307,6 @@ namespace Trendlink.Infrastructure.Authentication.Keycloak
             }
 
             return isLinked;
-        }
-
-        public async Task<Result> DeleteAccountAsync(
-            string userIdentityId,
-            CancellationToken cancellationToken = default
-        )
-        {
-            string accessToken = await this.GetAdminAccessTokenAsync(cancellationToken);
-
-            string url =
-                $"{this._keycloakOptions.BaseUrl}/admin/realms/{this._keycloakOptions.Realm}/users/{userIdentityId}";
-
-            using var request = new HttpRequestMessage(HttpMethod.Delete, url);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            HttpResponseMessage response = await this._httpClient.SendAsync(
-                request,
-                cancellationToken
-            );
-
-            if (!response.IsSuccessStatusCode)
-            {
-                this._logger.LogError(
-                    "Failed to delete account for user {UserIdentityId}.",
-                    userIdentityId
-                );
-                return Result.Failure(UserErrors.FailedDeleteAccount);
-            }
-
-            this._logger.LogInformation(
-                "User with ID {UserId} successfully deleted.",
-                userIdentityId
-            );
-            return Result.Success();
         }
 
         public async Task<bool> CheckUserExistsInKeycloak(

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Trendlink.Api.Controllers.Users;
-using Trendlink.Application.Accounts.DeleteUserAccount;
-using Trendlink.Application.Accounts.LogInUser;
-using Trendlink.Application.Accounts.LoginUserWithGoogle;
+using Trendlink.Application.Accounts.DeleteAccount;
+using Trendlink.Application.Accounts.LogIn;
+using Trendlink.Application.Accounts.LoginWithGoogle;
+using Trendlink.Application.Accounts.LogOut;
 using Trendlink.Application.Accounts.RefreshToken;
-using Trendlink.Application.Accounts.RegisterUser;
-using Trendlink.Application.Accounts.RegisterUserWithGoogle;
+using Trendlink.Application.Accounts.Register;
+using Trendlink.Application.Accounts.RegisterWithGoogle;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
@@ -83,6 +84,14 @@ namespace Trendlink.Api.Controllers.Accounts
         )
         {
             var command = new RefreshTokenCommand(request.Code);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> LogOut(CancellationToken cancellationToken)
+        {
+            var command = new LogOutCommand();
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

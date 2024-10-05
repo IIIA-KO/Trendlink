@@ -4,7 +4,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Accounts.LogInUser
+namespace Trendlink.Application.Accounts.LogIn
 {
     internal sealed class LogInCommandHandler : ICommandHandler<LogInCommand, AccessTokenResponse>
     {

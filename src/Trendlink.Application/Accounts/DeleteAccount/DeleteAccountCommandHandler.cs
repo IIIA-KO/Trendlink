@@ -4,7 +4,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Accounts.DeleteUserAccount
+namespace Trendlink.Application.Accounts.DeleteAccount
 {
     internal sealed class DeleteAccountCommandHandler : ICommandHandler<DeleteAccountCommand>
     {

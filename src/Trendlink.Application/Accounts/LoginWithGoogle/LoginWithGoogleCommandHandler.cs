@@ -2,11 +2,11 @@
 using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
-namespace Trendlink.Application.Accounts.LoginUserWithGoogle
+namespace Trendlink.Application.Accounts.LoginWithGoogle
 {
     internal sealed class LoginWithGoogleCommandHandler
         : ICommandHandler<LoginWithGoogleCommand, AccessTokenResponse>

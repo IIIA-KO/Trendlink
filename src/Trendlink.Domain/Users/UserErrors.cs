@@ -27,5 +27,11 @@ namespace Trendlink.Domain.Users
                 "User.RegistrationFailed ",
                 "Failed to register user authentication service failure"
             );
+
+        public static readonly Error FailedTerminateSession =
+            new(
+                "User.FailedTerminateSession",
+                "Failed to terminate session of the user with provided indentifier"
+            );
     }
 }

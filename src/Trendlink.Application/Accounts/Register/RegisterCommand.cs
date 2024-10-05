@@ -2,7 +2,7 @@
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
 
-namespace Trendlink.Application.Accounts.RegisterUser
+namespace Trendlink.Application.Accounts.Register
 {
     public sealed record RegisterCommand(
         FirstName FirstName,

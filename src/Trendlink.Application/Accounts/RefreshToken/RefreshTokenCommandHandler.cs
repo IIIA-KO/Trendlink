@@ -1,6 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Application.Accounts.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 

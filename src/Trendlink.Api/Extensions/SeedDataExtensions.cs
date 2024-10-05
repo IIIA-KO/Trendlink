@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Trendlink.Application.Accounts.RegisterUser;
+using Trendlink.Application.Accounts.Register;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Users;

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Trendlink.Application.Accounts.LogInUser
+namespace Trendlink.Application.Accounts.LogIn
 {
     internal sealed class LogInCommandValidator : AbstractValidator<LogInCommand>
     {

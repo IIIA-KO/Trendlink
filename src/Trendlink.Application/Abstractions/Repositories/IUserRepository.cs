@@ -10,6 +10,8 @@ namespace Trendlink.Application.Abstractions.Repositories
 
         Task<User?> GetByIdWithStateAsync(UserId id, CancellationToken cancellationToken = default);
 
+        Task<User?> GetByIdWithTokenAsync(UserId id, CancellationToken cancellationToken = default);
+
         Task<User?> GetByIdWithInstagramAccountAsync(
             UserId id,
             CancellationToken cancellationToken = default

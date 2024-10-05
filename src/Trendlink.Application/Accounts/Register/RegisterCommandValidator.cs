@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Trendlink.Application.Extensions;
 
-namespace Trendlink.Application.Accounts.RegisterUser
+namespace Trendlink.Application.Accounts.Register
 {
     internal sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
