@@ -49,3 +49,8 @@
     transform: translateX(-50%);
     border-radius: 50%;
 }
+.scrollable-fixed {
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }

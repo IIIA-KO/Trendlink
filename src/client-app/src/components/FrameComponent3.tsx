@@ -49,9 +49,9 @@ const FrameComponent3: FunctionComponent<FrameComponent3Type> = memo(
 
     return (
       <div
-        className={`w-[57.938rem] h-[17.938rem] absolute !m-[0] top-[4.375rem] right-[9.063rem] max-w-full text-left text-[1rem] text-[#3c3c3c] font-[Inter] mq1050:h-auto mq1050:min-h-[287] ${className}`}
+        className={`w-[57.938rem] h-[17.938rem] absolute  top-[4.375rem] right-[9.063rem] text-left text-[1rem] text-[#3c3c3c] font-[Inter] mq1050:h-auto mq1050:min-h-[287] ${className}`}
       >
-        <div className="absolute top-[0rem] left-[0rem] w-full flex flex-row items-start justify-between pt-[0rem] px-[0rem] pb-[3.875rem] box-border max-w-full gap-[1.25rem] h-full z-[1] mq1050:flex-wrap">
+        <div className="absolute top-[0rem] left-[0rem] fixed flex flex-row items-start justify-between pt-[0rem] px-[0rem] pb-[3.875rem] box-border max-w-full gap-[1.25rem] h-full z-[1] mq1050:flex-wrap">
           <div className="w-[34.563rem] flex flex-col items-start justify-start gap-[1.875rem] max-w-full">
             <div className="flex flex-row items-start justify-start gap-[1.875rem] max-w-full mq750:flex-wrap">
               <img

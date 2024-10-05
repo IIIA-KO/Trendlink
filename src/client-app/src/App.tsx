@@ -7,6 +7,7 @@ import '@fontsource/kodchasan';
 import '@fontsource/inter'
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from './pages/AuthPage';
+import StatisticsPage from './pages/Statiscs';
 
 const App: React.FC = () => {
   return (

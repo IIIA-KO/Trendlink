@@ -10,7 +10,7 @@ export type MenuTabsType = {
 const MenuTabs: FunctionComponent<MenuTabsType> = memo(({ className = "" }) => {
   return (
     <div
-      className={`h-[56.688rem] w-[70.063rem] relative max-w-full text-left text-[0.875rem] text-[#3c3c3c] font-[Inter] mq750:h-auto mq750:min-h-[907] ${className}`}
+      className={`h-[56.688rem] w-[70.063rem] fixed relative max-w-full text-left text-[0.875rem] text-[#3c3c3c] font-[Inter] mq750:h-auto mq750:min-h-[907] ${className}`}
     >
       <div className="absolute top-[11.25rem] left-[23.813rem] border-[#c0bebe] border-b-[1px] border-solid box-border h-[2.438rem] overflow-hidden flex flex-row items-start justify-start pt-[0.687rem] pb-[0.562rem] pl-[3.937rem] pr-[3.875rem] z-[1]">
         <div className="relative inline-block min-w-[3.563rem]"> Відгуки</div>

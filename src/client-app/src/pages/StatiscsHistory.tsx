@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import ProfileNavigation1 from "../components/ProfileNavigation1";
+import ProfileNavigation1 from "../components/ProfileNavigation";
 import FrameComponent3 from "../components/FrameComponent3";
 
 const Frame3: FunctionComponent = () => {

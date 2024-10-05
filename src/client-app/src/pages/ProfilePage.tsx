@@ -26,8 +26,8 @@ import image1 from "../public/actions--navigation--chevronright--24@2x.png"
 import newLocal1 from "../public/actions--toggle--favorite--241@2x.png" 
 const Frame5: FunctionComponent = () => {
   return (
-    <div className="w-full h-[89.188rem] relative bg-[#f0f4f9] overflow-hidden flex flex-col items-end justify-start pt-[2.187rem] pb-[3.125rem] pl-[6.25rem] pr-[6.312rem] box-border gap-[22.375rem] leading-[normal] tracking-[normal] mq750:gap-[11.188rem] mq750:pl-[3.125rem] mq750:pr-[3.125rem] mq750:box-border mq1050:h-auto mq450:gap-[5.563rem] mq450:pl-[1.25rem] mq450:pr-[1.25rem] mq450:box-border">
-      <main className="self-stretch flex flex-row items-start justify-start gap-[3.75rem] shrink-0 max-w-full lg:gap-[1.875rem]">
+    <div className="w-full w-h-[89.188rem] scrollable-fixed relative bg-[#f0f4f9] overflow-hidden flex flex-col items-end justify-start pt-[2.187rem] pb-[3.125rem] pl-[6.25rem] pr-[6.312rem] box-border gap-[22.375rem] leading-[normal] tracking-[normal] mq750:gap-[11.188rem] mq750:pl-[3.125rem] mq750:pr-[3.125rem] mq750:box-border mq1050:h-auto mq450:gap-[5.563rem] mq450:pl-[1.25rem] mq450:pr-[1.25rem] mq450:box-border">
+      <main className="self-stretch flex flex-row scrollable-fixed fixed items-start justify-start gap-[3.75rem] shrink-0 max-w-full lg:gap-[1.875rem]">
         <div className="w-[7.5rem] flex flex-col items-start justify-start pt-[0.062rem] px-[0rem] pb-[0rem] box-border mq750:hidden">
           <div className="self-stretch h-[68.75rem] relative">
             <Stripe />
@@ -61,7 +61,7 @@ const Frame5: FunctionComponent = () => {
                     <div className="flex-1 flex flex-row items-start justify-start pt-[2rem]  relative min-w-[18.188rem] max-w-full mq1050:flex-1">
                       <div className="h-[85.5rem] w-[63.5rem] absolute !m-[0] right-[-32.687rem] bottom-[-49.687rem]">
                         <img
-                          className="absolute top-[0rem] left-[-0.2rem] rounded-[2.5rem] w-full h-full"
+                          className="absolute top-[0rem] left-[-0.5rem] rounded-[2.5rem] w-full h-full"
                           alt=""
                           src={background}
                         />
