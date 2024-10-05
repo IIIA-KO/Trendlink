@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Trendlink.Api.Extensions;
+using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Pagination;
 using Trendlink.Domain.Abstraction;
 
@@ -13,6 +14,11 @@ namespace Trendlink.Api.Controllers
 
         protected ISender Sender =>
             this._sender ??= this.HttpContext.RequestServices.GetService<ISender>()!;
+
+        private IUserContext _userContext;
+
+        protected IUserContext UserContext =>
+            this._userContext ??= this.HttpContext.RequestServices.GetService<IUserContext>()!;
 
         protected IActionResult HandleResult<T>(Result<T> result)
         {

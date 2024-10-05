@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.Replication;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Specifications.Users;
@@ -50,6 +51,18 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<User?> GetByIdWithStateAndInstagramAccountAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ApplySpecification(
+                    new UserByIdWithStateSpecification(id)
+                        & new UserByIdWithInstagramAccountSpecification(id)
+                )
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public async Task<User?> GetByIdentityIdAsync(
             string identityId,
             CancellationToken cancellationToken = default
@@ -92,8 +105,10 @@ namespace Trendlink.Infrastructure.Repositories
                 .dbContext.Set<User>()
                 .Include(user => user.Roles)
                 .Where(user => !user.Roles.Any(r => r.Name == Role.Administrator.Name))
+                .Include(user => user.InstagramAccount)
                 .Include(user => user.State)
-                .ThenInclude(state => state.Country);
+                .ThenInclude(state => state.Country)
+                .AsSplitQuery();
 
             if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
             {

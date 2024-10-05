@@ -1,23 +1,16 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import ProtectedRouteType from '../types/ProtectedRouteType'
 
-interface ProtectedRouteProps {
-    children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
     const { user } = useAuth();
 
     if (user === null) {
-        return <div>Loading...</div>;
+        return null;
     }
 
-    if (!user) {
-        return <Navigate to="/login" />;
-    }
-
-    return <>{children}</>;
+    return user ? <>{children}</> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

@@ -1,6 +1,7 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Notifications;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
@@ -64,6 +65,8 @@ namespace Trendlink.Domain.Users
         public UserToken? Token { get; set; }
 
         public InstagramAccount? InstagramAccount { get; set; }
+
+        public Rating Rating { get; private set; }
 
         public IReadOnlyCollection<Role> Roles => this._roles.AsReadOnly();
 
@@ -151,14 +154,10 @@ namespace Trendlink.Domain.Users
         )
         {
             if (
-                firstName is null
-                || string.IsNullOrEmpty(firstName.Value)
-                || lastName is null
-                || string.IsNullOrEmpty(lastName.Value)
-                || email is null
-                || string.IsNullOrEmpty(email.Value)
-                || phoneNumber is null
-                || string.IsNullOrEmpty(phoneNumber.Value)
+                string.IsNullOrWhiteSpace(firstName?.Value)
+                || string.IsNullOrWhiteSpace(lastName?.Value)
+                || string.IsNullOrWhiteSpace(email?.Value)
+                || string.IsNullOrWhiteSpace(phoneNumber?.Value)
             )
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
@@ -225,6 +224,13 @@ namespace Trendlink.Domain.Users
                     expiresAt
                 )
             );
+        }
+
+        public void SetRating(Rating rating)
+        {
+            ArgumentNullException.ThrowIfNull(rating);
+
+            this.Rating = rating;
         }
     }
 }

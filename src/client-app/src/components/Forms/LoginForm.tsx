@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../api/authApi.ts';
-import useAuth from '../../hooks/useAuth.ts';
+import { login } from '../../services/auth';
+import useAuth from '../../hooks/useAuth';
 import axios from "axios";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import PasswordInputField from "../Inputs/PasswordInputField.tsx";
-import EmailInputFiled from "../Inputs/EmailInputField.tsx";
-import AuthSubButton from "../Buttons/AuthSubButton.tsx";
+import PasswordInputField from "../Inputs/PasswordInputField";
+import EmailInputFiled from "../Inputs/EmailInputField";
+import AuthSubButton from "../Buttons/AuthSubButton";
 
 const LoginForm: React.FC = () => {
 

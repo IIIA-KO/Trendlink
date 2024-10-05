@@ -5,7 +5,6 @@ using NSubstitute.DbConnection;
 using Trendlink.Application.Abstractions.Data;
 using Trendlink.Application.Calendar;
 using Trendlink.Application.Calendar.GetUserCalendar;
-using Trendlink.Application.UnitTests.Users;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 
