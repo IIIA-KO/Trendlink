@@ -17,7 +17,7 @@ import logo from '../assets/logo/logo-trendlink-white.svg'
 const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Profile", icon: profileIcon, path: "/" },
+        { title: "Profile", icon: profileIcon, path: "/profile" },
         { title: "Search", icon: searchIcon, path: "/" },
         { title: "Chat", icon: chatIcon, path: "/" },
         { title: "Statistics", icon: statisticsIcon, path: "/"},
@@ -34,7 +34,7 @@ const NavBar: React.FC = () => {
     return (
         <div className="flex bg-main-green rounded-[40px]">
             <div
-                className={`${open ? "w-344" : "w-120"} bg-dark-purple h-[900px] p-4 pt-8 relative duration-300 flex-col items-center justify-between`}
+                className={`${open ? "w-[344px]" : "w-[120px]"} bg-dark-purple h-[900px] pt-8 relative duration-700 flex-col items-center justify-between`}
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
             >
@@ -45,15 +45,15 @@ const NavBar: React.FC = () => {
                     />
                 </div>
 
-                <ul className="flex flex-col gap-6 mt-5 w-full">
+                <ul className="flex flex-col mt-2 w-full">
                     {Menus.map((Menu, index) => (
                         <li
                             key={index}
-                            className={`flex items-center p-2 rounded-md cursor-pointer hover:bg-light-white text-gray-300 text-sm transition-all duration-700
-                            ${open ? "justify-start pl-4" : "justify-center"}`}
+                            className={`flex items-center w-full h-full pb-3.5 pt-3.5 cursor-pointer hover:bg-second-green text-white text-sm transition-all duration-300
+                            ${open ? "pl-12" : "pl-11 justify-start"}`}
                         >
-                            <img src={Menu.icon}/>
-                            <NavLink to="${Menus.path}" className={`${!open && "hidden"} origin-left whitespace-nowrap transition-all duration-700 ml-6 font-inter text-[16px] `}>
+                            <img src={Menu.icon} className="w-8 h-8"/>
+                            <NavLink to={Menu.path} className={`flex-grow duration-300 ease-in-out ml-6 ${open ? "opacity-100" : "opacity-0"} origin-left whitespace-nowrap font-inter text-[16px]`}>
                                 {Menu.title}
                             </NavLink>
                         </li>
