@@ -26,6 +26,7 @@ export default {
         },
         "main-black": "#3c3c3c",
         "main-green": "#009ea0",
+        "second-green": "#1D8181",
         white: "#fff",
         text: "#444",
         gray: {
