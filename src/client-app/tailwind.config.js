@@ -14,10 +14,13 @@ export default {
         semibold: '600',
         bold: '700',
       },
+      backgroundImage: {
+        'custom-bg': "url('/src/assets/bg.svg')",
+      },
       colors: {
         primary: "#009EA0",
         hover: "#21CBCD",
-        background: "#FFFFFF",
+        background: "#f0f4f9",
         textPrimary: "#FFFFFF",
         textSecondary: "#3C3C3C",
         aliceblue: {
