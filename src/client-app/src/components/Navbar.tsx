@@ -32,7 +32,7 @@ const NavBar: React.FC = () => {
     ];
 
     return (
-        <div className="flex bg-main-green rounded-[40px]">
+        <div className="fixed z-50 bg-main-green rounded-[40px]">
             <div
                 className={`${open ? "w-[344px]" : "w-[120px]"} bg-dark-purple h-[900px] pt-8 relative duration-700 flex-col items-center justify-between`}
                 onMouseEnter={() => setOpen(true)}
@@ -41,6 +41,7 @@ const NavBar: React.FC = () => {
                 <div className="flex flex-col items-center">
                     <img
                         src={logo}
+                        alt="Trendlink"
                         className={`cursor-pointer duration-500`}
                     />
                 </div>
