@@ -5,7 +5,7 @@ import imgOne from "../assets/img1AuthPage.svg";
 import RegisterForm from "../components/Forms/RegisterForm";
 import GoogleRegisterForm from "../components/Forms/GoogleRegisterForm";
 import GoogleLoginForm from "../components/Forms/GoogleLoginForm";
-import logo from "../assets/icons/logo-trendlink-green.svg";
+import logo from "../assets/logo/logo-trendlink-green.svg";
 
 const AuthPage: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -19,14 +19,14 @@ const AuthPage: React.FC = () => {
         <div className="bg-background flex justify-between items-center h-screen w-screen">
             <div className="p-8 pt-16 max-w-xl w-full">
                 <div className="ml-16">
-                    <div className="flex items-center justify-center mb-2">
+                    <div className="flex items-center justify-center mb-1">
                         <img
                             src={logo}
                             alt="logo"
                             className="h-[101px] w-[110px] object-contain"
                         />
                     </div>
-                    <p className="text-center text-[1.50rem] font-inter font-regular text-textSecondary mb-8">
+                    <p className="text-center text-[1.50rem] font-inter font-regular text-textSecondary mb-2">
                         A network for successful cooperation with bloggers
                     </p>
 
@@ -70,10 +70,10 @@ const AuthPage: React.FC = () => {
                             Policy
                         </a>
                     </div>
-                    <div className="text-center text-gray-500 text-sm mt-8">
+                    <div className="text-center text-gray-500 text-sm mt-1">
                         or
                     </div>
-                    <div className="flex justify-center mt-4 space-x-4">
+                    <div className="flex justify-center mt-1 space-x-4">
                         <img
                             src={googleIcon}
                             alt="Google"

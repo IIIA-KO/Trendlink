@@ -113,7 +113,7 @@ const RegisterForm: React.FC = () => {
             onSubmit={handleSubmit}
         >
             {({touched, errors, setFieldValue }) => (
-                <Form className="space-y-6">
+                <Form className="space-y-4">
                     <div className="text-[0.85rem]">
                         <Field
                             name="firstName"
