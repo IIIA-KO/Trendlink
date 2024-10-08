@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Authentication.Models;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
-using AccessTokenResponse = Trendlink.Application.Users.LogInUser.AccessTokenResponse;
+using AccessTokenResponse = Trendlink.Application.Accounts.LogIn.AccessTokenResponse;
 
 namespace Trendlink.Application.Abstractions.Authentication
 {
@@ -15,6 +15,16 @@ namespace Trendlink.Application.Abstractions.Authentication
 
         Task<Result<AccessTokenResponse>> RefreshTokenAsync(
             string refreshToken,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result> TerminateUserSession(
+            string userIdentityId,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<Result> DeleteAccountAsync(
+            string userIdentityId,
             CancellationToken cancellationToken = default
         );
 

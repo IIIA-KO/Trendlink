@@ -5,7 +5,6 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations.BlockedDates;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Calendar.UblockDate
 {

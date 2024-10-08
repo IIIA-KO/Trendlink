@@ -18,6 +18,9 @@ namespace Trendlink.Domain.UnitTests.Users
             DateTime.Now.AddYears(-MinimumAge)
         );
 
+        public static readonly Photo ProfilePicture =
+            new("picture-id", new Uri("https://example.com/profile.jpg"));
+
         public static readonly PhoneNumber PhoneNumber = new("0123456789");
 
         public static readonly State State = State

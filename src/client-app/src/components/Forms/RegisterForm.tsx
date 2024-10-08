@@ -1,16 +1,16 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../../api/authApi.ts';
-import { getCountries, getStates } from '../../api/countriesAndStatesApi.ts';
-import useAuth from '../../hooks/useAuth.ts';
-import { CountryType } from "../../models/CountryType.ts";
-import { StateType } from "../../models/StateType.ts";
+import { register } from '../../services/auth';
+import { getCountries, getStates } from '../../services/countriesAndStates';
+import useAuth from '../../hooks/useAuth';
+import { CountryType } from "../../types/CountryType";
+import { StateType } from "../../types/StateType";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
-import PasswordInputField from "../Inputs/PasswordInputField.tsx";
-import EmailInputFiled from "../Inputs/EmailInputField.tsx";
-import AuthSubButton from "../Buttons/AuthSubButton.tsx";
+import PasswordInputField from "../Inputs/PasswordInputField";
+import EmailInputFiled from "../Inputs/EmailInputField";
+import AuthSubButton from "../Buttons/AuthSubButton";
 
 const RegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -70,7 +70,7 @@ const RegisterForm: React.FC = () => {
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
             const userData = await register(values);
-            authLogin(userData);
+            authLogin(userData!);
             navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
@@ -113,7 +113,7 @@ const RegisterForm: React.FC = () => {
             onSubmit={handleSubmit}
         >
             {({touched, errors, setFieldValue }) => (
-                <Form className="space-y-6">
+                <Form className="space-y-4">
                     <div className="text-[0.85rem]">
                         <Field
                             name="firstName"

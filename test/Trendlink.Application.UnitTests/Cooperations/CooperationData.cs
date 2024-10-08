@@ -8,20 +8,6 @@ namespace Trendlink.Application.UnitTests.Cooperations
 {
     internal static class CooperationData
     {
-        public static Cooperation Create() =>
-            Cooperation
-                .Pend(
-                    Name,
-                    Description,
-                    ScheduledOnUtc,
-                    AdvertisementData.Price,
-                    AdvertisementData.Create(),
-                    BuyerId,
-                    SellerId,
-                    UtcNow
-                )
-                .Value;
-
         public static readonly Name Name = new("Name");
 
         public static readonly Description Description = new("Description");
@@ -35,5 +21,40 @@ namespace Trendlink.Application.UnitTests.Cooperations
         public static readonly UserId BuyerId = UserId.New();
 
         public static readonly UserId SellerId = UserId.New();
+
+        public static Cooperation CreatePendingCooperation() =>
+            Cooperation
+                .Pend(
+                    Name,
+                    Description,
+                    ScheduledOnUtc,
+                    AdvertisementData.Price,
+                    AdvertisementData.Create(),
+                    BuyerId,
+                    SellerId,
+                    UtcNow
+                )
+                .Value;
+
+        public static Cooperation CreateConfirmedCooperation()
+        {
+            Cooperation cooperation = CreatePendingCooperation();
+            cooperation.Confirm(DateTime.UtcNow);
+            return cooperation;
+        }
+
+        public static Cooperation CreateDoneCooperation()
+        {
+            Cooperation cooperation = CreateConfirmedCooperation();
+            cooperation.MarkAsDone(DateTime.UtcNow);
+            return cooperation;
+        }
+
+        public static Cooperation CreateCompletedCooperation()
+        {
+            Cooperation cooperation = CreateDoneCooperation();
+            cooperation.Complete(DateTime.UtcNow);
+            return cooperation;
+        }
     }
 }

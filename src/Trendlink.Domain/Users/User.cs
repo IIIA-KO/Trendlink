@@ -1,6 +1,7 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Notifications;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
@@ -41,7 +42,7 @@ namespace Trendlink.Domain.Users
 
         public LastName LastName { get; private set; }
 
-        public ProfilePicture? ProfilePicture { get; private set; }
+        public Photo? ProfilePhoto { get; private set; }
 
         public DateOnly BirthDate { get; private set; }
 
@@ -151,14 +152,10 @@ namespace Trendlink.Domain.Users
         )
         {
             if (
-                firstName is null
-                || string.IsNullOrEmpty(firstName.Value)
-                || lastName is null
-                || string.IsNullOrEmpty(lastName.Value)
-                || email is null
-                || string.IsNullOrEmpty(email.Value)
-                || phoneNumber is null
-                || string.IsNullOrEmpty(phoneNumber.Value)
+                string.IsNullOrWhiteSpace(firstName?.Value)
+                || string.IsNullOrWhiteSpace(lastName?.Value)
+                || string.IsNullOrWhiteSpace(email?.Value)
+                || string.IsNullOrWhiteSpace(phoneNumber?.Value)
             )
             {
                 return Result.Failure(UserErrors.InvalidCredentials);
@@ -194,11 +191,16 @@ namespace Trendlink.Domain.Users
                 );
         }
 
-        public void SetProfilePicture(Uri uri)
+        public void SetProfilePhoto(Photo photo)
         {
-            ArgumentNullException.ThrowIfNull(uri);
+            ArgumentNullException.ThrowIfNull(photo.Uri);
 
-            this.ProfilePicture = new ProfilePicture(uri);
+            this.ProfilePhoto = photo;
+        }
+
+        public void RemoveProfilePhoto()
+        {
+            this.ProfilePhoto = null;
         }
 
         public void LinkInstagramAccount(

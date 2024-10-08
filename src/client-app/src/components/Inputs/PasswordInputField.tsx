@@ -1,18 +1,18 @@
 import {Field, ErrorMessage, useFormikContext, FormikTouched, FormikErrors} from 'formik';
 import {useState} from "react";
-import {UserType} from "../../models/UserType.ts";
+import {UserLoginType} from "../../types/UserLoginType";
 
 const PasswordInputField = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { touched, errors } = useFormikContext<UserType>();
+    const { touched, errors } = useFormikContext<UserLoginType>();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     const getFieldClasses = (
-        touched: FormikTouched<UserType>['email'],
-        error: FormikErrors<UserType>['email']
+        touched: FormikTouched<UserLoginType>['email'],
+        error: FormikErrors<UserLoginType>['email']
     ) => {
         const baseClasses = "bg-transparent w-full px-4 py-2 border-b-2 focus:outline-none";
         return touched && error ? `${baseClasses} border-red-500` : `${baseClasses} border-gray-300 focus:border-blue-500`;

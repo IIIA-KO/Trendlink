@@ -164,7 +164,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Confirm_Should_SetStatusAndConfirmedOnUtc()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -180,7 +180,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Confirm_Should_RaiseCooperationConfirmedDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -199,7 +199,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Confirm_Should_ReturnFailure_WhenStatusIsNotPending()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -214,7 +214,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Reject_Should_SetStatusAndRejectedOnUtc()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -230,7 +230,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Reject_Should_RaiseCooperationRejectedDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -249,7 +249,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Reject_Should_ReturnError_WhenStatusIsNotPending()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -264,7 +264,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void MarkAsDone_Should_SetStatusAndDoneOnUtc()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -280,7 +280,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void MarkAsDone_Should_RaiseCooperationDoneDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -299,7 +299,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void MarkAsDone_Should_ReturnFailure_WhenStatusIsNotConfirmed()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -314,7 +314,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Complete_Should_SetStatusAndCompletedOnUtc()
         {
             // Arrange
-            Cooperation cooperation = CreateDoneCooperation();
+            Cooperation cooperation = CooperationData.CreateDoneCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -330,7 +330,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Complete_Should_RaiseCooperationCompletedDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = CreateDoneCooperation();
+            Cooperation cooperation = CooperationData.CreateDoneCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -349,7 +349,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Complete_Should_ReturnFailure_WhenStatusIsNotDone()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -364,7 +364,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Cancel_Should_SetStatusAndCancelledOnUtc()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow.AddDays(-1);
 
             // Act
@@ -380,7 +380,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Cancel_Should_RaiseCooperationCancelledDomainEvent()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow.AddDays(-1);
 
             // Act
@@ -399,7 +399,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Cancel_Should_ReturnFailure_WhenStatusIsNotConfirmed()
         {
             // Arrange
-            Cooperation cooperation = CreatePendingCooperation();
+            Cooperation cooperation = CooperationData.CreatePendingCooperation();
             DateTime utcNow = DateTime.UtcNow;
 
             // Act
@@ -414,7 +414,7 @@ namespace Trendlink.Domain.UnitTests.Cooperations
         public void Cancel_Should_ReturnFailure_WhenAlreadyStarted()
         {
             // Arrange
-            Cooperation cooperation = CreateConfirmedCooperation();
+            Cooperation cooperation = CooperationData.CreateConfirmedCooperation();
             DateTime utcNow = DateTime.UtcNow.AddDays(8);
 
             // Act
@@ -423,36 +423,6 @@ namespace Trendlink.Domain.UnitTests.Cooperations
             // Assert
             result.IsFailure.Should().BeTrue();
             result.Error.Should().Be(CooperationErrors.AlreadyStarted);
-        }
-
-        private static Cooperation CreatePendingCooperation()
-        {
-            return Cooperation
-                .Pend(
-                    CooperationData.Name,
-                    CooperationData.Description,
-                    DateTimeOffset.UtcNow.AddDays(7),
-                    AdvertisementData.Price,
-                    AdvertisementData.Create(),
-                    UserId.New(),
-                    UserId.New(),
-                    DateTime.UtcNow
-                )
-                .Value;
-        }
-
-        private static Cooperation CreateConfirmedCooperation()
-        {
-            Cooperation cooperation = CreatePendingCooperation();
-            cooperation.Confirm(DateTime.UtcNow);
-            return cooperation;
-        }
-
-        private static Cooperation CreateDoneCooperation()
-        {
-            Cooperation cooperation = CreateConfirmedCooperation();
-            cooperation.MarkAsDone(DateTime.UtcNow);
-            return cooperation;
         }
     }
 }

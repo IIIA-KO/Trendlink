@@ -5,7 +5,6 @@ using Trendlink.Application.Abstractions.SignalR.Notifications;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.Notifications.CreateNotification
 {

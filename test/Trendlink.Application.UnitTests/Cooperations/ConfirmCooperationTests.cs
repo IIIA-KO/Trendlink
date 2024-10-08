@@ -7,13 +7,13 @@ using Trendlink.Application.Cooperations.ConfirmCooperation;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;
-using Trendlink.Domain.Users.InstagramBusinessAccount;
 
 namespace Trendlink.Application.UnitTests.Cooperations
 {
     public class ConfirmCooperationTests : CooperationBaseTest
     {
-        public static readonly ConfirmCooperationCommand Command = new(CooperationData.Create().Id);
+        public static readonly ConfirmCooperationCommand Command =
+            new(CooperationData.CreatePendingCooperation().Id);
 
         private readonly ICooperationRepository _cooperationRepositoryMock;
         private readonly IUserContext _userContextMock;

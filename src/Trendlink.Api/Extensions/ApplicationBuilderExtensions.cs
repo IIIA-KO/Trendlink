@@ -19,7 +19,7 @@ namespace Trendlink.Api.Extensions
             }
             catch (Npgsql.PostgresException)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
                 dbContext.Database.Migrate();
             }
         }
@@ -42,9 +42,9 @@ namespace Trendlink.Api.Extensions
                     "CorsPolicy",
                     policy =>
                         policy
+                            .WithOrigins("https://localhost:3000", "http://localhost:3000")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .WithOrigins("http://localhost:3000", "https://localhost:3000")
                             .AllowCredentials()
                 )
             );

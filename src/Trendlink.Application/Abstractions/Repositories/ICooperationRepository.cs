@@ -16,6 +16,11 @@ namespace Trendlink.Application.Abstractions.Repositories
             CancellationToken cancellationToken = default
         );
 
+        Task<bool> HasActiveCooperationsForAdvertisement(
+            Advertisement advertisement,
+            CancellationToken cancellationToken = default
+        );
+
         void Add(Cooperation cooperation);
     }
 }

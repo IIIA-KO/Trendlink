@@ -1,11 +1,11 @@
-﻿using Trendlink.Application.Users.LogInUser;
+﻿using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
 
 namespace Trendlink.Application.UnitTests.Users
 {
-    internal static class UserData
+    public static class UserData
     {
         public const int MinimumAge = 18;
 
@@ -25,9 +25,8 @@ namespace Trendlink.Application.UnitTests.Users
 
         public static readonly Email Email = new("test@test.com");
 
-        public static readonly ProfilePicture ProfilePicture = new ProfilePicture(
-            new Uri("htttps://www.picture.com")
-        );
+        public static readonly Photo ProfilePhoto =
+            new("picture-id", new Uri("htttps://www.picture.com"));
 
         public static readonly DateOnly BirthDate = DateOnly.FromDateTime(
             DateTime.Now.AddYears(-18)
