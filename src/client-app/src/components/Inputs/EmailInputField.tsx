@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Field, ErrorMessage, useFormikContext, FormikTouched, FormikErrors } from 'formik';
-import {UserType} from "../../types/UserType";
+import {UserLoginType} from "../../types/UserLoginType";
 
 const EmailInputFiled: React.FC = () => {
-    const { touched, errors, setFieldValue } = useFormikContext<UserType>();
+    const { touched, errors, setFieldValue } = useFormikContext<UserLoginType>();
 
     const [email, setEmail] = useState('');
 
@@ -18,8 +18,8 @@ const EmailInputFiled: React.FC = () => {
     };
 
     const getFieldClasses = (
-        touched: FormikTouched<UserType>['email'],
-        error: FormikErrors<UserType>['email']
+        touched: FormikTouched<UserLoginType>['email'],
+        error: FormikErrors<UserLoginType>['email']
     ) => {
         const baseClasses = "bg-transparent w-full px-4 py-2 border-b-2 focus:outline-none";
         return touched && error ? `${baseClasses} border-red-500` : `${baseClasses} border-gray-300 focus:border-blue-500`;

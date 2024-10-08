@@ -5,8 +5,7 @@ export default {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
-        kodchasan: ['Kodchasan', 'sans-serif'],
-        "logo-font": "Kodchasan",
+        kodchasan: ['Kodchasan', 'sans-serif']
       },
       fontWeight: {
         light: '300',
@@ -15,10 +14,13 @@ export default {
         semibold: '600',
         bold: '700',
       },
+      backgroundImage: {
+        'custom-bg': "url('/src/assets/bg.svg')",
+      },
       colors: {
         primary: "#009EA0",
         hover: "#21CBCD",
-        background: "#FFFFFF",
+        background: "#f0f4f9",
         textPrimary: "#FFFFFF",
         textSecondary: "#3C3C3C",
         aliceblue: {
@@ -27,6 +29,7 @@ export default {
         },
         "main-black": "#3c3c3c",
         "main-green": "#009ea0",
+        "second-green": "#1D8181",
         white: "#fff",
         text: "#444",
         gray: {

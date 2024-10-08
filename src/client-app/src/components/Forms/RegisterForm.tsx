@@ -70,7 +70,7 @@ const RegisterForm: React.FC = () => {
     const handleSubmit = async (values: typeof initialValues, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         try {
             const userData = await register(values);
-            authLogin(userData);
+            authLogin(userData!);
             navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
@@ -113,7 +113,7 @@ const RegisterForm: React.FC = () => {
             onSubmit={handleSubmit}
         >
             {({touched, errors, setFieldValue }) => (
-                <Form className="space-y-6">
+                <Form className="space-y-4">
                     <div className="text-[0.85rem]">
                         <Field
                             name="firstName"

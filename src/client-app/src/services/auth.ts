@@ -1,5 +1,5 @@
 import axiosInstance from './api';
-import { UserType } from '../types/UserType';
+import { UserLoginType } from '../types/UserLoginType';
 import { AuthResponseType } from '../types/AuthResponseType'
 import {handleError} from "../utils/handleError";
 
@@ -11,7 +11,7 @@ export const register = async (data: {
     phoneNumber: string;
     password: string;
     stateId: string;
-}): Promise<AuthResponseType> => {
+}): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/accounts/register', data);
         return {
@@ -19,17 +19,13 @@ export const register = async (data: {
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
 
-export const login = async (credentials: UserType): Promise<AuthResponseType> => {
+export const login = async (credentials: UserLoginType): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/accounts/login', credentials);
         return {
@@ -37,13 +33,9 @@ export const login = async (credentials: UserType): Promise<AuthResponseType> =>
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
 
@@ -55,7 +47,7 @@ export const logout = async (): Promise<void> => {
     }
 };
 
-export const refreshAccessToken = async (refreshToken: string): Promise<AuthResponseType> => {
+export const refreshAccessToken = async (refreshToken: string): Promise<AuthResponseType | null> => {
     try {
         const response = await axiosInstance.post('/accounts/refresh', { refreshToken });
         return {
@@ -63,12 +55,8 @@ export const refreshAccessToken = async (refreshToken: string): Promise<AuthResp
             refreshToken: response.data.refreshToken,
             expiresIn: response.data.expiresIn,
         };
-    } catch (error: unknown) {
+    } catch (error) {
         handleError(error);
-        return {
-            accessToken: '',
-            refreshToken: '',
-            expiresIn: 0,
-        };
+        return null
     }
 };
