@@ -11,11 +11,6 @@ const CallBackPage = lazy(() =>import("./pages/CallBackPage"));
 const ProfilePage = lazy(() =>import("./pages/ProfilePage"));
 const NotFoundPage = lazy(() =>import("./pages/NotFoundPage"));
 const ServerErrorPage = lazy(() =>import("./pages/ServerErrorPage"));
-const ReelsPage = lazy(() =>import("./pages/ReelsPage"));
-const StaticsEngagementPage = lazy(() =>import("./pages/StaticsEngagementPage"));
-const StaticsPage = lazy(() =>import("./pages/StaticsPage"));
-const StaticsPublicationsPage = lazy(() =>import("./pages/StaticsPublicationsPage"));
-const StaticsHistoryPage = lazy(() =>import("./pages/StaticsHistoryPage"));
 
 const App: React.FC = () => {
     return (
@@ -23,13 +18,8 @@ const App: React.FC = () => {
             <AuthProvider>
                 <Suspense fallback={<LoadingPage/>}>
                     <Routes>
+                        <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
                         <Route path="/login" element={<AuthPage/>} />
-                        <Route path="/reels" element={<ReelsPage />}/>
-                        <Route path="/statistic" element={<StaticsPage />}/>
-                        <Route path="/statisticengagment" element={<StaticsEngagementPage />}/>
-                        <Route path="/statisticPublications" element={<StaticsPublicationsPage />}/>
-                        <Route path="/statisticHistoryPage" element={<StaticsHistoryPage />}/>
-                        <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage /></ProfileProvider></ProtectedRoute>}/>
                         <Route path="/404" element={<NotFoundPage />} />
                         <Route path="/500" element={<ServerErrorPage />} />
                         <Route path="*" element={<Navigate to="/404" replace />} />
