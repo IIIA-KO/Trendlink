@@ -28,11 +28,10 @@ const TopBar: React.FC = () => {
 
                 <div className="grid grid-cols-[35rem_35rem] items-center ml-36">
                     <p className='font-inter font-bold text-[19px]'>{user?.firstName || 'John'} {user?.lastName || 'Doe'}</p>
-                    <p className='font-inter font-regular text-main-black text-[17px]'>{user?.accountCategory || 'Creator'}</p>
                 </div>
 
-                <div className="grid grid-cols-[33rem_33rem] items-center ml-36 gap-x-8 mt-2">
-                    <p className='font-inter font-regular text-[17px]'>Style for every day</p>
+                <div className="grid grid-cols-[33rem_33rem] items-center ml-36 mt-2">
+                    <p className='font-inter font-regular text-[17px]'>Name instagram</p>
                     <p className='font-inter font-regular text-main-black text-[17px] inline-flex items-center'>
                         <img src={locationIcon} alt="Location icon" className="w-5 h-5 mr-1"/>
                         {user?.countryName || 'UA'} / {user?.stateName || 'Kyiv'}
@@ -40,11 +39,11 @@ const TopBar: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-[36rem] items-center ml-36 mt-2">
-                    <p className='font-inter font-regular text-[16px]'>Fashion and style</p>
+                    <p className='font-inter font-regular text-main-black text-[17px]'>{user?.accountCategory || 'Creator'}</p>
                 </div>
 
                 <div className="flex gap-1 items-center ml-36 mt-2">
-                    {[...Array(5)].map((_, index) => (
+                {[...Array(5)].map((_, index) => (
                         <img key={index} src={star} alt="Star" className="w-6 h-6"/>
                     ))}
                 </div>
