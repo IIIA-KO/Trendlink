@@ -66,6 +66,8 @@ namespace Trendlink.Infrastructure
 
             AddCloudinary(services, configuration);
 
+            AddHealthChecks(services, configuration);
+
             return services;
         }
 
@@ -258,6 +260,23 @@ namespace Trendlink.Infrastructure
             services.Configure<CloudinaryOptions>(configuration.GetSection("Cloudinary"));
 
             services.AddSingleton<IPhotoAccessor, PhotoAccessor>();
+        }
+
+        private static void AddHealthChecks(
+            IServiceCollection services,
+            IConfiguration configuration
+        )
+        {
+            services
+                .AddHealthChecks()
+                .AddNpgSql(configuration.GetConnectionString("Database")!)
+                .AddRedis(configuration.GetConnectionString("Cache")!)
+                .AddUrlGroup(
+                    new Uri(configuration["Keycloak:BaseUrl"]!),
+                    HttpMethod.Get,
+                    "keycloak"
+                )
+                .AddUrlGroup(new Uri(configuration["Email:BaseUrl"]!), HttpMethod.Get, "papercut");
         }
     }
 }

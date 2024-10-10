@@ -7,6 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
+		<PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
 		<PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
 		<PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
 		<PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
