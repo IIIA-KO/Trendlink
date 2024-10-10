@@ -1,7 +1,7 @@
 ﻿using FluentEmail.Core;
-using Trendlink.Application.Abstractions.Email;
+using Trendlink.Application.Abstractions.Emails;
 
-namespace Trendlink.Infrastructure.Email
+namespace Trendlink.Infrastructure.Emails
 {
     internal sealed class EmailService : IEmailService
     {

@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
@@ -18,16 +18,14 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             IUserRepository userRepository,
             IAdvertisementRepository advertisementRepository,
             IDateTimeProvider dateTimeProvider,
-            INotificationRepository notificationRepository,
-            IUnitOfWork unitOfWork
+            IEmailService emailService
         )
             : base(
                 cooperationRepository,
                 userRepository,
                 advertisementRepository,
                 dateTimeProvider,
-                notificationRepository,
-                unitOfWork
+                emailService
             ) { }
 
         protected override CompositeFormat MessageFormat =>
@@ -38,13 +36,18 @@ namespace Trendlink.Application.Cooperations.MarkCooperationAsDone
             return string.Format(
                 CultureInfo.CurrentCulture,
                 this.MessageFormat,
-                user.FirstName.Value
+                user.FirstName.Value,
+                advertisement.Name.Value
             );
         }
 
-        protected override string GetNotificationTitle() => "Advertisement Done!";
+        protected override string GetEmailSubject() => "Advertisement Done!";
 
-        protected override UserId GetReceiverId(Cooperation cooperation) => cooperation.BuyerId;
+        protected override async Task<Email> GetRecipientEmail(Cooperation cooperation)
+        {
+            User? user = await this._userRepository.GetByIdAsync(cooperation.BuyerId);
+            return user!.Email;
+        }
 
         protected override async Task<User?> GetUserAsync(
             Cooperation cooperation,

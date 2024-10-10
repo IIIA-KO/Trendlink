@@ -1,4 +1,4 @@
-﻿namespace Trendlink.Application.Abstractions.Email
+﻿namespace Trendlink.Application.Abstractions.Emails
 {
     public interface IEmailService
     {
