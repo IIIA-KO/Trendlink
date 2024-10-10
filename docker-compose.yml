@@ -40,7 +40,7 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - 5341:5341
-      - 8081:80
+      - 8081:81
 
   trendlink-redis:
     image: redis:latest
@@ -48,3 +48,10 @@ services:
     restart: always
     ports:
       - '6379:6379'
+  
+  trendlink-papercut:
+    image: changemakerstudiosus/papercut-smtp:latest
+    container_name: Trendlink.Papercut
+    ports:
+      - 8080:80
+      - 25:25

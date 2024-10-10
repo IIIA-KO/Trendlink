@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Globalization;
+using Dapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Abstractions.Email;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Photos;
 using Trendlink.Application.Abstractions.Repositories;
@@ -25,6 +27,7 @@ using Trendlink.Infrastructure.BackgroundJobs.Token;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
+using Trendlink.Infrastructure.Email;
 using Trendlink.Infrastructure.Instagram;
 using Trendlink.Infrastructure.Instagram.Abstraction;
 using Trendlink.Infrastructure.Photos;
@@ -54,6 +57,8 @@ namespace Trendlink.Infrastructure
 
             AddAuthorization(services);
 
+            AddEmail(services, configuration);
+
             AddCaching(services, configuration);
 
             AddBackgroundJobs(services, configuration);
@@ -63,6 +68,18 @@ namespace Trendlink.Infrastructure
             AddCloudinary(services, configuration);
 
             return services;
+        }
+
+        private static void AddEmail(IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
+                .AddSmtpSender(
+                    configuration["Email:Host"],
+                    configuration.GetValue<int>("Email:Port")
+                );
+
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         private static void AddPersistence(
