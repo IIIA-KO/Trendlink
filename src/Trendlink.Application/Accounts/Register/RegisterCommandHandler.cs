@@ -1,9 +1,12 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
+using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.Register
 {
@@ -11,18 +14,30 @@ namespace Trendlink.Application.Accounts.Register
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IUserRepository _userRepository;
+        private readonly IEmailService _emailService;
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IEmailVerificationLinkFactory _emailVerificationLinkFactory;
+        private readonly IEmailVerificationTokenRepository _emailVerificationTokenRepository;
         private readonly IStateRepository _stateRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RegisterCommandHandler(
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
+            IEmailService emailService,
+            IDateTimeProvider dateTimeProvider,
+            IEmailVerificationLinkFactory emailVerificationLinkFactory,
+            IEmailVerificationTokenRepository emailVerificationTokenRepository,
             IStateRepository stateRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._authenticationService = authenticationService;
             this._userRepository = userRepository;
+            this._emailService = emailService;
+            this._dateTimeProvider = dateTimeProvider;
+            this._emailVerificationLinkFactory = emailVerificationLinkFactory;
+            this._emailVerificationTokenRepository = emailVerificationTokenRepository;
             this._stateRepository = stateRepository;
             this._unitOfWork = unitOfWork;
         }
@@ -78,7 +93,26 @@ namespace Trendlink.Application.Accounts.Register
 
                 this._userRepository.Add(user);
 
+                DateTime utcNow = this._dateTimeProvider.UtcNow;
+                var emailVerificationToken = new EmailVerificationToken(
+                    user.Id,
+                    utcNow,
+                    utcNow.AddDays(1)
+                );
+                this._emailVerificationTokenRepository.Add(emailVerificationToken);
+
                 await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+                string verificationLink = this._emailVerificationLinkFactory.Create(
+                    emailVerificationToken
+                );
+
+                await this._emailService.SendAsync(
+                    user.Email,
+                    "Email Verification for Trendlink",
+                    $"To verify your email <a href='{verificationLink}'>click here</a>",
+                    isHtml: true
+                );
 
                 return user.Id;
             }

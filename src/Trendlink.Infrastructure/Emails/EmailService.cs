@@ -12,9 +12,18 @@ namespace Trendlink.Infrastructure.Emails
             this._fluentEmail = fluentEmail;
         }
 
-        public async Task SendAsync(Domain.Users.Email recipient, string subject, string body)
+        public async Task SendAsync(
+            Domain.Users.Email recipient,
+            string subject,
+            string body,
+            bool isHtml = false
+        )
         {
-            await this._fluentEmail.To(recipient.Value).Subject(subject).Body(body).SendAsync();
+            await this
+                ._fluentEmail.To(recipient.Value)
+                .Subject(subject)
+                .Body(body, isHtml)
+                .SendAsync();
         }
     }
 }

@@ -81,6 +81,8 @@ namespace Trendlink.Infrastructure
                 );
 
             services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+            services.AddHttpContextAccessor();
         }
 
         private static void AddPersistence(
@@ -113,6 +115,10 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IUserTokenRepository, UserTokenRepository>();
             services.AddScoped<IInstagramAccountRepository, InstagramAccountRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<
+                IEmailVerificationTokenRepository,
+                EmailVerificationTokenRepository
+            >();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()

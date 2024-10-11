@@ -39,7 +39,6 @@ namespace Trendlink.Infrastructure.Authentication
                 userRepresentationModel,
                 cancellationToken
             );
-
             return ExtractIdentityIdFromLocationHeader(response);
         }
 
