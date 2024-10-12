@@ -27,6 +27,8 @@ namespace Trendlink.Application.Abstractions.Repositories
             CancellationToken cancellationToken = default
         );
 
+        Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default);
+
         Task<User?> GetByIdentityIdAsync(
             string identityId,
             CancellationToken cancellationToken = default

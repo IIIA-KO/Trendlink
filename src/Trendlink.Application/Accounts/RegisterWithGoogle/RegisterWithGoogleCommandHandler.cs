@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Accounts.LogIn;
@@ -7,6 +8,7 @@ using Trendlink.Application.Exceptions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.RegisterWithGoogle
 {
@@ -21,6 +23,9 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
 
         private readonly IUserRepository _userRepository;
         private readonly IStateRepository _stateRepository;
+
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IEmailVerificationTokenRepository _emailVerificationTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public RegisterWithGoogleCommandHandler(
@@ -29,6 +34,8 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
             IAuthenticationService authenticationService,
             IUserRepository userRepository,
             IStateRepository stateRepository,
+            IDateTimeProvider dateTimeProvider,
+            IEmailVerificationTokenRepository emailVerificationTokenRepository,
             IUnitOfWork unitOfWork
         )
         {
@@ -37,6 +44,8 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
             this._authenticationService = authenticationService;
             this._userRepository = userRepository;
             this._stateRepository = stateRepository;
+            this._dateTimeProvider = dateTimeProvider;
+            this._emailVerificationTokenRepository = emailVerificationTokenRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -119,8 +128,6 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
 
                 this._userRepository.Add(user);
 
-                await this._unitOfWork.SaveChangesAsync(cancellationToken);
-
                 Result linkGoogleResult =
                     await this._keycloakService.LinkExternalIdentityProviderAccountToKeycloakUserAsync(
                         user.IdentityId,
@@ -143,6 +150,17 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
                 {
                     return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
                 }
+
+                DateTime utcNow = this._dateTimeProvider.UtcNow;
+                var emailVerificationToken = new EmailVerificationToken(
+                    user.Id,
+                    utcNow,
+                    utcNow.AddDays(1)
+                );
+                this._emailVerificationTokenRepository.Add(emailVerificationToken);
+                user.VerifyEmail(emailVerificationToken);
+
+                await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
                 return tokenResult.Value;
             }

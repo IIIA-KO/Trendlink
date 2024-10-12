@@ -5,6 +5,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.LoginWithGoogle
 {
@@ -51,13 +52,19 @@ namespace Trendlink.Application.Accounts.LoginWithGoogle
 
             try
             {
-                bool userExists = await this._userRepository.ExistByEmailAsync(
+                User? user = await this._userRepository.GetByEmailAsync(
                     new Email(userInfo.Email),
                     cancellationToken
                 );
-                if (!userExists)
+                if (user is null)
                 {
                     return Result.Failure<AccessTokenResponse>(UserErrors.InvalidCredentials);
+                }
+                if (!user.EmailVerified)
+                {
+                    return Result.Failure<AccessTokenResponse>(
+                        EmailVerificationTokenErrors.EmailNotVerified
+                    );
                 }
 
                 Result<AccessTokenResponse> tokenResult =

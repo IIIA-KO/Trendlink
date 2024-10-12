@@ -3,6 +3,7 @@ using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.LogIn
 {
@@ -22,13 +23,19 @@ namespace Trendlink.Application.Accounts.LogIn
             CancellationToken cancellationToken
         )
         {
-            bool userExists = await this._userRepository.ExistByEmailAsync(
+            User? user = await this._userRepository.GetByEmailAsync(
                 request.Email,
                 cancellationToken
             );
-            if (!userExists)
+            if (user is null)
             {
                 return Result.Failure<AccessTokenResponse>(UserErrors.NotFound);
+            }
+            if (!user.EmailVerified)
+            {
+                return Result.Failure<AccessTokenResponse>(
+                    EmailVerificationTokenErrors.EmailNotVerified
+                );
             }
 
             Result<AccessTokenResponse> result = await this._keycloakService.GetAccessTokenAsync(
