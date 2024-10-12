@@ -1,4 +1,5 @@
-﻿using Trendlink.Domain.Users.VerificationTokens;
+﻿using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {
@@ -12,6 +13,11 @@ namespace Trendlink.Application.Abstractions.Repositories
         Task<EmailVerificationToken?> GetByIdWithUser(
             EmailVerificationTokenId id,
             CancellationToken cancellationToken = default
+        );
+
+        Task<EmailVerificationToken?> GetActiveTokenByUserId(
+            UserId userId,
+            CancellationToken cancellationToken
         );
 
         void Add(EmailVerificationToken emailVerificationToken);

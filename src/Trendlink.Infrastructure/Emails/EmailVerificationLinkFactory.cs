@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.Extensions.Configuration;
 using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Domain.Users.VerificationTokens;
 
@@ -7,28 +6,18 @@ namespace Trendlink.Infrastructure.Emails
 {
     internal sealed class EmailVerificationLinkFactory : IEmailVerificationLinkFactory
     {
-        private readonly IHttpContextAccessor _contextAccessor;
-        private readonly LinkGenerator _linkGenerator;
+        private readonly IConfiguration _configuration;
 
-        public EmailVerificationLinkFactory(
-            IHttpContextAccessor contextAccessor,
-            LinkGenerator linkGenerator
-        )
+        public EmailVerificationLinkFactory(IConfiguration configuration)
         {
-            this._contextAccessor = contextAccessor;
-            this._linkGenerator = linkGenerator;
+            this._configuration = configuration;
         }
 
         public string Create(EmailVerificationToken emailVerificationToken)
         {
-            string? verificationLink = this._linkGenerator.GetUriByName(
-                this._contextAccessor.HttpContext!,
-                "VerifyEmail",
-                new { token = emailVerificationToken.Id.Value }
-            );
+            string frontendUrl = this._configuration.GetValue<string>("FrontendUrl");
 
-            return verificationLink
-                ?? throw new Exception("Could not create email verification link");
+            return $"{frontendUrl}/verify-email?token={emailVerificationToken.Id.Value}";
         }
     }
 }

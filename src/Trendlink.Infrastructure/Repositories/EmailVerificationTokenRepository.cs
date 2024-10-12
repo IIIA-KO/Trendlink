@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
+using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.VerificationTokens;
 using Trendlink.Infrastructure.Specifications.EmailVerificationTokens;
 
@@ -20,6 +21,17 @@ namespace Trendlink.Infrastructure.Repositories
             return await this.ApplySpecification(
                     new EmailVerificationTokenByIdWithUserSpecification(id)
                 )
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<EmailVerificationToken?> GetActiveTokenByUserId(
+            UserId userId,
+            CancellationToken cancellationToken
+        )
+        {
+            return await this
+                .dbContext.Set<EmailVerificationToken>()
+                .Where(token => token.UserId == userId && token.ExpiresAtUtc > DateTime.UtcNow)
                 .FirstOrDefaultAsync(cancellationToken);
         }
     }

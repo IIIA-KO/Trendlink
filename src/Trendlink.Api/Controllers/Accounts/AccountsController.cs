@@ -8,6 +8,7 @@ using Trendlink.Application.Accounts.LogOut;
 using Trendlink.Application.Accounts.RefreshToken;
 using Trendlink.Application.Accounts.Register;
 using Trendlink.Application.Accounts.RegisterWithGoogle;
+using Trendlink.Application.Accounts.ResendEmailVerificationToken;
 using Trendlink.Application.Accounts.VerifyEmail;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
@@ -38,13 +39,25 @@ namespace Trendlink.Api.Controllers.Accounts
         }
 
         [AllowAnonymous]
-        [HttpGet("verify-email", Name = "VerifyEmail")]
+        [HttpGet("verify-email")]
         public async Task<IActionResult> VerifyEmail(
             [FromQuery] Guid token,
             CancellationToken cancellationToken
         )
         {
             var command = new VerifyEmailCommand(token);
+
+            return this.HandleResult(await this.Sender.Send(command, cancellationToken));
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resend-verification-token/{email}")]
+        public async Task<IActionResult> ResendVerificationToken(
+            [FromRoute] string email,
+            CancellationToken cancellationToken
+        )
+        {
+            var command = new ResendEmailVerificationTokenCommand(new Email(email));
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
