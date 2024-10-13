@@ -20,6 +20,7 @@ using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authentication.Google;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
+using Trendlink.Infrastructure.BackgroundJobs.EmailVerificationTokens;
 using Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts;
 using Trendlink.Infrastructure.BackgroundJobs.Outbox;
 using Trendlink.Infrastructure.BackgroundJobs.Token;
@@ -73,6 +74,8 @@ namespace Trendlink.Infrastructure
 
         private static void AddEmail(IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<EmailOptions>(configuration.GetSection("Email"));
+
             services
                 .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
                 .AddSmtpSender(
@@ -254,6 +257,7 @@ namespace Trendlink.Infrastructure
             services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
             services.ConfigureOptions<CheckUserTokensJobSetup>();
             services.ConfigureOptions<UpdateInstagramAccountJobSetup>();
+            services.ConfigureOptions<DeleteExpiredEmailVerificationTokensJobSetup>();
         }
 
         private static void AddRealTimeServices(IServiceCollection services)
