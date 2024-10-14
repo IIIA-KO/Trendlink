@@ -9,7 +9,7 @@ const EmailInputFiled: React.FC = () => {
 
     const handleClear = () => {
         setEmail('');
-        setFieldValue('email', ''); // Очищаем значение в Formik
+        setFieldValue('email', '');
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
