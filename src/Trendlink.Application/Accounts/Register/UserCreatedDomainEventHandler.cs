@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Repositories;
