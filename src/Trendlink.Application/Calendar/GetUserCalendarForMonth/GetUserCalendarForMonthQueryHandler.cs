@@ -20,11 +20,10 @@ namespace Trendlink.Application.Calendar.GetUserCalendarForMonth
         )
         {
             IReadOnlyList<CooperationResponse> cooperations =
-                await this._cooperationRepository.GetCooperationsForUserAsync(
+                await this._cooperationRepository.GetUserCooperationsForMonthAsync(
                     request.UserId,
                     request.Month,
-                    request.Year,
-                    cancellationToken
+                    request.Year
                 );
 
             IReadOnlyList<DateOnly> blockedDates =

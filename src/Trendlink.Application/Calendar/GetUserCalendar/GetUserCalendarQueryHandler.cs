@@ -2,6 +2,7 @@
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Cooperations;
 
 namespace Trendlink.Application.Calendar.GetUserCalendar
 {
@@ -20,11 +21,33 @@ namespace Trendlink.Application.Calendar.GetUserCalendar
             CancellationToken cancellationToken
         )
         {
-            IReadOnlyList<CooperationResponse> cooperations =
-                await this._cooperationRepository.GetCooperationsForUserAsync(
-                    request.UserId,
-                    cancellationToken: cancellationToken
-                );
+            IQueryable<Cooperation> cooperations = this._cooperationRepository.SearchCooperations(
+                request.UserId,
+                new CooperationSearchParameters(
+                    request.SearchTerm,
+                    request.StartMonth,
+                    request.StartYear,
+                    request.EndMonth,
+                    request.EndYear,
+                    request.CooperationStatus
+                )
+            );
+
+            IQueryable<CooperationResponse> cooperationResponses = cooperations.Select(
+                cooperation => new CooperationResponse
+                {
+                    Id = cooperation.Id.Value,
+                    Name = cooperation.Name.Value,
+                    Description = cooperation.Description.Value,
+                    ScheduledOnUtc = cooperation.ScheduledOnUtc,
+                    PriceAmount = cooperation.Price.Amount,
+                    PriceCurrency = cooperation.Price.Currency.Code,
+                    AdvertisementId = cooperation.AdvertisementId.Value,
+                    BuyerId = cooperation.BuyerId.Value,
+                    SellerId = cooperation.SellerId.Value,
+                    Status = cooperation.Status
+                }
+            );
 
             IReadOnlyList<DateOnly> blockedDates =
                 await this._cooperationRepository.GetBlockedDatesForUserAsync(
@@ -32,7 +55,7 @@ namespace Trendlink.Application.Calendar.GetUserCalendar
                     cancellationToken
                 );
 
-            var dateResponses = cooperations
+            var dateResponses = cooperationResponses
                 .GroupBy(c => DateOnly.FromDateTime(c.ScheduledOnUtc.UtcDateTime))
                 .Select(g => new DateResponse
                 {

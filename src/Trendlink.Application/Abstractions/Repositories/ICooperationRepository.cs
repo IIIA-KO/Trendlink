@@ -1,4 +1,5 @@
-﻿using Trendlink.Application.Calendar;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Trendlink.Application.Calendar;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;
@@ -23,11 +24,15 @@ namespace Trendlink.Application.Abstractions.Repositories
             CancellationToken cancellationToken = default
         );
 
-        Task<IReadOnlyList<CooperationResponse>> GetCooperationsForUserAsync(
+        IQueryable<Cooperation> SearchCooperations(
             UserId userId,
-            int? month = null,
-            int? year = null,
-            CancellationToken cancellationToken = default
+            CooperationSearchParameters parameters
+        );
+
+        Task<IReadOnlyList<CooperationResponse>> GetUserCooperationsForMonthAsync(
+            UserId userId,
+            int month,
+            int year
         );
 
         Task<IReadOnlyList<DateOnly>> GetBlockedDatesForUserAsync(
@@ -37,4 +42,13 @@ namespace Trendlink.Application.Abstractions.Repositories
 
         void Add(Cooperation cooperation);
     }
+
+    public sealed record CooperationSearchParameters(
+        string? SearchTerm,
+        int? StartMonth,
+        int? StartYear,
+        int? EndMonth,
+        int? EndYear,
+        CooperationStatus? CooperationStatus
+    );
 }

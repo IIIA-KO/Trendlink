@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Calendar;
 using Trendlink.Domain.Conditions.Advertisements;
@@ -47,39 +48,94 @@ namespace Trendlink.Infrastructure.Repositories
                 );
         }
 
-        public async Task<IReadOnlyList<CooperationResponse>> GetCooperationsForUserAsync(
+        public IQueryable<Cooperation> SearchCooperations(
             UserId userId,
-            int? month = null,
-            int? year = null,
-            CancellationToken cancellationToken = default
+            CooperationSearchParameters parameters
+        )
+        {
+            IQueryable<Cooperation> query = this
+                .dbContext.Set<Cooperation>()
+                .Where(cooperation =>
+                    cooperation.BuyerId == userId || cooperation.SellerId == userId
+                );
+
+            if (!string.IsNullOrEmpty(parameters.SearchTerm))
+            {
+                query = query.Where(cooperation =>
+                    ((string)cooperation.Name).Contains(parameters.SearchTerm)
+                    || ((string)cooperation.Description).Contains(parameters.SearchTerm)
+                );
+            }
+
+            if (parameters.StartMonth.HasValue && parameters.StartYear.HasValue)
+            {
+                var startDate = new DateTime(
+                    parameters.StartYear.Value,
+                    parameters.StartMonth.Value,
+                    day: 1,
+                    hour: 0,
+                    minute: 0,
+                    second: 0,
+                    DateTimeKind.Utc
+                );
+
+                query = query.Where(cooperation => cooperation.ScheduledOnUtc >= startDate);
+            }
+
+            if (parameters.EndMonth.HasValue && parameters.EndYear.HasValue)
+            {
+                var endDate = new DateTime(
+                    parameters.EndYear.Value,
+                    parameters.EndMonth.Value,
+                    day: DateTime.DaysInMonth(parameters.EndYear.Value, parameters.EndMonth.Value),
+                    hour: 23,
+                    minute: 59,
+                    second: 59,
+                    DateTimeKind.Utc
+                );
+
+                query = query.Where(cooperation => cooperation.ScheduledOnUtc <= endDate);
+            }
+
+            if (parameters.CooperationStatus is not null)
+            {
+                query = query.Where(cooperation =>
+                    cooperation.Status == parameters.CooperationStatus
+                );
+            }
+
+            return query;
+        }
+
+        public async Task<IReadOnlyList<CooperationResponse>> GetUserCooperationsForMonthAsync(
+            UserId userId,
+            int month,
+            int year
         )
         {
             IQueryable<Cooperation> cooperationsQuery = this
                 .dbContext.Set<Cooperation>()
-                .Where(c => c.BuyerId == userId || c.SellerId == userId);
-
-            if (month.HasValue && year.HasValue)
-            {
-                cooperationsQuery = cooperationsQuery.Where(c =>
-                    c.ScheduledOnUtc.Month == month.Value && c.ScheduledOnUtc.Year == year.Value
+                .Where(cooperation => cooperation.SellerId == userId)
+                .Where(cooperation =>
+                    cooperation.ScheduledOnUtc.Month == month
+                    && cooperation.ScheduledOnUtc.Year == year
                 );
-            }
 
             return await cooperationsQuery
-                .Select(c => new CooperationResponse
+                .Select(cooperation => new CooperationResponse
                 {
-                    Id = c.Id.Value,
-                    Name = c.Name.Value,
-                    Description = c.Description.Value,
-                    ScheduledOnUtc = c.ScheduledOnUtc,
-                    PriceAmount = c.Price.Amount,
-                    PriceCurrency = c.Price.Currency.Code,
-                    AdvertisementId = c.AdvertisementId.Value,
-                    BuyerId = c.BuyerId.Value,
-                    SellerId = c.SellerId.Value,
-                    Status = c.Status
+                    Id = cooperation.Id.Value,
+                    Name = cooperation.Name.Value,
+                    Description = cooperation.Description.Value,
+                    ScheduledOnUtc = cooperation.ScheduledOnUtc,
+                    PriceAmount = cooperation.Price.Amount,
+                    PriceCurrency = cooperation.Price.Currency.Code,
+                    AdvertisementId = cooperation.AdvertisementId.Value,
+                    BuyerId = cooperation.BuyerId.Value,
+                    SellerId = cooperation.SellerId.Value,
+                    Status = cooperation.Status
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<DateOnly>> GetBlockedDatesForUserAsync(
