@@ -1,7 +1,7 @@
 import {UserType} from "./UserType";
+import {AdvertisementsType} from "./AdvertisementsType";
 
 export type ProfileContextType = {
     user: UserType | null;
-    loading: boolean;
-    error: string | null;
+    advertisements: AdvertisementsType | null;
 };
