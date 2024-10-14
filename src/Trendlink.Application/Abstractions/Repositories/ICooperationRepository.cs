@@ -1,5 +1,7 @@
-﻿using Trendlink.Domain.Conditions.Advertisements;
+﻿using Trendlink.Application.Calendar;
+using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Abstractions.Repositories
 {
@@ -18,6 +20,18 @@ namespace Trendlink.Application.Abstractions.Repositories
 
         Task<bool> HasActiveCooperationsForAdvertisement(
             Advertisement advertisement,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<IReadOnlyList<CooperationResponse>> GetCooperationsForUserAsync(
+            UserId userId,
+            int? month = null,
+            int? year = null,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<IReadOnlyList<DateOnly>> GetBlockedDatesForUserAsync(
+            UserId userId,
             CancellationToken cancellationToken = default
         );
 
