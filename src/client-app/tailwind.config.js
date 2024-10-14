@@ -22,7 +22,7 @@ export default {
         hover: "#21CBCD",
         background: "#f0f4f9",
         textPrimary: "#FFFFFF",
-        textSecondary: "#3C3C3C",
+        textSecondary: "#444444",
         aliceblue: {
           "100": "#eff7ff",
           "200": "#f0f4f9",
@@ -31,7 +31,7 @@ export default {
         "main-green": "#009ea0",
         "second-green": "#1D8181",
         white: "#fff",
-        text: "#444",
+        text: "#444444",
         gray: {
           "100": "#7c7c7c",
           "200": "#181d25",
@@ -65,13 +65,16 @@ export default {
           "200": "#b8b6b6",
         },
       },
-      spacing: {},
     },
 
     screens: {
-      lg: {
-        max: "1200px",
-      },
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      '2xl': "1536px",
+      '3xl': '1920px',
+
       mq1050: {
         raw: "screen and (max-width: 1050px)",
       },
