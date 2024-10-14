@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using Trendlink.Api.Controllers.Users;
 using Trendlink.Api.FunctionalTests.Users;
-using Trendlink.Application.Users.Authentication.LogInUser;
+using Trendlink.Application.Accounts.LogIn;
 
 namespace Trendlink.Api.FunctionalTests.Infrastructure
 {

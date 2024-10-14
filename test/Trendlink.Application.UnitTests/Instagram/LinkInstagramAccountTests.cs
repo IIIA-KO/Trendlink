@@ -89,7 +89,7 @@ namespace Trendlink.Application.UnitTests.Instagram
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(UserErrors.InvalidCredentials);
+            result.Error.Should().Be(Error.NullValue);
         }
 
         [Fact]
@@ -116,21 +116,23 @@ namespace Trendlink.Application.UnitTests.Instagram
             this._instagramServiceMock.GetAccessTokenAsync(Arg.Any<string>(), default)
                 .Returns(facebookToken);
 
-            var userInfoResult = Result.Failure<InstagramUserInfo>(UserErrors.InvalidCredentials);
+            var instagramAccountResult = Result.Failure<InstagramAccount>(
+                UserErrors.InvalidCredentials
+            );
 
             this._instagramServiceMock.GetInstagramAccountAsync(
                 user.Id,
                 facebookToken.AccessToken,
                 default
             )
-                .Returns(InstagramAccountData.Create());
+                .Returns(instagramAccountResult);
 
             // Act
             Result result = await this._handler.Handle(Command, CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();
-            result.Error.Should().Be(userInfoResult.Error);
+            result.Error.Should().Be(instagramAccountResult.Error);
         }
     }
 }

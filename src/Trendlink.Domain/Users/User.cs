@@ -1,6 +1,7 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Notifications;
+using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
@@ -151,14 +152,10 @@ namespace Trendlink.Domain.Users
         )
         {
             if (
-                firstName is null
-                || string.IsNullOrEmpty(firstName.Value)
-                || lastName is null
-                || string.IsNullOrEmpty(lastName.Value)
-                || email is null
-                || string.IsNullOrEmpty(email.Value)
-                || phoneNumber is null
-                || string.IsNullOrEmpty(phoneNumber.Value)
+                string.IsNullOrWhiteSpace(firstName?.Value)
+                || string.IsNullOrWhiteSpace(lastName?.Value)
+                || string.IsNullOrWhiteSpace(email?.Value)
+                || string.IsNullOrWhiteSpace(phoneNumber?.Value)
             )
             {
                 return Result.Failure(UserErrors.InvalidCredentials);

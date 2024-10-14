@@ -58,11 +58,7 @@ namespace Trendlink.Infrastructure.Authentication
                 StringComparison.InvariantCultureIgnoreCase
             );
 
-            string userIdentityId = locationHeader.Substring(
-                userSegmentValueIndex + usersSegmentName.Length
-            );
-
-            return userIdentityId;
+            return locationHeader.Substring(userSegmentValueIndex + usersSegmentName.Length);
         }
     }
 }

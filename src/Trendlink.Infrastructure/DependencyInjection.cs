@@ -94,6 +94,7 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
             services.AddScoped<IUserTokenRepository, UserTokenRepository>();
             services.AddScoped<IInstagramAccountRepository, InstagramAccountRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()

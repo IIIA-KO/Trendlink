@@ -1,4 +1,5 @@
-# Trendlink
+# Trendlink 
+## Find. Connect. Collaborate
 
 **Social blogger search platform for successful advertising integration.**
 
@@ -8,6 +9,7 @@ Trendlink connects bloggers, allowing them to collaborate on advertising coopera
 
 ## Table of Contents
 - [Trendlink](#trendlink)
+  - [Find. Connect. Collaborate](#find-connect-collaborate)
   - [Table of Contents](#table-of-contents)
   - [🚀 Project Overview](#-project-overview)
   - [🎯 Features](#-features)
@@ -31,9 +33,9 @@ Trendlink is a social platform that connects bloggers, enabling them to collabor
 - 🔗 Instagram account integration for profile insights
 - ✏️ Profile management and advertisement creation
 - 💬 Real-time collaboration requests and notifications
+- ⭐ Ratings and reviews
 - Upcoming features:
   - ✉️ Email notifications
-  - ⭐ Ratings and reviews
 
 ---
 

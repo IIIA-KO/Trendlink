@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
+using Trendlink.Application.Accounts.Register;
 using Trendlink.Application.IntegrationTests.Infrastructure;
-using Trendlink.Application.Users.Authentication.RegisterUser;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
@@ -18,7 +18,7 @@ namespace Trendlink.Application.IntegrationTests.Users
             // Arrange
             User user = UserData.Create();
 
-            var command = new RegisterUserCommand(
+            var command = new RegisterCommand(
                 user.FirstName,
                 user.LastName,
                 user.BirthDate,

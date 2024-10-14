@@ -245,6 +245,62 @@ namespace Trendlink.Infrastructure.Migrations
                     b.ToTable("notifications", (string)null);
                 });
 
+            modelBuilder.Entity("Trendlink.Domain.Reviews.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AdvertisementId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("advertisement_id");
+
+                    b.Property<Guid>("BuyerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("buyer_id");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("comment");
+
+                    b.Property<Guid>("CooperationId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cooperation_id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("seller_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_reviews");
+
+                    b.HasIndex("AdvertisementId")
+                        .HasDatabaseName("ix_reviews_advertisement_id");
+
+                    b.HasIndex("BuyerId")
+                        .HasDatabaseName("ix_reviews_buyer_id");
+
+                    b.HasIndex("CooperationId")
+                        .HasDatabaseName("ix_reviews_cooperation_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_reviews_id");
+
+                    b.HasIndex("SellerId")
+                        .HasDatabaseName("ix_reviews_seller_id");
+
+                    b.ToTable("reviews", (string)null);
+                });
+
             modelBuilder.Entity("Trendlink.Domain.Users.Countries.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -651,6 +707,37 @@ namespace Trendlink.Infrastructure.Migrations
                         .HasConstraintName("fk_notifications_users_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Trendlink.Domain.Reviews.Review", b =>
+                {
+                    b.HasOne("Trendlink.Domain.Conditions.Advertisements.Advertisement", null)
+                        .WithMany()
+                        .HasForeignKey("AdvertisementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_advertisements_advertisement_id");
+
+                    b.HasOne("Trendlink.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_users_buyer_id");
+
+                    b.HasOne("Trendlink.Domain.Cooperations.Cooperation", null)
+                        .WithMany()
+                        .HasForeignKey("CooperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_cooperations_cooperation_id");
+
+                    b.HasOne("Trendlink.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_users_seller_id");
                 });
 
             modelBuilder.Entity("Trendlink.Domain.Users.InstagramBusinessAccount.InstagramAccount", b =>

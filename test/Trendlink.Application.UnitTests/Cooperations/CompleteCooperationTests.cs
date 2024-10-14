@@ -13,7 +13,7 @@ namespace Trendlink.Application.UnitTests.Cooperations
     public class CompleteCooperationTests : CooperationBaseTest
     {
         public static readonly CompleteCooperationCommand Command =
-            new(CooperationData.Create().Id);
+            new(CooperationData.CreatePendingCooperation().Id);
 
         private readonly ICooperationRepository _cooperationRepositoryMock;
         private readonly IUserContext _userContextMock;

@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.Replication;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Specifications.Users;
@@ -26,6 +27,15 @@ namespace Trendlink.Infrastructure.Repositories
         )
         {
             return await this.ApplySpecification(new UserByIdWithStateSpecification(id))
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<User?> GetByIdWithTokenAsync(
+            UserId id,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this.ApplySpecification(new UserByIdWithTokenSpecification(id))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
