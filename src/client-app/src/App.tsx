@@ -20,6 +20,7 @@ const App: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
                         <Route path="/login" element={<AuthPage/>} />
+                        <Route path="/login/callback" element={<CallBackPage/>} />
                         <Route path="/loading" element={<LoadingPage/>} />
                         <Route path="/404" element={<NotFoundPage />} />
                         <Route path="/500" element={<ServerErrorPage />} />
