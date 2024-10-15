@@ -1,37 +1,38 @@
-﻿using System.Globalization;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.DomainEvents;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.Register
 {
     internal sealed class UserCreatedDomainEventHandler
         : INotificationHandler<UserCreatedDomainEvent>
     {
-        private static readonly CompositeFormat MessageFormat = CompositeFormat.Parse(
-            Resources.NotificationMessages.WelcomeMessage
-        );
-
         private readonly IUserRepository _userRepository;
+        private readonly IEmailService _emailService;
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly INotificationRepository _notificationRepository;
+        private readonly IEmailVerificationLinkFactory _emailVerificationLinkFactory;
+        private readonly IEmailVerificationTokenRepository _emailVerificationTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public UserCreatedDomainEventHandler(
             IUserRepository userRepository,
+            IEmailService emailService,
             IDateTimeProvider dateTimeProvider,
-            INotificationRepository notificationRepository,
+            IEmailVerificationLinkFactory emailVerificationLinkFactory,
+            IEmailVerificationTokenRepository emailVerificationTokenRepository,
             IUnitOfWork unitOfWork
         )
         {
             this._userRepository = userRepository;
+            this._emailService = emailService;
+            this._emailVerificationLinkFactory = emailVerificationLinkFactory;
+            this._emailVerificationTokenRepository = emailVerificationTokenRepository;
             this._dateTimeProvider = dateTimeProvider;
-            this._notificationRepository = notificationRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -49,23 +50,28 @@ namespace Trendlink.Application.Accounts.Register
                 return;
             }
 
-            string welcomeMessage = string.Format(
-                CultureInfo.CurrentCulture,
-                MessageFormat,
-                user.FirstName.Value
+            DateTime utcNow = this._dateTimeProvider.UtcNow;
+            var emailVerificationToken = new EmailVerificationToken(
+                user.Id,
+                utcNow,
+                utcNow.AddDays(1)
             );
+            this._emailVerificationTokenRepository.Add(emailVerificationToken);
 
-            Notification builtNotification = NotificationBuilder
-                .ForUser(user.Id)
-                .WithType(NotificationType.System)
-                .WithTitle("Welcome to Trendlink!")
-                .WithMessage(welcomeMessage)
-                .CreatedOn(this._dateTimeProvider.UtcNow)
-                .Build();
-
-            this._notificationRepository.Add(builtNotification);
+            user.VerifyEmail(emailVerificationToken);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
+
+            string verificationLink = this._emailVerificationLinkFactory.Create(
+                emailVerificationToken
+            );
+
+            await this._emailService.SendAsync(
+                user.Email,
+                "Email Verification for Trendlink",
+                $"To verify your email <a href='{verificationLink}'>click here</a>",
+                isHtml: true
+            );
         }
     }
 }

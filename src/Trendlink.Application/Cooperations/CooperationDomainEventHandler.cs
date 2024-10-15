@@ -1,12 +1,11 @@
 ﻿using System.Text;
 using MediatR;
 using Trendlink.Application.Abstractions.Clock;
+using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Repositories;
-using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Cooperations.DomainEvents;
-using Trendlink.Domain.Notifications;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Cooperations
@@ -19,8 +18,7 @@ namespace Trendlink.Application.Cooperations
         protected readonly IUserRepository _userRepository;
         protected readonly IAdvertisementRepository _advertisementRepository;
         protected readonly IDateTimeProvider _dateTimeProvider;
-        protected readonly INotificationRepository _notificationRepository;
-        protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IEmailService _emailService;
 
         protected abstract CompositeFormat MessageFormat { get; }
 
@@ -29,16 +27,14 @@ namespace Trendlink.Application.Cooperations
             IUserRepository userRepository,
             IAdvertisementRepository advertisementRepository,
             IDateTimeProvider dateTimeProvider,
-            INotificationRepository notificationRepository,
-            IUnitOfWork unitOfWork
+            IEmailService emailService
         )
         {
             this._cooperationRepository = cooperationRepository;
             this._userRepository = userRepository;
             this._advertisementRepository = advertisementRepository;
             this._dateTimeProvider = dateTimeProvider;
-            this._notificationRepository = notificationRepository;
-            this._unitOfWork = unitOfWork;
+            this._emailService = emailService;
         }
 
         public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
@@ -67,18 +63,14 @@ namespace Trendlink.Application.Cooperations
                 return;
             }
 
+            string subject = this.GetEmailSubject();
             string message = this.GenerateMessage(advertisement, user);
 
-            Notification builtNotification = NotificationBuilder
-                .ForUser(this.GetReceiverId(cooperation))
-                .WithType(NotificationType.System)
-                .WithTitle(this.GetNotificationTitle())
-                .WithMessage(message)
-                .CreatedOn(this._dateTimeProvider.UtcNow)
-                .Build();
-
-            this._notificationRepository.Add(builtNotification);
-            await this._unitOfWork.SaveChangesAsync(cancellationToken);
+            await this._emailService.SendAsync(
+                await this.GetRecipientEmail(cooperation),
+                subject,
+                message
+            );
         }
 
         protected abstract Task<User?> GetUserAsync(
@@ -86,10 +78,10 @@ namespace Trendlink.Application.Cooperations
             CancellationToken cancellationToken
         );
 
-        protected abstract UserId GetReceiverId(Cooperation cooperation);
+        protected abstract Task<Email> GetRecipientEmail(Cooperation cooperation);
 
         protected abstract string GenerateMessage(Advertisement advertisement, User user);
 
-        protected abstract string GetNotificationTitle();
+        protected abstract string GetEmailSubject();
     }
 }

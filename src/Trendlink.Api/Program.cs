@@ -1,62 +1,19 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Serilog;
 using Trendlink.Api.Extensions;
-using Trendlink.Application;
-using Trendlink.Infrastructure;
-using Trendlink.Infrastructure.SignalR;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog(
-    (context, loggerConfig) => loggerConfig.ReadFrom.Configuration(context.Configuration)
-);
+builder.Host.AddSerilogLogging();
 
-builder.Services.AddControllers(options =>
-{
-    AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-
-    options.Filters.Add(new AuthorizeFilter(policy));
-});
-
-builder.Services.AddSignalR();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
-
-builder.Services.AddCorsPolicy();
+builder.Services.ConfigureServices(builder.Configuration);
 
 WebApplication app = builder.Build();
 
+app.ConfigureMiddleware();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    app.ApplyMigrations();
-    await app.SeedDataAsync(builder.Configuration);
+    await app.ApplyDevelopmentSettings(builder.Configuration);
 }
-
-app.UseHttpsRedirection();
-
-app.UseCors("CorsPolicy");
-
-app.UseRequestContextLogging();
-app.UseSerilogRequestLogging();
-
-app.UseCustomExceptionHandler();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHub<NotificationHub>("/hubs/notifications");
 
 await app.RunAsync();
 

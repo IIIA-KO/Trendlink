@@ -1,11 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Trendlink.Api.Middleware;
 using Trendlink.Infrastructure;
+using Trendlink.Infrastructure.SignalR;
 
 namespace Trendlink.Api.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
+        public static void ConfigureMiddleware(this WebApplication app)
+        {
+            app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+
+            app.UseRequestContextLogging();
+            app.UseSerilogRequestLogging();
+            app.UseCustomExceptionHandler();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+            app.MapHealthChecks(
+                "health",
+                new HealthCheckOptions
+                {
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                }
+            );
+
+            app.MapHub<NotificationHub>("/hubs/notifications");
+        }
+
         public static void ApplyMigrations(this IApplicationBuilder app)
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();

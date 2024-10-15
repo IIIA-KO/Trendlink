@@ -71,6 +71,16 @@ namespace Trendlink.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<User?> GetByEmailAsync(
+            Email email,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await this
+                .dbContext.Set<User>()
+                .FirstOrDefaultAsync(user => user.Email == email, cancellationToken);
+        }
+
         public async Task<User?> GetByIdentityIdAsync(
             string identityId,
             CancellationToken cancellationToken = default

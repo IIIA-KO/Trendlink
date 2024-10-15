@@ -5,6 +5,8 @@ using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
 using Trendlink.Domain.Users.Token;
+using Trendlink.Domain.Users.VerificationTokens;
+using Trendlink.Domain.Users.VerificationTokens.DomainEvents;
 
 namespace Trendlink.Domain.Users
 {
@@ -47,6 +49,8 @@ namespace Trendlink.Domain.Users
 
         public Email Email { get; init; }
 
+        public bool EmailVerified { get; private set; }
+
         public StateId StateId { get; private set; }
 
         public State State { get; init; }
@@ -80,6 +84,62 @@ namespace Trendlink.Domain.Users
         public bool HasRole(Role role)
         {
             return this._roles.Any(r => string.Equals(r.Name, role.Name, StringComparison.Ordinal));
+        }
+
+        public void SetIdentityId(string identityId)
+        {
+            this.IdentityId =
+                identityId
+                ?? throw new ArgumentNullException(
+                    nameof(identityId),
+                    "IdentityId cannot be null."
+                );
+        }
+
+        public void SetProfilePhoto(Photo photo)
+        {
+            ArgumentNullException.ThrowIfNull(photo.Uri);
+
+            this.ProfilePhoto = photo;
+        }
+
+        public void RemoveProfilePhoto()
+        {
+            this.ProfilePhoto = null;
+        }
+
+        public void LinkInstagramAccount(
+            InstagramAccount instagramAccount,
+            string facebookAccessToken,
+            DateTimeOffset expiresAt
+        )
+        {
+            ArgumentNullException.ThrowIfNull(instagramAccount);
+            ArgumentException.ThrowIfNullOrEmpty(facebookAccessToken);
+
+            this.InstagramAccount = instagramAccount;
+
+            this.RaiseDomainEvent(
+                new InstagramAccountLinkedDomainEvent(
+                    this.Id,
+                    instagramAccount,
+                    facebookAccessToken,
+                    expiresAt
+                )
+            );
+        }
+
+        public Result VerifyEmail(EmailVerificationToken token)
+        {
+            if (this.EmailVerified)
+            {
+                return Result.Failure(EmailVerificationTokenErrors.EmailAlreadyVerified);
+            }
+
+            this.EmailVerified = true;
+            this.RaiseDomainEvent(new EmailVerifiedDomainEvent(token.Id));
+
+            return Result.Success();
         }
 
         public Result Update(
@@ -178,49 +238,6 @@ namespace Trendlink.Domain.Users
             }
 
             return age >= MinimumAge;
-        }
-
-        public void SetIdentityId(string identityId)
-        {
-            this.IdentityId =
-                identityId
-                ?? throw new ArgumentNullException(
-                    nameof(identityId),
-                    "IdentityId cannot be null."
-                );
-        }
-
-        public void SetProfilePhoto(Photo photo)
-        {
-            ArgumentNullException.ThrowIfNull(photo.Uri);
-
-            this.ProfilePhoto = photo;
-        }
-
-        public void RemoveProfilePhoto()
-        {
-            this.ProfilePhoto = null;
-        }
-
-        public void LinkInstagramAccount(
-            InstagramAccount instagramAccount,
-            string facebookAccessToken,
-            DateTimeOffset expiresAt
-        )
-        {
-            ArgumentNullException.ThrowIfNull(instagramAccount);
-            ArgumentException.ThrowIfNullOrEmpty(facebookAccessToken);
-
-            this.InstagramAccount = instagramAccount;
-
-            this.RaiseDomainEvent(
-                new InstagramAccountLinkedDomainEvent(
-                    this.Id,
-                    instagramAccount,
-                    facebookAccessToken,
-                    expiresAt
-                )
-            );
         }
     }
 }

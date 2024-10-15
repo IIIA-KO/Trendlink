@@ -58,7 +58,6 @@ namespace Trendlink.Application.Accounts.Register
                 request.Email,
                 request.PhoneNumber
             );
-
             if (result.IsFailure)
             {
                 return Result.Failure<UserId>(result.Error);

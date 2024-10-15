@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Authentication.Models;
+using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Accounts.LogIn;
@@ -7,6 +8,7 @@ using Trendlink.Application.Exceptions;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.States;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.Accounts.RegisterWithGoogle
 {
@@ -18,7 +20,6 @@ namespace Trendlink.Application.Accounts.RegisterWithGoogle
         private readonly IGoogleService _googleService;
         private readonly IKeycloakService _keycloakService;
         private readonly IAuthenticationService _authenticationService;
-
         private readonly IUserRepository _userRepository;
         private readonly IStateRepository _stateRepository;
         private readonly IUnitOfWork _unitOfWork;

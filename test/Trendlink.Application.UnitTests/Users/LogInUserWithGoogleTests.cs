@@ -8,6 +8,7 @@ using Trendlink.Application.Accounts.LogIn;
 using Trendlink.Application.Accounts.LoginWithGoogle;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
+using Trendlink.Domain.Users.VerificationTokens;
 
 namespace Trendlink.Application.UnitTests.Users
 {
@@ -123,8 +124,12 @@ namespace Trendlink.Application.UnitTests.Users
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
                 .Returns(userInfo);
 
-            this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
-                .Returns(true);
+            User? verifiedUser = UserData.Create();
+            verifiedUser.VerifyEmail(
+                new EmailVerificationToken(verifiedUser.Id, DateTime.Now, DateTime.Now.AddDays(1))
+            );
+            this._userRepositoryMock.GetByEmailAsync(new Email(userInfo.Email), default)
+                .Returns(verifiedUser);
 
             this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Throws(new HttpRequestException("Google service exception"));
@@ -138,6 +143,31 @@ namespace Trendlink.Application.UnitTests.Users
         }
 
         [Fact]
+        public async Task Handle_Should_ReturnFailure_WhenEmailIsNotVerified()
+        {
+            // Arrange
+            this._googleServiceMock.GetAccessTokenAsync(Command.Code, default)
+                .Returns(new GoogleTokenResponse { AccessToken = UserData.Token.AccessToken });
+
+            var userInfo = new GoogleUserInfo { Email = UserData.Email.Value };
+            this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
+                .Returns(userInfo);
+
+            this._userRepositoryMock.GetByEmailAsync(new Email(userInfo.Email), default)
+                .Returns(UserData.Create());
+
+            this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
+                .Returns(UserData.Token);
+
+            // Act
+            Result<AccessTokenResponse> result = await this._handler.Handle(Command, default);
+
+            // Assert
+            result.IsFailure.Should().BeTrue();
+            result.Error.Should().Be(EmailVerificationTokenErrors.EmailNotVerified);
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnSuccess()
         {
             // Arrange
@@ -148,8 +178,12 @@ namespace Trendlink.Application.UnitTests.Users
             this._googleServiceMock.GetUserInfoAsync(UserData.Token.AccessToken, default)
                 .Returns(userInfo);
 
-            this._userRepositoryMock.ExistByEmailAsync(new Email(userInfo.Email), default)
-                .Returns(true);
+            User? verifiedUser = UserData.Create();
+            verifiedUser.VerifyEmail(
+                new EmailVerificationToken(verifiedUser.Id, DateTime.Now, DateTime.Now.AddDays(1))
+            );
+            this._userRepositoryMock.GetByEmailAsync(new Email(userInfo.Email), default)
+                .Returns(verifiedUser);
 
             this._keycloakServiceMock.AuthenticateWithGoogleAsync(userInfo, default)
                 .Returns(UserData.Token);

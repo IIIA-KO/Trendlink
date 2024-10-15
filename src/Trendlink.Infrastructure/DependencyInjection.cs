@@ -10,6 +10,7 @@ using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Caching;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Data;
+using Trendlink.Application.Abstractions.Emails;
 using Trendlink.Application.Abstractions.Instagram;
 using Trendlink.Application.Abstractions.Photos;
 using Trendlink.Application.Abstractions.Repositories;
@@ -19,12 +20,14 @@ using Trendlink.Infrastructure.Authentication;
 using Trendlink.Infrastructure.Authentication.Google;
 using Trendlink.Infrastructure.Authentication.Keycloak;
 using Trendlink.Infrastructure.Authorization;
+using Trendlink.Infrastructure.BackgroundJobs.EmailVerificationTokens;
 using Trendlink.Infrastructure.BackgroundJobs.InstagramAccounts;
 using Trendlink.Infrastructure.BackgroundJobs.Outbox;
 using Trendlink.Infrastructure.BackgroundJobs.Token;
 using Trendlink.Infrastructure.Caching;
 using Trendlink.Infrastructure.Clock;
 using Trendlink.Infrastructure.Data;
+using Trendlink.Infrastructure.Emails;
 using Trendlink.Infrastructure.Instagram;
 using Trendlink.Infrastructure.Instagram.Abstraction;
 using Trendlink.Infrastructure.Photos;
@@ -54,6 +57,8 @@ namespace Trendlink.Infrastructure
 
             AddAuthorization(services);
 
+            AddEmail(services, configuration);
+
             AddCaching(services, configuration);
 
             AddBackgroundJobs(services, configuration);
@@ -62,7 +67,25 @@ namespace Trendlink.Infrastructure
 
             AddCloudinary(services, configuration);
 
+            AddHealthChecks(services, configuration);
+
             return services;
+        }
+
+        private static void AddEmail(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<EmailOptions>(configuration.GetSection("Email"));
+
+            services
+                .AddFluentEmail(configuration["Email:SenderEmail"], configuration["Email:Sender"])
+                .AddSmtpSender(
+                    configuration["Email:Host"],
+                    configuration.GetValue<int>("Email:Port")
+                );
+
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailVerificationLinkFactory, EmailVerificationLinkFactory>();
+            services.AddHttpContextAccessor();
         }
 
         private static void AddPersistence(
@@ -95,6 +118,10 @@ namespace Trendlink.Infrastructure
             services.AddScoped<IUserTokenRepository, UserTokenRepository>();
             services.AddScoped<IInstagramAccountRepository, InstagramAccountRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<
+                IEmailVerificationTokenRepository,
+                EmailVerificationTokenRepository
+            >();
 
             services.AddScoped<IUnitOfWork>(serviceProvider =>
                 serviceProvider.GetRequiredService<ApplicationDbContext>()
@@ -230,6 +257,7 @@ namespace Trendlink.Infrastructure
             services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
             services.ConfigureOptions<CheckUserTokensJobSetup>();
             services.ConfigureOptions<UpdateInstagramAccountJobSetup>();
+            services.ConfigureOptions<DeleteExpiredEmailVerificationTokensJobSetup>();
         }
 
         private static void AddRealTimeServices(IServiceCollection services)
@@ -242,6 +270,23 @@ namespace Trendlink.Infrastructure
             services.Configure<CloudinaryOptions>(configuration.GetSection("Cloudinary"));
 
             services.AddSingleton<IPhotoAccessor, PhotoAccessor>();
+        }
+
+        private static void AddHealthChecks(
+            IServiceCollection services,
+            IConfiguration configuration
+        )
+        {
+            services
+                .AddHealthChecks()
+                .AddNpgSql(configuration.GetConnectionString("Database")!)
+                .AddRedis(configuration.GetConnectionString("Cache")!)
+                .AddUrlGroup(
+                    new Uri(configuration["Keycloak:BaseUrl"]!),
+                    HttpMethod.Get,
+                    "keycloak"
+                )
+                .AddUrlGroup(new Uri(configuration["Email:BaseUrl"]!), HttpMethod.Get, "papercut");
         }
     }
 }
