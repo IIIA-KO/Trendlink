@@ -1,6 +1,5 @@
 import noProfile from "../assets/icons/no-profile.svg";
 import locationIcon from "../assets/icons/location-icon.svg";
-import star from "../assets/star.svg";
 import NavButton from "./Buttons/NavButton";
 import phoneIcon from "../assets/icons/telephone-icon.svg";
 import emailIcon from "../assets/icons/email-icon.svg";
