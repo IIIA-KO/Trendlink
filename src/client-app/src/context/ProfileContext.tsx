@@ -3,7 +3,6 @@ import {UserType} from "../types/UserType";
 import {ProfileContextType} from "../types/ProfileContextType";
 import {getUser} from "../services/user";
 import {handleError} from "../utils/handleError";
-import {useNavigate} from "react-router-dom";
 import {getAdvertisements} from "../services/advertisements";
 import {AdvertisementsType} from "../types/AdvertisementsType";
 
@@ -13,7 +12,6 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
     const [advertisements, setAdvertisements] = useState<AdvertisementsType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -42,12 +40,8 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         fetchAdvertisementsData();
     }, []);
 
-    if(loading === true) {
-        navigate("/loading")
-    }
-
     return (
-        <ProfileContext.Provider value={{ user, advertisements }}>
+        <ProfileContext.Provider value={{ user, advertisements, loading }}>
             {children}
         </ProfileContext.Provider>
     );
