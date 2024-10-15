@@ -1,4 +1,3 @@
-import {UserType} from "../types/UserType";
 import axiosInstance from "./api";
 import {handleError} from "../utils/handleError";
 import {AdvertisementsType} from "../types/AdvertisementsType";
