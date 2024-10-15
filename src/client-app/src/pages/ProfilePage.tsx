@@ -22,7 +22,6 @@ const ProfilePage: React.FC = () => {
             averagePriceRange: advertisements?.value || 'N/A',
             averagePriceRangeCurrency: advertisements?.currency || '',
             followersCount: user.followersCount || 'N/A',
-            //postsCount: user.posts || 'N/A',
             //likesOnLastPost: user.likesOnLastPost || 'N/A'
         };
     }, [user, advertisements]);
@@ -40,13 +39,13 @@ const ProfilePage: React.FC = () => {
                             <div className="h-auto w-1/3 flex justify-center items-center">
                                 <p className="font-inter font-bold text-xl text-text inline-flex items-center">
                                     <img src={instGreyIcon} alt="Subscribe icon" className="w-7 h-7 mr-1"/>
-                                    {userStats?.mediaCount || 'N/A'}
+                                    {userStats?.followersCount || 'N/A'}
                                 </p>
                             </div>
                             <div className="h-full w-2/3 flex flex-col gap-3 py-4 border-red-600 border-2">
                                 <div className="flex flex-row">
                                     <div className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.averagePriceRangeCurrency === 'USD' ? '$' : userStats?.averagePriceRangeCurrency === 'EUR' ? '€' : userStats?.averagePriceRangeCurrency === 'UAH' ? '₴' : ' '}</p>
+                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.averagePriceRange || 'N/A'} {userStats?.averagePriceRangeCurrency === 'USD' ? '$' : userStats?.averagePriceRangeCurrency === 'EUR' ? '€' : userStats?.averagePriceRangeCurrency === 'UAH' ? '₴' : '?'}</p>
                                     </div>
                                     <div className="w-1/2">
                                         <p className="font-inter font-regular text-[14px] text-text text-left"> Середня
@@ -54,16 +53,8 @@ const ProfilePage: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex flex-row">
-                                    <div className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.followersCount || 'N/A'}</p>
-                                    </div>
-                                    <div  className="w-1/2">
-                                        <p className="font-inter font-regular text-[14px] text-text text-left"> Підписок</p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row">
                                     <div  className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">3200</p>
+                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.mediaCount || 'N/A'}</p>
                                     </div>
                                     <div  className="w-1/2">
                                         <p className="font-inter font-regular text-[14px] text-text text-left"> Публікацій</p>
