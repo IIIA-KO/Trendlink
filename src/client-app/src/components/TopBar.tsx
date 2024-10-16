@@ -5,12 +5,10 @@ import phoneIcon from "../assets/icons/telephone-icon.svg";
 import emailIcon from "../assets/icons/email-icon.svg";
 import React, {useMemo} from "react";
 import {useProfile} from "../hooks/useProfile";
-import {useNavigate} from "react-router-dom";
 
 const TopBar: React.FC = () => {
 
     const { user } = useProfile();
-    const navigate = useNavigate();
 
     const userStats = useMemo<{
         profilePhoto: string;
@@ -35,7 +33,6 @@ const TopBar: React.FC = () => {
             email: user?.email || "",
         };
     }, [user]);
-
 
     return (
         <div className="h-1/4 w-full flex flex-row">
