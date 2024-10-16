@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 const StatisticsBar: React.FC = () => {
 
-    const { user, advertisements, loading } = useProfile();
+    const { user, advertisements, posts, loading } = useProfile();
     const navigate = useNavigate();
 
     if (loading) {
@@ -15,12 +15,20 @@ const StatisticsBar: React.FC = () => {
     const userStats = useMemo(() => {
         if (!user) return null;
 
+        if (!posts || posts.length === 0) {
+            return null;
+        }
+
+        const lastPost = posts[0];
+        const likeInsight = lastPost.insights.find(insight => insight.name === 'likes');
+        const lastPostLikes = likeInsight ? likeInsight.value : null;
+
         return {
             mediaCount: user.mediaCount || 'N/A',
             averagePriceRange: advertisements?.value || 'N/A',
             averagePriceRangeCurrency: advertisements?.currency || '',
             followersCount: user.followersCount || 'N/A',
-            //likesOnLastPost: user.likesOnLastPost || 'N/A'
+            likesOnLastPost: lastPostLikes || 'N/A'
         };
     }, [user, advertisements]);
 
@@ -54,7 +62,7 @@ const StatisticsBar: React.FC = () => {
                     </div>
                     <div className="flex flex-row">
                         <div className="w-1/2 pr-6">
-                            <p className="font-inter font-bold text-[14px] text-text text-right">606</p>
+                            <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.likesOnLastPost || 'N/A'}</p>
                         </div>
                         <div className="w-1/2">
                             <p className="font-inter font-regular text-[14px] text-text text-left"> Лайків </p>
