@@ -54,3 +54,41 @@
     height: 100%;
     overflow: auto;
   }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.block {
+    background: #ffffff;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 182px;
+    padding: 11px 25px;
+    display: flex;
+}
+.block-current {
+    background: #009ea0;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #009ea0;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    width: 182px;
+    padding: 11px 25px;
+    display: flex;
+}
+.chart-container {
+    width: 500px;
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px auto;
+}
