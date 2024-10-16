@@ -25,10 +25,10 @@ const ProfilePage: React.FC = () => {
                     <StatisticsBar/>
                     <div className="h-auto w-full p-6">
                         <div className="flex justify-center">
-                            <div className="w-full sm:w-3/4 lg:w-2/3 border-2 border-gray-300 p-4 rounded-lg">
+                            <div className="w-full sm:w-full lg:w-full border-2 border-gray-300 p-4 rounded-lg">
                                 {loading || !posts ? (
                                     // Skeleton loaders
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
                                         {[...Array(6)].map((_, index) => (
                                             <div key={index} className="w-full animate-pulse">
                                                 <div className="bg-gray-300 h-64 w-full rounded-lg"></div>
@@ -40,17 +40,16 @@ const ProfilePage: React.FC = () => {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
                                         {posts.map(post => (
                                             <div key={post.id} className="flex-shrink-0 w-full">
                                                 <div className="relative">
-                                                    <img
-                                                        src={post.mediaUrl}
-                                                        alt="Post media"
-                                                        className="w-full h-64 object-cover rounded-lg"
-                                                    />
-                                                    <div
-                                                        className="flex justify-between absolute bottom-2 left-2 right-2 text-white">
+                                                    {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
+                                                        <img src={post.mediaUrl} alt="Post media" className="post-image" />
+                                                    ) : (
+                                                        <img src={post.thumbnailUrl ?? post.mediaUrl} alt="Post thumbnail" className="post-image" />
+                                                    )}
+                                                    <div className="flex justify-between absolute bottom-2 left-2 right-2 text-white">
                                                         <div className="flex items-center">
                                                             <svg
                                                                 className="w-5 h-5 mr-1"
@@ -86,17 +85,6 @@ const ProfilePage: React.FC = () => {
                                                             <span>{post.insights.find(insight => insight.name === 'saved')?.value}</span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="mt-2 text-center">
-                                                    <h4 className="text-sm text-gray-500">{post.timestamp}</h4>
-                                                    <a
-                                                        href={post.permalink}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-blue-500 text-sm"
-                                                    >
-                                                        View on Instagram
-                                                    </a>
                                                 </div>
                                             </div>
                                         ))}
