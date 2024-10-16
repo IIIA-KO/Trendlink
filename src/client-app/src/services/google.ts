@@ -6,10 +6,7 @@ import axiosInstance from "./api";
 
 export const loginWithGoogle = async (credentials: GoogleLoginType): Promise<AuthResponseType | null> => {
     try {
-        console.log('Sending login request to /accounts/google-login with code:', credentials.code);
         const response = await axiosInstance.post('/accounts/google-login', credentials);
-        console.log('Login response:', response.data);
-        console.log('Access Token:', response.data.accessToken);
         return {
             accessToken: response.data.accessToken,
             refreshToken: response.data.refreshToken,
