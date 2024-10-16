@@ -4,6 +4,9 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    outDir: '../Trendlink.Api/wwwroot',
+  },
   server: {
     port: 3000,
     hmr: {

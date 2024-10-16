@@ -22,6 +22,10 @@ namespace Trendlink.Api.Extensions
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.MapFallbackToController("Index", "Fallback");
+
             app.MapControllers();
             app.MapHealthChecks(
                 "health",
