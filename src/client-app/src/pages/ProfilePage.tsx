@@ -3,10 +3,15 @@ import TopBar from "../components/TopBar";
 import {useProfile} from "../hooks/useProfile";
 import {useNavigate} from "react-router-dom";
 import StatisticsBar from "../components/StatisticsBar";
+import like from "../assets/icons/Fill.svg"
+import save from "../assets/icons/save-icon.svg"
+import view from "../assets/icons/views-icon.svg"
+import right from "../assets/icons/navigation-chevron-right.svg"
+import left from "../assets/icons/navigation-chevron-left.svg"
 
 const ProfilePage: React.FC = () => {
 
-    const { posts, loading } = useProfile();
+    const { posts, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
     const navigate = useNavigate();
 
     if (loading) {
@@ -20,80 +25,82 @@ const ProfilePage: React.FC = () => {
             </div>
             <div className="w-5/6 h-auto">
                 <div
-                    className="flex flex-col gap-2 border border-orange bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
+                    className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
                     <TopBar/>
                     <StatisticsBar/>
-                    <div className="h-auto w-full p-6">
+                    <div className="h-auto w-full py-4 px-12">
                         <div className="flex justify-center">
-                            <div className="w-full sm:w-full lg:w-full border-2 border-gray-300 p-4 rounded-lg">
+                            <div className="h-auto w-full flex flex-row p-4 rounded-lg">
+                                {hasPreviousPage && (
+                                    <button onClick={() => fetchPosts('before', beforeCursor)}>
+                                        <img src={left} className="w-12 h-12"/>
+                                    </button>
+                                )}
                                 {loading || !posts ? (
-                                    // Skeleton loaders
-                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
+                                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-16 px-2">
                                         {[...Array(6)].map((_, index) => (
-                                            <div key={index} className="w-full animate-pulse">
-                                                <div className="bg-gray-300 h-64 w-full rounded-lg"></div>
-                                                <div className="mt-2 space-y-2">
-                                                    <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-                                                    <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
-                                        {posts.map(post => (
-                                            <div key={post.id} className="flex-shrink-0 w-full">
+                                            <div key={index} className="w-full">
                                                 <div className="relative">
-                                                    {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
-                                                        <img src={post.mediaUrl} alt="Post media" className="post-image" />
-                                                    ) : (
-                                                        <img src={post.thumbnailUrl ?? post.mediaUrl} alt="Post thumbnail" className="post-image" />
-                                                    )}
-                                                    <div className="flex justify-between absolute bottom-2 left-2 right-2 text-white">
+                                                    <div className="bg-gray-300 w-36 h-48 rounded-lg"></div>
+                                                    <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         <div className="flex items-center">
-                                                            <svg
-                                                                className="w-5 h-5 mr-1"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                viewBox="0 0 24 24"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth="2"
-                                                                    d="M5 13l4 4L19 7"
-                                                                />
-                                                            </svg>
-                                                            <span>{post.insights.find(insight => insight.name === 'likes')?.value}</span>
+                                                            <div className="h-4 bg-gray-300 rounded w-full"></div>
                                                         </div>
                                                         <div className="flex items-center">
-                                                            <svg
-                                                                className="w-5 h-5 mr-1"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                viewBox="0 0 24 24"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth="2"
-                                                                    d="M12 8v4l3 3"
-                                                                />
-                                                            </svg>
-                                                            <span>{post.insights.find(insight => insight.name === 'saved')?.value}</span>
+                                                            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
+                                    {posts.map(post => (
+                                            <div key={post.id} className="flex-shrink-0 w-full">
+                                                <div className="relative">
+                                                    {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
+                                                        <img src={post.mediaUrl} alt="Post media"
+                                                             className="post-image"/>
+                                                    ) : (
+                                                        <img src={post.thumbnailUrl ?? post.mediaUrl}
+                                                             alt="Post thumbnail" className="post-image"/>
+                                                    )}
+                                                    <div className="flex flex-col justify-center items-left gap-1 pt-2">
+                                                        {post.insights.find(insight => insight.name === 'likes')?.value && (
+                                                            <div className="flex items-center border-2">
+                                                                <img src={like} className="w-4 h-4"/>
+                                                                <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'likes')?.value}</p>
+                                                            </div>
+                                                        )}
+                                                        {post.insights.find(insight => insight.name === 'saved')?.value && (
+                                                            <div className="flex items-center border-2">
+                                                                <img src={save} className="w-4 h-4"/>
+                                                                <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'saved')?.value}</p>
+                                                            </div>
+                                                        )}
+                                                        {post.insights.find(insight => insight.name === 'views')?.value && (
+                                                            <div className="flex items-center border-2">
+                                                                <img src={view} className="w-4 h-4"/>
+                                                                <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'views')?.value}</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    ))}
+                                    </div>
+                                )}
+                                {hasNextPage && (
+                                    <button className="flex items-start justify-center pt-20"
+                                            onClick={() => fetchPosts('after', afterCursor)}>
+                                        <img src={right} className="w-12 h-12"/>
+                                    </button>
                                 )}
                             </div>
                         </div>
                     </div>
-                    <div className="h-1/4 w-full border-2 border-red-600 text-center text-black">
+                    <div className="h-1/4 w-full flex justify-center items-center">
                         4
                     </div>
                 </div>
