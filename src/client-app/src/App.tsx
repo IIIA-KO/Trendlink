@@ -11,6 +11,8 @@ const CallBackPage = lazy(() =>import("./pages/CallBackPage"));
 const ProfilePage = lazy(() =>import("./pages/ProfilePage"));
 const NotFoundPage = lazy(() =>import("./pages/NotFoundPage"));
 const ServerErrorPage = lazy(() =>import("./pages/ServerErrorPage"));
+const StatisticsPage = lazy(() =>import("./pages/StatisticsPage"));
+const LogoutPage = lazy(() =>import("./pages/LogoutPage"));
 
 const App: React.FC = () => {
     return (
@@ -21,6 +23,8 @@ const App: React.FC = () => {
                         <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
                         <Route path="/login" element={<AuthPage/>} />
                         <Route path="/login/callback" element={<CallBackPage/>} />
+                        <Route path="/statistics" element={<ProfileProvider><StatisticsPage/></ProfileProvider>} />
+                        <Route path="/logout" element={<LogoutPage/>} />
                         <Route path="/loading" element={<LoadingPage/>} />
                         <Route path="/404" element={<NotFoundPage />} />
                         <Route path="/500" element={<ServerErrorPage />} />

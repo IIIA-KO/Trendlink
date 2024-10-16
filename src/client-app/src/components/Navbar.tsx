@@ -13,14 +13,14 @@ import logo from '../assets/logo/logo-trendlink-white.svg'
 const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Profile", icon: profileIcon, path: "/profile" },
-        { title: "Statistics", icon: statisticsIcon, path: "/"},
+        { title: "Profile", icon: profileIcon, path: "/" },
+        { title: "Statistics", icon: statisticsIcon, path: "/statistics"},
         { title: "Calendar ", icon: calendarIcon, path: "/" },
         { title: "Reviews", icon: reviewsIcon, path: "/" },
         { title: "Notifications ", icon: notificationsIcon, path: "/" },
         { title: "Terms of cooperation", icon: termsOfCooperationIcon, path: "/" },
         { title: "Settings", icon: settingsIcon, path: "/" },
-        { title: "Logout", icon: supportsIcon, path: "/" },
+        { title: "Logout", icon: supportsIcon, path: "/logout" },
     ];
 
     return (
