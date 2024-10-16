@@ -52,7 +52,7 @@ const TopBar: React.FC = () => {
                     </div>
                     <div className="h-full w-full flex items-start flex-col gap-4">
                         <div className="mt-2">
-                            <p className='font-inter font-regular text-main-black sm:text-[15px] md:text-[16px] lg:text-[16px] xl:text-[17px] 2xl:text-[17px]'>{userStats?.accountCategory || 'Creator'}</p>
+                            <p className='font-inter font-regular text-main-black sm:text-[15px] md:text-[16px] lg:text-[16px] xl:text-[17px] 2xl:text-[17px]'>{userStats?.accountCategory || 'N/A'}</p>
                         </div>
                         <div>
                             <p className='font-inter font-regular text-main-black sm:text-[15px] md:text-[16px] lg:text-[16px] xl:text-[17px] 2xl:text-[17px] inline-flex items-center'>
