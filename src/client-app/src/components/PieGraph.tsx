@@ -7,7 +7,7 @@ const PieGraph: React.FC = () => {
     const { genderData } = useProfile();
 
     if (!genderData) {
-        return <div>Loading...</div>;
+        return <div className="text-center">Loading...</div>;
     }
 
     const series = genderData.map((item) => item.percentage);

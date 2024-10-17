@@ -33,12 +33,12 @@ const StatisticsBar: React.FC = () => {
             followersCount: user.followersCount || 'N/A',
             likesOnLastPost: lastPostLikes || 'N/A'
         };
-    }, [user, advertisements]);
+    }, [user, advertisements, posts]);
 
     return (
         <div className="h-1/4 w-full flex flex-row xl:gap-20 2xl:gap-32 text-center">
             <div
-                className="h-full w-1/2 mx-10 my-6 flex flex-row rounded-[15px] bg-background">
+                className="min-h-full w-1/2 mx-10 my-6 flex flex-row rounded-[15px] bg-background">
                 <div className="h-auto w-1/3 flex justify-center items-center">
                     <p className="font-inter font-bold text-xl text-text inline-flex items-center">
                         <img src={instGreyIcon} alt="Subscribe icon" className="w-7 h-7 mr-1"/>
@@ -74,7 +74,7 @@ const StatisticsBar: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="h-full w-1/2 mx-10 my-6 rounded-[15px] bg-background">
+            <div className="min-h-full w-1/2 mx-10 my-6 flex justify-center items-center rounded-[15px] bg-background">
                 <PieGraph />
             </div>
         </div>
