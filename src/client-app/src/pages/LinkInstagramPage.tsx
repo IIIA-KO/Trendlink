@@ -2,13 +2,10 @@ import React, { useEffect } from 'react';
 import { instagramClientId, instagramRedirectUri, instagramConfigId, instagramScope, instagramResponseType } from "../utils/constants";
 
 const LinkInstagramPage: React.FC = () => {
-
     const handleInstagramLink = () => {
         const authUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${instagramClientId}&redirect_uri=${instagramRedirectUri}&scope=${instagramScope}&response_type=${instagramResponseType}&config_id=${instagramConfigId}`;
         window.location.href = authUrl;
     };
-
-    console.log(localStorage.getItem('isInstagramLinked'));
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-50 p-6">

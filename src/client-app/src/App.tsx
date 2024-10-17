@@ -22,7 +22,13 @@ const App: React.FC = () => {
             <AuthProvider>
                 <Suspense fallback={<LoadingPage />}>
                     <Routes>
-                        <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage /></ProfileProvider></ProtectedRoute>} />
+                        <Route path="/" element={
+                            <ProtectedRoute>
+                                <ProfileProvider>
+                                    <ProfilePage />
+                                </ProfileProvider>
+                            </ProtectedRoute>
+                        } />
                         <Route path="/login" element={<AuthPage />} />
                         <Route path="/login/callback" element={<CallBackPage />} />
                         <Route path='/link-instagram' element={<LinkInstagramPage />} />

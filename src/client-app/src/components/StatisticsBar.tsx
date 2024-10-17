@@ -1,16 +1,20 @@
 import instGreyIcon from "../assets/icons/instagram-grey-icon.svg";
-import React, { useMemo, useEffect } from "react";
-import { useProfile } from "../hooks/useProfile";
-import { useNavigate } from "react-router-dom";
+import React, {useEffect, useMemo} from "react";
+import {useProfile} from "../hooks/useProfile";
 import PieGraph from "./PieGraph";
 
 const StatisticsBar: React.FC = () => {
 
     const { user, advertisements, posts, loading } = useProfile();
-    const navigate = useNavigate();
+    
+    const advertisement = advertisements?.[0];
 
     const userStats = useMemo(() => {
         if (!user || !posts || posts.length === 0) return null;
+
+        if (!posts || posts.length === 0) {
+            return null;
+        }
 
         const lastPost = posts[0];
         const likeInsight = lastPost.insights.find(insight => insight.name === 'likes');
@@ -33,11 +37,12 @@ const StatisticsBar: React.FC = () => {
         'UAH': '₴'
     };
 
-    const currencySymbol = currencySymbols[userStats?.averagePriceRangeCurrency || ''];
+    const currencySymbol = currencySymbols[advertisement?.currency || ''];
 
     return (
         <div className="h-1/4 w-full flex flex-row xl:gap-20 2xl:gap-32 text-center">
-            <div className="flex-1 mx-2 my-6 flex flex-row rounded-[15px] bg-background">
+            <div
+                className="min-h-full w-1/2 mx-10 my-6 flex flex-row rounded-[15px] bg-background">
                 <div className="h-auto w-1/3 flex justify-center items-center">
                     <p className="font-inter font-bold text-xl text-text inline-flex items-center">
                         <img src={instGreyIcon} alt="Subscribe icon" className="w-7 h-7 mr-1" />
@@ -48,7 +53,7 @@ const StatisticsBar: React.FC = () => {
                     <div className="flex flex-row">
                         <div className="w-1/2 pr-6">
                             <p className="font-inter font-bold text-[14px] text-text text-right">
-                                {userStats?.averagePriceRange} {currencySymbol}
+                                {advertisement?.value} {currencySymbol}
                             </p>
                         </div>
                         <div className="w-1/2">
@@ -74,7 +79,7 @@ const StatisticsBar: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex-1 mx-2 my-6 rounded-[15px] bg-background">
+            <div className="min-h-full w-1/2 mx-10 my-6 flex justify-center items-center rounded-[15px] bg-background">
                 <PieGraph />
             </div>
         </div>

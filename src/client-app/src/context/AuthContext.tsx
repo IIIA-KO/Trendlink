@@ -51,7 +51,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 const remainingTime = Number(expiresIn) - elapsed;
 
                 if (remainingTime > 0) {
-                    setUser({ accessToken, refreshToken, expiresIn: remainingTime, isInstagramLinked });
+                    setUser({ accessToken, refreshToken, expiresIn: remainingTime });
                     scheduleTokenRefresh(remainingTime);
                     setLoading(false);
                 } else {
@@ -95,7 +95,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
                     setUser((prevUser) => prevUser ? { ...prevUser, accessToken } : null);
                     scheduleTokenRefresh(expiresIn);
-                    return { accessToken, refreshToken, expiresIn, isInstagramLinked: user?.isInstagramLinked || false };
+                    return { accessToken, refreshToken, expiresIn };
                 }
             } catch (error) {
                 console.error('Failed to refresh token', error);

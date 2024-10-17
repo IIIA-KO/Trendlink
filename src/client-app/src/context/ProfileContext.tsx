@@ -50,14 +50,15 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         try {
             setLoading(true);
             const postsData = await getPosts(6, cursorType, cursor);
-            setPosts(postsData ? postsData.posts : null);
 
-            if (postsData?.paging) {
-                setAfterCursor(postsData.paging.after ?? null);
-                setBeforeCursor(postsData.paging.before ?? null);
-                setHasNextPage(!!postsData.paging.after);
-                setHasPreviousPage(!!postsData.paging.before);
+            if (postsData) {
+                setPosts(postsData.posts);
+                setAfterCursor(postsData.paging?.after ?? null);
+                setBeforeCursor(postsData.paging?.before ?? null);
+                setHasNextPage(!!postsData.paging?.nextCursor);
+                setHasPreviousPage(!!postsData.paging?.previousCursor);
             } else {
+                setPosts(null);
                 setHasNextPage(false);
                 setHasPreviousPage(false);
             }

@@ -14,8 +14,8 @@ import logo from '../assets/logo/logo-trendlink-white.svg'
 const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Link Instagram", icon: instGreyIcon, path: "/link-instagram" },
         { title: "Profile", icon: profileIcon, path: "/" },
+        { title: "Link Instagram", icon: instGreyIcon, path: "/link-instagram" },
         { title: "Statistics", icon: statisticsIcon, path: "/statistics"},
         { title: "Calendar ", icon: calendarIcon, path: "/" },
         { title: "Reviews", icon: reviewsIcon, path: "/" },

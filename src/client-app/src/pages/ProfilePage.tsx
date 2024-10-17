@@ -7,6 +7,7 @@ import save from "../assets/icons/save-icon.svg"
 import view from "../assets/icons/views-icon.svg"
 import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
     const { posts, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
@@ -26,7 +27,7 @@ const ProfilePage: React.FC = () => {
                             <div className="h-auto w-full flex flex-row p-4 rounded-lg">
                                 {hasPreviousPage && (
                                     <button onClick={() => fetchPosts('before', beforeCursor)}>
-                                        <img src={left} className="w-12 h-12" />
+                                        <img src={left} className="w-12 h-12" alt="left navigation arrow" />
                                     </button>
                                 )}
                                 {loading || !posts ? (
@@ -34,7 +35,7 @@ const ProfilePage: React.FC = () => {
                                         {[...Array(6)].map((_, index) => (
                                             <div key={index} className="w-full">
                                                 <div className="relative">
-                                                    <div className="bg-gray-300 w-36 h-48 rounded-lg"></div>
+                                                    <div className="bg-gray-300 w-36 h-44 rounded-lg"></div>
                                                     <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         <div className="flex items-center">
                                                             <div className="h-4 bg-gray-300 rounded w-full"></div>
@@ -54,27 +55,27 @@ const ProfilePage: React.FC = () => {
                                                 <div className="relative">
                                                     {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
                                                         <img src={post.mediaUrl} alt="Post media"
-                                                            className="post-image" />
+                                                            className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover" />
                                                     ) : (
                                                         <img src={post.thumbnailUrl ?? post.mediaUrl}
-                                                            alt="Post thumbnail" className="post-image" />
+                                                            alt="Post thumbnail" className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover" />
                                                     )}
                                                     <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         {post.insights.find(insight => insight.name === 'likes')?.value && (
-                                                            <div className="flex items-center border-2">
-                                                                <img src={like} className="w-4 h-4" />
+                                                            <div className="flex items-center">
+                                                                <img src={like} className="w-4 h-4" alt="likes icon" />
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'likes')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'saved')?.value && (
-                                                            <div className="flex items-center border-2">
-                                                                <img src={save} className="w-4 h-4" />
+                                                            <div className="flex items-center">
+                                                                <img src={save} className="w-4 h-4" alt="saves icon" />
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'saved')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'views')?.value && (
-                                                            <div className="flex items-center border-2">
-                                                                <img src={view} className="w-4 h-4" />
+                                                            <div className="flex items-center">
+                                                                <img src={view} className="w-4 h-4" alt="views icon" />
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'views')?.value}</p>
                                                             </div>
                                                         )}
@@ -87,7 +88,7 @@ const ProfilePage: React.FC = () => {
                                 {hasNextPage && (
                                     <button className="flex items-start justify-center pt-20"
                                         onClick={() => fetchPosts('after', afterCursor)}>
-                                        <img src={right} className="w-12 h-12" />
+                                        <img src={right} className="w-12 h-12" alt="right navigation arrow" />
                                     </button>
                                 )}
                             </div>
