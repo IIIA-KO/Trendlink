@@ -8,15 +8,18 @@ import save from "../assets/icons/save-icon.svg"
 import view from "../assets/icons/views-icon.svg"
 import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
+import {useEffect} from "react";
 
 const ProfilePage: React.FC = () => {
 
     const { posts, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
     const navigate = useNavigate();
 
-    if (loading) {
-        navigate("/loading")
-    }
+    useEffect(() => {
+        if (loading) {
+            navigate("/loading");
+        }
+    }, [loading, navigate]);
 
     return (
         <div className="bg-background flex justify-start h-auto w-auto">
@@ -33,7 +36,7 @@ const ProfilePage: React.FC = () => {
                             <div className="h-auto w-full flex flex-row p-4 rounded-lg">
                                 {hasPreviousPage && (
                                     <button onClick={() => fetchPosts('before', beforeCursor)}>
-                                        <img src={left} className="w-12 h-12"/>
+                                        <img src={left} className="w-12 h-12" alt="left navigation arrow"/>
                                     </button>
                                 )}
                                 {loading || !posts ? (
@@ -69,19 +72,19 @@ const ProfilePage: React.FC = () => {
                                                     <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         {post.insights.find(insight => insight.name === 'likes')?.value && (
                                                             <div className="flex items-center">
-                                                                <img src={like} className="w-4 h-4"/>
+                                                                <img src={like} className="w-4 h-4" alt="likes icon"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'likes')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'saved')?.value && (
                                                             <div className="flex items-center">
-                                                                <img src={save} className="w-4 h-4"/>
+                                                                <img src={save} className="w-4 h-4" alt="saves icon"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'saved')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'views')?.value && (
                                                             <div className="flex items-center">
-                                                                <img src={view} className="w-4 h-4"/>
+                                                                <img src={view} className="w-4 h-4" alt="views icon"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'views')?.value}</p>
                                                             </div>
                                                         )}
@@ -94,7 +97,7 @@ const ProfilePage: React.FC = () => {
                                 {hasNextPage && (
                                     <button className="flex items-start justify-center pt-20"
                                             onClick={() => fetchPosts('after', afterCursor)}>
-                                        <img src={right} className="w-12 h-12"/>
+                                        <img src={right} className="w-12 h-12" alt="right navigation arrow"/>
                                     </button>
                                 )}
                             </div>

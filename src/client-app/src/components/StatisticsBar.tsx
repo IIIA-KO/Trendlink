@@ -1,5 +1,5 @@
 import instGreyIcon from "../assets/icons/instagram-grey-icon.svg";
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import {useProfile} from "../hooks/useProfile";
 import {useNavigate} from "react-router-dom";
 import PieGraph from "./PieGraph";
@@ -9,9 +9,11 @@ const StatisticsBar: React.FC = () => {
     const { user, advertisements, posts, loading } = useProfile();
     const navigate = useNavigate();
 
-    if (loading) {
-        navigate("/loading")
-    }
+    useEffect(() => {
+        if (loading) {
+            navigate("/loading");
+        }
+    }, [loading, navigate]);
 
     const userStats = useMemo(() => {
         if (!user) return null;
