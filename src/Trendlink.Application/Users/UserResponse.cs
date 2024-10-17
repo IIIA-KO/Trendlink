@@ -1,6 +1,4 @@
 ﻿#pragma warning disable  CA1054
-using Trendlink.Domain.Users;
-
 namespace Trendlink.Application.Users
 {
     public sealed class UserResponse
@@ -12,6 +10,7 @@ namespace Trendlink.Application.Users
             string Email,
             string firstName,
             string lastName,
+            string instagramAccountUsername,
             string? profilePhotoId,
             string? profilePhotoUri,
             DateOnly birthDate,
@@ -19,7 +18,7 @@ namespace Trendlink.Application.Users
             string stateName,
             string phoneNumber,
             string bio,
-            AccountCategory accountCategory,
+            string accountCategory,
             int? followersCount,
             int? mediaCount
         )
@@ -28,6 +27,7 @@ namespace Trendlink.Application.Users
             this.Email = Email;
             this.FirstName = firstName;
             this.LastName = lastName;
+            this.InstagramAccountUsername = instagramAccountUsername;
             this.ProfilePhotoId = profilePhotoId;
             this.ProfilePhotoUri = profilePhotoUri;
             this.BirthDate = birthDate;
@@ -48,6 +48,8 @@ namespace Trendlink.Application.Users
 
         public string LastName { get; init; }
 
+        public string InstagramAccountUsername { get; init; }
+
         public string? ProfilePhotoId { get; init; }
 
         public string? ProfilePhotoUri { get; init; }
@@ -62,7 +64,7 @@ namespace Trendlink.Application.Users
 
         public string Bio { get; init; }
 
-        public AccountCategory AccountCategory { get; init; }
+        public string AccountCategory { get; init; }
 
         public int? FollowersCount { get; init; }
 

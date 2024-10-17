@@ -3,15 +3,24 @@ import { ApexOptions } from "apexcharts";
 import {useProfile} from "../hooks/useProfile";
 
 const PieGraph: React.FC = () => {
-
     const { genderData } = useProfile();
 
     if (!genderData) {
         return <div>Loading...</div>;
     }
 
-    const series = genderData.map((item) => item.percentage);
-    const labels = genderData.map((item) => item.gender)
+    const series = genderData.genderPercentages.map((item) => Math.round(item.percentage));
+    
+    const labels = genderData.genderPercentages.map((item) => {
+        switch (item.gender) {
+            case "M":
+                return "Male";
+            case "F":
+                return "Female";
+            default:
+                return "Unknown";
+        }
+    });
 
     const chartConfig: ApexOptions = {
         series: series,
@@ -23,12 +32,12 @@ const PieGraph: React.FC = () => {
         },
         labels: labels,
         title: {
-            text: "",
+            text: "Gender",
         },
         dataLabels: {
             enabled: false,
         },
-        colors: ["#F3AE5F", "#0B87BA"],
+        colors: ["#F3AE5F", "#0B87BA", "#C0C0C0"],
         legend: {
             show: false,
         },

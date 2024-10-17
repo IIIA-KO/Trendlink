@@ -13,6 +13,6 @@ export type ProfileContextType = {
     fetchPosts: (cursorType?: string | null, cursor?: string | null) => void;
     afterCursor: string | null;
     beforeCursor: string | null;
-    genderData: AudienceGenderData[] | null;
+    genderData: AudienceGenderData | null;
     fetchAudienceGenderPercentage: () => void;
 };

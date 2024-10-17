@@ -17,7 +17,7 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [advertisements, setAdvertisements] = useState<AdvertisementsType[] | null>(null);
     const [posts, setPosts] = useState<InstagramPostType[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [genderData, setGenderData] = useState<AudienceGenderData[] | null>(null);
+    const [genderData, setGenderData] = useState<AudienceGenderData | null>(null);
     const [hasNextPage, setHasNextPage] = useState<boolean>(false);
     const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
     const [afterCursor, setAfterCursor] = useState<string | null>(null);
@@ -40,6 +40,7 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             setAdvertisements(advertisementsData);
         } catch (error) {
             handleError(error)
+            setAdvertisements(new Array<AdvertisementsType>());
         } finally {
             setLoading(false);
         }

@@ -17,10 +17,10 @@ export const getAudienceAgePercentage = async (): Promise<AudienceAgeData[] | nu
     }
 };
 
-export const getAudienceGenderPercentage = async (): Promise<AudienceGenderData[] | null> => {
+export const getAudienceGenderPercentage = async (): Promise<AudienceGenderData | null> => {
     try {
         const response = await axiosInstance.get('/audience/gender');
-        return response.data as AudienceGenderData[];
+        return response.data as AudienceGenderData;
     } catch (error) {
         handleError(error);
         return null;
