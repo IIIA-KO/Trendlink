@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import imgTwo from "../assets/img2CallBackPage.svg";
 import {useNavigate} from "react-router-dom";
 import {loginWithGoogle, registerWithGoogle} from "../services/google";
@@ -9,8 +9,11 @@ const CallBackPage: React.FC = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
     const [message, setMessage] = useState("Loading...");
-
+    const isFetched = useRef(false);
     useEffect(() => {
+        if (isFetched.current) return;
+        isFetched.current = true;
+        
         const fetchToken = async () => {
             const params =  new URLSearchParams(window.location.search);
             const code = params.get('code');

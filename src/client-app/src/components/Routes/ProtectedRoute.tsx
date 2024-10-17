@@ -11,7 +11,15 @@ const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
         return <LoadingPage />;
     }
 
-    return user ? <>{children}</> : <Navigate to="/login" />;
+    if (!user) {
+        return <Navigate to="/login" />
+    }
+
+    if (!user.isInstagramLinked) {
+        return <Navigate to="/link-instagram" />
+    }
+
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;

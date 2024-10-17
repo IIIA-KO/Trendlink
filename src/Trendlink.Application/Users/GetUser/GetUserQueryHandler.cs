@@ -33,7 +33,7 @@ namespace Trendlink.Application.Users.GetUser
                 user.Email.Value,
                 user.FirstName.Value,
                 user.LastName.Value,
-                user.InstagramAccount!.Metadata.UserName,
+                user.InstagramAccount?.Metadata?.UserName,
                 user.ProfilePhoto?.Id,
                 user.ProfilePhoto?.Uri.ToString(),
                 user.BirthDate,

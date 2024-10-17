@@ -4,7 +4,7 @@ import { getCountries, getStates } from '../../services/countriesAndStates';
 import { CountryType } from "../../types/CountryType";
 import { StateType } from "../../types/StateType";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import {clientId, redirectUri, scope, responseType} from "../../utils/constants";
+import {googleClientId, googleRedirectUri, googleScope, googleResponseType} from "../../utils/constants";
 
 const GoogleRegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -41,7 +41,7 @@ const GoogleRegisterForm: React.FC = () => {
         try {
             const { birthDate, phoneNumber, stateId } = values;
 
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${encodeURIComponent(`birthDate=${birthDate}&phoneNumber=${phoneNumber}&stateId=${stateId}`)}`;
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUri}&response_type=${googleResponseType}&scope=${googleScope}&state=${encodeURIComponent(`birthDate=${birthDate}&phoneNumber=${phoneNumber}&stateId=${stateId}`)}`;
 
             window.location.href = authUrl;
         } catch (error) {

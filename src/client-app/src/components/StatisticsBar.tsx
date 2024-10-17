@@ -9,9 +9,6 @@ const StatisticsBar: React.FC = () => {
     const { user, advertisements, posts, loading } = useProfile();
     const navigate = useNavigate();
 
-    
-
-    // Використовуємо useMemo для оптимізації обчислення статистики
     const userStats = useMemo(() => {
         if (!user || !posts || posts.length === 0) return null;
 
@@ -30,7 +27,6 @@ const StatisticsBar: React.FC = () => {
         };
     }, [user, advertisements, posts]);
 
-    // Мапа для конвертації коду валюти у символ
     const currencySymbols: { [key: string]: string } = {
         'USD': '$',
         'EUR': '€',

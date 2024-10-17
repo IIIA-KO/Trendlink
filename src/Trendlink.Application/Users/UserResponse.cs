@@ -10,7 +10,7 @@ namespace Trendlink.Application.Users
             string Email,
             string firstName,
             string lastName,
-            string instagramAccountUsername,
+            string? instagramAccountUsername,
             string? profilePhotoId,
             string? profilePhotoUri,
             DateOnly birthDate,
@@ -48,7 +48,7 @@ namespace Trendlink.Application.Users
 
         public string LastName { get; init; }
 
-        public string InstagramAccountUsername { get; init; }
+        public string? InstagramAccountUsername { get; init; }
 
         public string? ProfilePhotoId { get; init; }
 
