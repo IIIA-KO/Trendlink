@@ -8,18 +8,11 @@ import save from "../assets/icons/save-icon.svg"
 import view from "../assets/icons/views-icon.svg"
 import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
-import {useEffect} from "react";
 
 const ProfilePage: React.FC = () => {
 
     const { posts, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (loading) {
-            navigate("/loading");
-        }
-    }, [loading, navigate]);
 
     return (
         <div className="bg-background flex justify-start h-auto w-auto">
@@ -58,7 +51,7 @@ const ProfilePage: React.FC = () => {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-4">
+                                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-16 px-2">
                                     {posts.map(post => (
                                             <div key={post.id} className="flex-shrink-0 w-full">
                                                 <div className="relative">
