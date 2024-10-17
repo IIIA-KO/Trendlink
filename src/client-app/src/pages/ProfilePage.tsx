@@ -41,7 +41,7 @@ const ProfilePage: React.FC = () => {
                                         {[...Array(6)].map((_, index) => (
                                             <div key={index} className="w-full">
                                                 <div className="relative">
-                                                    <div className="bg-gray-300 w-36 h-48 rounded-lg"></div>
+                                                    <div className="bg-gray-300 w-36 h-44 rounded-lg"></div>
                                                     <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         <div className="flex items-center">
                                                             <div className="h-4 bg-gray-300 rounded w-full"></div>
@@ -61,26 +61,26 @@ const ProfilePage: React.FC = () => {
                                                 <div className="relative">
                                                     {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
                                                         <img src={post.mediaUrl} alt="Post media"
-                                                             className="post-image"/>
+                                                             className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover"/>
                                                     ) : (
                                                         <img src={post.thumbnailUrl ?? post.mediaUrl}
-                                                             alt="Post thumbnail" className="post-image"/>
+                                                             alt="Post thumbnail" className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover"/>
                                                     )}
                                                     <div className="flex flex-col justify-center items-left gap-1 pt-2">
                                                         {post.insights.find(insight => insight.name === 'likes')?.value && (
-                                                            <div className="flex items-center border-2">
+                                                            <div className="flex items-center">
                                                                 <img src={like} className="w-4 h-4"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'likes')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'saved')?.value && (
-                                                            <div className="flex items-center border-2">
+                                                            <div className="flex items-center">
                                                                 <img src={save} className="w-4 h-4"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'saved')?.value}</p>
                                                             </div>
                                                         )}
                                                         {post.insights.find(insight => insight.name === 'views')?.value && (
-                                                            <div className="flex items-center border-2">
+                                                            <div className="flex items-center">
                                                                 <img src={view} className="w-4 h-4"/>
                                                                 <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'views')?.value}</p>
                                                             </div>
