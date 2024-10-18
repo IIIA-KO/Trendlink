@@ -21,24 +21,26 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <AuthProvider>
+                <ProfileProvider>
                     <Suspense fallback={<LoadingPage/>}>
                         <Routes>
-                            <Route path="/" element={<ProtectedRoute> <ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
+                            <Route path="/" element={<ProfileProvider><ProtectedRoute><ProfilePage/></ProtectedRoute></ProfileProvider>} />
                             <Route path="/login" element={<AuthPage/>} />
                             <Route path="/login/callback" element={<CallBackPage/>} />
-                            <Route path="/statistics" element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>} />
-                            <Route path="/termsofcooperation" element={<ProtectedRoute><ProfileProvider><TermsOfCooperationPage/></ProfileProvider></ProtectedRoute>} />
+                            <Route path="/statistics" element={<ProfileProvider><ProtectedRoute><StatisticsPage/></ProtectedRoute></ProfileProvider>} />
+                            <Route path="/termsofcooperation" element={<ProfileProvider><ProtectedRoute><TermsOfCooperationPage/></ProtectedRoute></ProfileProvider>} />
                             <Route path="/logout" element={<LogoutPage/>} />
                             <Route path="/loading" element={<LoadingPage/>} />
                             <Route path="/login" element={<AuthPage />} />
                             <Route path="/login/callback" element={<CallBackPage />} />
-                            <Route path='/link-instagram' element={<LinkInstagramPage />} />
-                            <Route path='/link-instagram/callback' element={<LinkInstagramCallbackPage />} />
+                            <Route path='/link-instagram' element={<ProfileProvider><ProtectedRoute><LinkInstagramPage /></ProtectedRoute></ProfileProvider>} />
+                            <Route path='/link-instagram/callback' element={<ProtectedRoute><LinkInstagramCallbackPage /></ProtectedRoute>} />
                             <Route path="/404" element={<NotFoundPage />} />
                             <Route path="/500" element={<ServerErrorPage />} />
                             <Route path="*" element={<Navigate to="/404" replace />} />
                         </Routes>
                     </Suspense>
+                </ProfileProvider>
             </AuthProvider>
         </BrowserRouter>
     );

@@ -8,14 +8,12 @@ import notificationsIcon from '../assets/icons/notifications-icon.svg';
 import termsOfCooperationIcon from '../assets/icons/termsOfcooperation-icon.svg';
 import settingsIcon from '../assets/icons/settings-icon.svg';
 import logoutIcon from '../assets/icons/Logout-icon.svg';
-import instGreyIcon from "../assets/icons/instagram-grey-icon.svg";
 import logo from '../assets/logo/logo-trendlink-white.svg'
 
 const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const Menus = [
         { title: "Profile", icon: profileIcon, path: "/" },
-        { title: "Link Instagram", icon: instGreyIcon, path: "/link-instagram" },
         { title: "Statistics", icon: statisticsIcon, path: "/statistics"},
         { title: "Calendar ", icon: calendarIcon, path: "/" },
         { title: "Reviews", icon: reviewsIcon, path: "/" },
