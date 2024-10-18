@@ -25,7 +25,7 @@ export const getAdvertisementsByID = async (query: string): Promise<Advertisemen
 
 export const updateAdvertisement = async (id: string, data: AdvertisementsType) => {
     try {
-        const response = await axiosInstance.put(`/advertisements/${id}/edit`, data);
+        const response = await axiosInstance.put(`/advertisements/ad/${id}/edit`, data);
         return response.data;
     } catch (error) {
         console.error('Error updating advertisement:', error);
@@ -35,7 +35,7 @@ export const updateAdvertisement = async (id: string, data: AdvertisementsType) 
 
 export const createAdvertisement = async (data: AdvertisementsType) => {
     try {
-        const response = await axiosInstance.post(`/advertisements/`, data);
+        const response = await axiosInstance.post(`/advertisements/ad`, data);
         return response.data;
     } catch (error) {
         console.error('Error creating advertisement:', error);

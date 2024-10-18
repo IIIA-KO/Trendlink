@@ -3,7 +3,7 @@ export interface UserType {
     email: string;
     firstName: string;
     lastName: string;
-    instagramAccountUsername: string;
+    instagramAccountUsername: string | null;
     profilePhotoId: string;
     profilePhotoUri: string;
     birthDate: string;

@@ -21,27 +21,26 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <Suspense fallback={<LoadingPage/>}>
-                    <Routes>
-                        <Route path="/" element={<ProtectedRoute><ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
-                        <Route path="/login" element={<AuthPage/>} />
-                        <Route path="/login/callback" element={<CallBackPage/>} />
-                        <Route path="/statistics" element={<ProtectedRoute><ProfileProvider><StatisticsPage/></ProfileProvider></ProtectedRoute>} />
-                        <Route path="/termsofcooperation" element={<ProtectedRoute><ProfileProvider><TermsOfCooperationPage/></ProfileProvider></ProtectedRoute>} />
-                        <Route path="/logout" element={<LogoutPage/>} />
-                        <Route path="/loading" element={<LoadingPage/>} />
-                        <Route path="/login" element={<AuthPage />} />
-                        <Route path="/login/callback" element={<CallBackPage />} />
-                        <Route path='/link-instagram' element={<LinkInstagramPage />} />
-                        <Route path='/link-instagram/callback' element={<LinkInstagramCallbackPage />} />
-                        <Route path="/statistics" element={<ProfileProvider><StatisticsPage /></ProfileProvider>} />
-                        <Route path="/logout" element={<LogoutPage />} />
-                        <Route path="/loading" element={<LoadingPage />} />
-                        <Route path="/404" element={<NotFoundPage />} />
-                        <Route path="/500" element={<ServerErrorPage />} />
-                        <Route path="*" element={<Navigate to="/404" replace />} />
-                    </Routes>
-                </Suspense>
+                <ProfileProvider>
+                    <Suspense fallback={<LoadingPage/>}>
+                        <Routes>
+                            <Route path="/" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+                            <Route path="/login" element={<AuthPage/>} />
+                            <Route path="/login/callback" element={<CallBackPage/>} />
+                            <Route path="/statistics" element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>} />
+                            <Route path="/termsofcooperation" element={<ProtectedRoute><ProfileProvider><TermsOfCooperationPage/></ProfileProvider></ProtectedRoute>} />
+                            <Route path="/logout" element={<LogoutPage/>} />
+                            <Route path="/loading" element={<LoadingPage/>} />
+                            <Route path="/login" element={<AuthPage />} />
+                            <Route path="/login/callback" element={<CallBackPage />} />
+                            <Route path='/link-instagram' element={<LinkInstagramPage />} />
+                            <Route path='/link-instagram/callback' element={<LinkInstagramCallbackPage />} />
+                            <Route path="/404" element={<NotFoundPage />} />
+                            <Route path="/500" element={<ServerErrorPage />} />
+                            <Route path="*" element={<Navigate to="/404" replace />} />
+                        </Routes>
+                    </Suspense>
+                </ProfileProvider>
             </AuthProvider>
         </BrowserRouter>
     );
