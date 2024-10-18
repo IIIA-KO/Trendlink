@@ -7,7 +7,7 @@ import reviewsIcon from '../assets/icons/reviews-icon.svg'
 import notificationsIcon from '../assets/icons/notifications-icon.svg';
 import termsOfCooperationIcon from '../assets/icons/termsOfcooperation-icon.svg';
 import settingsIcon from '../assets/icons/settings-icon.svg';
-import supportsIcon from '../assets/icons/supports-icon.svg';
+import logoutIcon from '../assets/icons/Logout-icon.svg';
 import instGreyIcon from "../assets/icons/instagram-grey-icon.svg";
 import logo from '../assets/logo/logo-trendlink-white.svg'
 
@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
         { title: "Notifications ", icon: notificationsIcon, path: "/" },
         { title: "Terms of cooperation", icon: termsOfCooperationIcon, path: "/termsofcooperation" },
         { title: "Settings", icon: settingsIcon, path: "/" },
-        { title: "Logout", icon: supportsIcon, path: "/logout" },
+        { title: "Logout", icon: logoutIcon, path: "/logout" },
     ];
 
     return (
