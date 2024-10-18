@@ -22,9 +22,9 @@ export const createTermsAndConditions = async (data: Partial<TermsAndConditionsT
     }
 };
 
-export const updateTermsAndConditions = async (id: string, data: Partial<TermsAndConditionsType>): Promise<TermsAndConditionsType | null> => {
+export const updateTermsAndConditions = async (data: Partial<TermsAndConditionsType>): Promise<TermsAndConditionsType | null> => {
     try {
-        const response = await axiosInstance.put(`/terms-and-conditions/${id}`, data);
+        const response = await axiosInstance.put(`/terms-and-conditions`, data);
         return response.data;
     } catch (error) {
         handleError(error);

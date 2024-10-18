@@ -7,15 +7,20 @@ import {
 } from "../../services/termsofcooperation";
 import {TermsAndConditionsType} from "../../types/TermsAndConditionsType";
 import {useEffect, useState} from "react";
-import plus from "../../assets/navigation-plus.svg"
-import {createAdvertisement, updateAdvertisement} from "../../services/advertisements";
+import addIcon from "../../assets/navigation-plus.svg"
+import removeIcon from "../../assets/icons/remove-icon.svg"
+import {
+    createAdvertisement,
+    deleteAdvertisement,
+    updateAdvertisement
+} from "../../services/advertisements";
 import {useNavigate} from "react-router-dom";
 
 
 const TermsOfCooperationForm: React.FC = () => {
-    const navigate = useNavigate();
     const [termsData, setTermsData] = useState<Omit<TermsAndConditionsType, 'userId'> | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [adsToDelete, setAdsToDelete] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchTerms = async () => {
@@ -62,7 +67,7 @@ const TermsOfCooperationForm: React.FC = () => {
     const handleSubmit = async (values: Omit<TermsAndConditionsType, 'userId'>) => {
         try {
             if (isEditing) {
-                await updateTermsAndConditions(values.id, { description: values.description });
+                await updateTermsAndConditions({ description: values.description });
 
                 await Promise.all(
                     values.advertisements.map(async (advertisement) => {
@@ -74,10 +79,14 @@ const TermsOfCooperationForm: React.FC = () => {
                     })
                 );
 
-                console.log('Terms and advertisements updated:', values);
+                await Promise.all(
+                    adsToDelete.map(async (adId) => {
+                        await deleteAdvertisement(adId);
+                    })
+                );
+
             } else {
                 const response = await createTermsAndConditions({ description: values.description });
-                console.log('Terms created:', response);
 
                 await Promise.all(
                     values.advertisements.map(async (advertisement) => {
@@ -86,9 +95,15 @@ const TermsOfCooperationForm: React.FC = () => {
                 );
             }
 
-            navigate('/');
         } catch (error) {
             console.error('Error saving terms and advertisements:', error);
+        }
+    };
+
+    const handleRemoveAd = (index: number, adId: string) => {
+        // Додаємо до списку для видалення
+        if (adId) {
+            setAdsToDelete((prev) => [...prev, adId]);
         }
     };
 
@@ -103,7 +118,7 @@ const TermsOfCooperationForm: React.FC = () => {
             onSubmit={handleSubmit}
             enableReinitialize={true}
         >
-            {({ values }) => (
+            {({ values, setFieldValue }) => (
                 <Form className="w-[calc(100%-90px)] h-auto flex flex-col mt-12">
                     <div className="w-full h-full flex flex-row">
                         <div className="flex flex-row w-2/3">
@@ -118,11 +133,13 @@ const TermsOfCooperationForm: React.FC = () => {
                                                            className="font-inter inter-light-italic text-[12px] text-text-2 my-1 ml-2">Types
                                                         of services</label>
                                                     <div
-                                                        className="border border-transparent rounded-[10px] flex items-center justify-center p-2">
+                                                        className="border border-gray-10 rounded-[10px] flex items-center justify-center p-2">
                                                         <Field
                                                             name={`advertisements.${index}.name`}
                                                             className="form-control focus:outline-none h-full w-full"
                                                             placeholder="Enter advertisement name"
+                                                            disabled={!!values.advertisements[index].id}
+                                                            title={values.advertisements[index].name}
                                                         />
                                                     </div>
                                                     <ErrorMessage name={`advertisements.${index}.name`} component="div"
@@ -132,7 +149,7 @@ const TermsOfCooperationForm: React.FC = () => {
                                                     <label htmlFor="description"
                                                            className="font-inter inter-light-italic text-[12px] text-text-2 my-1 ml-2">Price</label>
                                                     <div
-                                                        className="border border-transparent rounded-[10px] flex items-center justify-center p-2">
+                                                        className="border border-gray-10 rounded-[10px] flex items-center justify-center p-2">
                                                         <Field
                                                             name={`advertisements.${index}.priceAmount`}
                                                             type="number"
@@ -148,12 +165,16 @@ const TermsOfCooperationForm: React.FC = () => {
                                                            className="font-inter inter-light-italic text-[12px] text-text-2 my-1 ml-2">Price
                                                         Currency</label>
                                                     <div
-                                                        className="border border-transparent rounded-[10px] flex items-center justify-center p-2">
+                                                        className="border border-gray-10 rounded-[10px] flex items-center justify-center p-2">
                                                         <Field
+                                                            as="select"
                                                             name={`advertisements.${index}.priceCurrency`}
-                                                            className="form-control focus:outline-none h-full w-full"
-                                                            placeholder="Enter price currency (e.g., USD)"
-                                                        />
+                                                            className="form-control focus:outline-none h-full w-full bg-transparent"
+                                                        >
+                                                            <option value="USD" className="text-center">$</option>
+                                                            <option value="EUR" className="text-center">€</option>
+                                                            <option value="UAH" className="text-center">₴</option>
+                                                        </Field>
                                                     </div>
                                                     <ErrorMessage name={`advertisements.${index}.priceCurrency`}
                                                                   component="div" className="text-red-500 text-[14px]"/>
@@ -163,7 +184,7 @@ const TermsOfCooperationForm: React.FC = () => {
                                                            className="font-inter inter-light-italic text-[12px] text-text-2 my-1 ml-2">Advertisement
                                                         description</label>
                                                     <div
-                                                        className="border border-transparent rounded-[10px] flex items-center justify-center p-2">
+                                                        className="border border-gray-10 rounded-[10px] flex items-center justify-center p-2">
                                                         <Field
                                                             as="textarea"
                                                             name={`advertisements.${index}.description`}
@@ -174,30 +195,41 @@ const TermsOfCooperationForm: React.FC = () => {
                                                     <ErrorMessage name={`advertisements.${index}.description`}
                                                                   component="div" className="text-red-500 text-[14px]"/>
                                                 </div>
-                                                <div className="flex justify-between">
+                                                <div className="flex justify-center items-center mt-6">
                                                     <button
                                                         type="button"
-                                                        onClick={() => remove(index)}
+                                                        onClick={() => {
+                                                            handleRemoveAd(index, values.advertisements[index].id);
+                                                            remove(index);
+                                                        }}
                                                         className="text-red-500"
                                                     >
-                                                        Remove
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => push({
-                                                            id: '',
-                                                            name: '',
-                                                            priceAmount: 0,
-                                                            priceCurrency: '',
-                                                            description: ''
-                                                        })}
-                                                        className="text-blue-500"
-                                                    >
-                                                        Add Advertisement
+                                                        <img src={removeIcon} alt="remove icon button" className="w-8 h-8 transition duration-500 ease-in-out hover:border-hover hover:scale-110 active:scale-90"/>
                                                     </button>
                                                 </div>
                                             </div>
                                         ))}
+                                        <div className="flex justify-center items-center">
+                                            <button
+                                                type="button"
+                                                onClick={() => push({
+                                                    id: '',
+                                                    name: '',
+                                                    priceAmount: 0,
+                                                    priceCurrency: '',
+                                                    description: ''
+                                                })}
+                                                className="text-blue-500 mt-4"
+                                            >
+                                                <img src={addIcon} alt="add icon button" className="w-8 h-8 transition duration-500 ease-in-out hover:border-hover hover:scale-110 active:scale-90"/>
+                                            </button>
+                                        </div>
+                                        <div className="my-8 flex justify-center items-center">
+                                            <button type="submit"
+                                                    className="w-1/2 h-full text-center bg-primary text-textPrimary text-[1rem] rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-105 active:scale-90 active:bg-transparent active:border-primary active:text-textSecondary focus:scale-100 transform">
+                                                <p className="m-2">Save changes</p>
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </FieldArray>
@@ -207,8 +239,8 @@ const TermsOfCooperationForm: React.FC = () => {
                             <label htmlFor="description"
                                    className="font-inter inter-light-italic text-[12px] text-text-2 my-1 ml-2">Description</label>
                             <div
-                                className="border border-transparent rounded-[10px] flex items-center justify-center p-8">
-                                <Field
+                                className="border border-gray-10 rounded-[10px] flex items-center justify-center p-8">
+                            <Field
                                     as="textarea"
                                     name="description"
                                     className="form-control relative focus:outline-none w-full h-full resize-none-indicator"
@@ -219,17 +251,11 @@ const TermsOfCooperationForm: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="my-8">
-                        <button type="submit"
-                                className="w-1/2 h-full text-center bg-primary text-textPrimary text-[1rem] rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-105 active:scale-90 active:bg-transparent active:border-primary active:text-textSecondary focus:scale-100 transform">
-                            <p className="m-2">Save changes</p>
-                        </button>
-                    </div>
+
                 </Form>
             )}
         </Formik>
     );
 };
-
 
 export default TermsOfCooperationForm;

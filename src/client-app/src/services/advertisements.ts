@@ -3,6 +3,8 @@ import {handleError} from "../utils/handleError";
 import {AdvertisementsAveragePriceType} from "../types/AdvertisementsAveragePriceType";
 import {AdvertisementsType} from "../types/AdvertisementsType";
 
+export type PartialAdvertisementsType = Partial<AdvertisementsType>;
+
 export const getAdvertisements = async (): Promise<AdvertisementsAveragePriceType[] | null> => {
     try {
         const response = await axiosInstance.get('/advertisements/avarage-prices');
@@ -23,12 +25,12 @@ export const getAdvertisementsByID = async (query: string): Promise<Advertisemen
     }
 };
 
-export const updateAdvertisement = async (id: string, data: AdvertisementsType) => {
+export const updateAdvertisement = async (id: string, data: PartialAdvertisementsType) => {
     try {
         const response = await axiosInstance.put(`/advertisements/ad/${id}/edit`, data);
         return response.data;
     } catch (error) {
-        console.error('Error updating advertisement:', error);
+        handleError(error);
         throw error;
     }
 };
@@ -38,7 +40,16 @@ export const createAdvertisement = async (data: AdvertisementsType) => {
         const response = await axiosInstance.post(`/advertisements/ad`, data);
         return response.data;
     } catch (error) {
-        console.error('Error creating advertisement:', error);
+        handleError(error);
+        throw error;
+    }
+};
+
+export const deleteAdvertisement = async (id: string): Promise<void> => {
+    try {
+        await axiosInstance.delete(`/advertisements/ad/${id}/delete`);
+    } catch (error) {
+        handleError(error);
         throw error;
     }
 };

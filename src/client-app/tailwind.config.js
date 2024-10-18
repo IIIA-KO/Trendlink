@@ -36,10 +36,10 @@ export default {
         white: "#fff",
         text: "#444444",
         gray: {
+          "10": "#C0BEBE",
           "100": "#7c7c7c",
           "200": "#181d25",
         },
-        transparen: "#C0BEBE",
         crimson: "#dd1e1e",
         whitesmoke: {
           "100": "#f6f6f6",
