@@ -1,11 +1,11 @@
 import {UserType} from "./UserType";
-import {AdvertisementsType} from "./AdvertisementsType";
+import {AdvertisementsAveragePriceType} from "./AdvertisementsAveragePriceType";
 import {InstagramPostType} from "./InstagramPostType";
 import {AudienceGenderData} from "./AudienceGenderDataType";
 
 export type ProfileContextType = {
     user: UserType | null;
-    advertisements: AdvertisementsType[] | null;
+    advertisements: AdvertisementsAveragePriceType[] | null;
     posts: InstagramPostType[] | null;
     loading: boolean;
     hasNextPage: boolean;

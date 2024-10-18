@@ -4,7 +4,7 @@ import {ProfileContextType} from "../types/ProfileContextType";
 import {getUser} from "../services/user";
 import {handleError} from "../utils/handleError";
 import {getAdvertisements} from "../services/advertisements";
-import {AdvertisementsType} from "../types/AdvertisementsType";
+import {AdvertisementsAveragePriceType} from "../types/AdvertisementsAveragePriceType";
 import {InstagramPostType} from "../types/InstagramPostType";
 import {getPosts} from "../services/posts";
 import {getAudienceGenderPercentage} from "../services/audiences";
@@ -14,7 +14,7 @@ const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
-    const [advertisements, setAdvertisements] = useState<AdvertisementsType[] | null>(null);
+    const [advertisements, setAdvertisements] = useState<AdvertisementsAveragePriceType[] | null>(null);
     const [posts, setPosts] = useState<InstagramPostType[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [genderData, setGenderData] = useState<AudienceGenderData | null>(null);
@@ -40,7 +40,7 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             setAdvertisements(advertisementsData);
         } catch (error) {
             handleError(error)
-            setAdvertisements(new Array<AdvertisementsType>());
+            setAdvertisements(new Array<AdvertisementsAveragePriceType>());
         } finally {
             setLoading(false);
         }

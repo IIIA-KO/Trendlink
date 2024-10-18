@@ -1,4 +1,7 @@
 export interface AdvertisementsType {
-    currency: string;
-    value: number;
+    id: string;
+    name: string;
+    priceAmount: number;
+    priceCurrency: string;
+    description: string;
 }

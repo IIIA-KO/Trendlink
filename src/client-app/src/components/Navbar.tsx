@@ -20,13 +20,13 @@ const NavBar: React.FC = () => {
         { title: "Calendar ", icon: calendarIcon, path: "/" },
         { title: "Reviews", icon: reviewsIcon, path: "/" },
         { title: "Notifications ", icon: notificationsIcon, path: "/" },
-        { title: "Terms of cooperation", icon: termsOfCooperationIcon, path: "/" },
+        { title: "Terms of cooperation", icon: termsOfCooperationIcon, path: "/termsofcooperation" },
         { title: "Settings", icon: settingsIcon, path: "/" },
         { title: "Logout", icon: supportsIcon, path: "/logout" },
     ];
 
     return (
-            <div className="fixed top-10 z-50 bg-main-green rounded-[40px]">
+            <div className="fixed top-6 z-50 bg-main-green rounded-[40px]">
                 <div
                     className={`${open ? "w-[344px]" : "sm:w-[80px] md:w-[90px] lg:w-[100px] xl:w-[120px] 2xl:w-[120px]"} h-[900px] pt-8 relative duration-700 flex-col items-center justify-between`}
                     onMouseEnter={() => setOpen(true)}
