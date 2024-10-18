@@ -21,10 +21,9 @@ const App: React.FC = () => {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <ProfileProvider>
                     <Suspense fallback={<LoadingPage/>}>
                         <Routes>
-                            <Route path="/" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+                            <Route path="/" element={<ProtectedRoute> <ProfileProvider><ProfilePage/></ProfileProvider></ProtectedRoute>} />
                             <Route path="/login" element={<AuthPage/>} />
                             <Route path="/login/callback" element={<CallBackPage/>} />
                             <Route path="/statistics" element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>} />
@@ -40,7 +39,6 @@ const App: React.FC = () => {
                             <Route path="*" element={<Navigate to="/404" replace />} />
                         </Routes>
                     </Suspense>
-                </ProfileProvider>
             </AuthProvider>
         </BrowserRouter>
     );
