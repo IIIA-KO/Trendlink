@@ -1,11 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Trendlink.Api.Middleware;
 using Trendlink.Infrastructure;
+using Trendlink.Infrastructure.SignalR;
 
 namespace Trendlink.Api.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
+        public static void ConfigureMiddleware(this WebApplication app)
+        {
+            app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+
+            app.UseRequestContextLogging();
+            app.UseSerilogRequestLogging();
+            app.UseCustomExceptionHandler();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.MapFallbackToController("Index", "Fallback");
+
+            app.MapControllers();
+
+            app.MapHub<NotificationHub>("/hubs/notifications");
+        }
+
         public static void ApplyMigrations(this IApplicationBuilder app)
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
@@ -19,7 +43,7 @@ namespace Trendlink.Api.Extensions
             }
             catch (Npgsql.PostgresException)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
                 dbContext.Database.Migrate();
             }
         }
