@@ -33,7 +33,7 @@ const ProfilePage: React.FC = () => {
                 <div
                     className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
                     <TopBar user={user} />
-                    <StatisticsBar user={user} posts={posts} advertisements={advertisements}  />
+                    <StatisticsBar user={user} posts={posts} advertisements={advertisements} />
                     <div className="h-auto w-full py-4 px-12">
                         <div className="flex justify-center">
                             <div className="h-auto w-full flex flex-row p-4 rounded-lg">
@@ -62,7 +62,7 @@ const ProfilePage: React.FC = () => {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-16 px-2">
-                                    {posts.map(post => (
+                                        {posts.map(post => (
                                             <div key={post.id} className="flex-shrink-0 w-full">
                                                 <div className="relative">
                                                     {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
@@ -106,11 +106,13 @@ const ProfilePage: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="h-1/4 w-full flex justify-center items-center">
-                        <div className="flex flex-col w-1/2">
-                            <UniversalButton buttonText={"Link Instagram"} onClick={handleInstagramLink}/>
+                    {!user?.instagramAccountUsername && (
+                        <div className="h-1/4 w-full flex justify-center items-center">
+                            <div className="flex flex-col w-1/2">
+                                <UniversalButton buttonText={"Link Instagram"} onClick={handleInstagramLink} />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
 

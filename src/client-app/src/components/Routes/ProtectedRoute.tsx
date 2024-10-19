@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import ProtectedRouteType from '../../types/ProtectedRouteType'
 import LoadingPage from "../../pages/LoadingPage";
-import {useProfile} from "../../hooks/useProfile";
+import { useProfile } from "../../hooks/useProfile";
 
 
 const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
@@ -15,11 +15,11 @@ const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
     }
 
     if (!user) {
-        return <Navigate to="/login" />
-    } else {
-        if (!userProfile?.instagramAccountUsername) {
-            return <Navigate to="/link-instagram" />
-        }
+        return <Navigate to="/login" />;
+    }
+
+    if (!userProfile) {
+        return <LoadingPage />;
     }
     
     return <>{children}</>;
