@@ -7,9 +7,22 @@ import save from "../assets/icons/save-icon.svg"
 import view from "../assets/icons/views-icon.svg"
 import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
+import UniversalButton from "../components/Buttons/UniversalButton";
+import {
+    instagramClientId,
+    instagramConfigId,
+    instagramRedirectUri,
+    instagramResponseType,
+    instagramScope
+} from "../utils/constants";
 
 const ProfilePage: React.FC = () => {
     const { user, posts, advertisements, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
+
+    const handleInstagramLink = () => {
+        const authUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${instagramClientId}&redirect_uri=${instagramRedirectUri}&scope=${instagramScope}&response_type=${instagramResponseType}&config_id=${instagramConfigId}`;
+        window.location.href = authUrl;
+    };
 
     return (
         <div className="bg-background flex justify-start h-auto w-auto">
@@ -94,7 +107,9 @@ const ProfilePage: React.FC = () => {
                         </div>
                     </div>
                     <div className="h-1/4 w-full flex justify-center items-center">
-                        4
+                        <div className="flex flex-col w-1/2">
+                            <UniversalButton buttonText={"Link Instagram"} onClick={handleInstagramLink}/>
+                        </div>
                     </div>
                 </div>
             </div>
