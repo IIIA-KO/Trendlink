@@ -1,12 +1,10 @@
 import instGreyIcon from "../assets/icons/instagram-grey-icon.svg";
-import React, {useEffect, useMemo} from "react";
-import {useProfile} from "../hooks/useProfile";
+import React, {useMemo} from "react";
 import PieGraph from "./PieGraph";
+import {StatisticsBarType} from "../types/StatisticsBarType";
 
-const StatisticsBar: React.FC = () => {
+const StatisticsBar: React.FC<StatisticsBarType> = ({ user, posts, advertisements }) => {
 
-    const { user, advertisements, posts, loading } = useProfile();
-    
     const advertisement = advertisements?.[0];
 
     const userStats = useMemo(() => {
@@ -20,7 +18,6 @@ const StatisticsBar: React.FC = () => {
         const likeInsight = lastPost.insights.find(insight => insight.name === 'likes');
         const lastPostLikes = likeInsight ? likeInsight.value : null;
 
-        const advertisement = advertisements?.[0];
 
         return {
             mediaCount: user.mediaCount || 'N/A',

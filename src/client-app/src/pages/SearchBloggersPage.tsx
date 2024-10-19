@@ -7,8 +7,13 @@ import {getUsers} from "../services/user";
 import {getCountries} from "../services/countriesAndStates";
 import {CountryType} from "../types/CountryType";
 import instGreyIcon from "../assets/icons/instagram-grey-icon.svg"
+import noProfile from "../assets/icons/no-profile.svg";
+import {Link} from "react-router-dom";
+import {useProfile} from "../hooks/useProfile";
 
 const SearchBloggersPage: React.FC = () => {
+
+    const { user } = useProfile();
 
     const [users, setUsers] = useState<UserType[]>([]);
     const [loading, setLoading] = useState(false);
@@ -72,7 +77,7 @@ const SearchBloggersPage: React.FC = () => {
             </div>
             <div className="w-5/6 h-auto">
                 <div className="flex flex-col items-center gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-                    <TopBar />
+                    <TopBar user={user} />
                     <div className="relative w-11/12 flex flex-col gap-12 justify-center items-left">
                         <div className="w-full flex flex-row items-center space-x-4">
                             <div className="w-5/6 h-full border border-gray-10 rounded-[5px] flex items-center justify-center p-2">
@@ -189,8 +194,13 @@ const SearchBloggersPage: React.FC = () => {
                                     <tbody>
                                     {users.map((user) => (
                                         <tr key={user.id}>
-                                            <td className="border-b-[1px] border-r-[1px] border-gray-10">{user.firstName} {user.lastName}</td>
-                                            <td className="border-b-[1px] border-r-[1px] border-gray-10 text-center flex justify-end items-center"><img src={instGreyIcon} alt="instagram follower icon" className="w-6 h-6 my-4 mr-1"/> {user.followersCount}</td>
+                                            <td className="border-b-[1px] border-r-[1px] border-gray-10 p-4">
+                                                <Link to={`/profile/${user.id}`}>
+                                                    {user.firstName} {user.lastName}
+                                                </Link>
+                                                </td>
+                                            <td className="border-b-[1px] border-r-[1px] border-gray-10 text-center flex justify-end items-center">
+                                                <img src={instGreyIcon} alt="instagram follower icon" className="w-6 h-6 my-4 mr-1"/> {user.followersCount}</td>
                                             <td className="border-b-[1px] border-r-[1px] border-gray-10 text-center"><p>{user.countryName}</p></td>
                                             <td className="border-b-[1px] border-r-[1px] border-gray-10 text-right"><p className="pr-2">{user.mediaCount}</p></td>
                                         </tr>

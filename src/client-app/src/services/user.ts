@@ -22,3 +22,13 @@ export const getUsers = async (params: UsersType): Promise<UserType[] | null> =>
         return null;
     }
 };
+
+export const getUserByID = async (userId: string): Promise<UserType | null> => {
+    try {
+        const response = await axiosInstance.get(`/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        return null;
+    }
+};

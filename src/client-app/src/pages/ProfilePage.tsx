@@ -9,7 +9,7 @@ import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
 
 const ProfilePage: React.FC = () => {
-    const { posts, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
+    const { user, posts, advertisements, loading, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor } = useProfile();
 
     return (
         <div className="bg-background flex justify-start h-auto w-auto">
@@ -19,8 +19,8 @@ const ProfilePage: React.FC = () => {
             <div className="w-5/6 h-auto">
                 <div
                     className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-                    <TopBar />
-                    <StatisticsBar />
+                    <TopBar user={user} />
+                    <StatisticsBar user={user} posts={posts} advertisements={advertisements}  />
                     <div className="h-auto w-full py-4 px-12">
                         <div className="flex justify-center">
                             <div className="h-auto w-full flex flex-row p-4 rounded-lg">
