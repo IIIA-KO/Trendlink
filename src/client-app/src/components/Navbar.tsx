@@ -8,12 +8,14 @@ import notificationsIcon from '../assets/icons/notifications-icon.svg';
 import termsOfCooperationIcon from '../assets/icons/termsOfcooperation-icon.svg';
 import settingsIcon from '../assets/icons/settings-icon.svg';
 import logoutIcon from '../assets/icons/Logout-icon.svg';
+import searchIcon from '../assets/icons/search-icon.svg';
 import logo from '../assets/logo/logo-trendlink-white.svg'
 
 const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const Menus = [
         { title: "Profile", icon: profileIcon, path: "/" },
+        { title: "Search", icon: searchIcon, path: "/searchbloggers" },
         { title: "Statistics", icon: statisticsIcon, path: "/statistics"},
         { title: "Calendar ", icon: calendarIcon, path: "/" },
         { title: "Reviews", icon: reviewsIcon, path: "/" },
@@ -38,7 +40,7 @@ const NavBar: React.FC = () => {
                         />
                     </div>
 
-                    <ul className="flex flex-col mt-4 w-full">
+                    <ul className="flex flex-col mt-2 w-full">
                         {Menus.map((Menu, index) => (
                             <li
                                 key={index}
