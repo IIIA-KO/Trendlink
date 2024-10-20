@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - trendlink
 
 on:
@@ -55,13 +52,20 @@ jobs:
       - name: Add Trendlink.Application.IntegrationTests back to sln
         run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlink.Application.IntegrationTests/Trendlink.Application.IntegrationTests.csproj
 
-      # Add  functional tests back to sln
+      # Add functional tests back to sln
       - name: Add Trendlink.Api.FunctionalTests back to sln
         run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
       
       - name: Publish
-        run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
-        
+        run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --output ./published-app
+
+      # Upload the artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: published-app
+          path: ./published-app
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -73,7 +77,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: published-app
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -81,5 +85,5 @@ jobs:
         with:
           app-name: 'trendlink'
           slot-name: 'Production'
-          package: .
+          package: ./published-app
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2231A2B145441BBB313E3E602720374 }}
