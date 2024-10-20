@@ -9,9 +9,14 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  DOTNET_VERSION: "8.0.x"
+  SOLUTION_PATH: "./Trendlink.sln"
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
 
