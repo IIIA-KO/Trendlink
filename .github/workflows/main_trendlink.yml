@@ -96,5 +96,5 @@ jobs:
         with:
           app-name: 'trendlink'
           slot-name: 'Production'
-          package: ${{env.DOTNET_ROOT}}/publish
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2231A2B145441BBB313E3E602720374 }}
