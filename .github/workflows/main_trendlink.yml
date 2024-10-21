@@ -66,9 +66,10 @@ jobs:
       # Add functional tests back to sln
       - name: Add Trendlink.Api.FunctionalTests back to sln
         run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
-      
+
       - name: Publish
-        run: dotnet publish --configuration Release --no-restore --no-build --output  ${{ env.SOLUTION_PATH }}/myapp
+        run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --output ${{env.DOTNET_ROOT}}/myapp
+
 
       # Upload the artifact
       - name: Upload artifact
