@@ -1,4 +1,6 @@
-﻿namespace Trendlink.Api.Extensions
+﻿using Trendlink.Infrastructure.Extensions;
+
+namespace Trendlink.Api.Extensions
 {
     public static class DevelopmentExtensions
     {
