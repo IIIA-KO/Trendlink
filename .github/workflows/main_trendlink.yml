@@ -15,7 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies and build react app
+        run: |
+          cd client-app
+          npm install
+          npm run build
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -57,14 +68,14 @@ jobs:
         run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
       
       - name: Publish
-        run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --output ./published-app
+        run: dotnet publish --configuration Release --no-restore --no-build --output  ${{ env.SOLUTION_PATH }}/myapp
 
       # Upload the artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: published-app
-          path: ./published-app
+          name: .net-app
+          path: ${{env.SOLUTION_PATH}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -75,15 +86,15 @@ jobs:
     
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: published-app
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'trendlink'
           slot-name: 'Production'
-          package: ./published-app
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2231A2B145441BBB313E3E602720374 }}
