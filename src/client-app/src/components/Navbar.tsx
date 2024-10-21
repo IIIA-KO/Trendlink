@@ -26,6 +26,7 @@ const NavBar: React.FC = () => {
     ];
 
     return (
+        <div className="h-auto w-1/6 flex justify-start items-center pl-1 sm:pl-4 md:pl-6 lg:pl-10 xl:pl-22 2xl:pl-28">
             <div className="fixed top-6 z-50 bg-main-green rounded-[40px]">
                 <div
                     className={`${open ? "w-[344px]" : "sm:w-[80px] md:w-[90px] lg:w-[100px] xl:w-[120px] 2xl:w-[120px]"} h-[900px] pt-8 relative duration-700 flex-col items-center justify-between`}
@@ -57,6 +58,7 @@ const NavBar: React.FC = () => {
                     </ul>
                 </div>
             </div>
+        </div>
     );
 };
 

@@ -11,7 +11,6 @@ const TopBar: React.FC<TopBarType> = ({ user }) => {
         return null;
     }
 
-
     return (
         <div className="h-1/4 w-full flex flex-row">
             <div className="h-[300px] w-[120rem] flex flex-col gap-3">

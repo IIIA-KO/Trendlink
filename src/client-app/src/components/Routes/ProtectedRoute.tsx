@@ -3,12 +3,12 @@ import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import ProtectedRouteType from '../../types/ProtectedRouteType'
 import LoadingPage from "../../pages/LoadingPage";
-import { useProfile } from "../../hooks/useProfile";
+import { useUser } from "../../hooks/useUser";
 
 
 const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
     const { user, loading } = useAuth();
-    const { user: userProfile } = useProfile()
+    const { user: userProfile } = useUser()
 
     if (loading) {
         return <LoadingPage />;

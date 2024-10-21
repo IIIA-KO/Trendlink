@@ -1,9 +1,9 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import {useProfile} from "../hooks/useProfile";
+import {useAudience} from "../hooks/useAudience";
 
 const PieGraph: React.FC = () => {
-    const { genderData } = useProfile();
+    const { genderData } = useAudience();
 
     if (!genderData) {
         return <div className="text-center">Loading...</div>;
