@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies and build react app
         run: |
-          cd client-app
+          cd src/client-app
           npm install
           npm run build
 
