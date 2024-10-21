@@ -1,13 +1,14 @@
 ﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
 using Trendlink.Domain.Users.States;
-using Condition = Trendlink.Domain.Conditions.Condition;
 
-namespace Trendlink.Api.Extensions
+namespace Trendlink.Infrastructure.Extensions
 {
     public static class DataGenerator
     {
@@ -92,6 +93,8 @@ namespace Trendlink.Api.Extensions
 
         public static (User admin, List<User> users) GenerateUsers()
         {
+            var faker = new Faker();
+
             User admin = User.Create(
                 new FirstName("Trendlink"),
                 new LastName("Administrator"),
@@ -101,33 +104,21 @@ namespace Trendlink.Api.Extensions
                 new PhoneNumber("0123456789")
             ).Value;
 
-            List<User> users =
-            [
-                User.Create(
-                    new FirstName("Firstname1"),
-                    new LastName("Lastname1"),
-                    new DateOnly(1999, 1, 1),
-                    StateId.New(),
-                    new Email("user1@trendlink.com"),
-                    new PhoneNumber("0123456789")
-                ).Value,
-                User.Create(
-                    new FirstName("Firstname2"),
-                    new LastName("Lastname2"),
-                    new DateOnly(1999, 1, 1),
-                    StateId.New(),
-                    new Email("user2@trendlink.com"),
-                    new PhoneNumber("0123456789")
-                ).Value,
-                User.Create(
-                    new FirstName("Firstname3"),
-                    new LastName("Lastname3"),
-                    new DateOnly(1999, 1, 1),
-                    StateId.New(),
-                    new Email("user3@trendlink.com"),
-                    new PhoneNumber("0123456789")
-                ).Value,
-            ];
+            var users = new List<User>();
+
+            for (int i = 0; i < 100; i++)
+            {
+                users.Add(
+                    User.Create(
+                        new FirstName(faker.Name.FirstName()),
+                        new LastName(faker.Name.LastName()),
+                        DateOnly.FromDateTime(faker.Date.Past(30, DateTime.Now.AddYears(-18))),
+                        StateId.New(),
+                        new Email(faker.Internet.Email()),
+                        new PhoneNumber(faker.Random.ReplaceNumbers("##########"))
+                    ).Value
+                );
+            }
 
             return (admin, users);
         }
@@ -152,14 +143,14 @@ namespace Trendlink.Api.Extensions
             var faker = new Faker();
             var advertisements = new List<Advertisement>();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 advertisements.Add(
                     Advertisement
                         .Create(
                             condition.Id,
                             new Name(faker.Lorem.Sentence()),
-                            new Money(Math.Round(faker.Random.Decimal(1, 100), 2), Currency.Usd),
+                            new Money(Math.Round(faker.Random.Decimal(1, 1000), 2), Currency.Usd),
                             new Description(faker.Lorem.Sentence())
                         )
                         .Value
