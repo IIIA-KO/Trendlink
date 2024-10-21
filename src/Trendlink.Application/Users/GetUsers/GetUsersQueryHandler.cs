@@ -39,6 +39,7 @@ namespace Trendlink.Application.Users.GetUsers
                     user.Email.Value,
                     user.FirstName.Value,
                     user.LastName.Value,
+                    user.InstagramAccount == null ? "" : user.InstagramAccount.Metadata.UserName,
                     user.ProfilePhoto == null ? null : user.ProfilePhoto.Id,
                     user.ProfilePhoto == null ? null : user.ProfilePhoto.Uri.ToString(),
                     user.BirthDate,
@@ -46,7 +47,7 @@ namespace Trendlink.Application.Users.GetUsers
                     user.State.Name.Value,
                     user.PhoneNumber.Value,
                     user.Bio.Value,
-                    user.AccountCategory,
+                    user.AccountCategory.ToString(),
                     user.InstagramAccount!.Metadata.FollowersCount,
                     user.InstagramAccount.Metadata.MediaCount
                 )

@@ -2,7 +2,6 @@
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Shared;
-using Trendlink.Domain.UnitTests.Infrastructure;
 
 namespace Trendlink.Domain.UnitTests.Reviews
 {

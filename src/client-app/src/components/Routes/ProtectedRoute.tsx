@@ -2,15 +2,27 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import ProtectedRouteType from '../../types/ProtectedRouteType'
+import LoadingPage from "../../pages/LoadingPage";
+import { useProfile } from "../../hooks/useProfile";
+
 
 const ProtectedRoute: React.FC<ProtectedRouteType> = ({ children }) => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
+    const { user: userProfile } = useProfile()
 
-    if (user === null) {
-        return null;
+    if (loading) {
+        return <LoadingPage />;
     }
 
-    return user ? <>{children}</> : <Navigate to="/login" />;
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
+
+    if (!userProfile) {
+        return <LoadingPage />;
+    }
+    
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;

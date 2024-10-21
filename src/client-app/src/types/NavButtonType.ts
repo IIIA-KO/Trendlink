@@ -3,4 +3,5 @@ export default interface NavButtonType {
     redirectTo: string;
     width?: string;
     height?: string;
+    className?: string;
 }

@@ -1,7 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Notifications;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users.DomainEvents;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
 using Trendlink.Domain.Users.States;
