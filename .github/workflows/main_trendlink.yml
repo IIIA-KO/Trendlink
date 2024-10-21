@@ -22,12 +22,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies and build react app
+      - name: Build react app
         run: |
           cd src/client-app
           npm install
           npm run build
-
+      
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -68,7 +68,7 @@ jobs:
         run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
 
       - name: Publish
-        run: dotnet publish ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build --output ${{env.DOTNET_ROOT}}/publish
+        run: dotnet publish src/Trendlink.Api/Trendlink.Api.csproj --configuration Release --no-restore --no-build --output ${{env.DOTNET_ROOT}}/publish
 
       # Upload the artifact
       - name: Upload artifact
@@ -96,5 +96,5 @@ jobs:
         with:
           app-name: 'trendlink'
           slot-name: 'Production'
-          package: .
+          package: ${{env.DOTNET_ROOT}}/publish
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2231A2B145441BBB313E3E602720374 }}
