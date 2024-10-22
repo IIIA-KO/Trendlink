@@ -1,5 +1,5 @@
 import {ProfileType} from "../types/ProfileType";
-import {deleteProfilePhoto, updateProfile} from "../services/profile";
+import {deleteProfilePhoto, updateProfile, uploadProfilePhoto} from "../services/profile";
 import {createContext, ReactNode} from "react";
 import {ProfileContextType} from "../types/ProfileContextType";
 import {handleError} from "../utils/handleError";
@@ -23,11 +23,20 @@ const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const uploadPhoto = async (photoFile: File) => {
+        try {
+            await uploadProfilePhoto(photoFile);
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
     return (
         <ProfileContext.Provider
             value={{
                 deletePhoto,
                 updateProfileData,
+                uploadPhoto,
             }}
         >
             {children}

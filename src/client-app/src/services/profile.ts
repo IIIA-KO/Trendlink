@@ -17,3 +17,18 @@ export const updateProfile = async (profileData: ProfileType): Promise<void> => 
         handleError(error);
     }
 };
+
+export const uploadProfilePhoto = async (photoFile: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('file', photoFile);
+
+    try {
+        await axiosInstance.post('/profile/photo', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    } catch (error) {
+        handleError(error);
+    }
+};
