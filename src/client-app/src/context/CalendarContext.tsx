@@ -33,9 +33,9 @@ const CalendarProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
-    const fetchMonthCalendar = async () => {
+    const fetchMonthCalendar = async (month: string, year: string) => {
         try {
-            const data: CalendarDayType[] = await getMonthCalendar();
+            const data: CalendarDayType[] = await getMonthCalendar(month, year);
             setCalendarData(data);
         } catch (error) {
             handleError(error);

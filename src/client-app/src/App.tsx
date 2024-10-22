@@ -17,10 +17,10 @@ import CallBackPage from "./pages/CallBackPage";
 import LogoutPage from "./pages/LogoutPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ServerErrorPage from "./pages/ServerErrorPage";
-import ProfileBloggersPage from "./pages/ProfileBloggerPage"
+import ProfileBloggersPage from "./pages/ProfileBloggerPage";
+import CalendarPage from "./pages/CalendarPage";
 
 const App: React.FC = () => {
-
     return (
         <AuthProvider>
             <Suspense fallback={<LoadingPage/>}>
@@ -32,6 +32,7 @@ const App: React.FC = () => {
                         <Route path="/statistics" element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>} />
                         <Route path="/termsofcooperation" element={<ProtectedRoute><TermsOfCooperationPage/></ProtectedRoute>} />
                         <Route path="/searchbloggers" element={<ProtectedRoute><SearchBloggersPage/></ProtectedRoute>} />
+                        <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
                     </Route>
 
                     <Route element={<AuthLayout />}>

@@ -22,7 +22,7 @@ export const getCalendarByUserId = async (userId: string): Promise<CalendarDayTy
     }
 };
 
-export const getMonthCalendar = async (): Promise<CalendarDayType[]> => {
+export const getMonthCalendar = async (month: string, year: string): Promise<CalendarDayType[]> => {
     try {
         const response = await axiosInstance.get('/calendar/month');
         return response.data;
