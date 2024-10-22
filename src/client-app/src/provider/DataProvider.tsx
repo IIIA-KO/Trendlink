@@ -6,23 +6,26 @@ import {AudienceProvider} from "../context/AudienceContext";
 import {CalendarProvider} from "../context/CalendarContext";
 import {CooperationProvider} from "../context/CooperationContext";
 import {NotificationProvider} from "../context/NotificationContext";
+import {ProfileProvider} from "../context/ProfileContext";
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return (
         <UserProvider>
-            <AdvertisementsProvider>
-                <PostsProvider>
-                    <AudienceProvider>
-                        <CalendarProvider>
-                            <CooperationProvider>
-                                <NotificationProvider>
-                                    {children}
-                                </NotificationProvider>
-                            </CooperationProvider>
-                        </CalendarProvider>
-                    </AudienceProvider>
-                </PostsProvider>
-            </AdvertisementsProvider>
+            <ProfileProvider>
+                <AdvertisementsProvider>
+                    <PostsProvider>
+                        <AudienceProvider>
+                            <CalendarProvider>
+                                <CooperationProvider>
+                                    <NotificationProvider>
+                                        {children}
+                                    </NotificationProvider>
+                                </CooperationProvider>
+                            </CalendarProvider>
+                        </AudienceProvider>
+                    </PostsProvider>
+                </AdvertisementsProvider>
+            </ProfileProvider>
         </UserProvider>
     );
 };
