@@ -14,6 +14,9 @@ export default {
         semibold: '600',
         bold: '700',
       },
+      fontStyle: {
+        italic: 'italic',
+      },
       backgroundImage: {
         'custom-bg': "url('/src/assets/bg.svg')",
       },
@@ -33,6 +36,7 @@ export default {
         white: "#fff",
         text: "#444444",
         gray: {
+          "10": "#C0BEBE",
           "100": "#7c7c7c",
           "200": "#181d25",
         },
@@ -92,5 +96,24 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.resize-none-indicator': {
+          resize: 'both',
+          overflow: 'auto',
+          '::-webkit-resizer': {
+            display: 'none',
+          },
+        },
+      });
+      addUtilities({
+        '.inter-light-italic': {
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: '300',
+          fontStyle: 'italic',
+        },
+      });
+    },
+  ],
 }

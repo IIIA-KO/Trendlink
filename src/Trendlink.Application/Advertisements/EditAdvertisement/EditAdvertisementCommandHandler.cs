@@ -55,7 +55,7 @@ namespace Trendlink.Application.Advertisements.EditAdvertisement
                 return Result.Failure(AdvertisementErrors.NotFound);
             }
 
-            if (condition.HasAdvertisement(request.Name))
+            if (!condition.HasAdvertisement(request.Name))
             {
                 return Result.Failure<AdvertisementId>(AdvertisementErrors.Duplicate);
             }

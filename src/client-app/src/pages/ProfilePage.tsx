@@ -1,94 +1,117 @@
-import React, {useMemo} from "react";
-import Navbar from "../components/Navbar";
 import TopBar from "../components/TopBar";
-import instGreyIcon from "../assets/icons/instagram-grey-icon.svg"
-import {useProfile} from "../hooks/useProfile";
+import { useUser } from "../hooks/useUser";
+import StatisticsBar from "../components/StatisticsBar";
+import like from "../assets/icons/Fill.svg"
+import save from "../assets/icons/save-icon.svg"
+import view from "../assets/icons/views-icon.svg"
+import right from "../assets/icons/navigation-chevron-right.svg"
+import left from "../assets/icons/navigation-chevron-left.svg"
+import UniversalButton from "../components/Buttons/UniversalButton";
+import {
+    instagramClientId,
+    instagramConfigId,
+    instagramRedirectUri,
+    instagramResponseType,
+    instagramScope
+} from "../utils/constants";
+import {usePosts} from "../hooks/usePosts";
+import {useAdvertisements} from "../hooks/useAdvertisements";
 
 const ProfilePage: React.FC = () => {
+    const { user } = useUser();
+    const { posts, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor, loading } = usePosts();
+    const { advertisements } = useAdvertisements();
 
-    const { user, advertisements } = useProfile();
-
-    const userStats = useMemo(() => {
-        if (!user) return null;
-
-        return {
-            mediaCount: user.mediaCount || 'N/A',
-            averagePriceRange: advertisements?.value || 'N/A',
-            averagePriceRangeCurrency: advertisements?.currency || '',
-            followersCount: user.followersCount || 'N/A',
-            //postsCount: user.posts || 'N/A',
-            //likesOnLastPost: user.likesOnLastPost || 'N/A'
-        };
-    }, [user]);
+    const handleInstagramLink = () => {
+        const authUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${instagramClientId}&redirect_uri=${instagramRedirectUri}&scope=${instagramScope}&response_type=${instagramResponseType}&config_id=${instagramConfigId}`;
+        window.location.href = authUrl;
+    };
 
     return (
-        <div className="bg-background flex justify-start h-auto w-auto">
-            <div className="h-auto w-1/6 flex justify-start items-center pl-1 sm:pl-4 md:pl-6 lg:pl-10 xl:pl-22 2xl:pl-28">
-                <Navbar />
-            </div>
-            <div className="w-5/6 h-auto">
-                <div className="flex flex-col gap-2 border border-orange bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-                    <TopBar />
-                    <div className="h-1/4 w-full flex flex-row xl:gap-20 2xl:gap-32 border border-2 border-red-600 text-center text-black">
-                        <div className="h-full w-1/2 mx-10 my-6 flex flex-row rounded-[15px] bg-background border border-2 border-emerald-700">
-                            <div className="h-auto w-1/3 flex justify-center items-center">
-                                <p className="font-inter font-bold text-xl text-text inline-flex items-center">
-                                    <img src={instGreyIcon} alt="Subscribe icon" className="w-7 h-7 mr-1"/>
-                                    25k
-                                    {userStats?.mediaCount || 'N/A'}
-                                </p>
+        <div
+            className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
+            <TopBar user={user}/>
+            <StatisticsBar user={user} posts={posts} advertisements={advertisements}/>
+            <div className="h-auto w-full py-4 px-12">
+                <div className="flex justify-center">
+                    <div className="h-auto w-full flex flex-row p-4 rounded-lg">
+                        {hasPreviousPage && (
+                            <button onClick={() => fetchPosts('before', beforeCursor)}>
+                                <img src={left} className="w-12 h-12" alt="left navigation arrow"/>
+                            </button>
+                        )}
+                        {loading || !posts ? (
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-16 px-2">
+                                {[...Array(6)].map((_, index) => (
+                                    <div key={index} className="w-full">
+                                        <div className="relative">
+                                            <div className="bg-gray-300 w-36 h-44 rounded-lg"></div>
+                                            <div className="flex flex-col justify-center items-left gap-1 pt-2">
+                                                <div className="flex items-center">
+                                                    <div className="h-4 bg-gray-300 rounded w-full"></div>
+                                                </div>
+                                                <div className="flex items-center">
+                                                    <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="h-full w-2/3 flex flex-col gap-3 py-4 border border-red-600 border-2">
-                                <div className="flex flex-row">
-                                    <div className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.averagePriceRangeCurrency === 'USD' ? '$' : userStats?.averagePriceRangeCurrency === 'EUR' ? '€' : userStats?.averagePriceRangeCurrency === 'UAH' ? '₴' : ' '}</p>
+                        ) : (
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-16 px-2">
+                                {posts.map(post => (
+                                    <div key={post.id} className="flex-shrink-0 w-full">
+                                        <div className="relative">
+                                            {post.mediaType === 'IMAGE' || post.mediaType === 'CAROUSEL_ALBUM' ? (
+                                                <img src={post.mediaUrl} alt="Post media"
+                                                     className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover"/>
+                                            ) : (
+                                                <img src={post.thumbnailUrl ?? post.mediaUrl}
+                                                     alt="Post thumbnail"
+                                                     className="max-w-36 max-h-44 min-w-36 min-h-44 object-cover"/>
+                                            )}
+                                            <div className="flex flex-col justify-center items-left gap-1 pt-2">
+                                                {post.insights.find(insight => insight.name === 'likes')?.value && (
+                                                    <div className="flex items-center">
+                                                        <img src={like} className="w-4 h-4" alt="likes icon"/>
+                                                        <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'likes')?.value}</p>
+                                                    </div>
+                                                )}
+                                                {post.insights.find(insight => insight.name === 'saved')?.value && (
+                                                    <div className="flex items-center">
+                                                        <img src={save} className="w-4 h-4" alt="saves icon"/>
+                                                        <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'saved')?.value}</p>
+                                                    </div>
+                                                )}
+                                                {post.insights.find(insight => insight.name === 'views')?.value && (
+                                                    <div className="flex items-center">
+                                                        <img src={view} className="w-4 h-4" alt="views icon"/>
+                                                        <p className="font-inter font-regular text-text text-sm">{post.insights.find(insight => insight.name === 'views')?.value}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="w-1/2">
-                                        <p className="font-inter font-regular text-[14px] text-text text-left"> Середня
-                                            ціна на рекламу</p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row">
-                                    <div className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">{userStats?.followersCount || 'N/A'}</p>
-                                    </div>
-                                    <div  className="w-1/2">
-                                        <p className="font-inter font-regular text-[14px] text-text text-left"> Підписок</p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row">
-                                    <div  className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">3200</p>
-                                    </div>
-                                    <div  className="w-1/2">
-                                        <p className="font-inter font-regular text-[14px] text-text text-left"> Публікацій</p>
-                                    </div>
-                                </div>
-                                <div className="flex flex-row">
-                                    <div  className="w-1/2 pr-6">
-                                        <p className="font-inter font-bold text-[14px] text-text text-right">606</p>
-                                    </div>
-                                    <div  className="w-1/2">
-                                        <p className="font-inter font-regular text-[14px] text-text text-left"> Лайків </p>
-                                        <p className="font-inter font-light text-[12px] text-text text-left">на останній пост</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
-                        </div>
-                        <div
-                            className="h-full w-1/2 mx-10 my-6 rounded-[40px] bg-background border border-2 border-emerald-700">
-                            02
-                        </div>
-                    </div>
-                    <div className="h-1/4 w-full border border-2 border-red-600 text-center text-black">
-                        3
-                    </div>
-                    <div className="h-1/4 w-full border border-2 border-red-600 text-center text-black">
-                        4
+                        )}
+                        {hasNextPage && (
+                            <button className="flex items-start justify-center pt-20"
+                                    onClick={() => fetchPosts('after', afterCursor)}>
+                                <img src={right} className="w-12 h-12" alt="right navigation arrow"/>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
-
+            {!user?.instagramAccountUsername && (
+                <div className="h-1/4 w-full flex justify-center items-center">
+                    <div className="flex flex-col w-1/2">
+                        <UniversalButton buttonText={"Link Instagram"} onClick={handleInstagramLink}/>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

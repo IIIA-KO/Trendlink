@@ -83,7 +83,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new RefreshTokenCommand(request.Code);
+            var command = new RefreshTokenCommand(request.RefreshToken);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }

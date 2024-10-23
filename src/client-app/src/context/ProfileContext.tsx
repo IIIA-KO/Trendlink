@@ -1,53 +1,44 @@
-import React, {createContext, ReactNode, useEffect, useState} from "react";
-import {UserType} from "../types/UserType";
+import {ProfileType} from "../types/ProfileType";
+import {deleteProfilePhoto, updateProfile, uploadProfilePhoto} from "../services/profile";
+import {createContext, ReactNode} from "react";
 import {ProfileContextType} from "../types/ProfileContextType";
-import {getUser} from "../services/user";
 import {handleError} from "../utils/handleError";
-import {useNavigate} from "react-router-dom";
-import {getAdvertisements} from "../services/advertisements";
-import {AdvertisementsType} from "../types/AdvertisementsType";
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<UserType | null>(null);
-    const [advertisements, setAdvertisements] = useState<AdvertisementsType | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const navigate = useNavigate();
+    const deletePhoto = async () => {
+        try {
+            await deleteProfilePhoto();
+        } catch (error) {
+            handleError(error);
+        }
+    };
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userData = await getUser();
-                setUser(userData);
-            } catch (error) {
-                handleError(error)
-            } finally {
-                setLoading(false);
-            }
-        };
+    const updateProfileData = async (profileData: ProfileType) => {
+        try {
+            await updateProfile(profileData);
+        } catch (error) {
+            handleError(error);
+        }
+    };
 
-        const fetchAdvertisementsData = async () => {
-            try {
-                const advertisementsData = await getAdvertisements();
-                setAdvertisements(advertisementsData);
-            } catch (error) {
-                handleError(error)
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUserData();
-        fetchAdvertisementsData();
-    }, []);
-
-    if(loading === true) {
-        navigate("/loading")
+    const uploadPhoto = async (photoFile: File) => {
+        try {
+            await uploadProfilePhoto(photoFile);
+        } catch (error) {
+            handleError(error);
+        }
     }
 
     return (
-        <ProfileContext.Provider value={{ user, advertisements }}>
+        <ProfileContext.Provider
+            value={{
+                deletePhoto,
+                updateProfileData,
+                uploadPhoto,
+            }}
+        >
             {children}
         </ProfileContext.Provider>
     );
