@@ -19,6 +19,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ServerErrorPage from "./pages/ServerErrorPage";
 import ProfileBloggersPage from "./pages/ProfileBloggerPage";
 import CalendarPage from "./pages/CalendarPage";
+import ReviewsPage from "./pages/ReviewsPage";
 
 const App: React.FC = () => {
     return (
@@ -33,6 +34,7 @@ const App: React.FC = () => {
                         <Route path="/termsofcooperation" element={<ProtectedRoute><TermsOfCooperationPage/></ProtectedRoute>} />
                         <Route path="/searchbloggers" element={<ProtectedRoute><SearchBloggersPage/></ProtectedRoute>} />
                         <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
+                        <Route path="/reviews" element={<ProtectedRoute><ReviewsPage /></ProtectedRoute>} />
                     </Route>
 
                     <Route element={<AuthLayout />}>
