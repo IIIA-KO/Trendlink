@@ -1,5 +1,2 @@
-export enum StatisticsPeriod {
-    Day = 1,
-    Week = 7,
-    Day21 = 21
-}
+
+export type StatisticsPeriodType = 1 | 7 | 21;

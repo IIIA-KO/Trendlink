@@ -7,6 +7,8 @@ import {CalendarProvider} from "../context/CalendarContext";
 import {CooperationProvider} from "../context/CooperationContext";
 import {NotificationProvider} from "../context/NotificationContext";
 import {ProfileProvider} from "../context/ProfileContext";
+import {StatisticsProvider} from "../context/StatisticsContext";
+import {ReviewProvider} from "../context/ReviewContext";
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return (
@@ -15,13 +17,17 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 <AdvertisementsProvider>
                     <PostsProvider>
                         <AudienceProvider>
-                            <CalendarProvider>
-                                <CooperationProvider>
-                                    <NotificationProvider>
-                                        {children}
-                                    </NotificationProvider>
-                                </CooperationProvider>
-                            </CalendarProvider>
+                            <StatisticsProvider>
+                                <CalendarProvider>
+                                    <CooperationProvider>
+                                        <NotificationProvider>
+                                            <ReviewProvider>
+                                                {children}
+                                            </ReviewProvider>
+                                        </NotificationProvider>
+                                    </CooperationProvider>
+                                </CalendarProvider>
+                            </StatisticsProvider>
                         </AudienceProvider>
                     </PostsProvider>
                 </AdvertisementsProvider>
