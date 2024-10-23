@@ -52,7 +52,9 @@ export const blockDate = async (date: string): Promise<void> => {
 
 export const unblockDate = async (date: string): Promise<void> => {
     try {
-        await axiosInstance.post('/calendar/unblock-date', { date });
+        await axiosInstance.delete('/calendar/unblock-date', {
+            data: { date },
+        });
     } catch (error) {
         handleError(error);
     }
