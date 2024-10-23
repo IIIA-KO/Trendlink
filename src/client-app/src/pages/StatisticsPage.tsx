@@ -4,12 +4,22 @@ import {useUser} from "../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 import {usePosts} from "../hooks/usePosts";
 import {useAdvertisements} from "../hooks/useAdvertisements";
+import {useStatistics} from "../hooks/useStatistics";
+import {useEffect} from "react";
 
 const StatisticsPage: React.FC = () => {
 
   const { user } = useUser();
   const { posts, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor, loading } = usePosts();
   const { advertisements } = useAdvertisements();
+  const {tableData, overviewData, interactionData, engagementData, fetchStatisticsTable, fetchStatisticsOverview, fetchStatisticsInteraction, fetchStatisticsEngagement} = useStatistics();
+
+  useEffect(() => {
+    fetchStatisticsTable(7);
+    fetchStatisticsOverview(7);
+    fetchStatisticsInteraction(7);
+    fetchStatisticsEngagement(7);
+  }, [fetchStatisticsTable, fetchStatisticsOverview, fetchStatisticsInteraction, fetchStatisticsEngagement]);
 
   const navigate = useNavigate();
   if (loading) {
