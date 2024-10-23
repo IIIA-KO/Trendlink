@@ -92,11 +92,18 @@ namespace Trendlink.Application.Instagarm.RenewInstagramAccess
             this._userTokenRepository.Remove(userToken!);
 
             this._instagramAccountRepository.Remove(user.InstagramAccount);
-            user.LinkInstagramAccount(
-                instagramAccount,
+            user.LinkInstagramAccount(instagramAccount);
+
+            Result<UserToken> userTokenResult = UserToken.Create(
+                user.Id,
                 facebookTokenResult.Value.AccessToken,
                 facebookTokenResult.Value.ExpiresAtUtc
             );
+            if (userTokenResult.IsFailure)
+            {
+                return Result.Failure(userTokenResult.Error);
+            }
+            this._userTokenRepository.Add(userTokenResult.Value);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -6,6 +6,7 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.InstagramBusinessAccount;
+using Trendlink.Domain.Users.Token;
 
 namespace Trendlink.Application.Instagarm.LinkInstagram
 {
@@ -17,6 +18,7 @@ namespace Trendlink.Application.Instagarm.LinkInstagram
         private readonly IUserContext _userContext;
         private readonly IInstagramService _instagramService;
         private readonly IKeycloakService _keycloakService;
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public LinkInstagramCommandHandler(
@@ -24,6 +26,7 @@ namespace Trendlink.Application.Instagarm.LinkInstagram
             IUserContext userContext,
             IInstagramService instagramService,
             IKeycloakService keycloakService,
+            IUserTokenRepository userTokenRepository,
             IUnitOfWork unitOfWork
         )
         {
@@ -31,6 +34,7 @@ namespace Trendlink.Application.Instagarm.LinkInstagram
             this._userContext = userContext;
             this._instagramService = instagramService;
             this._keycloakService = keycloakService;
+            this._userTokenRepository = userTokenRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -87,11 +91,18 @@ namespace Trendlink.Application.Instagarm.LinkInstagram
                 return Result.Failure(linkInstagramResult.Error);
             }
 
-            user.LinkInstagramAccount(
-                instagramAccount,
+            user.LinkInstagramAccount(instagramAccount);
+
+            Result<UserToken> userTokenResult = UserToken.Create(
+                user.Id,
                 facebookTokenResult.Value.AccessToken,
                 facebookTokenResult.Value.ExpiresAtUtc
             );
+            if (userTokenResult.IsFailure)
+            {
+                return Result.Failure(userTokenResult.Error);
+            }
+            this._userTokenRepository.Add(userTokenResult.Value);
 
             await this._unitOfWork.SaveChangesAsync(cancellationToken);
 
