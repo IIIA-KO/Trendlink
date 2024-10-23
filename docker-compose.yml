@@ -1,28 +1,45 @@
 services:
   trendlink.api:
-    image: ${DOCKER_REGISTRY-}trendlinkapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTPS_PORTS=5001
+    networks:
+     - trendlink-net
+    ports:
+      - "5001:5001"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    image: iiiako/trendlinkapi:latest
     container_name: Trendlink.Api
     build:
       context: .
       dockerfile: src/Trendlink.Api/Dockerfile
     depends_on:
      - trendlink-db
+     - trendlink-idp
+     - trendlink-seq
+     - trendlink-redis
   
   trendlink-db:
     image: postgres:latest
     container_name: Trendlink.Db
+    restart: always
     environment:
       - POSTGRES_DB=trendlink
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - ./.containers/database:/var/lib/postgresql/data
+    networks:
+     - trendlink-net
     ports:
       - 5432:5432
    
   trendlink-idp:
     image: quay.io/keycloak/keycloak:latest
     container_name: Trendlink.Identity
+    restart: always
     command: start-dev --import-realm
     environment:
       - KEYCLOAK_ADMIN=admin
@@ -30,14 +47,19 @@ services:
     volumes:
       - ./.containers/identity:/opt/keycloak/data
       - ./.files/trendlink-realm-export.json:/opt/keycloak/data/import/realm.json
+    networks:
+     - trendlink-net
     ports:
       - 18080:8080
 
   trendlink-seq:
     image: datalust/seq:latest
     container_name: Trendlink.Seq
+    restart: always
     environment:
       - ACCEPT_EULA=Y
+    networks:
+     - trendlink-net
     ports:
       - 5341:5341
       - 8081:80
@@ -46,5 +68,11 @@ services:
     image: redis:latest
     container_name: Trendlink.Redis
     restart: always
+    networks:
+     - trendlink-net
     ports:
       - '6379:6379'
+
+networks:
+  trendlink-net:
+    driver: bridge
