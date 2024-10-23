@@ -1,0 +1,70 @@
+{
+  "name": "client-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.0.20",
+    "@fontsource/kodchasan": "^5.0.21",
+    "@microsoft/signalr": "^8.0.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/yup": "^0.32.0",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "antd": "^5.20.6",
+    "axios": "^1.7.7",
+    "formik": "^2.4.6",
+    "query-string": "^9.1.0",
+    "react": "^18.3.1",
+    "react-apexcharts": "^1.4.1",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.3",
+    "react-infinite-scroller": "^1.2.6",
+    "react-router-dom": "^6.26.1",
+    "react-toastify": "^10.0.5",
+    "typescript": "^5.5.4",
+    "uuid": "^10.0.0",
+    "web-vitals": "^4.2.3",
+    "yup": "^1.4.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.4.0",
+    "@typescript-eslint/parser": "^8.4.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
+  }
+}

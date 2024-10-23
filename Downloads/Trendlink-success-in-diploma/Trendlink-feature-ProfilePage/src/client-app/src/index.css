@@ -1,0 +1,94 @@
+@import '@fontsource/inter/300.css'; /* Light */
+@import '@fontsource/inter/400.css'; /* Normal */
+@import '@fontsource/inter/700.css'; /* Bold */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*loading spin*/
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    position: relative;
+    background-color: transparent;
+    height: 113px;
+    width: 113px;
+    border-radius: 50%;
+    background: conic-gradient(#009EA0, transparent);
+    animation: rotate 1.5s linear infinite;
+    padding: 5px;
+}
+
+.spinner::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    background-color: white;
+    top: 20px;
+    left: 20px;
+    border-radius: 50%;
+}
+
+.spinner::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #009EA0;
+    top: 0;
+    left: 51%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+}
+.scrollable-fixed {
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.block {
+    background: #ffffff;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 182px;
+    padding: 11px 25px;
+    display: flex;
+}
+.block-current {
+    background: #009ea0;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #009ea0;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    width: 182px;
+    padding: 11px 25px;
+    display: flex;
+}
+.chart-container {
+    width: 500px;
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px auto;
+}
