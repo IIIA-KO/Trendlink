@@ -1,4 +1,4 @@
 ﻿namespace Trendlink.Api.Controllers.Users
 {
-    public sealed record LoginUserWithGoogleRequest(string Code);
+    public sealed record LoginUserWithGoogleRequest(string RefreshToken);
 }
