@@ -1,8 +1,12 @@
-﻿using Bogus;
+﻿using System.Security.Cryptography;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
+using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
@@ -158,6 +162,22 @@ namespace Trendlink.Infrastructure.Extensions
             }
 
             return advertisements;
+        }
+
+        public static Review GenerateReview(Cooperation cooperation)
+        {
+            var faker = new Faker();
+
+            Rating rating = Rating.Create(RandomNumberGenerator.GetInt32(1, 6)).Value;
+            var comment = new Comment(faker.Lorem.Sentence(3));
+
+            Result<Review> reviewResult = Review.Create(
+                cooperation,
+                rating,
+                comment,
+                DateTime.UtcNow
+            );
+            return reviewResult.Value;
         }
     }
 }
