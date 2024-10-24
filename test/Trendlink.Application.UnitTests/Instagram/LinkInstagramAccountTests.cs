@@ -22,6 +22,7 @@ namespace Trendlink.Application.UnitTests.Instagram
         private readonly IUserContext _userContextMock;
         private readonly IInstagramService _instagramServiceMock;
         private readonly IKeycloakService _keycloakServiceMock;
+        private readonly IUserTokenRepository _userTokenRepositoryMock;
         private readonly IUnitOfWork _unitOfWorkMock;
 
         private readonly LinkInstagramCommandHandler _handler;
@@ -32,6 +33,7 @@ namespace Trendlink.Application.UnitTests.Instagram
             this._userContextMock = Substitute.For<IUserContext>();
             this._instagramServiceMock = Substitute.For<IInstagramService>();
             this._keycloakServiceMock = Substitute.For<IKeycloakService>();
+            this._userTokenRepositoryMock = Substitute.For<IUserTokenRepository>();
             this._unitOfWorkMock = Substitute.For<IUnitOfWork>();
 
             this._handler = new LinkInstagramCommandHandler(
@@ -39,6 +41,7 @@ namespace Trendlink.Application.UnitTests.Instagram
                 this._userContextMock,
                 this._instagramServiceMock,
                 this._keycloakServiceMock,
+                this._userTokenRepositoryMock,
                 this._unitOfWorkMock
             );
         }
