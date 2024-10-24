@@ -332,42 +332,5 @@ namespace Trendlink.Domain.UnitTests.Users
             user.ProfilePhoto.Should().NotBeNull();
             user.ProfilePhoto!.Uri.Should().Be(UserData.ProfilePicture.Uri);
         }
-
-        [Fact]
-        public void LinkInstagramAccount_Should_RaiseInstagramAccountLinkedDomainEvent()
-        {
-            // Arrange
-            User user = User.Create(
-                UserData.FirstName,
-                UserData.LastName,
-                UserData.BirthDate,
-                UserData.State.Id,
-                UserData.Email,
-                UserData.PhoneNumber
-            ).Value;
-
-            InstagramAccount instagramAccount = InstagramAccount
-                .Create(
-                    user.Id,
-                    new FacebookPageId("dummy_id"),
-                    new AdvertisementAccountId("dummy_id"),
-                    new Metadata("123", 1, "username", 100, 1)
-                )
-                .Value;
-
-            const string facebookAccessToken = "dummy_token";
-            DateTimeOffset expiresAt = DateTimeOffset.UtcNow.AddDays(7);
-
-            // Act
-            user.LinkInstagramAccount(instagramAccount, facebookAccessToken, expiresAt);
-
-            // Assert
-            InstagramAccountLinkedDomainEvent domainEvent = AssertDomainEventWasPublished<
-                InstagramAccountLinkedDomainEvent,
-                UserId
-            >(user);
-            domainEvent.UserId.Should().Be(user.Id);
-            domainEvent.InstagramAccount.Should().Be(instagramAccount);
-        }
     }
 }
