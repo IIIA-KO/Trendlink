@@ -21,6 +21,7 @@ import ProfileBloggersPage from "./pages/ProfileBloggerPage";
 import CalendarPage from "./pages/CalendarPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import EditProfilePage from "./pages/EditProfilePage";
+import NotificationPage from "./pages/NotificationPage";
 
 const App: React.FC = () => {
     return (
@@ -37,6 +38,7 @@ const App: React.FC = () => {
                         <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
                         <Route path="/reviews" element={<ProtectedRoute><ReviewsPage /></ProtectedRoute>} />
                         <Route path="/editprofile" element={<EditProfilePage/>} />
+                        <Route path="/notifications" element={<NotificationPage/>} />
                     </Route>
 
                     <Route element={<AuthLayout />}>
