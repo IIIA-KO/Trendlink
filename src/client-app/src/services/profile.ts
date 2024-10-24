@@ -20,7 +20,7 @@ export const updateProfile = async (profileData: ProfileType): Promise<void> => 
 
 export const uploadProfilePhoto = async (photoFile: File): Promise<void> => {
     const formData = new FormData();
-    formData.append('file', photoFile);
+    formData.append('photo', photoFile);
 
     try {
         await axiosInstance.post('/profile/photo', formData, {
