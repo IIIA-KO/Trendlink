@@ -202,25 +202,11 @@ namespace Trendlink.Domain.Users
             this.ProfilePhoto = null;
         }
 
-        public void LinkInstagramAccount(
-            InstagramAccount instagramAccount,
-            string facebookAccessToken,
-            DateTimeOffset expiresAt
-        )
+        public void LinkInstagramAccount(InstagramAccount instagramAccount)
         {
             ArgumentNullException.ThrowIfNull(instagramAccount);
-            ArgumentException.ThrowIfNullOrEmpty(facebookAccessToken);
 
             this.InstagramAccount = instagramAccount;
-
-            this.RaiseDomainEvent(
-                new InstagramAccountLinkedDomainEvent(
-                    this.Id,
-                    instagramAccount,
-                    facebookAccessToken,
-                    expiresAt
-                )
-            );
         }
     }
 }

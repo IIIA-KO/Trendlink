@@ -9,6 +9,7 @@ using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
+using Trendlink.Domain.Reviews;
 using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 using Trendlink.Domain.Users.Countries;
@@ -39,6 +40,8 @@ namespace Trendlink.Infrastructure.Extensions
             await SeedAdvertisements(dbContext);
 
             await SeedCooperations(dbContext);
+
+            await SeedReviews(dbContext);
         }
 
         private static async Task SeedCountries(
@@ -236,6 +239,28 @@ namespace Trendlink.Infrastructure.Extensions
 
                             dbContext.Set<Cooperation>().Add(cooperation);
                         }
+                    }
+                }
+
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedReviews(ApplicationDbContext dbContext)
+        {
+            if (!await dbContext.Set<Review>().AnyAsync())
+            {
+                List<Cooperation> completedCooperations = await dbContext
+                    .Set<Cooperation>()
+                    .Where(cooperation => cooperation.Status == CooperationStatus.Completed)
+                    .ToListAsync();
+
+                foreach (Cooperation cooperation in completedCooperations)
+                {
+                    if (RandomNumberGenerator.GetInt32(2) == 1)
+                    {
+                        Review review = DataGenerator.GenerateReview(cooperation);
+                        dbContext.Set<Review>().Add(review);
                     }
                 }
 

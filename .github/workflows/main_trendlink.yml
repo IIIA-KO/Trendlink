@@ -1,0 +1,100 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - trendlink
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  SOLUTION_PATH: "./Trendlink.sln"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Build react app
+        run: |
+          cd src/client-app
+          npm install
+          npm run build
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      # Remove compose proj from sln
+      - name: Remove compose proj from sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove $(dotnet sln ${{ env.SOLUTION_PATH }} list | grep .dcproj)
+      
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      # Add compose proj back to sln
+      - name: Add compose proj back to sln
+        run: |
+          find . -name '*.dcproj' | xargs -I {} dotnet sln ${{ env.SOLUTION_PATH }} add {}
+        
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Release --no-restore
+
+      # Remove integration tests from sln
+      - name: Remove Trendlink.Application.IntegrationTests from sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove test/Trendlink.Application.IntegrationTests/Trendlink.Application.IntegrationTests.csproj
+
+      # Remove functional tests from sln
+      - name: Remove Trendlink.Api.FunctionalTests  from sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} remove test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
+      
+      - name: Test
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-restore --no-build
+
+      # Add integration tests back to sln
+      - name: Add Trendlink.Application.IntegrationTests back to sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlink.Application.IntegrationTests/Trendlink.Application.IntegrationTests.csproj
+
+      # Add functional tests back to sln
+      - name: Add Trendlink.Api.FunctionalTests back to sln
+        run: dotnet sln ${{ env.SOLUTION_PATH }} add test/Trendlinl.Api.FunctionalTests/Trendlink.Api.FunctionalTests.csproj
+
+      - name: Publish
+        run: dotnet publish src/Trendlink.Api/Trendlink.Api.csproj --configuration Release --no-restore --no-build --output ${{env.DOTNET_ROOT}}/publish
+
+      # Upload the artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/publish
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+      
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'trendlink'
+          slot-name: 'Production'
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2231A2B145441BBB313E3E602720374 }}

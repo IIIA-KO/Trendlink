@@ -72,7 +72,7 @@ namespace Trendlink.Api.Controllers.Accounts
             CancellationToken cancellationToken
         )
         {
-            var command = new LoginWithGoogleCommand(request.Code);
+            var command = new LoginWithGoogleCommand(request.RefreshToken);
 
             return this.HandleResult(await this.Sender.Send(command, cancellationToken));
         }
