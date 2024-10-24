@@ -5,6 +5,7 @@ using Trendlink.Application.Calendar.GetLoggedInUserCalendarForMonth;
 using Trendlink.Application.Calendar.GetUserCalendar;
 using Trendlink.Application.Calendar.GetUserCalendarForMonth;
 using Trendlink.Application.Calendar.UblockDate;
+using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Calendar
@@ -14,10 +15,23 @@ namespace Trendlink.Api.Controllers.Calendar
     {
         [HttpGet]
         public async Task<IActionResult> GetLoggedInUserCooperations(
+            [FromQuery] string? searchTerm,
+            [FromQuery] int? StartMonth,
+            [FromQuery] int? StartYear,
+            [FromQuery] int? EndMonth,
+            [FromQuery] int? EndYear,
+            [FromQuery] CooperationStatus? CooperationStatus,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetLoggedInUserCalendarQuery();
+            var query = new GetLoggedInUserCalendarQuery(
+                searchTerm,
+                StartMonth,
+                StartYear,
+                EndMonth,
+                EndYear,
+                CooperationStatus
+            );
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
@@ -25,10 +39,24 @@ namespace Trendlink.Api.Controllers.Calendar
         [HttpGet("{userId:guid}")]
         public async Task<IActionResult> GetUserCalendar(
             [FromRoute] Guid userId,
+            [FromQuery] string? searchTerm,
+            [FromQuery] int? StartMonth,
+            [FromQuery] int? StartYear,
+            [FromQuery] int? EndMonth,
+            [FromQuery] int? EndYear,
+            [FromQuery] CooperationStatus? CooperationStatus,
             CancellationToken cancellationToken
         )
         {
-            var query = new GetUserCalendarQuery(new UserId(userId));
+            var query = new GetUserCalendarQuery(
+                new UserId(userId),
+                searchTerm,
+                StartMonth,
+                StartYear,
+                EndMonth,
+                EndYear,
+                CooperationStatus
+            );
 
             return this.HandleResult(await this.Sender.Send(query, cancellationToken));
         }
