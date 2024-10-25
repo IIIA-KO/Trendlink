@@ -102,7 +102,7 @@ const SearchBloggersPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-            <TopBar user={user} />
+            <TopBar user={user} showButton={"off"} />
             <div className="relative w-11/12 flex flex-col gap-12 justify-center items-left">
                 <div className="w-full flex flex-row items-center space-x-4">
                     <div className="w-5/6 h-full border border-gray-10 rounded-[5px] flex items-center justify-center p-2">
