@@ -81,8 +81,8 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ month, year, sele
                 <div
                     key={currentDate}
                     className={`calendar-day w-10 h-10 flex items-center justify-center rounded-full cursor-pointer
-                    ${filteredCooperations.length > 0 ? "bg-green-500 text-white" : "bg-gray-200 text-black"}
-                    ${selectedDate === currentDate ? "bg-yellow-400 text-white" : ""}
+                    ${filteredCooperations.length > 0 ? "bg-[#009d9f] font-normal font-['Inter'] text-white" : "font-normal font-['Inter'] text-black"}
+                    ${selectedDate === currentDate ? "bg-yellow-400 font-normal font-['Inter'] text-white" : ""}
                 `}
                     onClick={() => handleDateClick(currentDate, filteredCooperations, isBlocked)}
                 >
@@ -99,16 +99,17 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ month, year, sele
 
     return (
         <div className="flex space-x-6">
-            <div className="border-2 h-full">
-                <h3 className="text-center text-xl font-semibold mb-4">
+            <div className="justify-start text-center items-center bg-[#eff7ff] rounded-[20px] shadow">
+                <h3 className="text-[#3c3c3c] text-sm font-normal font-['Inter'] justify-center uppercase tracking-tight">
                     {new Date(year, adjustedMonth).toLocaleString("en-US", {
                         month: "long",
                         year: "numeric",
                     })}
                 </h3>
+                <div className="w-[251px] h-[0px] ml-5px border border-[#e4e5e7]"></div>
                 <div className="grid grid-cols-7 gap-2 text-center mb-2">
                     {daysOfWeek.map((day) => (
-                        <div key={day} className="text-sm font-semibold">
+                        <div key={day} className="grow shrink basis-0 text-center text-[#7e818c] text-[10px] font-normal font-['Inter'] uppercase">
                             {day}
                         </div>
                     ))}
@@ -118,13 +119,13 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ month, year, sele
                 </div>
             </div>
 
-            <div className="h-full w-1/3 bg-gray-100 p-6 rounded-lg shadow-md border-2">
+            <div className="h-full w-1/3 bg-[#eff7ff] rounded-[20px] shadow p-6 font-['Inter'] rounded-lg shadow-md">
                 {selectedDate && !isPastDate && (
                     <div className="flex justify-between items-center mb-4">
                         <button
                             onClick={handleBlockToggle}
                             className={`px-4 py-2 rounded ${
-                                isBlocked ? "bg-red-500 text-white" : "bg-green-500 text-white"
+                                isBlocked ? " bg-[#f4b400] text-white text-sm font-normal font-['Inter'] rounded-[40px] text-white" : " bg-[#009d9f] text-white text-sm font-normal font-['Inter'] rounded-[40px] text-white"
                             }`}
                         >
                             {isBlocked ? "Unblock date" : "Block date"}
@@ -141,7 +142,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ month, year, sele
                         />
                     ))
                 ) : (
-                    <p>There are no cooperations for the selected date.</p>
+                    <p className="font-normal font-['Inter']">There are no cooperations for the selected date.</p>
                 )}
             </div>
         </div>
