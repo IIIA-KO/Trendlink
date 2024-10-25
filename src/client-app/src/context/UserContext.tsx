@@ -4,11 +4,20 @@ import {getUser, getUserByID, getUsers} from "../services/user";
 import {handleError} from "../utils/handleError";
 import {UserContextType} from "../types/UserContextType";
 import {UsersType} from "../types/UsersType";
+import {PaginationHeaders} from "../types/PaginationHeadersType";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
+    const [paginationData, setPaginationData] = useState<PaginationHeaders>({
+        currentPage: 1,
+        itemsPerPage: 10,
+        totalItems: 0,
+        totalPages: 0,
+        hasNextPage: false,
+        hasPreviousPage: false,
+    });
 
     const fetchUserData = async () => {
         try {
@@ -30,7 +39,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const fetchUsers = async (params: UsersType): Promise<UserType[] | null> => {
         try {
-            return await getUsers(params);
+            const response = await getUsers(params);
+            if (response) {
+                setPaginationData(response.pagination);
+                return response.data;
+            }
+            return null;
         } catch (error) {
             handleError(error);
             return null;

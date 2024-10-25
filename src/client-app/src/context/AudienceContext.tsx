@@ -11,7 +11,7 @@ import {AudienceAgeData} from "../types/AudienceAgeDataType";
 import {AudienceLocationData} from "../types/AudienceLocationDataType";
 import {AudienceReachData} from "../types/AudienceReachDataType";
 import {LocationType} from "../types/LocationType";
-import {StatisticsPeriod} from "../types/StatisticsPeriodType";
+import {StatisticsPeriodType} from "../types/StatisticsPeriodType";
 
 const AudienceContext = createContext<AudienceContextType | undefined>(undefined);
 
@@ -48,7 +48,7 @@ const AudienceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
-    const fetchAudienceReachPercentage = async (statisticsPeriod: StatisticsPeriod) => {
+    const fetchAudienceReachPercentage = async (statisticsPeriod: StatisticsPeriodType) => {
         try {
             const reachDataResponse = await getAudienceReachPercentage(statisticsPeriod);
             setReachData(reachDataResponse);

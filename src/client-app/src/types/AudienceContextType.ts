@@ -3,7 +3,7 @@ import {AudienceAgeData} from "./AudienceAgeDataType";
 import {AudienceLocationData} from "./AudienceLocationDataType";
 import {AudienceReachData} from "./AudienceReachDataType";
 import {LocationType} from "./LocationType";
-import {StatisticsPeriod} from "./StatisticsPeriodType";
+import {StatisticsPeriodType} from "./StatisticsPeriodType";
 
 export interface AudienceContextType {
     genderData: AudienceGenderData | null;
@@ -13,5 +13,5 @@ export interface AudienceContextType {
     fetchAudienceGenderPercentage: () => Promise<void>;
     fetchAudienceAgePercentage: () => Promise<void>;
     fetchAudienceLocationPercentage: (locationType: LocationType) => Promise<void>;
-    fetchAudienceReachPercentage: (statisticsPeriod: StatisticsPeriod) => Promise<void>;
+    fetchAudienceReachPercentage: (statisticsPeriod: StatisticsPeriodType) => Promise<void>;
 }
