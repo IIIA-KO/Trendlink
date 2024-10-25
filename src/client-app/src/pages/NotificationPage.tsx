@@ -1,32 +1,23 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useNotification} from "../hooks/useNotification";
-import {useUser} from "../hooks/useUser";
-import {NotificationType} from "../types/NotificationType";
 import ReactPaginate from "react-paginate";
-import TopBar from "../components/TopBar";
-import Navbar from "../components/Navbar";
 
 const NotificationPage: React.FC = () => {
-    const { notifications } = useNotification();
-    const { user } = useUser();
+    const { notifications, fetchNotifications, paginationData } = useNotification();
+    const pageSize = 8;
 
-    const [pageNumber, setPageNumber] = useState(1);
-    const pageSize = 9;  // Кількість записів на сторінку
+    useEffect(() => {
+        fetchNotifications({ pageNumber: 1, pageSize });
+
+    }, []);
 
     if (!notifications) {
-        return <p>Завантаження сповіщень...</p>; // Показуємо повідомлення, поки notifications завантажуються
+        return <p>Завантаження сповіщень...</p>;
     }
-
-    const totalPages = Math.ceil(notifications.length / pageSize);
-
-    if (pageNumber > totalPages && totalPages > 0) {
-        setPageNumber(1);
-    }
-
-    const currentNotifications = notifications.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 
     const handlePageChange = (selectedItem: { selected: number }) => {
-        setPageNumber(selectedItem.selected + 1);
+        const newPageNumber = selectedItem.selected + 1;
+        fetchNotifications({ pageNumber: newPageNumber, pageSize });
     };
 
     return (
@@ -42,16 +33,14 @@ const NotificationPage: React.FC = () => {
                 <div className="h-1/4 w-full inline-block text-center text-black">
             <div className="p-6"></div>
         <div>
-            <h1 className="font-normal font-['Inter']"><u><b>Сповіщення</b></u></h1>
+            <h1>Сповіщення</h1>
             {currentNotifications.length > 0 ? (
-                <ul className="w-70% ml-10 mr-10">
+                <ul>
                     {currentNotifications.map(notification => (
-                        <li className="justify-start mt-2 items-start border-b" key={notification.id}>
-                                          <h2 className="font-normal  bg-blue-50 rounded-3xl font-['Inter'] w-32 h-6 text-cente">{notification.title}</h2>
-                                          <div className="inline-flex gap-4">
-                                          <p className="font-normal font-['Inter']">{notification.message}</p>
-                                          <p><small className="font-normal font-['Inter'] text-light-gray"><i>{new Date(notification.createdOnUtc).toLocaleString()}</i></small></p>
-                                          </div>
+                        <li key={notification.id}>
+                            <h2>{notification.title}</h2>
+                            <p>{notification.message}</p>
+                            <small>{new Date(notification.createdOnUtc).toLocaleString()}</small>
                         </li>
                     ))}
                 </ul>
@@ -59,18 +48,22 @@ const NotificationPage: React.FC = () => {
                 <p className="font-normal font-['Inter']">Немає сповіщень</p>
             )}
 
-            {/* Пагінація */}
-            {totalPages > 1 && (
+            {/* Пагинация */}
+            {paginationData.totalPages > 1 && (
                 <ReactPaginate
-                    previousLabel={pageNumber > 1 ? '← Попередня' : null}
-                    nextLabel={'Наступна →'}
-                    breakLabel={'...'}
-                    pageCount={totalPages}
+                    previousLabel={paginationData.currentPage > 1 ? <img alt="left" src={iconLeft} /> : <button  className="pointer-events-none cursor-default"></button >}
+                    nextLabel={paginationData.currentPage < paginationData.totalPages ? <img alt="right" src={iconRight}/> :
+                        <button className="pointer-events-none cursor-default"></button>}
+                    breakLabel={"..."}
+                    pageCount={paginationData.totalPages}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={3}
                     onPageChange={handlePageChange}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
+                    containerClassName="flex flex-row gap-6"
+                    activeClassName="bg-gray-10 text-main-black rounded-full py-2 px-4"
+                    pageClassName="p-2 hover:scale-110 active:scale-90 rounded-full cursor-pointer"
+                    previousClassName="p-2 hover:scale-110 active:scale-90 rounded-full"
+                    nextClassName="p-2 hover:scale-110 active:scale-90 rounded-full"
                 />
             )}
         </div>
@@ -81,6 +74,7 @@ const NotificationPage: React.FC = () => {
         </div>
     );
 };
+
 
 
 

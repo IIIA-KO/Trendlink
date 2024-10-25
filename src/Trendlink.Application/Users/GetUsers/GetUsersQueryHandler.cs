@@ -26,7 +26,6 @@ namespace Trendlink.Application.Users.GetUsers
                     request.SearchTerm,
                     request.SortColumn,
                     request.SortOrder,
-                    request.Country,
                     request.AccountCategory,
                     request.MinFollowersCount,
                     request.MinMediaCount

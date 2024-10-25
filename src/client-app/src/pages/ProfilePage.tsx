@@ -16,11 +16,18 @@ import {
 } from "../utils/constants";
 import {usePosts} from "../hooks/usePosts";
 import {useAdvertisements} from "../hooks/useAdvertisements";
+import {useEffect} from "react";
 
 const ProfilePage: React.FC = () => {
-    const { user } = useUser();
+    const { user, fetchUserData } = useUser();
     const { posts, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor, loading } = usePosts();
-    const { advertisements } = useAdvertisements();
+    const { advertisements, fetchAdvertisementsData } = useAdvertisements();
+
+    useEffect(() => {
+        fetchUserData();
+        fetchAdvertisementsData();
+        fetchPosts()
+    }, [fetchAdvertisementsData, fetchAdvertisementsData, fetchPosts]);
 
     const handleInstagramLink = () => {
         const authUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${instagramClientId}&redirect_uri=${instagramRedirectUri}&scope=${instagramScope}&response_type=${instagramResponseType}&config_id=${instagramConfigId}`;

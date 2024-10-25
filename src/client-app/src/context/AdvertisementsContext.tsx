@@ -1,6 +1,6 @@
 import React, {createContext, ReactNode, useEffect, useState} from "react";
 import {handleError} from "../utils/handleError";
-import {getAdvertisements} from "../services/advertisements";
+import {getAdvertisements, getAdvertisementsByID} from "../services/advertisements";
 import {AdvertisementsAveragePriceType} from "../types/AdvertisementsAveragePriceType";
 import {AdvertisementsContextType} from "../types/AdvertisementsContextType";
 
@@ -8,6 +8,7 @@ const AdvertisementsContext = createContext<AdvertisementsContextType | undefine
 
 const AdvertisementsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [advertisements, setAdvertisements] = useState<AdvertisementsAveragePriceType[] | null>(null);
+    const [advertisementByID, setAdvertisementByID] = useState<AdvertisementsAveragePriceType[] | null>(null);
 
     const fetchAdvertisementsData = async () => {
         try {
@@ -19,6 +20,16 @@ const AdvertisementsProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
     };
 
+    const fetchAdvertisementsByID = async (id: string) => {
+        try {
+            const advertisementData = await getAdvertisementsByID(id);
+            setAdvertisementByID(advertisementData);
+        } catch (error) {
+            handleError(error);
+            setAdvertisementByID(new Array<AdvertisementsAveragePriceType>());
+        }
+    };
+
     useEffect(() => {
         fetchAdvertisementsData();
     }, []);
@@ -27,6 +38,9 @@ const AdvertisementsProvider: React.FC<{ children: ReactNode }> = ({ children })
         <AdvertisementsContext.Provider
             value={{
                 advertisements,
+                advertisementByID,
+                fetchAdvertisementsData,
+                fetchAdvertisementsByID,
             }}>
             {children}
         </AdvertisementsContext.Provider>
