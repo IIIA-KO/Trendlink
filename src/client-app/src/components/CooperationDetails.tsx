@@ -15,7 +15,7 @@ const getCooperationStatusText = (status: number): string => {
 };
 
 const CooperationDetails: React.FC<CooperationDetailsPropsType> = ({ cooperation, getAdvertisementNameById }) => {
-    const { fetchUserByID } = useUser();
+    const { fetchUserByIDRE } = useUser();
     const [buyerName, setBuyerName] = useState<string | null>(null);
     const [sellerName, setSellerName] = useState<string | null>(null);
 
@@ -23,7 +23,7 @@ const CooperationDetails: React.FC<CooperationDetailsPropsType> = ({ cooperation
         const fetchBuyer = async () => {
             if (cooperation.buyerId) {
                 try {
-                    const buyer = await fetchUserByID(cooperation.buyerId);
+                    const buyer = await fetchUserByIDRE(cooperation.buyerId);
                     if (buyer) {
                         setBuyerName(`${buyer.firstName} ${buyer.lastName}`);
                     }
@@ -36,7 +36,7 @@ const CooperationDetails: React.FC<CooperationDetailsPropsType> = ({ cooperation
         const fetchSeller = async () => {
             if (cooperation.sellerId) {
                 try {
-                    const seller = await fetchUserByID(cooperation.sellerId);
+                    const seller = await fetchUserByIDRE(cooperation.sellerId);
                     if (seller) {
                         setSellerName(`${seller.firstName} ${seller.lastName}`);
                     }
@@ -48,7 +48,7 @@ const CooperationDetails: React.FC<CooperationDetailsPropsType> = ({ cooperation
 
         fetchBuyer();
         fetchSeller();
-    }, [cooperation.buyerId, cooperation.sellerId, fetchUserByID]);
+    }, [cooperation.buyerId, cooperation.sellerId, fetchUserByIDRE]);
 
     const cooperationDate = new Date(cooperation.scheduledOnUtc);
     const formattedDate = cooperationDate.toLocaleDateString('uk-UA');

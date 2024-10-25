@@ -10,6 +10,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserType | null>(null);
+    const [userByID, setUserByID] = useState<UserType | null>(null);
     const [paginationData, setPaginationData] = useState<PaginationHeaders>({
         currentPage: 1,
         itemsPerPage: 10,
@@ -25,10 +26,21 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             setUser(userData);
         } catch (error) {
             handleError(error)
+            return null;
         }
     };
 
-    const fetchUserByID = async (userId: string): Promise<UserType | null> => {
+    const fetchUserByID = async (userId: string) => {
+        try {
+            const userData = await getUserByID(userId);
+            setUserByID(userData);
+        } catch (error) {
+            handleError(error);
+            return null;
+        }
+    };
+
+    const fetchUserByIDRE = async (userId: string): Promise<UserType | null> => {
         try {
             return await getUserByID(userId);
         } catch (error) {
@@ -59,8 +71,11 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         <UserContext.Provider
             value={{
                 user,
+                userByID,
+                fetchUserData,
                 fetchUserByID,
                 fetchUsers,
+                fetchUserByIDRE
         }}>
             {children}
         </UserContext.Provider>
