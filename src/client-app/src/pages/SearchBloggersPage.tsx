@@ -1,6 +1,6 @@
 import TopBar from "../components/TopBar";
 import {UsersType} from "../types/UsersType";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {UserType} from "../types/UserType";
 import {getUsers} from "../services/user";
 import {getCountries} from "../services/countriesAndStates";
@@ -13,6 +13,7 @@ import {PaginationHeaders} from "../types/PaginationHeadersType";
 import ReactPaginate from "react-paginate";
 import iconLeft from "../assets/icons/navigation-chevron-left.svg"
 import iconRight from "../assets/icons/navigation-chevron-right.svg"
+import {accountCategories} from "../utils/constants";
 
 const SearchBloggersPage: React.FC = () => {
     const { user } = useUser();
@@ -88,7 +89,7 @@ const SearchBloggersPage: React.FC = () => {
     const handleSearch = () => {
         setFilters({
             ...filters,
-            searchTerm: filters.searchTerm?.toLowerCase() || '',
+            searchTerm: filters.searchTerm|| '',
             pageNumber: 1,
         });
         setUsers([]);
@@ -122,7 +123,6 @@ const SearchBloggersPage: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Фильтры */}
                 <div className="relative flex flex-row space-x-4">
                     <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
@@ -147,14 +147,21 @@ const SearchBloggersPage: React.FC = () => {
                             onChange={handleInputChange}
                             className="focus:outline-none h-full w-full bg-transparent"
                         >
-                            <option value="">Category</option>
-                            <option value="Business">Business</option>
-                            <option value="Lifestyle">Lifestyle</option>
-                            <option value="Fashion">Fashion</option>
+                            {[
+                                ...accountCategories.filter(category => category.name === "None"),
+                                ...accountCategories
+                                    .filter(category => category.name !== "None")
+                                    .sort((a, b) => a.name.localeCompare(b.name)),
+                            ].map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
-                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div
+                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <input
                             type="number"
                             name="minFollowersCount"
@@ -201,7 +208,6 @@ const SearchBloggersPage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Таблица пользователей */}
                 <div className="mt-8">
                     {loading ? (
                         <div>Loading...</div>
@@ -240,7 +246,6 @@ const SearchBloggersPage: React.FC = () => {
                     )}
                 </div>
 
-                {/* Пагинация */}
                 <div className="flex justify-start items-center mt-2 mb-16">
                     <ReactPaginate
                         previousLabel={paginationData.currentPage > 1 ? <img alt="left" src={iconLeft} /> : <button  className="pointer-events-none cursor-default"></button >}
