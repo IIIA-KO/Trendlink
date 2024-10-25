@@ -119,16 +119,18 @@ const GoogleRegisterForm: React.FC = () => {
                                 const countryId = e.target.value;
                                 setFieldValue('countryId', countryId);
                                 setFieldValue('stateId', '');
-
                                 setSelectedCountryId(countryId);
                             }}
                         >
                             <option value="">Select Country</option>
-                            {countries.map((country) => (
-                                <option key={country.id} value={country.id}>
-                                    {country.name}
-                                </option>
-                            ))}
+                            {countries
+                                .slice()
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((country) => (
+                                    <option key={country.id} value={country.id}>
+                                        {country.name}
+                                    </option>
+                                ))}
                         </Field>
                         <ErrorMessage
                             name="countryId"
@@ -143,11 +145,14 @@ const GoogleRegisterForm: React.FC = () => {
                             className={getFieldClasses(touched.stateId, errors.stateId)}
                         >
                             <option value="">Select State</option>
-                            {states.map((state) => (
-                                <option key={state.id} value={state.id}>
-                                    {state.name}
-                                </option>
-                            ))}
+                            {states
+                                .slice()
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((state) => (
+                                    <option key={state.id} value={state.id}>
+                                        {state.name}
+                                    </option>
+                                ))}
                         </Field>
                         <ErrorMessage
                             name="stateId"
