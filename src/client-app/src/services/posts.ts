@@ -8,7 +8,6 @@ export const getPosts = async (limit: number, cursorType: string | null = null, 
         if (cursor && cursorType) {
             url += `&cursorType=${cursorType}&cursor=${cursor}`;
         }
-
         const response = await axiosInstance.get(url);
         return response.data;
     } catch (error) {
@@ -17,9 +16,20 @@ export const getPosts = async (limit: number, cursorType: string | null = null, 
     }
 }
 
-export const getPostsByID = async (postId: string): Promise<UserPostsResponse | null> => {
+export const getPostsByID = async (
+    userId: string,
+    limit: number = 6,
+    cursorType: string | null = null,
+    cursor: string | null = null
+): Promise<UserPostsResponse | null> => {
     try {
-        const response = await axiosInstance.get(`/posts/${postId}`);
+        let url = `/posts/${userId}?limit=${limit}`;
+
+        if (cursorType && cursor) {
+            url += `&cursorType=${cursorType}&cursor=${cursor}`;
+        }
+
+        const response = await axiosInstance.get(url);
         return response.data;
     } catch (error) {
         handleError(error);

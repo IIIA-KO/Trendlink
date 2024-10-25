@@ -5,7 +5,7 @@ import phoneIcon from "../assets/icons/telephone-icon.svg";
 import emailIcon from "../assets/icons/email-icon.svg";
 import {TopBarType} from "../types/TopBarType";
 
-const TopBar: React.FC<TopBarType> = ({ user }) => {
+const TopBar: React.FC<TopBarType> = ({ user, showButton = 'on' }) => {
 
     if (!user) {
         return null;
@@ -48,7 +48,15 @@ const TopBar: React.FC<TopBarType> = ({ user }) => {
                     </p>
                 </div>
                 <div className="h-1/5 w-full flex justify-start items-center">
-                    <NavButton buttonText={'Edit Profile'} redirectTo={'/editprofile'} width={'w-[250px]'} height={'h-[35px]'} className={'ml-10'} />
+                    {showButton !== 'off' && (
+                        <NavButton
+                            buttonText={'Edit Profile'}
+                            redirectTo={'/editprofile'}
+                            width={'w-[250px]'}
+                            height={'h-[35px]'}
+                            className={'ml-10'}
+                        />
+                    )}
                 </div>
             </div>
             <div className="h-auto w-full flex flex-col gap-2 justify-center items-start">

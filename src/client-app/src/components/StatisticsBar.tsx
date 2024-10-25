@@ -18,7 +18,6 @@ const StatisticsBar: React.FC<StatisticsBarType> = ({ user, posts, advertisement
         const likeInsight = lastPost.insights.find(insight => insight.name === 'likes');
         const lastPostLikes = likeInsight ? likeInsight.value : null;
 
-
         return {
             mediaCount: user.mediaCount || 'N/A',
             averagePriceRange: advertisement?.value || '0',

@@ -2,6 +2,7 @@ import {UserType} from "../types/UserType";
 import axiosInstance from "./api";
 import {handleError} from "../utils/handleError";
 import {UsersType} from "../types/UsersType";
+import {PaginationHeaders} from "../types/PaginationHeadersType";
 
 export const getUser = async (): Promise<UserType | null> => {
     try {
@@ -13,10 +14,17 @@ export const getUser = async (): Promise<UserType | null> => {
     }
 };
 
-export const getUsers = async (params: UsersType): Promise<UserType[] | null> => {
+export const getUsers = async (params: Partial<UsersType>): Promise<{ data: UserType[]; pagination: PaginationHeaders } | null> => {
     try {
         const response = await axiosInstance.get('/users', { params });
-        return response.data;
+        if (response) {
+            const data = response.data;
+            const pagination: PaginationHeaders = JSON.parse(response.headers.pagination);
+
+            return { data, pagination };
+        }
+
+        return null;
     } catch (error) {
         handleError(error);
         return null;

@@ -9,80 +9,47 @@ import {getUserByID} from "../services/user";
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {UserType} from "../types/UserType";
-import {getPosts} from "../services/posts";
+import {getPosts, getPostsByID} from "../services/posts";
 import {InstagramPostType} from "../types/InstagramPostType";
-import {getAdvertisements} from "../services/advertisements";
+import {getAdvertisements, getAdvertisementsByID} from "../services/advertisements";
 import {AdvertisementsAveragePriceType} from "../types/AdvertisementsAveragePriceType";
+import {usePosts} from "../hooks/usePosts";
+import {useAdvertisements} from "../hooks/useAdvertisements";
+import {useUser} from "../hooks/useUser";
 
-const ProfilePage: React.FC = () => {
+const ProfileBloggerPage: React.FC = () => {
     const { userId } = useParams<{ userId: string }>();
-    const [user, setUser] = useState<UserType | null>(null);
-    const [posts, setPosts] = useState<InstagramPostType[] | null>(null);
-    const [advertisements, setAdvertisements] = useState<AdvertisementsAveragePriceType[] | null>(null);
-    const [hasNextPage, setHasNextPage] = useState(false);
-    const [hasPreviousPage, setHasPreviousPage] = useState(false);
-    const [afterCursor, setAfterCursor] = useState<string | null>(null);
-    const [beforeCursor, setBeforeCursor] = useState<string | null>(null);
+    const { userByID, fetchUserByID } = useUser();
+    const { advertisementByID, fetchAdvertisementsByID } = useAdvertisements();
+    const {
+        posts,
+        hasNextPage,
+        hasPreviousPage,
+        afterCursor,
+        beforeCursor,
+        fetchPostsByID,
+    } = usePosts();
     const [loading, setLoading] = useState(true);
     const [activeButton, setActiveButton] = useState<string>('Views');
 
 
     useEffect(() => {
-        const fetchUser = async () => {
-            if (userId) {
-                const userData = await getUserByID(userId);
-                setUser(userData);
-                setLoading(false);
-            }
-        };
-        fetchUser();
-    }, [userId]);
-
-    const fetchPosts = async (cursorType: string | null = null, cursor: string | null = null) => {
-        setLoading(true);
-        try {
-            const postsData = await getPosts(6, cursorType, cursor);
-            if (postsData) {
-                setPosts(postsData.posts);
-                setAfterCursor(postsData.paging?.after ?? null);
-                setBeforeCursor(postsData.paging?.before ?? null);
-                setHasNextPage(!!postsData.paging?.nextCursor);
-                setHasPreviousPage(!!postsData.paging?.previousCursor);
-            }
-        } catch (error) {
-            console.error('Error fetching posts:', error);
+        if (userId) {
+            fetchUserByID(userId);
+            fetchAdvertisementsByID(userId);
+            fetchPostsByID(userId);
         }
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        const fetchAdvertisements = async () => {
-            const advertisementsData = await getAdvertisements();
-            setAdvertisements(advertisementsData || []);
-        };
-        fetchAdvertisements();
-        if (userId) fetchPosts();
-    }, [userId]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!user) {
-        return <div>User not found</div>;
-    }
-
+    }, [userId, fetchUserByID, fetchAdvertisementsByID, fetchPostsByID]);
 
 
     const handleButtonClick = (buttonName: string) => {
         setActiveButton(buttonName);
     };
 
-
     return (
         <div
             className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-            <TopBar user={user}/>
+            <TopBar user={userByID} showButton={"off"}/>
             <div className="w-full h-full flex justify-center items-center mb-12">
                 <div className="flex space-x-2">
                     <button
@@ -119,12 +86,12 @@ const ProfilePage: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <StatisticsBar user={user} posts={posts} advertisements={advertisements}/>
+            <StatisticsBar user={userByID} posts={posts} advertisements={advertisementByID}/>
             <div className="h-auto w-full py-4 px-12">
                 <div className="flex justify-center">
                     <div className="h-auto w-full flex flex-row p-4 rounded-lg">
                         {hasPreviousPage && (
-                            <button onClick={() => fetchPosts('before', beforeCursor)}>
+                            <button onClick={() => fetchPostsByID(userId!, 6, "before", beforeCursor)}>
                                 <img src={left} className="w-12 h-12" alt="left navigation arrow"/>
                             </button>
                         )}
@@ -186,7 +153,7 @@ const ProfilePage: React.FC = () => {
                         )}
                         {hasNextPage && (
                             <button className="flex items-start justify-center pt-20"
-                                    onClick={() => fetchPosts('after', afterCursor)}>
+                                    onClick={() => fetchPostsByID(userId!, 6, "before", beforeCursor)}>
                                 <img src={right} className="w-12 h-12" alt="right navigation arrow"/>
                             </button>
                         )}
@@ -200,4 +167,4 @@ const ProfilePage: React.FC = () => {
     );
 };
 
-export default ProfilePage;
+export default ProfileBloggerPage;
