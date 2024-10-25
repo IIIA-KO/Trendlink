@@ -1,13 +1,14 @@
 import React, {createContext, ReactNode, useEffect, useState} from "react";
 import {handleError} from "../utils/handleError";
 import {InstagramPostType} from "../types/InstagramPostType";
-import {getPosts} from "../services/posts";
+import {getPosts, getPostsByID} from "../services/posts";
 import {PostsContextType} from "../types/PostsContextType";
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
 
 const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [posts, setPosts] = useState<InstagramPostType[] | null>(null);
+    const [postsByID, setPostsByID] = useState<InstagramPostType[] | null>(null);
     const [hasNextPage, setHasNextPage] = useState<boolean>(false);
     const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
     const [afterCursor, setAfterCursor] = useState<string | null>(null);
@@ -36,6 +37,34 @@ const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const fetchPostsByID = async (
+        userId: string,
+        limit: number = 6,
+        cursorType: string | null = null,
+        cursor: string | null = null
+    ) => {
+        setLoading(true);
+        try {
+            const postsData = await getPostsByID(userId, limit, cursorType, cursor);
+            if (postsData) {
+                setPostsByID(postsData.posts);
+                setAfterCursor(postsData.paging?.after ?? null);
+                setBeforeCursor(postsData.paging?.before ?? null);
+                setHasNextPage(!!postsData.paging?.after);
+                setHasPreviousPage(!!postsData.paging?.before);
+            } else {
+                setPosts(null);
+                setHasNextPage(false);
+                setHasPreviousPage(false);
+            }
+        } catch (error) {
+            handleError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     useEffect(() => {
         fetchPosts();
     }, []);
@@ -49,6 +78,7 @@ const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 afterCursor,
                 beforeCursor,
                 fetchPosts,
+                fetchPostsByID,
                 loading
             }}>
             {children}

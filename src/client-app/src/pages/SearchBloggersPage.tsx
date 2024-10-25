@@ -1,6 +1,6 @@
 import TopBar from "../components/TopBar";
 import {UsersType} from "../types/UsersType";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {UserType} from "../types/UserType";
 import {getUsers} from "../services/user";
 import {getCountries} from "../services/countriesAndStates";
@@ -9,11 +9,14 @@ import instGreyIcon from "../assets/icons/instagram-grey-icon.svg"
 import noProfile from "../assets/icons/no-profile.svg";
 import {Link} from "react-router-dom";
 import {useUser} from "../hooks/useUser";
+import {PaginationHeaders} from "../types/PaginationHeadersType";
+import ReactPaginate from "react-paginate";
+import iconLeft from "../assets/icons/navigation-chevron-left.svg"
+import iconRight from "../assets/icons/navigation-chevron-right.svg"
+import {accountCategories} from "../utils/constants";
 
 const SearchBloggersPage: React.FC = () => {
-
     const { user } = useUser();
-
     const [users, setUsers] = useState<UserType[]>([]);
     const [loading, setLoading] = useState(false);
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -28,16 +31,23 @@ const SearchBloggersPage: React.FC = () => {
         pageNumber: 1,
         pageSize: 10,
     });
-
-    useEffect(() => {
-        loadUsers();
-    }, [filters]);
+    const [paginationData, setPaginationData] = useState<PaginationHeaders>({
+        currentPage: 1,
+        totalPages: 0,
+        totalItems: 0,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        itemsPerPage: 10,
+    });
 
     useEffect(() => {
         const fetchCountries = async () => {
             try {
                 const countriesData = await getCountries();
-                setCountries(countriesData || []);
+                const sortedCountries = (countriesData || []).sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                );
+                setCountries(sortedCountries || []);
             } catch (error) {
                 console.error("Error fetching countries:", error);
             }
@@ -45,13 +55,25 @@ const SearchBloggersPage: React.FC = () => {
         fetchCountries();
     }, []);
 
+    useEffect(() => {
+        loadUsers();
+    }, [filters.pageNumber]);
+
     const loadUsers = async () => {
         setLoading(true);
         try {
-            const data = await getUsers(filters);
-            setUsers(data || []);
+            const activeFilters: Partial<UsersType> = Object.fromEntries(
+                Object.entries(filters).filter(([_, value]) => value !== '' && value !== 0)
+            );
+
+            const response = await getUsers(activeFilters);
+
+            if (response) {
+                setUsers(response.data);
+                setPaginationData(response.pagination);
+            }
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error("Error fetching users:", error);
             setUsers([]);
         }
         setLoading(false);
@@ -65,22 +87,30 @@ const SearchBloggersPage: React.FC = () => {
     };
 
     const handleSearch = () => {
+        setFilters({
+            ...filters,
+            searchTerm: filters.searchTerm|| '',
+            pageNumber: 1,
+        });
+        setUsers([]);
         loadUsers();
     };
 
+    const handlePageChange = ({ selected }: { selected: number }) => {
+        setFilters({ ...filters, pageNumber: selected + 1 });
+    };
+
     return (
-        <div
-            className="flex flex-col items-center gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-            <TopBar user={user}/>
+        <div className="flex flex-col items-center gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
+            <TopBar user={user} showButton={"off"} />
             <div className="relative w-11/12 flex flex-col gap-12 justify-center items-left">
                 <div className="w-full flex flex-row items-center space-x-4">
-                    <div
-                        className="w-5/6 h-full border border-gray-10 rounded-[5px] flex items-center justify-center p-2">
+                    <div className="w-5/6 h-full border border-gray-10 rounded-[5px] flex items-center justify-center p-2">
                         <input
                             type="text"
                             name="searchTerm"
                             placeholder="Search name or description"
-                            value={filters.searchTerm}
+                            value={filters.searchTerm || ''}
                             onChange={handleInputChange}
                             className="w-full h-full focus:outline-none"
                         />
@@ -94,8 +124,7 @@ const SearchBloggersPage: React.FC = () => {
                 </div>
 
                 <div className="relative flex flex-row space-x-4">
-                    <div
-                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
                             name="country"
                             value={filters.country}
@@ -111,21 +140,25 @@ const SearchBloggersPage: React.FC = () => {
                         </select>
                     </div>
 
-                    <div
-                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
                             name="accountCategory"
                             value={filters.accountCategory}
                             onChange={handleInputChange}
                             className="focus:outline-none h-full w-full bg-transparent"
                         >
-                            <option value="">Category</option>
-                            <option value="Business">Business</option>
-                            <option value="Lifestyle">Lifestyle</option>
-                            <option value="Fashion">Fashion</option>
+                            {[
+                                ...accountCategories.filter(category => category.name === "None"),
+                                ...accountCategories
+                                    .filter(category => category.name !== "None")
+                                    .sort((a, b) => a.name.localeCompare(b.name)),
+                            ].map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
-
 
                     <div
                         className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
@@ -139,8 +172,7 @@ const SearchBloggersPage: React.FC = () => {
                         />
                     </div>
 
-                    <div
-                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <input
                             type="number"
                             name="minMediaCount"
@@ -151,9 +183,7 @@ const SearchBloggersPage: React.FC = () => {
                         />
                     </div>
 
-
-                    <div
-                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
                             name="sortColumn"
                             value={filters.sortColumn}
@@ -165,8 +195,7 @@ const SearchBloggersPage: React.FC = () => {
                         </select>
                     </div>
 
-                    <div
-                        className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
                             name="sortOrder"
                             value={filters.sortOrder}
@@ -189,9 +218,7 @@ const SearchBloggersPage: React.FC = () => {
                                 <th className="border-b-[1px] border-r-[1px] border-gray-10 font-inter font-regular text-[14px]">Name</th>
                                 <th className="border-b-[1px] border-r-[1px] border-gray-10 font-inter font-regular text-[14px]">Followers</th>
                                 <th className="border-b-[1px] border-r-[1px] border-gray-10 font-inter font-regular text-[14px]">Country</th>
-                                <th className="border-b-[1px] border-r-[1px] border-gray-10 font-inter font-regular text-[14px]">Media
-                                    Count
-                                </th>
+                                <th className="border-b-[1px] border-r-[1px] border-gray-10 font-inter font-regular text-[14px]">Media Count</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -203,47 +230,42 @@ const SearchBloggersPage: React.FC = () => {
                                         </Link>
                                     </td>
                                     <td className="border-b-[1px] border-r-[1px] border-gray-10 text-center flex justify-end items-center">
-                                        <img src={instGreyIcon} alt="instagram follower icon"
-                                             className="w-6 h-6 my-4 mr-1"/> {user.followersCount}</td>
+                                        <img src={instGreyIcon} alt="instagram follower icon" className="w-6 h-6 my-4 mr-1" />
+                                        {user.followersCount}
+                                    </td>
                                     <td className="border-b-[1px] border-r-[1px] border-gray-10 text-center">
-                                        <p>{user.countryName}</p></td>
-                                    <td className="border-b-[1px] border-r-[1px] border-gray-10 text-right"><p
-                                        className="pr-2">{user.mediaCount}</p></td>
+                                        <p>{user.countryName}</p>
+                                    </td>
+                                    <td className="border-b-[1px] border-r-[1px] border-gray-10 text-right">
+                                        <p className="pr-2">{user.mediaCount}</p>
+                                    </td>
                                 </tr>
                             ))}
-                            <td className="border-r-[1px] border-gray-10 p-2"></td>
-                            <td className="border-r-[1px] border-gray-10 p-2"></td>
-                            <td className="border-r-[1px] border-gray-10 p-2"></td>
-                            <td className="border-r-[1px] border-gray-10 p-2"></td>
                             </tbody>
                         </table>
                     )}
                 </div>
 
-                <div className="flex justify-center items-center gap-8 m-12">
-                    <button
-                        onClick={() =>
-                            setFilters({...filters, pageNumber: (filters.pageNumber || 1) - 1})
-                        }
-                        disabled={filters.pageNumber === 1}
-                        className="w-1/4 h-full py-2 border-2 border-primary bg-primary text-center text-textPrimary text-[1rem] rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-105 active:scale-90 active:bg-transparent active:border-primary active:text-textSecondary focus:scale-100 transform"
-                    >
-                        Previous
-                    </button>
-
-                    <button
-                        onClick={() =>
-                            setFilters({...filters, pageNumber: (filters.pageNumber || 1) + 1})
-                        }
-                        className="w-1/4 h-full py-2 border-2 border-primary bg-primary text-center text-textPrimary text-[1rem] rounded-full transition duration-500 ease-in-out hover:bg-hover hover:border-hover hover:scale-105 active:scale-90 active:bg-transparent active:border-primary active:text-textSecondary focus:scale-100 transform"
-                    >
-                        Next
-                    </button>
+                <div className="flex justify-start items-center mt-2 mb-16">
+                    <ReactPaginate
+                        previousLabel={paginationData.currentPage > 1 ? <img alt="left" src={iconLeft} /> : <button  className="pointer-events-none cursor-default"></button >}
+                        nextLabel={paginationData.currentPage < paginationData.totalPages ? <img alt="right" src={iconRight}/> :
+                            <button className="pointer-events-none cursor-default"></button>}
+                        breakLabel={"..."}
+                        pageCount={paginationData.totalPages}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={3}
+                        onPageChange={handlePageChange}
+                        containerClassName="flex flex-row gap-6"
+                        activeClassName="bg-gray-10 text-main-black rounded-full py-2 px-4"
+                        pageClassName="p-2 hover:scale-110 active:scale-90 rounded-full cursor-pointer"
+                        previousClassName="p-2 hover:scale-110 active:scale-90 rounded-full"
+                        nextClassName="p-2 hover:scale-110 active:scale-90 rounded-full"
+                    />
                 </div>
             </div>
-
         </div>
     );
-}
+};
 
 export default SearchBloggersPage;

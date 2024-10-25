@@ -17,7 +17,6 @@ const NavBar: React.FC = () => {
         { title: "Search", icon: searchIcon, path: "/searchbloggers" },
         { title: "Statistics", icon: statisticsIcon, path: "/statistics"},
         { title: "Calendar ", icon: calendarIcon, path: "/calendar" },
-        { title: "Reviews", icon: reviewsIcon, path: "/reviews" },
         { title: "Notifications ", icon: notificationsIcon, path: "/notifications" },
         { title: "Terms of cooperation", icon: termsOfCooperationIcon, path: "/termsofcooperation" },
         { title: "Logout", icon: logoutIcon, path: "/logout" },
