@@ -47,8 +47,7 @@ namespace Trendlink.Application.Abstractions.Repositories
         string? SearchTerm,
         string? SortColumn,
         string? SortOrder,
-        string? Country,
-        string? AccountCategory,
+        AccountCategory? AccountCategory,
         int MinFollowersCount,
         int MinMediaCount
     );

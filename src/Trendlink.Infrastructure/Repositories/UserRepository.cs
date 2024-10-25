@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Specifications.Users;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using User = Trendlink.Domain.Users.User;
 
 namespace Trendlink.Infrastructure.Repositories
 {
@@ -127,22 +129,9 @@ namespace Trendlink.Infrastructure.Repositories
                 );
             }
 
-            if (!string.IsNullOrWhiteSpace(parameters.Country))
+            if (parameters.AccountCategory is not null)
             {
-                query = query.Where(user =>
-                    user.State.Country!.Name.Value.Equals(
-                        parameters.Country,
-                        StringComparison.OrdinalIgnoreCase
-                    )
-                );
-            }
-
-            if (!string.IsNullOrWhiteSpace(parameters.AccountCategory))
-            {
-                query = query.Where(user =>
-                    nameof(user.AccountCategory)
-                        .Equals(parameters.AccountCategory, StringComparison.OrdinalIgnoreCase)
-                );
+                query = query.Where(user => user.AccountCategory == parameters.AccountCategory);
             }
 
             if (parameters.MinFollowersCount > 0)
