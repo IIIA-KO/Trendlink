@@ -32,14 +32,21 @@ namespace Trendlink.Application.Pagination
             int pageSize
         )
         {
-            int totalCount = await query.CountAsync();
+            try
+            {
+                int totalCount = await query.CountAsync();
 
-            List<T> items = await query
-                .Skip((currentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                List<T> items = await query
+                    .Skip((currentPage - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
 
-            return new PagedList<T>(items, totalCount, currentPage, pageSize);
+                return new PagedList<T>(items, totalCount, currentPage, pageSize);
+            }
+            catch (InvalidOperationException)
+            {
+                return new PagedList<T>([], 0, currentPage, pageSize);
+            }
         }
     }
 }
