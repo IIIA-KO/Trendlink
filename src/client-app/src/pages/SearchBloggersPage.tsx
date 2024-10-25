@@ -126,22 +126,6 @@ const SearchBloggersPage: React.FC = () => {
                 <div className="relative flex flex-row space-x-4">
                     <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
-                            name="country"
-                            value={filters.country}
-                            onChange={handleInputChange}
-                            className="focus:outline-none h-full w-full bg-transparent"
-                        >
-                            <option value="">Select Country</option>
-                            {countries.map((country) => (
-                                <option key={country.id} value={country.name}>
-                                    {country.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
-                        <select
                             name="accountCategory"
                             value={filters.accountCategory}
                             onChange={handleInputChange}
