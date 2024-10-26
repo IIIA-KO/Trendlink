@@ -22,7 +22,7 @@ import CalendarPage from "./pages/CalendarPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import NotificationPage from "./pages/NotificationPage";
-import InstLayout from "./Layouts/InstLayout";
+import NoNavBarLayout from "./Layouts/NoNavBarLayout";
 
 const App: React.FC = () => {
     return (
@@ -38,7 +38,6 @@ const App: React.FC = () => {
                         <Route path="/searchbloggers" element={<ProtectedRoute><SearchBloggersPage/></ProtectedRoute>} />
                         <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
                         <Route path="/reviews" element={<ProtectedRoute><ReviewsPage /></ProtectedRoute>} />
-                        <Route path="/editprofile" element={<EditProfilePage/>} />
                         <Route path="/notifications" element={<NotificationPage/>} />
                     </Route>
 
@@ -48,7 +47,8 @@ const App: React.FC = () => {
                         <Route path="/logout" element={<LogoutPage/>} />
                     </Route>
 
-                    <Route element={<InstLayout />}>
+                    <Route element={<NoNavBarLayout />}>
+                        <Route path="/editprofile" element={<EditProfilePage/>} />
                         <Route path='/link-instagram' element={<ProtectedRoute><LinkInstagramPage /></ProtectedRoute>} />
                         <Route path='/link-instagram/callback' element={<ProtectedRoute><LinkInstagramCallbackPage /></ProtectedRoute>} />
                     </Route>

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import {DataProvider} from "../provider/DataProvider";
 
-const InstLayout: React.FC = () => {
+const NoNavBarLayout: React.FC = () => {
     return (
         <DataProvider>
             <div>
@@ -11,4 +11,4 @@ const InstLayout: React.FC = () => {
     );
 }
 
-export default InstLayout;
+export default NoNavBarLayout;
