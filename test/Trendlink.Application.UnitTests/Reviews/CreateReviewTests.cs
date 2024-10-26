@@ -1,11 +1,9 @@
-﻿using System.Reflection;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
 using Trendlink.Application.Abstractions.Authentication;
 using Trendlink.Application.Abstractions.Clock;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Reviews.CreateReview;
-using Trendlink.Application.UnitTests.Cooperations;
 using Trendlink.Domain.Abstraction;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Reviews;

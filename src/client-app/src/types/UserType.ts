@@ -3,6 +3,7 @@ export interface UserType {
     email: string;
     firstName: string;
     lastName: string;
+    instagramAccountUsername: string | null;
     profilePhotoId: string;
     profilePhotoUri: string;
     birthDate: string;
@@ -10,7 +11,7 @@ export interface UserType {
     stateName: string;
     phoneNumber: string;
     bio: string;
-    accountCategory: number;
+    accountCategory: string;
     followersCount: number;
     mediaCount: number;
 }

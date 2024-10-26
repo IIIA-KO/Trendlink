@@ -1,5 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
 using Trendlink.Application.Pagination;
+using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.Users.GetUsers
 {
@@ -7,8 +8,7 @@ namespace Trendlink.Application.Users.GetUsers
         string? SearchTerm,
         string? SortColumn,
         string? SortOrder,
-        string? Country,
-        string? AccountCategory,
+        AccountCategory? AccountCategory,
         int MinFollowersCount,
         int MinMediaCount,
         int PageNumber,

@@ -4,7 +4,7 @@ import { getCountries, getStates } from '../../services/countriesAndStates';
 import { CountryType } from "../../types/CountryType";
 import { StateType } from "../../types/StateType";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import {clientId, redirectUri, scope, responseType} from "../../utils/constants";
+import {googleClientId, googleRedirectUri, googleScope, googleResponseType} from "../../utils/constants";
 
 const GoogleRegisterForm: React.FC = () => {
     const [countries, setCountries] = useState<CountryType[]>([]);
@@ -41,7 +41,7 @@ const GoogleRegisterForm: React.FC = () => {
         try {
             const { birthDate, phoneNumber, stateId } = values;
 
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${encodeURIComponent(`birthDate=${birthDate}&phoneNumber=${phoneNumber}&stateId=${stateId}`)}`;
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${googleRedirectUri}&response_type=${googleResponseType}&scope=${googleScope}&state=${encodeURIComponent(`birthDate=${birthDate}&phoneNumber=${phoneNumber}&stateId=${stateId}`)}`;
 
             window.location.href = authUrl;
         } catch (error) {
@@ -119,16 +119,18 @@ const GoogleRegisterForm: React.FC = () => {
                                 const countryId = e.target.value;
                                 setFieldValue('countryId', countryId);
                                 setFieldValue('stateId', '');
-
                                 setSelectedCountryId(countryId);
                             }}
                         >
                             <option value="">Select Country</option>
-                            {countries.map((country) => (
-                                <option key={country.id} value={country.id}>
-                                    {country.name}
-                                </option>
-                            ))}
+                            {countries
+                                .slice()
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((country) => (
+                                    <option key={country.id} value={country.id}>
+                                        {country.name}
+                                    </option>
+                                ))}
                         </Field>
                         <ErrorMessage
                             name="countryId"
@@ -143,11 +145,14 @@ const GoogleRegisterForm: React.FC = () => {
                             className={getFieldClasses(touched.stateId, errors.stateId)}
                         >
                             <option value="">Select State</option>
-                            {states.map((state) => (
-                                <option key={state.id} value={state.id}>
-                                    {state.name}
-                                </option>
-                            ))}
+                            {states
+                                .slice()
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((state) => (
+                                    <option key={state.id} value={state.id}>
+                                        {state.name}
+                                    </option>
+                                ))}
                         </Field>
                         <ErrorMessage
                             name="stateId"

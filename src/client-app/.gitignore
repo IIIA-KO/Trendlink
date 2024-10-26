@@ -41,3 +41,5 @@ dist-ssr
 *.sw?
 
 .env
+
+src/Trendlink.Api/wwwroot/

@@ -1,32 +1,44 @@
-import React, {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {UserType} from "../types/UserType";
+import {ProfileType} from "../types/ProfileType";
+import {deleteProfilePhoto, updateProfile, uploadProfilePhoto} from "../services/profile";
+import {createContext, ReactNode} from "react";
 import {ProfileContextType} from "../types/ProfileContextType";
-import {getUser} from "../services/user";
+import {handleError} from "../utils/handleError";
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<UserType | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const deletePhoto = async () => {
+        try {
+            await deleteProfilePhoto();
+        } catch (error) {
+            handleError(error);
+        }
+    };
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userData = await getUser();
-                setUser(userData);
-            } catch (err) {
-                setError('Не вдалося отримати дані користувача');
-            } finally {
-                setLoading(false);
-            }
-        };
+    const updateProfileData = async (profileData: ProfileType) => {
+        try {
+            await updateProfile(profileData);
+        } catch (error) {
+            handleError(error);
+        }
+    };
 
-        fetchUserData();
-    }, []);
+    const uploadPhoto = async (photoFile: File) => {
+        try {
+            await uploadProfilePhoto(photoFile);
+        } catch (error) {
+            handleError(error);
+        }
+    }
 
     return (
-        <ProfileContext.Provider value={{ user, loading, error }}>
+        <ProfileContext.Provider
+            value={{
+                deletePhoto,
+                updateProfileData,
+                uploadPhoto,
+            }}
+        >
             {children}
         </ProfileContext.Provider>
     );

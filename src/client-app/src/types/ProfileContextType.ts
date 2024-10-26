@@ -1,7 +1,7 @@
-import {UserType} from "./UserType";
+import {ProfileType} from "./ProfileType";
 
-export type ProfileContextType = {
-    user: UserType | null;
-    loading: boolean;
-    error: string | null;
-};
+export interface ProfileContextType {
+    deletePhoto: () => Promise<void>;
+    updateProfileData: (profileData: ProfileType) => Promise<void>;
+    uploadPhoto: (photoFile: File) => Promise<void>;
+}
