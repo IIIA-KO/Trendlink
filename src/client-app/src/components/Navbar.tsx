@@ -3,7 +3,6 @@ import { useState } from "react";
 import profileIcon from '../assets/icons/profile-icon.svg';
 import statisticsIcon from '../assets/icons/statistics-icon.svg';
 import calendarIcon from '../assets/icons/calendar-icon.svg';
-import reviewsIcon from '../assets/icons/reviews-icon.svg'
 import notificationsIcon from '../assets/icons/notifications-icon.svg';
 import termsOfCooperationIcon from '../assets/icons/termsOfcooperation-icon.svg';
 import logoutIcon from '../assets/icons/Logout-icon.svg';
@@ -23,7 +22,7 @@ const NavBar: React.FC = () => {
     ];
 
     return (
-        <div className="h-auto w-1/6 flex justify-start items-center pl-1 sm:pl-4 md:pl-6 lg:pl-10 xl:pl-22 2xl:pl-28">
+        <div className="h-auto w-1/6 flex justify-start items-center pl-1 sm:pl-4 md:pl-6 lg:pl-10 xl:pl-22 2xl:pl-24">
             <div className="fixed top-6 z-50 bg-main-green rounded-[40px]">
                 <div
                     className={`${open ? "w-[344px]" : "sm:w-[80px] md:w-[90px] lg:w-[100px] xl:w-[120px] 2xl:w-[120px]"} h-[900px] pt-8 relative duration-700 flex-col items-center justify-between`}
