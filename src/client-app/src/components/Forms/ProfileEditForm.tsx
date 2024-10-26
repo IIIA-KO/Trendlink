@@ -255,7 +255,7 @@ const ProfileForm: React.FC = () => {
                                 </button>
                                 <button
                                     onClick={handleModalDiscard}
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                    className="bg-[#f4b400] text-white text-sm font-normal font-['Inter'] rounded-[40px] text-whit text-white px-4 py-2 rounded hover:bg-[#f4b400]"
                                 >
                                     Discard
                                 </button>
@@ -263,9 +263,9 @@ const ProfileForm: React.FC = () => {
                         </Modal>
                     )}
 
-                    <div className="button-group">
+                    <div className="button-group grid flex column-2 gap-2">
                         <AuthSubButton buttonText={"Save Changes"}/>
-                        <button type="button" onClick={handleCancel}>Cancel</button>
+                        <button type="button" className="bg-[#f4b400] text-white text-sm font-normal font-['Inter'] rounded-[40px] text-whit text-white px-4 py-2 rounded" onClick={handleCancel}>Cancel</button>
                     </div>
                 </Form>
             )}
