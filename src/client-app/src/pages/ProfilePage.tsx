@@ -22,7 +22,7 @@ const ProfilePage: React.FC = () => {
         fetchUserData();
         fetchAdvertisementsData();
         fetchPosts()
-    }, [fetchAdvertisementsData, fetchAdvertisementsData, fetchPosts]);
+    }, []);
 
     const handleInstagramLink = () => {
         navigate("/link-instagram");
