@@ -1,13 +1,16 @@
 import React, {useEffect} from "react";
 import {useNotification} from "../hooks/useNotification";
 import ReactPaginate from "react-paginate";
-import {useState} from "react";
 import TopBar from "../components/TopBar";
 import { useUser } from "../hooks/useUser";
+import iconLeft from "../assets/icons/navigation-chevron-left.svg"
+import iconRight from "../assets/icons/navigation-chevron-right.svg"
+
+
 const NotificationPage: React.FC = () => {
     const { notifications, fetchNotifications, paginationData } = useNotification();
     const pageSize = 8;
-    const { user, fetchUserData } = useUser();
+    const { user } = useUser();
 
 
     useEffect(() => {
@@ -53,8 +56,8 @@ const NotificationPage: React.FC = () => {
             {/* Пагинация */}
             {paginationData.totalPages > 1 && (
                 <ReactPaginate
-                    previousLabel={paginationData.currentPage > 1 ? <img alt="left" /> : <button  className="pointer-events-none cursor-default"></button >}
-                    nextLabel={paginationData.currentPage < paginationData.totalPages ? <img alt="right"/> :
+                    previousLabel={paginationData.currentPage > 1 ? <img alt="left" src={iconLeft} /> : <button  className="pointer-events-none cursor-default"></button >}
+                    nextLabel={paginationData.currentPage < paginationData.totalPages ? <img alt="right" src={iconRight}/> :
                         <button className="pointer-events-none cursor-default"></button>}
                     breakLabel={"..."}
                     pageCount={paginationData.totalPages}

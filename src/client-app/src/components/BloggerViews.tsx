@@ -1,43 +1,32 @@
-import TopBar from "../components/TopBar";
-import { useUser } from "../hooks/useUser";
-import StatisticsBar from "../components/StatisticsBar";
-import like from "../assets/icons/Fill.svg"
-import save from "../assets/icons/save-icon.svg"
-import view from "../assets/icons/views-icon.svg"
-import right from "../assets/icons/navigation-chevron-right.svg"
-import left from "../assets/icons/navigation-chevron-left.svg"
-import UniversalButton from "../components/Buttons/UniversalButton";
+import StatisticsBar from "./StatisticsBar";
+import left from "../assets/icons/navigation-chevron-left.svg";
+import like from "../assets/icons/Fill.svg";
+import save from "../assets/icons/save-icon.svg";
+import view from "../assets/icons/views-icon.svg";
+import right from "../assets/icons/navigation-chevron-right.svg";
+import React, {useState} from "react";
 import {usePosts} from "../hooks/usePosts";
-import {useAdvertisements} from "../hooks/useAdvertisements";
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {BloggerComponentType} from "../types/BloggerComponentType";
 
-const ProfilePage: React.FC = () => {
-    const { user, fetchUserData } = useUser();
-    const { posts, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor, loading } = usePosts();
-    const { advertisements, fetchAdvertisementsData } = useAdvertisements();
-    const navigate = useNavigate();
+const BloggerViews: React.FC<BloggerComponentType> = ({ userID, user, posts, advertisements }) => {
 
-    useEffect(() => {
-        fetchUserData();
-        fetchAdvertisementsData();
-        fetchPosts()
-    }, [fetchAdvertisementsData, fetchAdvertisementsData, fetchPosts]);
-
-    const handleInstagramLink = () => {
-        navigate("/link-instagram");
-    };
+    const {
+        hasNextPage,
+        hasPreviousPage,
+        afterCursor,
+        beforeCursor,
+        fetchPostsByID,
+    } = usePosts();
+    const [loading, setLoading] = useState(true);
 
     return (
-        <div
-            className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-            <TopBar user={user}/>
+        <div>
             <StatisticsBar user={user} posts={posts} advertisements={advertisements}/>
             <div className="h-auto w-full py-4 px-12">
                 <div className="flex justify-center">
                     <div className="h-auto w-full flex flex-row p-4 rounded-lg">
                         {hasPreviousPage && (
-                            <button onClick={() => fetchPosts('before', beforeCursor)}>
+                            <button onClick={() => fetchPostsByID(userID!, 6, "before", beforeCursor)}>
                                 <img src={left} className="w-12 h-12" alt="left navigation arrow"/>
                             </button>
                         )}
@@ -99,22 +88,18 @@ const ProfilePage: React.FC = () => {
                         )}
                         {hasNextPage && (
                             <button className="flex items-start justify-center pt-20"
-                                    onClick={() => fetchPosts('after', afterCursor)}>
+                                    onClick={() => fetchPostsByID(userID!, 6, "before", beforeCursor)}>
                                 <img src={right} className="w-12 h-12" alt="right navigation arrow"/>
                             </button>
                         )}
                     </div>
                 </div>
             </div>
-            {!user?.instagramAccountUsername && (
-                <div className="h-1/4 w-full flex justify-center items-center">
-                    <div className="flex flex-col w-1/2">
-                        <UniversalButton buttonText={"Link Instagram"} onClick={handleInstagramLink}/>
-                    </div>
-                </div>
-            )}
+            <div className="h-1/4 w-full flex justify-center items-center">
+                4
+            </div>
         </div>
     );
 };
 
-export default ProfilePage;
+export default BloggerViews;

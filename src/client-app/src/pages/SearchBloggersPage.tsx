@@ -179,7 +179,7 @@ const SearchBloggersPage: React.FC = () => {
                         </select>
                     </div>
 
-                    <div className="h-auto w-1/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
+                    <div className="h-auto w-2/6 border border-gray-10 rounded-[10px] flex items-center justify-center pl-2">
                         <select
                             name="sortOrder"
                             value={filters.sortOrder}

@@ -22,6 +22,7 @@ import CalendarPage from "./pages/CalendarPage";
 import ReviewsPage from "./pages/ReviewsPage";
 import EditProfilePage from "./pages/EditProfilePage";
 import NotificationPage from "./pages/NotificationPage";
+import InstLayout from "./Layouts/InstLayout";
 
 const App: React.FC = () => {
     return (
@@ -44,9 +45,12 @@ const App: React.FC = () => {
                     <Route element={<AuthLayout />}>
                         <Route path="/login" element={<AuthPage/>} />
                         <Route path="/login/callback" element={<CallBackPage/>} />
+                        <Route path="/logout" element={<LogoutPage/>} />
+                    </Route>
+
+                    <Route element={<InstLayout />}>
                         <Route path='/link-instagram' element={<ProtectedRoute><LinkInstagramPage /></ProtectedRoute>} />
                         <Route path='/link-instagram/callback' element={<ProtectedRoute><LinkInstagramCallbackPage /></ProtectedRoute>} />
-                        <Route path="/logout" element={<LogoutPage/>} />
                     </Route>
 
                     <Route path="/404" element={<NotFoundPage />} />
