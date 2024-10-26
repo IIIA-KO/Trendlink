@@ -1,8 +1,11 @@
 import CalendarComponent from "../components/CalendarComponent";
 import {useState} from "react";
+import TopBar from "../components/TopBar";
+import { useUser } from "../hooks/useUser";
 
 
 const CalendarPage: React.FC = () => {
+    const { user, fetchUserData } = useUser();
 
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
@@ -27,15 +30,19 @@ const CalendarPage: React.FC = () => {
     };
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Календар</h1>
+        <div
+        className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
+        <TopBar user={user}/>
+                <div className="h-1/4 w-full text-center text-black">
+                <div className="h-1/4 w-full inline-block text-center text-black">
+            <div className="p-6">
 
             {/* Селектор для вибору статусу */}
             <div className="flex space-x-4 mb-4">
                 <select
                     value={selectedStatus !== null ? selectedStatus : ""}
                     onChange={(e) => setSelectedStatus(e.target.value !== "" ? Number(e.target.value) : null)}
-                    className="border px-2 py-1 rounded"
+                    className="h-[35px] px-2.5 py-1 text-[#c0bebe] text-[11px] font-normal font-['Inter'] rounded-[5px] border border-[#c0bebe] gap-2.5 inline-flex"
                 >
                     <option value="">All Statuses</option>
                     <option value={1}>Pending</option>
@@ -50,7 +57,7 @@ const CalendarPage: React.FC = () => {
                 <select
                     value={selectedYear}
                     onChange={(e) => handleYearChange(Number(e.target.value))}
-                    className="border px-2 py-1 rounded"
+                    className="h-[35px] px-2.5 py-1 rounded-[5px] text-[#c0bebe] ml-[] text-[11px] font-normal font-['Inter'] border border-[#c0bebe] gap-2.5 inline-flex"
                 >
                     {Array.from({ length: 10 }).map((_, i) => (
                         <option key={i} value={currentYear - 5 + i}>
@@ -58,15 +65,14 @@ const CalendarPage: React.FC = () => {
                         </option>
                     ))}
                 </select>
-            </div>
+            
 
             {/* Вибір місяця тільки для першого календаря */}
             <div className="flex items-center space-x-2 mb-2">
-                <label className="font-semibold">Select starting month:</label>
                 <select
                     value={selectedMonth}
                     onChange={(e) => handleMonthChange(Number(e.target.value))}
-                    className="border px-2 py-1 rounded"
+                    className="h-[35px] px-2.5 py-1 rounded-[5px] text-[#c0bebe] text-[11px] font-normal font-['Inter'] border border-[#c0bebe] gap-2.5 inline-flex"
                 >
                     {Array.from({ length: 12 }).map((_, i) => (
                         <option key={i + 1} value={i + 1}>
@@ -75,9 +81,10 @@ const CalendarPage: React.FC = () => {
                     ))}
                 </select>
             </div>
+            </div>
 
             {/* Відображаємо кілька календарів */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                 {Array.from({ length: numMonths }).map((_, index) => {
                     const displayedMonth = (selectedMonth + index - 1) % 12 + 1;
                     const displayedYear =
@@ -98,12 +105,17 @@ const CalendarPage: React.FC = () => {
             <div className="mt-6">
                 <button
                     onClick={addMoreMonths}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="w-[238px] py-2.5 bg-[#009d9f] text-white text-sm font-normal font-['Inter'] rounded-[40px] justify-center items-center gap-2.5 inline-flex"
                 >
                     Add More Months
                 </button>
-            </div>
+                </div>
         </div>
+                    </div>
+                    <div className="h-full relative w-1/2 mx-10 my-6">
+                    </div>
+               </div>
+            </div>
     );
 };
 

@@ -160,30 +160,32 @@ const ProfileForm: React.FC = () => {
         >
             {({ setFieldValue }) => (
                 <Form className="profile-form">
-                    <div>
-                        <label htmlFor="firstName">First Name</label>
-                        <Field name="firstName" type="text" />
+                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="firstName" className="text-[#616161] text-xs font-light font-['Inter']">First Name</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]" name="firstName" type="text" />
                         <ErrorMessage name="firstName" component="div" className="error" />
                     </div>
 
-                    <div>
-                        <label htmlFor="lastName">Last Name</label>
-                        <Field name="lastName" type="text" />
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="lastName" className="text-[#616161] text-xs font-light font-['Inter']">Last Name</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]"name="lastName" type="text" />
                         <ErrorMessage name="lastName" component="div" className="error" />
                     </div>
 
-                    <div>
-                        <label htmlFor="birthDate">Birth Date</label>
-                        <Field name="birthDate" type="date" />
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="birthDate" className="text-[#616161] text-xs font-light font-['Inter']">Birth Date</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]"name="birthDate" type="date" />
                         <ErrorMessage name="birthDate" component="div" className="error" />
                     </div>
 
-                    <div>
-                        <label htmlFor="country">Country</label>
-                        <Field as="select" name="country" onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="country" className="text-[#616161] text-xs font-light font-['Inter']">Country</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]" as="select" name="country" onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                             const countryId = e.target.value;
                             setSelectedCountryId(countryId);
                             setFieldValue('country', countryId);
+                            
                         }}>
                             {countries.map(country => (
                                 <option key={country.id} value={country.id}>{country.name}</option>
@@ -191,9 +193,9 @@ const ProfileForm: React.FC = () => {
                         </Field>
                     </div>
 
-                    <div>
-                        <label htmlFor="state">State</label>
-                        <Field as="select" name="stateId" value={selectedStateId || ''} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="state" className="text-[#616161] text-xs font-light font-['Inter']">State</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]"as="select" name="stateId" value={selectedStateId || ''} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                             setSelectedStateId(e.target.value);
                             setFieldValue('stateId', e.target.value);
                         }}>
@@ -204,15 +206,15 @@ const ProfileForm: React.FC = () => {
                         <ErrorMessage name="stateId" component="div" className="error" />
                     </div>
 
-                    <div>
-                        <label htmlFor="bio">Bio</label>
-                        <Field as="textarea" name="bio" />
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="bio" className="text-[#616161] text-xs font-light font-['Inter']">Bio</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]"as="textarea" name="bio" />
                         <ErrorMessage name="bio" component="div" className="error" />
                     </div>
 
-                    <div>
-                        <label htmlFor="accountCategory">Account Category</label>
-                        <Field as="select" name="accountCategory" onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                    <div className="grid grid-cols-1 gap-1">
+                        <label htmlFor="accountCategory" className="text-[#616161] text-xs font-light font-['Inter']">Account Category</label>
+                        <Field className="w-[299px] h-[35px] bg-[#d9d9d9] rounded-[5px]"as="select" name="accountCategory" onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                             setFieldValue('accountCategory', Number(e.target.value));
                         }}>
                             {accountCategories.map(category => (
@@ -221,9 +223,9 @@ const ProfileForm: React.FC = () => {
                         </Field>
                         <ErrorMessage name="accountCategory" component="div" className="error" />
                     </div>
-
+                    </div>
                     <div>
-                        <label htmlFor="profilePhoto">Profile Photo</label>
+                        <label htmlFor="profilePhoto" className="text-[#616161] text-xs font-light font-['Inter']">Profile Photo</label>
                         <div
                             className="drag-drop-area"
                             onDrop={handleDrop}

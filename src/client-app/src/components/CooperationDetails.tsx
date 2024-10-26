@@ -56,16 +56,16 @@ const CooperationDetails: React.FC<CooperationDetailsPropsType> = ({ cooperation
 
 
     return (
-        <div key={cooperation.id} className="cooperation-details mb-4 border p-4 rounded">
-            <h4 className="text-lg font-semibold mb-2">Cooperation</h4>
-            <p className="text-sm mb-2">Buyer: {buyerName || 'Завантаження...'}</p>
-            <p className="text-sm mb-2">Seller: {sellerName || 'Завантаження...'}</p>
-            <p className="text-sm">Date: {formattedDate}</p>
-            <p className="text-sm">Time: {formattedTime}</p>
-            <p className="text-sm mb-2">Amount : {cooperation.priceAmount} {cooperation.priceCurrency}</p>
-            <p className="text-sm mb-2">Advertisements: {getAdvertisementNameById(cooperation.advertisementId)}</p>
-            <p className="text-sm mb-2">Description: {cooperation.description}</p>
-            <p className="text-sm mb-2">Status: {getCooperationStatusText(cooperation.status)}</p>
+        <div key={cooperation.id} className="cooperation-details mb-4 p-4 bg-[#eff7ff] rounded-[20px] text-left shadow p-6 font-['Inter'] rounded-lg shadow-md">
+            <h4 className="text-lg font-normal font-['Inter'] mb-2">Cooperation</h4>
+            <p className="text-sm mb-2 font-normal font-['Inter']">Buyer: {buyerName || 'Завантаження...'}</p>
+            <p className="text-sm font-normal font-['Inter'] mb-2">Seller: {sellerName || 'Завантаження...'}</p>
+            <p className="text-sm font-normal font-['Inter']">Date: {formattedDate}</p>
+            <p className="text-sm font-normal font-['Inter']">Time: {formattedTime}</p>
+            <p className="text-sm font-normal font-['Inter'] mb-2">Amount : {cooperation.priceAmount} {cooperation.priceCurrency}</p>
+            <p className="text-sm font-normal font-['Inter'] mb-2">Advertisements: {getAdvertisementNameById(cooperation.advertisementId)}</p>
+            <p className="text-sm font-normal font-['Inter'] mb-2">Description: {cooperation.description}</p>
+            <p className="text-sm font-normal font-['Inter'] mb-2">Status: {getCooperationStatusText(cooperation.status)}</p>
         </div>
     );
 };
