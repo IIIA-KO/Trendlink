@@ -14,7 +14,6 @@ import {
     deleteAdvertisement,
     updateAdvertisement
 } from "../../services/advertisements";
-import {useNavigate} from "react-router-dom";
 
 
 const TermsOfCooperationForm: React.FC = () => {
@@ -101,7 +100,6 @@ const TermsOfCooperationForm: React.FC = () => {
     };
 
     const handleRemoveAd = (index: number, adId: string) => {
-        // Додаємо до списку для видалення
         if (adId) {
             setAdsToDelete((prev) => [...prev, adId]);
         }
@@ -199,12 +197,19 @@ const TermsOfCooperationForm: React.FC = () => {
                                                     <button
                                                         type="button"
                                                         onClick={() => {
-                                                            handleRemoveAd(index, values.advertisements[index].id);
-                                                            remove(index);
+                                                            if (values.advertisements.length > 1) {
+                                                                handleRemoveAd(index, values.advertisements[index].id);
+                                                                remove(index);
+                                                            }
                                                         }}
-                                                        className="text-red-500"
+                                                        className={`text-red-500 ${values.advertisements.length === 1 ? 'hidden opacity-50 cursor-not-allowed' : ''}`}
+                                                        disabled={values.advertisements.length === 1}
                                                     >
-                                                        <img src={removeIcon} alt="remove icon button" className="w-8 h-8 transition duration-500 ease-in-out hover:border-hover hover:scale-110 active:scale-90"/>
+                                                        <img
+                                                            src={removeIcon}
+                                                            alt="remove icon button"
+                                                            className={`w-8 h-8 transition duration-500 ease-in-out hover:border-hover hover:scale-110 active:scale-90 ${values.advertisements.length === 1 ? 'opacity-50' : ''}`}
+                                                        />
                                                     </button>
                                                 </div>
                                             </div>
