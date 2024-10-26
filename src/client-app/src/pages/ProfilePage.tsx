@@ -7,21 +7,16 @@ import view from "../assets/icons/views-icon.svg"
 import right from "../assets/icons/navigation-chevron-right.svg"
 import left from "../assets/icons/navigation-chevron-left.svg"
 import UniversalButton from "../components/Buttons/UniversalButton";
-import {
-    instagramClientId,
-    instagramConfigId,
-    instagramRedirectUri,
-    instagramResponseType,
-    instagramScope
-} from "../utils/constants";
 import {usePosts} from "../hooks/usePosts";
 import {useAdvertisements} from "../hooks/useAdvertisements";
 import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
     const { user, fetchUserData } = useUser();
     const { posts, fetchPosts, hasNextPage, hasPreviousPage, afterCursor, beforeCursor, loading } = usePosts();
     const { advertisements, fetchAdvertisementsData } = useAdvertisements();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserData();
@@ -30,8 +25,7 @@ const ProfilePage: React.FC = () => {
     }, [fetchAdvertisementsData, fetchAdvertisementsData, fetchPosts]);
 
     const handleInstagramLink = () => {
-        const authUrl = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${instagramClientId}&redirect_uri=${instagramRedirectUri}&scope=${instagramScope}&response_type=${instagramResponseType}&config_id=${instagramConfigId}`;
-        window.location.href = authUrl;
+        navigate("/link-instagram");
     };
 
     return (

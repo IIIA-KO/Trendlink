@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import {DataProvider} from "../provider/DataProvider";
 
 const AuthLayout: React.FC = () => {
     return (
-        <div>
-            <Outlet />
-        </div>
+        <DataProvider>
+            <div>
+                <Outlet />
+            </div>
+        </DataProvider>
     );
 }
 

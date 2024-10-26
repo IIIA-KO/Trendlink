@@ -48,14 +48,6 @@ const ProfileBloggerPage: React.FC = () => {
                     </button>
                     <button
                         className={`flex-1 border-b-[2px] border-gray-10 px-32  py-2 ${
-                            activeButton === 'Statistics' ? 'border-main-black' : 'text-black'
-                        }`}
-                        onClick={() => handleButtonClick('Statistics')}
-                    >
-                        Statistics
-                    </button>
-                    <button
-                        className={`flex-1 border-b-[2px] border-gray-10 px-32  py-2 ${
                             activeButton === 'Terms of cooperation' ? 'border-main-black' : 'text-black'
                         }`}
                         onClick={() => handleButtonClick('Terms of cooperation')}
