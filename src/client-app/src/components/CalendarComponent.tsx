@@ -106,7 +106,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ month, year, sele
                         year: "numeric",
                     })}
                 </h3>
-                <div className="w-[251px] h-[0px] ml-5px border border-[#e4e5e7]"></div>
+                <div className="w-[251px] absolute  ml-[30px] border border-[#e4e5e7]"></div>
                 <div className="grid grid-cols-7 gap-2 text-center mb-2">
                     {daysOfWeek.map((day) => (
                         <div key={day} className="grow shrink basis-0 text-center text-[#7e818c] text-[10px] font-normal font-['Inter'] uppercase">

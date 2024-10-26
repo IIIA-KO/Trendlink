@@ -1,10 +1,11 @@
 import CalendarComponent from "../components/CalendarComponent";
 import {useState} from "react";
-import Navbar from "../components/Navbar";
 import TopBar from "../components/TopBar";
+import { useUser } from "../hooks/useUser";
 
 
 const CalendarPage: React.FC = () => {
+    const { user, fetchUserData } = useUser();
 
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
@@ -29,14 +30,9 @@ const CalendarPage: React.FC = () => {
     };
 
     return (
-    <div className="bg-background flex justify-start h-auto w-auto">
-        <div className="h-auto w-1/6 flex justify-start items-center pl-1 sm:pl-4 md:pl-6 lg:pl-10 xl:pl-22 2xl:pl-28">
-            <Navbar />
-        </div>
-        <div className="w-5/6 h-auto">
-            <div className="flex flex-col gap-2  bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
-                <TopBar user={null} />
-               
+        <div
+        className="flex flex-col gap-2 bg-custom-bg bg-cover bg-no-repeat rounded-[50px] h-auto w-auto min-h-screen min-w-screen sm:mr-24 md:mr-32 lg:mr-42 xl:mr-64 mt-10">
+        <TopBar user={user}/>
                 <div className="h-1/4 w-full text-center text-black">
                 <div className="h-1/4 w-full inline-block text-center text-black">
             <div className="p-6">
@@ -69,11 +65,10 @@ const CalendarPage: React.FC = () => {
                         </option>
                     ))}
                 </select>
-            </div>
+            
 
             {/* Вибір місяця тільки для першого календаря */}
             <div className="flex items-center space-x-2 mb-2">
-                <label className="text-[#c0bebe] text-[14px] font-normal font-['Inter']">Select starting month:</label>
                 <select
                     value={selectedMonth}
                     onChange={(e) => handleMonthChange(Number(e.target.value))}
@@ -85,6 +80,7 @@ const CalendarPage: React.FC = () => {
                         </option>
                     ))}
                 </select>
+            </div>
             </div>
 
             {/* Відображаємо кілька календарів */}
@@ -120,8 +116,6 @@ const CalendarPage: React.FC = () => {
                     </div>
                </div>
             </div>
-        </div>
-   </div>
     );
 };
 
