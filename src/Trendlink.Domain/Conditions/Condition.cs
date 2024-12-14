@@ -1,6 +1,6 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Conditions
@@ -63,7 +63,7 @@ namespace Trendlink.Domain.Conditions
 
         public bool HasAdvertisement(Name advertisementName)
         {
-            return this._advertisements.Any(ad =>
+            return this._advertisements.Exists(ad =>
                 string.Equals(ad.Name.Value, advertisementName.Value, StringComparison.Ordinal)
             );
         }

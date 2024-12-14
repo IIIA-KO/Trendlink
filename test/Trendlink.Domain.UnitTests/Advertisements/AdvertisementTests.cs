@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Domain.UnitTests.Advertisements
 {

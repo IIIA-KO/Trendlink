@@ -1,6 +1,6 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Application.Conditions.CreateCondition
 {

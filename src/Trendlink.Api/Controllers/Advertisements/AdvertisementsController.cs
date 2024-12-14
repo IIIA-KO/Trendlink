@@ -4,8 +4,8 @@ using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.Advertisements.DeleteAdvertisement;
 using Trendlink.Application.Advertisements.EditAdvertisement;
 using Trendlink.Application.Advertisements.GetUserAvarageAdvertisementPrices;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Advertisements

@@ -28,7 +28,7 @@ namespace Trendlink.Domain.UnitTests.Currencies
             // Assert
             fromCode
                 .Should()
-                .Throw<ApplicationException>()
+                .Throw<InvalidCastException>()
                 .WithMessage("The currency is invalid.");
         }
 

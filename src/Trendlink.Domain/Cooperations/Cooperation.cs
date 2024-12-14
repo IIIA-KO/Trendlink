@@ -1,7 +1,7 @@
 ﻿using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations.DomainEvents;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.Cooperations
@@ -87,6 +87,9 @@ namespace Trendlink.Domain.Cooperations
             DateTime utcNow
         )
         {
+            ArgumentNullException.ThrowIfNull(advertisement);
+            ArgumentNullException.ThrowIfNull(price);
+            
             if (buyerId == selllerId)
             {
                 return Result.Failure<Cooperation>(CooperationErrors.SameUser);

@@ -52,6 +52,8 @@ namespace Trendlink.Domain.Reviews
             DateTime createdOnUtc
         )
         {
+            ArgumentNullException.ThrowIfNull(cooperation);
+            
             if (cooperation.Status != CooperationStatus.Completed)
             {
                 return Result.Failure<Review>(ReviewErrors.NotEligible);
@@ -73,6 +75,8 @@ namespace Trendlink.Domain.Reviews
 
         public Result Update(Rating rating, Comment comment)
         {
+            ArgumentNullException.ThrowIfNull(comment);
+            
             if (string.IsNullOrEmpty(comment.Value))
             {
                 return Result.Failure(ReviewErrors.InvalidComment);

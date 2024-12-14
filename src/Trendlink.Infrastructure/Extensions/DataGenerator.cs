@@ -1,8 +1,8 @@
 ﻿using System.Security.Cryptography;
 using Bogus;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;

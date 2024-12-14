@@ -1,5 +1,5 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
-using Trendlink.Domain.Shared;
+using Trendlink.Domain.Common;
 
 namespace Trendlink.Application.Conditions.EditLoggedInUserCondition
 {

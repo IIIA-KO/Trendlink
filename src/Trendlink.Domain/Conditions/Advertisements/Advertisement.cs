@@ -1,5 +1,5 @@
 ﻿using Trendlink.Domain.Abstraction;
-using Trendlink.Domain.Shared;
+using Trendlink.Domain.Common;
 
 namespace Trendlink.Domain.Conditions.Advertisements
 {
@@ -41,6 +41,8 @@ namespace Trendlink.Domain.Conditions.Advertisements
             Description description
         )
         {
+            ArgumentNullException.ThrowIfNull(price);
+            
             Result validationResult = ValidateParameters(name, price, description);
             if (validationResult.IsFailure)
             {
@@ -52,6 +54,8 @@ namespace Trendlink.Domain.Conditions.Advertisements
 
         public Result Update(Name name, Money price, Description description)
         {
+            ArgumentNullException.ThrowIfNull(price);
+            
             Result validationResult = ValidateParameters(name, price, description);
             if (validationResult.IsFailure)
             {

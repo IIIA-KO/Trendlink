@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.UnitTests.Advertisements;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Application.UnitTests.Cooperations

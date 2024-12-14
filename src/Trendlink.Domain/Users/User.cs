@@ -79,7 +79,7 @@ namespace Trendlink.Domain.Users
 
         public bool HasRole(Role role)
         {
-            return this._roles.Any(r => string.Equals(r.Name, role.Name, StringComparison.Ordinal));
+            return this._roles.Exists(r => string.Equals(r.Name, role.Name, StringComparison.Ordinal));
         }
 
         public Result Update(
@@ -192,6 +192,7 @@ namespace Trendlink.Domain.Users
 
         public void SetProfilePhoto(Photo photo)
         {
+            ArgumentNullException.ThrowIfNull(photo);
             ArgumentNullException.ThrowIfNull(photo.Uri);
 
             this.ProfilePhoto = photo;

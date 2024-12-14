@@ -2,7 +2,7 @@
 using Trendlink.Application.Conditions.CreateCondition;
 using Trendlink.Application.Conditions.EditLoggedInUserCondition;
 using Trendlink.Application.Conditions.GetUserCondition;
-using Trendlink.Domain.Shared;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Api.Controllers.Conditions

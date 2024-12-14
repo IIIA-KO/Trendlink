@@ -1,6 +1,6 @@
-﻿using Trendlink.Domain.Conditions;
+﻿using Trendlink.Domain.Common;
+using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Domain.UnitTests.Advertisements
 {

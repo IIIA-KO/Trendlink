@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions;
-using Trendlink.Domain.Shared;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Infrastructure.Configurations

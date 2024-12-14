@@ -11,7 +11,7 @@
 
         protected Entity() { }
 
-        public TEntityId Id { get; init; }
+        public TEntityId Id { get; protected init; }
 
         public IReadOnlyList<IDomainEvent> GetDomainEvents()
         {

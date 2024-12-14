@@ -1,4 +1,4 @@
-﻿using Trendlink.Domain.Shared;
+﻿using Trendlink.Domain.Common;
 using Trendlink.Domain.Users;
 
 namespace Trendlink.Domain.UnitTests.Conditions

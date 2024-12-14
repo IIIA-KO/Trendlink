@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Trendlink.Application.Calendar;
+﻿using Trendlink.Application.Calendar;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.Users;

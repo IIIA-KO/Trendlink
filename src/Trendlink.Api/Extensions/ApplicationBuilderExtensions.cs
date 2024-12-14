@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Trendlink.Api.Middleware;
 using Trendlink.Infrastructure;

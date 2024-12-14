@@ -2,6 +2,10 @@
 {
     public sealed record StateName(string Value)
     {
-        public static explicit operator string(StateName firstName) => firstName.Value;
+        public static explicit operator string(StateName stateName)
+        {
+            ArgumentNullException.ThrowIfNull(stateName);
+            return stateName.Value;
+        }
     }
 }

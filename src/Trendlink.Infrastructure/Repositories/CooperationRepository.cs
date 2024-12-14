@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Calendar;
 using Trendlink.Domain.Conditions.Advertisements;

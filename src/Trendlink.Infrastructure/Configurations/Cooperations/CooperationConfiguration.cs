@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Infrastructure.Configurations.Cooperations
 {

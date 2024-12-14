@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Domain.Users;
 using Trendlink.Infrastructure.Specifications.Users;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 using User = Trendlink.Domain.Users.User;
 
 namespace Trendlink.Infrastructure.Repositories

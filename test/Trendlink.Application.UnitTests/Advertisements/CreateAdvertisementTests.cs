@@ -6,9 +6,9 @@ using Trendlink.Application.Abstractions.Repositories;
 using Trendlink.Application.Advertisements.CreateAdvertisement;
 using Trendlink.Application.UnitTests.Conditions;
 using Trendlink.Domain.Abstraction;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions;
 using Trendlink.Domain.Conditions.Advertisements;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Application.UnitTests.Advertisements
 {

@@ -4,6 +4,9 @@
     {
         public static Money operator +(Money left, Money right)
         {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
             if (left.Currency != right.Currency)
             {
                 throw new InvalidOperationException("Currencies have to be equal.");
@@ -11,9 +14,14 @@
 
             return new Money(left.Amount + right.Amount, left.Currency);
         }
+        
+        public static Money Add(Money left, Money right) => left + right;
 
         public static Money operator -(Money left, Money right)
         {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
             if (left.Currency != right.Currency)
             {
                 throw new InvalidOperationException("Currencies have to be equal.");
@@ -26,43 +34,101 @@
 
             return new Money(left.Amount - right.Amount, left.Currency);
         }
+        
+        public static Money Subtract(Money left, Money right) => left - right;
 
-        public static Money operator *(Money amount, decimal factor) =>
-            new(amount.Amount * factor, amount.Currency);
+        public static Money operator *(Money amount, decimal factor)
+        {
+            ArgumentNullException.ThrowIfNull(amount);
+            return new Money(amount.Amount * factor, amount.Currency);
+        }
+        
+        public static Money Multiply(Money left, Money right) => left * right;
+        
+        public static Money operator /(Money amount, decimal factor)
+        {
+            ArgumentNullException.ThrowIfNull(amount);
+            return new Money(amount.Amount / factor, amount.Currency);
+        }
+        
+        public static decimal operator /(Money left, Money right)
+        {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
+            return left.Currency == right.Currency
+                ? left.Amount / right.Amount
+                : RaiseCurrencyError<decimal>("divide", left, right);
+        }
+        
+        public static decimal Divide(Money left, Money right) => left / right;
 
-        public static Money operator *(decimal factor, Money amount) =>
-            new(amount.Amount * factor, amount.Currency);
-
-        public static Money operator /(Money amount, decimal factor) =>
-            new(amount.Amount / factor, amount.Currency);
-
-        public static decimal operator /(Money a, Money b) =>
-            a.Currency == b.Currency
-                ? a.Amount / b.Amount
-                : RaiseCurrencyError<decimal>("divide", a, b);
-
-        public static bool operator >(Money left, Money right) =>
-            left.Currency == right.Currency
+        public static bool operator >(Money left, Money right)
+        {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
+            return left.Currency == right.Currency
                 ? left.Amount > right.Amount
                 : RaiseCurrencyComparisonError(left, right);
+        }
 
-        public static bool operator <(Money left, Money right) =>
-            left.Currency == right.Currency
+        public static bool operator <(Money left, Money right)
+        {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
+            return left.Currency == right.Currency
                 ? left.Amount < right.Amount
                 : RaiseCurrencyComparisonError(left, right);
-
-        public static bool operator >=(Money left, Money right) =>
-            left.Currency == right.Currency
+        }
+        
+        public static bool operator >=(Money left, Money right)
+        {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
+            return left.Currency == right.Currency
                 ? left.Amount >= right.Amount
                 : RaiseCurrencyComparisonError(left, right);
+        }
 
-        public static bool operator <=(Money left, Money right) =>
-            left.Currency == right.Currency
+        public static bool operator <=(Money left, Money right)
+        {
+            ArgumentNullException.ThrowIfNull(left);
+            ArgumentNullException.ThrowIfNull(right);
+            
+            return left.Currency == right.Currency
                 ? left.Amount <= right.Amount
                 : RaiseCurrencyComparisonError(left, right);
+        }
 
-        public static implicit operator decimal(Money a) => a.Amount;
+        public int CompareTo(Money other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return 1;
+            }
 
+            if (other.Currency != this.Currency)
+            {
+                return 1;
+            }
+            
+            return this.Amount.CompareTo(other.Amount);
+        }
+        
+        public static implicit operator decimal(Money a)
+        {
+            ArgumentNullException.ThrowIfNull(a);
+            return a.Amount;
+        }
+
+        public static decimal ToDecimal(Money a)
+        {
+            return (decimal)a;
+        }
+        
         private static bool RaiseCurrencyComparisonError(Money a, Money b) =>
             RaiseCurrencyError<bool>("compare", a, b);
 

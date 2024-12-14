@@ -1,5 +1,5 @@
-﻿using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Shared;
+﻿using Trendlink.Domain.Common;
+using Trendlink.Domain.Cooperations;
 using Trendlink.Domain.UnitTests.Advertisements;
 using Trendlink.Domain.Users;
 

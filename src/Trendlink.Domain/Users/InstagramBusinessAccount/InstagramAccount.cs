@@ -42,6 +42,10 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
             Metadata metadata
         )
         {
+            ArgumentNullException.ThrowIfNull(facebookPageId);
+            ArgumentNullException.ThrowIfNull(advertisementAccountId);
+            ArgumentNullException.ThrowIfNull(metadata);
+            
             if (string.IsNullOrEmpty(facebookPageId.Value))
             {
                 return Result.Failure<InstagramAccount>(
@@ -77,6 +81,7 @@ namespace Trendlink.Domain.Users.InstagramBusinessAccount
 
         public void Update(InstagramAccount updatedInstagramAccount)
         {
+            ArgumentNullException.ThrowIfNull(updatedInstagramAccount);
             this.Metadata = updatedInstagramAccount.Metadata;
         }
     }

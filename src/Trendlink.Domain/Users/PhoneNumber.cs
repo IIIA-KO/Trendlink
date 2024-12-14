@@ -2,6 +2,10 @@
 {
     public sealed record PhoneNumber(string Value)
     {
-        public static explicit operator string(PhoneNumber phoneNumber) => phoneNumber.Value;
+        public static explicit operator string(PhoneNumber phoneNumber)
+        {
+            ArgumentNullException.ThrowIfNull(phoneNumber);
+            return phoneNumber.Value;
+        }
     }
 }

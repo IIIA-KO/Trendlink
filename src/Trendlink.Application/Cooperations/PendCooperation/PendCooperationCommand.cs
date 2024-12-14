@@ -1,7 +1,7 @@
 ﻿using Trendlink.Application.Abstractions.Messaging;
+using Trendlink.Domain.Common;
 using Trendlink.Domain.Conditions.Advertisements;
 using Trendlink.Domain.Cooperations;
-using Trendlink.Domain.Shared;
 
 namespace Trendlink.Application.Cooperations.PendCooperation
 {
